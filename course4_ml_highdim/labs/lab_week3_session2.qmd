@@ -1,0 +1,189 @@
+---
+title: "Week 3, Session 2 — brms / Stan, LOO, hierarchical models"
+subtitle: "Course 4 — Biostatistics Courses"
+format:
+  html:
+    toc: true
+    toc-depth: 3
+    code-fold: false
+    code-tools: true
+  revealjs:
+    output-file: "lab_week3_session2_slides.html"
+    theme: [default, ../../assets/slides.scss]
+    slide-number: c/t
+    progress: true
+    scrollable: true
+    transition: none
+    preview-links: auto
+execute:
+  warning: false
+  message: false
+---
+
+::: {.callout-note}
+**Workflow labs** use the variant template:
+Goal → Approach → Execution → Check → Report.
+:::
+
+## Learning objectives
+
+- Write a simple multilevel model in `brms` syntax and describe each
+  prior.
+- Compare two candidate models using leave-one-out (LOO) cross-
+  validation.
+- Perform a prior predictive check and interpret it.
+
+## Prerequisites
+
+Beta-binomial Bayesian intuition from Session 1; linear mixed-effects
+from Course 2.
+
+## Background
+
+`brms` is an interface that translates R formulas into Stan programs
+and runs Hamiltonian Monte Carlo to draw from the posterior. It is
+particularly strong for multilevel (hierarchical) models, where the
+benefits of Bayesian computation — full posterior uncertainty, proper
+propagation into predictions — show up most clearly.
+
+LOO cross-validation, implemented via the `loo` package, estimates
+out-of-sample predictive accuracy from the posterior without refitting,
+using Pareto-smoothed importance sampling. It is a modern replacement
+for AIC/BIC in Bayesian model comparison, and comes with diagnostics
+that warn when the approximation is unreliable.
+
+::: {.content-visible when-format="html"}
+Compilation of Stan models is slow, and downloading the toolchain
+exceeds what we can assume in a rendering environment. We therefore
+show the `brms` code with `#| eval: false` and walk through prior
+predictive simulation and a small frequentist counterpart that runs
+end-to-end.
+:::
+
+## Setup
+
+```{r}
+#| label: setup
+library(tidyverse)
+library(lme4)
+set.seed(42)
+theme_set(theme_minimal(base_size = 12))
+```
+
+## 1. Goal
+
+Fit a two-level hierarchical model to simulated clinical data — patient
+outcomes nested within centre — and compare a random-intercept against
+a random-slope model.
+
+## 2. Approach
+
+Simulate 20 centres with varying mean outcomes and varying dose
+effects.
+
+```{r}
+n_centre <- 20; per_centre <- 15
+centre <- rep(seq_len(n_centre), each = per_centre)
+alpha0 <- rnorm(n_centre, 0, 1)
+beta0  <- rnorm(n_centre, 0.5, 0.3)
+dose <- rnorm(n_centre * per_centre)
+y <- alpha0[centre] + beta0[centre] * dose + rnorm(n_centre * per_centre, 0, 0.7)
+d <- tibble(y = y, dose = dose, centre = factor(centre))
+ggplot(d, aes(dose, y, colour = centre)) +
+  geom_point(alpha = 0.5) + geom_smooth(method = "lm", se = FALSE) +
+  theme(legend.position = "none")
+```
+
+## 3. Execution
+
+A classical `lmer` random-intercept-and-slope fit as a stand-in we can
+run.
+
+```{r}
+fit_lmer_ri  <- lmer(y ~ dose + (1 | centre), data = d)
+fit_lmer_rs  <- lmer(y ~ dose + (dose | centre), data = d)
+summary(fit_lmer_rs)$varcor
+anova(fit_lmer_ri, fit_lmer_rs)
+```
+
+Prior predictive simulation (frequentist-style) for the Bayesian
+counterpart we are about to sketch.
+
+```{r}
+prior_sim <- replicate(20, {
+  a <- rnorm(1, 0, 1); b <- rnorm(1, 0, 1); sd_a <- abs(rnorm(1, 0, 1))
+  a + b * dose + rnorm(length(dose), 0, sd_a)
+})
+ggplot(tibble(y = as.numeric(prior_sim)), aes(y)) +
+  geom_histogram(bins = 40, fill = "grey60", colour = "white") +
+  labs(x = "y drawn under priors only", y = "count")
+```
+
+The `brms` counterpart.
+
+```{r}
+#| eval: false
+library(brms)
+priors <- c(
+  prior(normal(0, 2), class = "Intercept"),
+  prior(normal(0, 1), class = "b"),
+  prior(exponential(1), class = "sd"),
+  prior(exponential(1), class = "sigma")
+)
+m_ri <- brm(y ~ dose + (1 | centre), data = d,
+            prior = priors, chains = 2, iter = 2000, refresh = 0)
+m_rs <- brm(y ~ dose + (dose | centre), data = d,
+            prior = priors, chains = 2, iter = 2000, refresh = 0)
+loo_compare(loo(m_ri), loo(m_rs))
+```
+
+## 4. Check
+
+Compare to `lmer` and report pooled vs unpooled estimates.
+
+```{r}
+fixef_lmer <- fixef(fit_lmer_rs)
+fixef_lmer
+```
+
+## 5. Report
+
+> On simulated hierarchical data (20 centres × 15 patients), a
+> random-slope `lmer` model recovered an average dose effect of
+> `r round(fixef_lmer["dose"], 2)` (SE from `lmer`), with substantial
+> centre-to-centre variation. The `brms` sketch shown in the
+> accompanying code would fit the same structure with explicit priors,
+> and `loo_compare` would rank the random-slope model against the
+> random-intercept model.
+
+In practice, the Bayesian and frequentist fits should agree closely
+when priors are weakly informative and *n* is large; the Bayesian
+route adds explicit prior sensitivity and full posterior uncertainty
+for downstream prediction.
+
+::: {.notes}
+Mention that the Pareto k-hat diagnostic from `loo` must be checked:
+values above 0.7 on many observations invalidate the comparison.
+:::
+
+## Common pitfalls
+
+- Fitting a flat prior in a small-sample hierarchical model and getting
+  a divergent posterior on variance components.
+- Comparing LOO elpd differences smaller than about 4 SE without
+  noting the uncertainty.
+- Forgetting to scale continuous predictors; default priors assume
+  normalised inputs.
+
+## Further reading
+
+- Bürkner P-C (2017), *brms: An R package for Bayesian multilevel
+  models using Stan*.
+- Vehtari A, Gelman A, Gabry J (2017), *Practical Bayesian model
+  evaluation using leave-one-out cross-validation*.
+
+## Session info
+
+```{r}
+sessionInfo()
+```

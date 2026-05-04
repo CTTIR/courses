@@ -1,0 +1,219 @@
+---
+title: "Week 1, Session 3 — Data types, tidy data, accuracy and precision"
+subtitle: "Course 1 — Biostatistics Courses"
+format:
+  html:
+    toc: true
+    toc-depth: 3
+    code-fold: false
+    code-tools: true
+  revealjs:
+    output-file: "lab_week1_session3_slides.html"
+    theme: [default, ../../assets/slides.scss]
+    slide-number: c/t
+    progress: true
+    scrollable: true
+    transition: none
+    preview-links: auto
+execute:
+  warning: false
+  message: false
+---
+
+::: {.callout-note}
+**Workflow labs** use the variant template:
+Goal → Approach → Execution → Check → Report.
+:::
+
+## Learning objectives
+
+- Classify a variable as nominal, ordinal, interval, or ratio and
+  explain why the distinction dictates what summaries are legal.
+- Reshape a rectangular dataset between wide and long form with
+  `pivot_longer()` and `pivot_wider()`.
+- Separate accuracy, precision, and bias by simulation, and say why a
+  precise instrument can still be wrong.
+
+## Prerequisites
+
+Lab 1.2 (toolchain).
+
+## Background
+
+Statistics is largely the study of variation, and variation must be
+measured. Before we calculate anything we need to say what kind of
+variable we are looking at. A *nominal* variable labels groups
+without order. An *ordinal* variable orders them but does not quantify
+the distance between them. *Interval* and *ratio* variables do quantify
+distances, and ratio variables have a true zero. Tools that average an
+ordinal variable or compute a standard deviation on a category code
+produce numbers, but not answers.
+
+Tidy data is a convention, not a requirement, but adopting it pays
+immediate dividends: every variable gets a column, every observation a
+row, and every value a cell. Real datasets arrive in other shapes, so a
+large part of the job is reshaping them until they conform. The tools
+are `pivot_longer()` and `pivot_wider()`, and they are the two
+functions you will use most often in a working week.
+
+::: {.content-visible when-format="html"}
+The accuracy/precision/bias triangle is borrowed from measurement
+theory. Accuracy is how close a measurement is to truth on average.
+Precision is how tightly repeated measurements cluster. Bias is a
+systematic offset from truth. An instrument can be precise but biased
+(tight cluster off-target), accurate but imprecise (wide cluster
+centred on truth), or — the goal — both.
+:::
+
+## Setup
+
+```{r}
+#| label: setup
+library(tidyverse)
+set.seed(42)
+theme_set(theme_minimal(base_size = 12))
+```
+
+## 1. Goal
+
+Move a small simulated clinical dataset between wide and long forms
+and quantify accuracy, precision, and bias in a simulated measurement
+process.
+
+## 2. Approach
+
+We simulate three repeat measurements of blood pressure on twelve
+patients at two visits. This is a realistic wide-format dataset with
+a within-patient structure.
+
+```{r}
+clinic <- tibble(
+  id = sprintf("P%02d", 1:12),
+  sex = sample(c("F", "M"), 12, replace = TRUE),
+  visit1_sbp1 = rnorm(12, 140, 10),
+  visit1_sbp2 = rnorm(12, 140, 10),
+  visit1_sbp3 = rnorm(12, 140, 10),
+  visit2_sbp1 = rnorm(12, 135, 10),
+  visit2_sbp2 = rnorm(12, 135, 10),
+  visit2_sbp3 = rnorm(12, 135, 10)
+)
+clinic |> select(id, starts_with("visit1")) |> head(3)
+```
+
+## 3. Execution
+
+Reshape to a long form where each row is one reading.
+
+```{r}
+long <- clinic |>
+  pivot_longer(
+    cols = starts_with("visit"),
+    names_to = c("visit", "reading"),
+    names_pattern = "visit(\\d)_sbp(\\d)",
+    values_to = "sbp"
+  ) |>
+  mutate(visit = factor(paste0("V", visit)),
+         reading = as.integer(reading))
+head(long)
+```
+
+```{r}
+#| fig-width: 6
+#| fig-height: 3.5
+long |>
+  ggplot(aes(visit, sbp, colour = sex)) +
+  geom_jitter(width = 0.1, alpha = 0.6) +
+  labs(x = NULL, y = "SBP (mmHg)")
+```
+
+The long format makes it trivial to summarise by visit, by patient, or
+by visit-and-patient. The same plot in wide format would require
+custom code for each visit column.
+
+```{r}
+# Collapse three readings per visit to a mean.
+by_visit <- long |>
+  group_by(id, visit, sex) |>
+  summarise(sbp_mean = mean(sbp), .groups = "drop")
+
+# Pivot back to wide if the downstream analysis needs it.
+wide <- by_visit |> pivot_wider(names_from = visit, values_from = sbp_mean)
+head(wide)
+```
+
+## 4. Check
+
+Simulate an instrument with a known truth (say, a calibrated reference
+of 120) and compare three candidate devices with different
+accuracy/precision profiles.
+
+```{r}
+truth <- 120
+n <- 500
+devices <- tibble(
+  device_A = rnorm(n, mean = 120, sd = 1),   # accurate & precise
+  device_B = rnorm(n, mean = 125, sd = 1),   # precise, biased
+  device_C = rnorm(n, mean = 120, sd = 5)    # accurate on average, imprecise
+) |>
+  pivot_longer(everything(), names_to = "device", values_to = "reading")
+
+summary_table <- devices |>
+  group_by(device) |>
+  summarise(mean = mean(reading),
+            sd = sd(reading),
+            bias = mean(reading) - truth,
+            rmse = sqrt(mean((reading - truth)^2)))
+summary_table
+```
+
+```{r}
+#| fig-width: 6
+#| fig-height: 3.5
+devices |>
+  ggplot(aes(reading, fill = device)) +
+  geom_density(alpha = 0.5, colour = NA) +
+  geom_vline(xintercept = truth, linetype = 2) +
+  labs(x = "Reading", y = "Density")
+```
+
+## 5. Report
+
+> In a simulated calibration experiment (*n* = `r n` draws per device),
+> the unbiased precise device had bias = `r round(summary_table$bias[1], 2)`
+> mmHg and SD = `r round(summary_table$sd[1], 2)`; the biased precise
+> device had bias = `r round(summary_table$bias[2], 2)` and the same SD;
+> the imprecise unbiased device had bias = `r round(summary_table$bias[3], 2)`
+> but SD = `r round(summary_table$sd[3], 2)`.
+> Root mean squared error captures accuracy overall and is the quantity
+> to minimise.
+
+The lesson is that *bias* and *variance* are separately identifiable.
+A device that is consistent is not necessarily correct, and a device
+that is correct on average may still be unusable on a single reading.
+
+::: {.notes}
+Use the density plot to anchor the intuition — three distributions,
+one dashed line at the truth. Ask the audience which device they would
+use for a single reading, and which for a large calibration study.
+:::
+
+## Common pitfalls
+
+- Treating ordinal codes (1 = mild, 2 = moderate, 3 = severe) as if
+  the steps were equal.
+- Forcing data to stay wide because that is how the spreadsheet
+  happened to arrive.
+- Judging a measurement by precision alone. A small SD with a big bias
+  is still the wrong number.
+- Using the mean to summarise a nominal variable.
+
+## Further reading
+
+- Wickham H (2014), *Tidy Data*. Journal of Statistical Software.
+- Altman DG, Bland JM (1983), *Measurement in medicine*.
+
+## Session info
+
+```{r}
+sessionInfo()
+```

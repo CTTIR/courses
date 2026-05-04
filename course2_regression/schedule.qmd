@@ -1,0 +1,37 @@
+---
+title: "Course 2 — Schedule"
+toc: true
+---
+
+::: {.hero}
+::: {.kicker}
+COURSE 2 · REGRESSION
+:::
+# Schedule
+::: {.lead}
+Every lab, every deck, every R script for Course 2.
+:::
+:::
+
+| Week | # | Topic | Article | Slides | Script |
+|---|---|---|---|---|---|
+| 1 | 1 | Correlation vs regression; Model-I/II | [lab](labs/lab_week1_session1.qmd) | [slides](labs/lab_week1_session1_slides.html) | [R](code/lab_week1_session1.R) |
+| 1 | 2 | Simple linear regression | [lab](labs/lab_week1_session2.qmd) | [slides](labs/lab_week1_session2_slides.html) | [R](code/lab_week1_session2.R) |
+| 1 | 3 | Multiple regression: confounding & interaction | [lab](labs/lab_week1_session3.qmd) | [slides](labs/lab_week1_session3_slides.html) | [R](code/lab_week1_session3.R) |
+| 1 | 4 | Diagnostics: residuals, leverage, Cook, VIF | [lab](labs/lab_week1_session4.qmd) | [slides](labs/lab_week1_session4_slides.html) | [R](code/lab_week1_session4.R) |
+| 1 | 5 | Robust and weighted regression; HC SEs | [lab](labs/lab_week1_session5.qmd) | [slides](labs/lab_week1_session5_slides.html) | [R](code/lab_week1_session5.R) |
+| 2 | 6 | One-way ANOVA and contrasts | [lab](labs/lab_week2_session1.qmd) | [slides](labs/lab_week2_session1_slides.html) | [R](code/lab_week2_session1.R) |
+| 2 | 7 | Two-way / factorial ANOVA | [lab](labs/lab_week2_session2.qmd) | [slides](labs/lab_week2_session2_slides.html) | [R](code/lab_week2_session2.R) |
+| 2 | 8 | RCBD and repeated measures | [lab](labs/lab_week2_session3.qmd) | [slides](labs/lab_week2_session3_slides.html) | [R](code/lab_week2_session3.R) |
+| 2 | 9 | GAMs with mgcv | [lab](labs/lab_week2_session4.qmd) | [slides](labs/lab_week2_session4_slides.html) | [R](code/lab_week2_session4.R) |
+| 2 | 10 | Non-linear regression with nls | [lab](labs/lab_week2_session5.qmd) | [slides](labs/lab_week2_session5_slides.html) | [R](code/lab_week2_session5.R) |
+| 3 | 11 | Logistic regression | [lab](labs/lab_week3_session1.qmd) | [slides](labs/lab_week3_session1_slides.html) | [R](code/lab_week3_session1.R) |
+| 3 | 12 | ANCOVA in RCTs | [lab](labs/lab_week3_session2.qmd) | [slides](labs/lab_week3_session2_slides.html) | [R](code/lab_week3_session2.R) |
+| 3 | 13 | Ordinal and multinomial regression | [lab](labs/lab_week3_session3.qmd) | [slides](labs/lab_week3_session3_slides.html) | [R](code/lab_week3_session3.R) |
+| 3 | 14 | Poisson and negative-binomial regression | [lab](labs/lab_week3_session4.qmd) | [slides](labs/lab_week3_session4_slides.html) | [R](code/lab_week3_session4.R) |
+| 3 | 15 | Calibration, discrimination, ROC/AUC, Brier | [lab](labs/lab_week3_session5.qmd) | [slides](labs/lab_week3_session5_slides.html) | [R](code/lab_week3_session5.R) |
+| 4 | 16 | Dichotomisation, change scores, RTM | [lab](labs/lab_week4_session1.qmd) | [slides](labs/lab_week4_session1_slides.html) | [R](code/lab_week4_session1.R) |
+| 4 | 17 | Kappa, ICC, Bland-Altman | [lab](labs/lab_week4_session2.qmd) | [slides](labs/lab_week4_session2_slides.html) | [R](code/lab_week4_session2.R) |
+| 4 | 18 | Survival primer: KM, log-rank, Cox | [lab](labs/lab_week4_session3.qmd) | [slides](labs/lab_week4_session3_slides.html) | [R](code/lab_week4_session3.R) |
+| 4 | 19 | Decision curves, NRI/IDI | [lab](labs/lab_week4_session4.qmd) | [slides](labs/lab_week4_session4_slides.html) | [R](code/lab_week4_session4.R) |
+| 4 | 20 | Explanation vs prediction; reporting | [lab](labs/lab_week4_session5.qmd) | [slides](labs/lab_week4_session5_slides.html) | [R](code/lab_week4_session5.R) |

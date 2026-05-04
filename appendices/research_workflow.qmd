@@ -1,0 +1,100 @@
+---
+title: "The research workflow"
+toc: true
+---
+
+::: {.hero}
+::: {.kicker}
+APPENDIX · RESEARCH WORKFLOW
+:::
+# The research workflow
+::: {.lead}
+Nine stages from a research question to knowledge that survives
+replication.
+:::
+:::
+
+Statistics is a thread running through a much longer process. The diagram
+below names the stages of that process and links each to the parts of
+the curriculum that cover it in detail. No stage is optional; errors
+made at one are paid for at the next.
+
+```{mermaid}
+flowchart TD
+  Q[1. Question] --> M[2. Measurements]
+  M --> D[3. Design]
+  D --> A[4. Acquisition]
+  A --> Desc[5. Description]
+  Desc --> An[6. Analysis]
+  An --> I[7. Interpretation / Prediction]
+  I --> V[8. Validation]
+  V --> K[9. Knowledge / Decisions]
+```
+
+## 1. Question
+
+A well-formed research question has a population, an exposure or
+intervention, a comparator, an outcome, and a time frame. The PICO
+framework from evidence-based medicine is a useful checklist.
+A vague question leads to a vague design and a vague answer; a
+well-formed question survives peer review before a single datum is
+collected.
+*Covered in:* [Course 1 W1 S1](../course1_foundations/labs/lab_week1_session1.qmd),
+[Course 3 W4 S1](../course3_design_causal/labs/lab_week4_session1.qmd).
+
+## 2. Measurements
+
+Every question depends on the measurement scale you choose to answer it.
+Accuracy, precision, reliability, and the difference between a measurement
+and a proxy are the vocabulary.
+*Covered in:* [Course 1 W1 S3](../course1_foundations/labs/lab_week1_session3.qmd),
+[Course 2 W4 S2](../course2_regression/labs/lab_week4_session2.qmd).
+
+## 3. Design
+
+Design is where you choose what the data can and cannot tell you. A
+well-designed observational study answers some questions better than a
+badly designed RCT; a good RCT answers them all.
+*Covered in:* [Course 3 W1](../course3_design_causal/labs/lab_week1_session1.qmd).
+
+## 4. Acquisition
+
+Getting the data into a computer faithfully is itself a statistical
+problem: missingness, measurement error, and batch effects start here.
+*Covered in:* [Course 1 W1 S4](../course1_foundations/labs/lab_week1_session4.qmd),
+[Course 3 W2](../course3_design_causal/labs/lab_week2_session1.qmd).
+
+## 5. Description
+
+Before any inference, look at the data. A well-designed plot is often
+the whole answer.
+*Covered in:* [Course 1 W1 S5](../course1_foundations/labs/lab_week1_session5.qmd),
+[Course 1 W2 S1](../course1_foundations/labs/lab_week2_session1.qmd).
+
+## 6. Analysis
+
+The formal model that takes the data and returns an estimate, an
+interval, and a decision.
+*Covered in:* Courses 1–4, throughout.
+
+## 7. Interpretation / prediction
+
+What does the estimate mean in the scale of the science? Effect size,
+clinical significance, and the distinction between an average and an
+individual prediction live here.
+*Covered in:* [Course 2 W3 S5](../course2_regression/labs/lab_week3_session5.qmd),
+[Course 4 W3 S5](../course4_ml_highdim/labs/lab_week3_session5.qmd).
+
+## 8. Validation
+
+Does the finding hold in data not used to find it? External validation,
+nested CV, and replication pool here.
+*Covered in:* [Course 4 W1 S1](../course4_ml_highdim/labs/lab_week1_session1.qmd),
+[Course 4 W3 S5](../course4_ml_highdim/labs/lab_week3_session5.qmd).
+
+## 9. Knowledge / decisions
+
+The act of writing it down so that others can trust, cite, and build on
+the finding.
+*Covered in:* [Writing a report](writing_a_report.qmd),
+[Course 2 W4 S5](../course2_regression/labs/lab_week4_session5.qmd).

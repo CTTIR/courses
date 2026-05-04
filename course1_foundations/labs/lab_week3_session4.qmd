@@ -1,0 +1,188 @@
+---
+title: "Week 3, Session 4 — One-sample t-test and one-proportion test"
+subtitle: "Course 1 — Biostatistics Courses"
+format:
+  html:
+    toc: true
+    toc-depth: 3
+    code-fold: false
+    code-tools: true
+  revealjs:
+    output-file: "lab_week3_session4_slides.html"
+    theme: [default, ../../assets/slides.scss]
+    slide-number: c/t
+    progress: true
+    scrollable: true
+    transition: none
+    preview-links: auto
+execute:
+  warning: false
+  message: false
+---
+
+::: {.callout-note}
+**Inference labs** use the five-step template:
+Hypothesis → Visualise → Assumptions → Conduct → Conclude.
+:::
+
+## Learning objectives
+
+- State a one-sample null and alternative hypothesis for a continuous
+  outcome and for a proportion.
+- Run `t.test(mu = )` and `prop.test()` / `binom.test()` and
+  interpret the output.
+- Apply the full five-step inference template in one working pass.
+
+## Prerequisites
+
+Labs 2.5, 3.3.
+
+## Background
+
+The one-sample *t*-test asks whether the mean of a continuous outcome
+differs from a pre-specified value μ₀. It is the inference analogue of
+Table 1: a single-column calculation asking whether the sample is
+consistent with a named population mean. The test statistic is
+(x̄ − μ₀) / (s/√*n*), compared to a *t* distribution on *n* − 1
+degrees of freedom.
+
+The one-proportion test does the same for a binary outcome. When the
+sample is large we use `prop.test()`, which is a Wald-type test based
+on the normal approximation to the binomial; when the sample is small,
+`binom.test()` gives an exact test based on the binomial PMF. Both
+return a *p*-value, a point estimate, and a CI.
+
+These are the simplest tests in the course, but the five-step template
+— hypothesis, visualise, assumptions, conduct, conclude — is the same
+template used in every later inference lab. Getting the template into
+muscle memory here pays dividends throughout the rest of the course.
+
+## Setup
+
+```{r}
+#| label: setup
+library(tidyverse)
+set.seed(42)
+theme_set(theme_minimal(base_size = 12))
+```
+
+## 1. Hypothesis
+
+Scenario A (continuous): fasting blood glucose in a random sample of
+`n = 40` patients from a clinic. Reference mean μ₀ = 95 mg/dL in a
+healthy population. Two-sided test.
+
+- H0: μ = 95
+- H1: μ ≠ 95
+- α = 0.05
+
+Scenario B (proportion): of 120 patients offered a new screening
+programme, *k* = 78 accepted. Reference acceptance rate π₀ = 0.60.
+
+- H0: π = 0.60
+- H1: π ≠ 0.60
+- α = 0.05
+
+## 2. Visualise
+
+```{r}
+n <- 40
+glucose <- rnorm(n, mean = 100, sd = 12)
+```
+
+```{r}
+#| fig-width: 6
+#| fig-height: 3.5
+tibble(glucose) |>
+  ggplot(aes(glucose)) +
+  geom_histogram(bins = 15, fill = "grey60", colour = "white") +
+  geom_vline(xintercept = 95, linetype = 2) +
+  geom_vline(xintercept = mean(glucose), colour = "firebrick") +
+  labs(x = "Fasting glucose (mg/dL)", y = "Count")
+```
+
+```{r}
+accept <- 78
+total  <- 120
+tibble(state = c("accepted", "declined"),
+       count = c(accept, total - accept))
+```
+
+## 3. Assumptions
+
+*t*-test: approximate normality of the sample mean, which — by the
+central limit theorem — holds for *n* = 40 unless the underlying
+distribution is strongly skewed. Check with a Q-Q plot.
+
+```{r}
+#| fig-width: 5
+#| fig-height: 3.5
+tibble(glucose) |>
+  ggplot(aes(sample = glucose)) +
+  stat_qq() + stat_qq_line(colour = "firebrick") +
+  labs(x = "Theoretical", y = "Sample")
+```
+
+Proportion test: independent binary trials, same success probability.
+For `prop.test` the large-sample normal approximation needs
+*np*₀ ≥ 5 and *n*(1 − *p*₀) ≥ 5; both are satisfied.
+
+## 4. Conduct
+
+```{r}
+tt <- t.test(glucose, mu = 95)
+tt
+```
+
+```{r}
+pt_large <- prop.test(x = accept, n = total, p = 0.60)
+pt_exact <- binom.test(x = accept, n = total, p = 0.60)
+list(prop_test = pt_large, binom_test = pt_exact)
+```
+
+## 5. Concluding statement
+
+> **Scenario A.** In a sample of `r n` patients, mean fasting glucose
+> was `r round(mean(glucose), 1)` mg/dL (SD
+> `r round(sd(glucose), 1)`). The one-sample *t*-test against μ₀ = 95
+> gave *t*(`r tt$parameter`) = `r round(tt$statistic, 2)`,
+> *p* = `r signif(tt$p.value, 2)`, mean difference
+> `r round(mean(glucose) - 95, 1)` (95% CI
+> `r round(tt$conf.int[1] - 95, 1)` to
+> `r round(tt$conf.int[2] - 95, 1)`).
+
+> **Scenario B.** Acceptance was `r accept` of `r total`
+> (`r round(100 * accept / total, 1)`%); the exact one-proportion
+> test against π₀ = 0.60 gave *p* =
+> `r signif(pt_exact$p.value, 2)`, 95% CI
+> `r round(pt_exact$conf.int[1], 2)` to
+> `r round(pt_exact$conf.int[2], 2)`.
+
+The two scenarios share a template. The glossary changes — mean and
+SD for continuous, count and proportion for binary — but the five
+steps are the same.
+
+::: {.notes}
+Make the template rigid here. In subsequent labs the students will
+riff on it; the rigidity at this stage is the anchor.
+:::
+
+## Common pitfalls
+
+- Running a one-sided test to "rescue" a borderline two-sided
+  *p*-value.
+- Reporting the *p*-value without the mean difference and its CI.
+- Using `prop.test` when the expected count of either outcome is very
+  small; use `binom.test` there.
+
+## Further reading
+
+- Rosner B. *Fundamentals of Biostatistics*, chapter on one-sample
+  inference.
+- Altman DG, *Confidence intervals rather than p values*, BMJ 1986.
+
+## Session info
+
+```{r}
+sessionInfo()
+```

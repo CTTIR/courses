@@ -1,0 +1,178 @@
+---
+title: "Week 2, Session 1 — MCAR, MAR, MNAR"
+subtitle: "Course 3 — Biostatistics Courses"
+format:
+  html:
+    toc: true
+    toc-depth: 3
+    code-fold: false
+    code-tools: true
+  revealjs:
+    output-file: "lab_week2_session1_slides.html"
+    theme: [default, ../../assets/slides.scss]
+    slide-number: c/t
+    progress: true
+    scrollable: true
+    transition: none
+    preview-links: auto
+execute:
+  warning: false
+  message: false
+---
+
+::: {.callout-note}
+**Inference lab** using the five-step template:
+Hypothesis → Visualise → Assumptions → Conduct → Conclude.
+:::
+
+## Learning objectives
+
+- Define MCAR, MAR, and MNAR and give an example of each.
+- Simulate the three mechanisms and measure the bias in a
+  complete-case analysis.
+- Decide when a missingness assumption is defensible from the data
+  alone and when it is not.
+
+## Prerequisites
+
+Course 2 regression basics.
+
+## Background
+
+The language of missingness is Rubin's taxonomy. MCAR (missing
+completely at random) means the probability of being missing does
+not depend on anything — observed or unobserved. MAR (missing at
+random) means the probability depends only on observed variables.
+MNAR (missing not at random) means the probability depends on the
+missing value itself, even after conditioning on everything
+observed. Each is a property of the process, not the data, and you
+can rarely decide between MAR and MNAR from the data alone.
+
+Complete-case analysis drops any row with a missing value. It is
+unbiased under MCAR, usually biased under MAR, and always suspect
+under MNAR. Multiple imputation handles MAR correctly if the
+imputation model is compatible with the analysis model, but cannot
+rescue MNAR without explicit modelling of the missingness
+mechanism.
+
+::: {.content-visible when-format="html"}
+Auxiliary variables — things that correlate with both the outcome
+and the missingness but are not in the analysis model — are the
+currency of MAR. If you have them, put them in the imputation
+model. If you do not, your MAR claim is on thinner ice than it
+appears.
+:::
+
+## Setup
+
+```{r}
+#| label: setup
+library(tidyverse)
+set.seed(42)
+theme_set(theme_minimal(base_size = 12))
+```
+
+## 1. Hypothesis
+
+We estimate the mean of Y from each of three datasets with the same
+true mean, where Y has been made missing by MCAR, MAR, and MNAR
+processes.
+
+## 2. Visualise
+
+```{r}
+n  <- 1000
+df <- tibble(
+  x = rnorm(n, 50, 10),
+  y = 2 + 0.5 * x + rnorm(n, 0, 5)
+)
+
+mcar <- df |> mutate(y_obs = if_else(runif(n) < 0.30, NA_real_, y),
+                     mech  = "MCAR")
+mar  <- df |> mutate(p = plogis(-2 + 0.05 * (x - 50)),
+                     y_obs = if_else(runif(n) < p, NA_real_, y),
+                     mech  = "MAR")
+mnar <- df |> mutate(p = plogis(-2 + 0.05 * (y - mean(y))),
+                     y_obs = if_else(runif(n) < p, NA_real_, y),
+                     mech  = "MNAR")
+
+all <- bind_rows(
+  mcar |> select(mech, x, y, y_obs),
+  mar  |> select(mech, x, y, y_obs),
+  mnar |> select(mech, x, y, y_obs)
+)
+
+all |>
+  mutate(missing = is.na(y_obs)) |>
+  ggplot(aes(x, y, colour = missing)) +
+  geom_point(alpha = 0.5) +
+  facet_wrap(~ mech) +
+  labs(colour = "Y missing?")
+```
+
+## 3. Assumptions
+
+Complete-case analysis is the bluntest possible method. It is
+justified if missingness is MCAR. We will compute the mean of Y on
+observed rows for each mechanism and compare with the true mean.
+
+## 4. Conduct
+
+```{r}
+results <- all |>
+  group_by(mech) |>
+  summarise(
+    truth = mean(y),
+    cc    = mean(y_obs, na.rm = TRUE),
+    bias  = cc - truth,
+    pct_missing = mean(is.na(y_obs)) * 100
+  )
+results
+```
+
+```{r}
+#| fig-width: 6
+#| fig-height: 3
+results |>
+  ggplot(aes(mech, bias)) +
+  geom_col(alpha = 0.7, fill = "steelblue") +
+  geom_hline(yintercept = 0, linetype = "dashed") +
+  labs(x = NULL, y = "Bias of complete-case mean")
+```
+
+## 5. Concluding statement
+
+> Complete-case estimation of the mean of Y was unbiased under MCAR
+> (bias ≈ `r round(results$bias[results$mech == "MCAR"], 2)`) and
+> meaningfully biased under MAR
+> (`r round(results$bias[results$mech == "MAR"], 2)`) and MNAR
+> (`r round(results$bias[results$mech == "MNAR"], 2)`), despite the
+> same true mean and similar missingness proportions.
+
+::: {.notes}
+Students often ask how to test for MCAR. Little's test exists but
+can only reject MCAR; it cannot prove it. The assumption ultimately
+rests on argument, not on a *p*-value.
+:::
+
+## Common pitfalls
+
+- Using Little's test as evidence *for* MCAR.
+- Imputing with a model that omits the analysis outcome.
+- Reporting a sample size inflated by a complete-case filter that
+  hides 40% dropout.
+- Using "the missingness was not significantly related to X" as
+  proof of MAR.
+
+## Further reading
+
+- Little RJA, Rubin DB. *Statistical Analysis with Missing Data*.
+- van Buuren S (2018), *Flexible Imputation of Missing Data*.
+- Sterne JA et al. (2009), *Multiple imputation for missing data
+  in epidemiological and clinical research*.
+
+## Session info
+
+```{r}
+sessionInfo()
+```

@@ -1,0 +1,211 @@
+---
+title: "Interactive apps"
+toc: true
+---
+
+::: {.hero}
+::: {.kicker}
+SHINY · INTERACTIVE COMPANIONS
+:::
+# Twelve Shiny companions to the labs
+::: {.lead}
+Apps that let you turn the dials on the most important ideas in the
+curriculum and watch the consequences live.
+:::
+:::
+
+The apps complement the labs. Each lab teaches you the mechanics of a
+method on a fixed dataset; the corresponding app lets you wiggle every
+parameter and watch the answer change. Build intuition first, then
+read the lab — or read the lab first and use the app to stress-test
+your understanding.
+
+::: {.callout-tip}
+**Source:** every app is a single `app.R` in
+[`shiny/<app-name>/`](https://github.com/r-heller/courses/tree/main/shiny)
+on GitHub. They are designed for self-hosted Shiny Server but run
+locally with one command:
+
+```bash
+R -e 'shiny::runApp("shiny/clt-explorer", launch.browser = TRUE)'
+```
+:::
+
+The links below point at the deployed apps on the curriculum's Shiny
+host. Replace `https://shiny.example.org` in `_quarto.yml` (or in this
+file) with your own host once the server is up.
+
+## Course 1 — Foundations
+
+::: {.card-grid}
+
+::: {.card}
+::: {.kicker}
+WEEK 3 · SESSION 1
+:::
+### [CLT explorer](https://shiny.example.org/clt-explorer/)
+Pick a parent distribution and a sample size; watch the sampling
+distribution of the mean tighten and turn Gaussian as *n* grows.
+:::
+
+::: {.card}
+::: {.kicker}
+WEEK 3 · SESSION 2
+:::
+### [Bootstrap CI explorer](https://shiny.example.org/bootstrap-ci/)
+Pick a statistic, a population, n, and B. The app draws one sample,
+resamples it B times, and gives a percentile CI you can compare to the
+true value.
+:::
+
+::: {.card}
+::: {.kicker}
+WEEK 2 · SESSION 3
+:::
+### [Diagnostic-test calculator](https://shiny.example.org/diagnostic-test/)
+Sliders for sensitivity, specificity, and prevalence; outputs the
+2×2 table, PPV/NPV, likelihood ratios, and the PPV-vs-prevalence curve.
+:::
+
+:::
+
+## Course 2 — Regression
+
+::: {.card-grid}
+
+::: {.card}
+::: {.kicker}
+WEEK 1 · SESSION 4
+:::
+### [Linear-model diagnostics](https://shiny.example.org/lm-diagnostics/)
+Generate data with chosen slope and noise (and optional
+heteroscedasticity / outliers); inspect the four diagnostic plots
+side-by-side.
+:::
+
+::: {.card}
+::: {.kicker}
+WEEK 3 · SESSIONS 1 & 5
+:::
+### [Logistic regression explorer](https://shiny.example.org/logistic-explorer/)
+Pick intercept and slope; the app simulates, fits, and shows the
+fitted curve, ROC, decile-binned calibration, and Brier score.
+:::
+
+::: {.card}
+::: {.kicker}
+WEEK 2 · SESSION 1
+:::
+### [One-way ANOVA + contrasts](https://shiny.example.org/anova-contrasts/)
+Pick the number of groups and within-group noise; the app shows the
+boxplot, ANOVA table, and Tukey HSD pairwise comparisons.
+:::
+
+:::
+
+## Course 3 — Design & Causal
+
+::: {.card-grid}
+
+::: {.card}
+::: {.kicker}
+WEEK 3 · SESSION 3
+:::
+### [DAG explorer](https://shiny.example.org/dag-explorer/)
+Pick a pre-built DAG (confounder, mediator, collider, M-bias) or paste
+your own. The app computes minimal sufficient adjustment sets via
+`dagitty`.
+:::
+
+::: {.card}
+::: {.kicker}
+WEEK 2 · SESSION 1
+:::
+### [Missing-data simulator](https://shiny.example.org/missing-data-sim/)
+Compare the bias of complete-case analysis under MCAR, MAR, and
+MNAR mechanisms over many replications.
+:::
+
+::: {.card}
+::: {.kicker}
+WEEK 4 · SESSION 4
+:::
+### [SIR / SEIR simulator](https://shiny.example.org/sir-simulator/)
+Pick R0, infectious period, population size, and initial infected.
+The app integrates the ODEs and reports peak prevalence and final
+attack rate.
+:::
+
+:::
+
+## Course 4 — ML & High-dimensional
+
+::: {.card-grid}
+
+::: {.card}
+::: {.kicker}
+WEEK 1 · SESSION 1
+:::
+### [CV vs nested CV](https://shiny.example.org/cv-vs-nested/)
+With pure noise data, naive CV looks confident but is wrong; nested
+CV recovers the honest MSE. A 30-second illustration of the
+selection-bias trap.
+:::
+
+::: {.card}
+::: {.kicker}
+WEEK 1 · SESSION 2
+:::
+### [Regularisation path](https://shiny.example.org/regularization-path/)
+Pick n, p, sparsity, SNR, and elastic-net alpha; see the full
+coefficient path with the truly non-zero predictors highlighted, and
+the CV curve with `lambda.min` and `lambda.1se` marked.
+:::
+
+::: {.card}
+::: {.kicker}
+WEEK 3 · SESSION 5
+:::
+### [Decision curves](https://shiny.example.org/decision-curves/)
+Pick prevalence and the AUC of two prediction models; compare net
+benefit across thresholds against treat-all and treat-none.
+:::
+
+:::
+
+## Deploying to your Shiny Server
+
+The apps assume a stock self-hosted Shiny Server with each app folder
+served at a route matching its name. To deploy them all:
+
+```bash
+rsync -avz --exclude README.md shiny/ user@your-host:/srv/shiny-server/
+sudo systemctl restart shiny-server
+```
+
+To install the R packages they depend on, on the server:
+
+```r
+install.packages(c(
+  "shiny", "ggplot2", "dplyr", "tidyr", "broom",
+  "dagitty", "ggdag", "deSolve", "glmnet", "pROC", "MASS"
+))
+```
+
+Once your apps are live, edit the URLs above (or use a global
+`{{< var shiny_host >}}` variable in `_quarto.yml`) so they point at
+your host instead of the placeholder.
+
+## Embedding an app inside a lab
+
+To embed an app on a lab page rather than link to it, drop in an
+iframe:
+
+```html
+<iframe src="https://shiny.example.org/clt-explorer/"
+        width="100%" height="650" frameborder="0">
+</iframe>
+```
+
+This works in any lab `.qmd` and renders identically in both the HTML
+article and the Reveal.js deck.

@@ -1,0 +1,152 @@
+---
+title: "Week 2, Session 5 — Non-linear regression with nls"
+subtitle: "Course 2 — Biostatistics Courses"
+format:
+  html:
+    toc: true
+    toc-depth: 3
+    code-fold: false
+    code-tools: true
+  revealjs:
+    output-file: "lab_week2_session5_slides.html"
+    theme: [default, ../../assets/slides.scss]
+    slide-number: c/t
+    progress: true
+    scrollable: true
+    transition: none
+    preview-links: auto
+execute:
+  warning: false
+  message: false
+---
+
+::: {.callout-note}
+**Inference labs** use the five-step template:
+Hypothesis → Visualise → Assumptions → Conduct → Conclude.
+:::
+
+## Learning objectives
+
+- Fit a parametric non-linear model with `nls()` and report the three
+  parameters.
+- Choose starting values that let the optimiser converge.
+- Distinguish a GAM's flexible curve from an `nls` model's mechanistic
+  curve.
+
+## Prerequisites
+
+Sessions 2 and 4 of this week.
+
+## Background
+
+Where a GAM says *fit a smooth and see what shape it takes*, `nls`
+says *this curve has a known parametric form and I want the
+parameters*. Michaelis–Menten kinetics, three-parameter logistic
+dose-response, and exponential decay are all examples of mechanistic
+models where the parameters have physical meanings: asymptote,
+half-maximal response, rate, and so on.
+
+Fitting non-linear models is slightly more fragile than fitting linear
+ones because the optimiser must start somewhere and can get lost.
+Sensible starting values come from the shape of the data: the
+asymptote from the highest fitted values, the inflection from where
+the curve flattens, and so on. `SSlogis` and related self-starting
+functions estimate these automatically for common parameterisations.
+
+::: {.content-visible when-format="html"}
+`nls` gives asymptotic standard errors by default. For small samples
+or poor parameter identifiability, bootstrap or profile-likelihood
+intervals (`confint(fit)` uses profiles) are more honest.
+:::
+
+## Setup
+
+```{r}
+#| label: setup
+library(tidyverse)
+library(broom)
+set.seed(42)
+theme_set(theme_minimal(base_size = 12))
+```
+
+## 1. Hypothesis
+
+Simulate dose-response data and fit a three-parameter logistic.
+
+## 2. Visualise
+
+```{r}
+n <- 60
+dose <- rep(c(0.1, 0.3, 1, 3, 10, 30), each = 10)
+# true params: asym = 100, xmid = log(3), scal = 0.7 (log-scale)
+true_resp <- 100 / (1 + exp(-(log(dose) - log(3)) / 0.7))
+resp <- true_resp + rnorm(n, 0, 5)
+dat <- tibble(dose, resp)
+
+ggplot(dat, aes(dose, resp)) +
+  geom_point(alpha = 0.7) +
+  scale_x_log10() +
+  labs(x = "Dose (log scale)", y = "Response")
+```
+
+## 3. Assumptions
+
+Correct model form, independent normal errors with constant variance
+on the response scale, and informative starting values.
+
+```{r}
+fit <- nls(resp ~ SSlogis(log(dose), Asym, xmid, scal), data = dat)
+resid_plot <- tibble(fitted = fitted(fit), resid = resid(fit))
+ggplot(resid_plot, aes(fitted, resid)) +
+  geom_point() +
+  geom_hline(yintercept = 0, linetype = 2, colour = "grey50") +
+  labs(x = "Fitted", y = "Residual")
+```
+
+## 4. Conduct
+
+```{r}
+summary(fit)
+confint(fit)
+
+pred <- tibble(dose = 10 ^ seq(-1, 1.5, length.out = 100))
+pred$resp <- predict(fit, newdata = pred)
+
+ggplot(dat, aes(dose, resp)) +
+  geom_point(alpha = 0.7) +
+  geom_line(data = pred, colour = "steelblue", linewidth = 0.8) +
+  scale_x_log10() +
+  labs(x = "Dose (log scale)", y = "Response")
+```
+
+## 5. Concluding statement
+
+> A three-parameter logistic fitted on the log-dose scale returned an
+> asymptote of `r round(coef(fit)["Asym"], 1)` units and a mid-dose
+> (EC50) at `r round(exp(coef(fit)["xmid"]), 2)`. Confidence intervals
+> were obtained via the likelihood profile (see `confint`).
+
+::: {.notes}
+Explain why the self-starting function matters: without it, the
+student is confronted with finding starts for three parameters from
+scratch, which distracts from the concept.
+:::
+
+## Common pitfalls
+
+- Starting values that put the optimiser in a local minimum.
+- Reporting symmetric SE-based intervals when the likelihood is
+  asymmetric; prefer `confint`.
+- Over-interpreting parameters when the data do not span the asymptote.
+
+## Further reading
+
+- Bates DM, Watts DG. *Nonlinear Regression Analysis and Its Applications*.
+- Ritz C, Streibig JC. *Nonlinear Regression with R*.
+- Pinheiro JC, Bates DM. *Mixed-Effects Models in S and S-PLUS*, ch. 8.
+
+## Session info
+
+```{r}
+sessionInfo()
+```

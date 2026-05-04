@@ -1,0 +1,112 @@
+---
+title: "Biostatistics Courses"
+pagetitle: "Biostatistics Courses"
+toc: false
+---
+
+::: {.hero}
+::: {.kicker}
+OPEN CURRICULUM · R · QUARTO · MIT
+:::
+# A four-course ladder, end to end
+
+::: {.lead}
+A four-course ladder from first principles to modern statistical learning,
+built for biomedical researchers who want to stop guessing about statistics.
+:::
+:::
+
+## What this is
+
+This site hosts a complete, opinionated biostatistics programme written in
+R and Quarto. It runs from the scientific process and data hygiene through
+regression, study design, causal inference, and modern statistical learning.
+Every lab is runnable on a laptop, every concept is introduced by way of a
+plot before a formula, and every inference lab follows the same five-step
+template so the shape of statistical reasoning becomes familiar long before
+the mathematics stops being intimidating. The curriculum is MIT-licensed
+and self-contained: no external data files, no institutional login, no
+exams. Clone the repository, open an R session, and work through it.
+
+## Who this is for
+
+The primary audience is PhD students, clinicians, postdocs, and research
+engineers in the biomedical sciences — anyone who needs to read a methods
+section critically, design a defensible study, analyse their own data, and
+report the result without sweeping the uncertainty under the rug. A working
+knowledge of basic R and high-school algebra is enough to start Course 1.
+The later courses assume familiarity with regression but build everything
+else from the ground up.
+
+## The four courses
+
+::: {.card-grid}
+
+::: {.card}
+::: {.kicker}
+Course 1 · Introductory
+:::
+### [Foundations of Biostatistics with R](course1_foundations/index.qmd)
+The scientific process, data hygiene, probability, sampling, and the core
+hypothesis tests that anchor everything else. 4 weeks · 20 labs.
+:::
+
+::: {.card}
+::: {.kicker}
+Course 2 · Intermediate
+:::
+### [Regression, ANOVA & Model Diagnostics](course2_regression/index.qmd)
+Linear models, ANOVA, GLMs, diagnostics, calibration, and honest model
+evaluation. 4 weeks · 20 labs.
+:::
+
+::: {.card}
+::: {.kicker}
+Course 3 · Advanced
+:::
+### [Study Design, Longitudinal Data & Causal Inference](course3_design_causal/index.qmd)
+Designing studies; handling missing, clustered, and time-to-event data;
+and making causal claims with care. 4 weeks · 20 labs.
+:::
+
+::: {.card}
+::: {.kicker}
+Course 4 · Specialist
+:::
+### [Modern Statistical Learning & High-Dimensional Biomedicine](course4_ml_highdim/index.qmd)
+Regularisation, tree ensembles, Bayesian modelling, omics, and
+reproducibility at scale. 4 weeks · 20 labs.
+:::
+
+:::
+
+## The five-step template
+
+Every inference lab marches through the same five steps:
+**Hypothesis → Visualise → Assumptions → Conduct → Conclude.**
+Workflow labs use the variant **Goal → Approach → Execution → Check → Report.**
+The sequence is not arbitrary: it mirrors the order in which a Methods
+section is written. State what you are asking, look at the data before you
+model it, check whether your chosen method is defensible, run it, and then
+write down what you found with an effect size and an interval. After
+twenty repetitions of this rhythm the scaffolding becomes invisible and
+the statistics starts to feel like a thought process rather than a recipe.
+
+## One source, two formats
+
+Every lab in this curriculum is written once and rendered twice. A single
+`.qmd` file produces a long-form article for reading and a
+[Reveal.js](https://quarto.org/docs/presentations/revealjs/) slide deck
+for teaching. The article carries the prose, the code, and the
+discussion; the deck distils the essentials into slides you can present
+at a group meeting or a seminar. One `quarto render` builds both.
+
+## Further along
+
+- [Get Started](get_started.qmd) — install, clone, and render the site locally.
+- [Schedule](schedule.qmd) — a linked index of every lab, every deck, every script.
+- [Cheatsheets](cheatsheets.qmd) — sixteen dense one-pagers, one per week, HTML + PDF.
+- [Interactive apps](shiny.qmd) — Shiny companions to the labs.
+- [Research workflow](appendices/research_workflow.qmd), [Decision tree](appendices/decision_tree.qmd), [Glossary](appendices/glossary.qmd), [Common errors](appendices/common_errors.qmd), [Writing a report](appendices/writing_a_report.qmd).
+- [References](references.qmd) — the sources and teaching ecosystems we drew on.
+- [Acknowledgements](acknowledgements.qmd) — the full list of people whose work made this curriculum possible.

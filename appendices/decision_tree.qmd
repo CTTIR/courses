@@ -1,0 +1,113 @@
+---
+title: "Decision tree: which method?"
+toc: true
+---
+
+::: {.hero}
+::: {.kicker}
+APPENDIX · DECISION TREE
+:::
+# Decision tree: which method?
+::: {.lead}
+A branching guide from what you are asking to the lab that shows you
+how to answer it.
+:::
+:::
+
+The tree below is not a substitute for thinking; it is a scaffold for
+thinking. Start from your scientific question, follow the branches, and
+land on a lab. Every leaf links into the curriculum.
+
+```{mermaid}
+flowchart TD
+  Start{What is the question?}
+  Start --> Q1[Compare two or more groups]
+  Start --> Q2[Quantify an association]
+  Start --> Q3[Model an outcome from predictors]
+  Start --> Q4[Handle clustered or repeated data]
+  Start --> Q5[Deal with high-dimensional data]
+  Start --> Q6[Estimate a causal effect]
+
+  Q1 --> G1[Continuous outcome]
+  G1 --> G1a[Two groups → t-test / Wilcoxon]
+  G1 --> G1b[Many groups → ANOVA / Kruskal-Wallis]
+
+  Q1 --> G2[Binary outcome]
+  G2 --> G2a[Two proportions → chi-square / Fisher]
+  G2 --> G2b[Risk or odds ratio]
+
+  Q2 --> A1[Two continuous → Pearson / Spearman]
+  Q2 --> A2[Continuous & categorical → ANOVA]
+  Q2 --> A3[Categorical & categorical → chi-square]
+
+  Q3 --> M1[Continuous outcome → linear regression]
+  Q3 --> M2[Binary → logistic]
+  Q3 --> M3[Count → Poisson / NB]
+  Q3 --> M4[Ordinal → ordinal logit]
+  Q3 --> M5[Time-to-event → Cox / KM]
+
+  Q4 --> C1[Linear mixed model]
+  Q4 --> C2[GLMM or GEE]
+  Q4 --> C3[Repeated measures ANOVA]
+
+  Q5 --> H1[Regularisation → lasso / ridge]
+  Q5 --> H2[Dimension reduction → PCA / UMAP]
+  Q5 --> H3[Tree ensemble → RF / xgboost]
+
+  Q6 --> CA1[Randomised → ITT analysis]
+  Q6 --> CA2[Observational → DAG → adjustment set]
+  Q6 --> CA3[Non-randomised → IPTW / matching]
+  Q6 --> CA4[Strong instrument → IV]
+```
+
+## Using the tree
+
+The first branch is always about the shape of your question: *comparison*,
+*association*, *modelling*, *clustering/repetition*, *dimension*, or
+*causation*. The later branches are about the shape of your data:
+*continuous*, *binary*, *count*, *time-to-event*.
+
+## Comparing groups
+
+- **Two groups, continuous:** start with a t-test if normality holds, the
+  Wilcoxon rank-sum otherwise. See [Course 1 W4 S1](../course1_foundations/labs/lab_week4_session1.qmd) and [W4 S4](../course1_foundations/labs/lab_week4_session4.qmd).
+- **More than two groups, continuous:** ANOVA (or Kruskal-Wallis). See
+  [Course 2 W2 S1](../course2_regression/labs/lab_week2_session1.qmd).
+- **Two proportions:** chi-square with large cells, Fisher with small.
+  See [Course 1 W4 S2](../course1_foundations/labs/lab_week4_session2.qmd).
+
+## Associations
+
+- **Two continuous variables:** Pearson if roughly linear and normal,
+  Spearman otherwise. See [Course 1 W4 S3](../course1_foundations/labs/lab_week4_session3.qmd).
+- **A continuous and a categorical variable:** ANOVA is equivalent to a
+  linear model with a categorical predictor. See [Course 2 W1 S2](../course2_regression/labs/lab_week1_session2.qmd).
+- **Two categorical variables:** chi-square test of independence, or
+  loglinear model for more than two factors.
+
+## Regression modelling
+
+- **Continuous outcome → linear regression.** [Course 2 W1](../course2_regression/labs/lab_week1_session2.qmd).
+- **Binary outcome → logistic regression.** [Course 2 W3 S1](../course2_regression/labs/lab_week3_session1.qmd).
+- **Count outcome → Poisson / negative binomial.** [Course 2 W3 S4](../course2_regression/labs/lab_week3_session4.qmd).
+- **Ordinal outcome → ordinal logit.** [Course 2 W3 S3](../course2_regression/labs/lab_week3_session3.qmd).
+- **Time-to-event → Cox proportional hazards.** [Course 2 W4 S3](../course2_regression/labs/lab_week4_session3.qmd).
+
+## Clustered or repeated data
+
+- **Continuous outcome:** linear mixed model. [Course 3 W2 S3](../course3_design_causal/labs/lab_week2_session3.qmd).
+- **Binary or count outcome:** GLMM or GEE. [Course 3 W2 S4](../course3_design_causal/labs/lab_week2_session4.qmd).
+
+## High-dimensional data
+
+- **Many predictors:** regularisation with `glmnet`. [Course 4 W1 S2](../course4_ml_highdim/labs/lab_week1_session2.qmd).
+- **Many variables, fewer dimensions wanted:** PCA, UMAP, t-SNE. [Course 4 W1 S3](../course4_ml_highdim/labs/lab_week1_session3.qmd) and [S5](../course4_ml_highdim/labs/lab_week1_session5.qmd).
+- **Prediction on messy tabular data:** tree ensembles. [Course 4 W2 S1](../course4_ml_highdim/labs/lab_week2_session1.qmd).
+
+## Estimating a causal effect
+
+- **Randomised trial:** analyse by ITT. [Course 3 W1 S2](../course3_design_causal/labs/lab_week1_session2.qmd).
+- **Observational data:** draw a DAG, pick an adjustment set.
+  [Course 3 W3 S3](../course3_design_causal/labs/lab_week3_session3.qmd).
+- **Non-randomised treatment:** propensity scores or IPTW. [Course 3 W3 S4](../course3_design_causal/labs/lab_week3_session4.qmd).
+- **A plausible instrument:** instrumental-variable regression. [Course 3 W3 S5](../course3_design_causal/labs/lab_week3_session5.qmd).

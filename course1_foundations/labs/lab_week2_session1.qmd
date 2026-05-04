@@ -1,0 +1,194 @@
+---
+title: "Week 2, Session 1 — Descriptive statistics and Table 1"
+subtitle: "Course 1 — Biostatistics Courses"
+format:
+  html:
+    toc: true
+    toc-depth: 3
+    code-fold: false
+    code-tools: true
+  revealjs:
+    output-file: "lab_week2_session1_slides.html"
+    theme: [default, ../../assets/slides.scss]
+    slide-number: c/t
+    progress: true
+    scrollable: true
+    transition: none
+    preview-links: auto
+execute:
+  warning: false
+  message: false
+---
+
+::: {.callout-note}
+**Workflow labs** use the variant template:
+Goal → Approach → Execution → Check → Report.
+:::
+
+## Learning objectives
+
+- Match the right summary statistic to the right variable type —
+  means for symmetric continuous, medians for skewed, counts and
+  percentages for categorical.
+- Build a publication-ready Table 1 with `gtsummary::tbl_summary()`.
+- Defend the choice of summary with a quick visual check.
+
+## Prerequisites
+
+Labs 1.3 through 1.5.
+
+## Background
+
+Table 1 is the first real table of almost every clinical paper. It
+describes the sample: who was in the study, in how many groups, with
+what characteristics, and — if the study has arms — how balanced those
+arms are at baseline. A Table 1 that is built thoughtlessly hides an
+unbalanced comparison; a Table 1 that is built well anchors the rest
+of the paper.
+
+The right summary depends on the variable. A continuous variable that
+is roughly symmetric is summarised by its mean and standard deviation;
+one that is skewed or has heavy tails is summarised by its median and
+interquartile range. A categorical variable is summarised by counts
+and percentages. Reporting the median of a balanced continuous variable
+is not wrong, but it is unusual; reporting the mean of a skewed
+variable is often misleading.
+
+gtsummary packages these choices into a declarative API. You say
+which variables to include and which grouping variable to stratify by,
+and the table is built with sensible defaults. When you need
+non-standard behaviour, you override per-variable.
+
+## Setup
+
+```{r}
+#| label: setup
+library(tidyverse)
+library(palmerpenguins)
+library(gtsummary)
+set.seed(42)
+theme_set(theme_minimal(base_size = 12))
+```
+
+## 1. Goal
+
+Produce a Table 1 for the `penguins` dataset stratified by species,
+and back the choice of summary with a diagnostic plot.
+
+## 2. Approach
+
+```{r}
+dat <- penguins |>
+  drop_na(species, sex, bill_length_mm, bill_depth_mm,
+          flipper_length_mm, body_mass_g)
+```
+
+## 3. Execution
+
+Pick the right summary per variable. First, eyeball the shapes.
+
+```{r}
+#| fig-width: 7
+#| fig-height: 4
+dat |>
+  pivot_longer(c(bill_length_mm, bill_depth_mm,
+                 flipper_length_mm, body_mass_g),
+               names_to = "variable", values_to = "value") |>
+  ggplot(aes(value, fill = species)) +
+  geom_histogram(bins = 20, alpha = 0.6, colour = "grey30",
+                 position = "identity") +
+  facet_wrap(~ variable, scales = "free") +
+  labs(x = NULL, y = "Count")
+```
+
+All four continuous variables are approximately symmetric within
+species, so mean (SD) is defensible. If a variable were skewed, we
+would switch to median (IQR).
+
+```{r}
+t1 <- dat |>
+  select(species, sex, bill_length_mm, bill_depth_mm,
+         flipper_length_mm, body_mass_g) |>
+  tbl_summary(
+    by = species,
+    statistic = list(
+      all_continuous() ~ "{mean} ({sd})",
+      all_categorical() ~ "{n} ({p}%)"
+    ),
+    digits = all_continuous() ~ 1,
+    label = list(
+      bill_length_mm    ~ "Bill length (mm)",
+      bill_depth_mm     ~ "Bill depth (mm)",
+      flipper_length_mm ~ "Flipper length (mm)",
+      body_mass_g       ~ "Body mass (g)",
+      sex               ~ "Sex"
+    )
+  ) |>
+  add_overall() |>
+  add_p()
+t1
+```
+
+`add_p()` will run a t-test or ANOVA on continuous variables and a
+chi-square or Fisher's exact test on categorical, with sensible
+defaults for sample size.
+
+## 4. Check
+
+Validate the gtsummary output against a hand computation.
+
+```{r}
+dat |>
+  group_by(species) |>
+  summarise(
+    n = n(),
+    mean_mass = mean(body_mass_g),
+    sd_mass   = sd(body_mass_g),
+    .groups = "drop"
+  )
+```
+
+The group means and standard deviations must match the numbers in the
+body-mass row of the Table 1.
+
+## 5. Report
+
+> Table 1 describes `r nrow(dat)` penguins from three species in the
+> Palmer Archipelago. Body mass was highest in Gentoo
+> (`r round(mean(dat$body_mass_g[dat$species == "Gentoo"]), 0)`
+> ± `r round(sd(dat$body_mass_g[dat$species == "Gentoo"]), 0)` g) and
+> lower in Adelie and Chinstrap. All four continuous variables were
+> approximately symmetric within species and are summarised as mean
+> (SD); sex was approximately balanced within each species.
+
+Table 1 is not a tool for hypothesis testing. The *p*-values in the
+rightmost column describe the data, not the biology. A
+statistically-significant difference between arms at baseline in a
+randomised trial is, by construction, a chance finding.
+
+::: {.notes}
+Stress the distinction between Table 1 as description and Table 2 as
+inference. The audience will carry the habit into their own writing.
+:::
+
+## Common pitfalls
+
+- Reporting a mean for a skewed variable.
+- Using Table 1 as a place to "prove balance" with *p*-values in a
+  randomised trial.
+- Suppressing the missing-data row. Always report it.
+- Forgetting that `tbl_summary` drops NAs by default; check the count
+  at the bottom of each column.
+
+## Further reading
+
+- Sjoberg DD et al. *Reproducible summary tables with the gtsummary
+  package*. R Journal.
+- Altman DG. *Practical Statistics for Medical Research*, chapter on
+  describing data.
+
+## Session info
+
+```{r}
+sessionInfo()
+```

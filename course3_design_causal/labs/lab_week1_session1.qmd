@@ -1,0 +1,197 @@
+---
+title: "Week 1, Session 1 — Observational designs and STROBE"
+subtitle: "Course 3 — Biostatistics Courses"
+format:
+  html:
+    toc: true
+    toc-depth: 3
+    code-fold: false
+    code-tools: true
+  revealjs:
+    output-file: "lab_week1_session1_slides.html"
+    theme: [default, ../../assets/slides.scss]
+    slide-number: c/t
+    progress: true
+    scrollable: true
+    transition: none
+    preview-links: auto
+execute:
+  warning: false
+  message: false
+---
+
+::: {.callout-note}
+**Workflow lab** using the variant template:
+Goal → Approach → Execution → Check → Report.
+:::
+
+## Learning objectives
+
+- Distinguish cohort, case-control, and cross-sectional designs and
+  say when each is the right tool.
+- Simulate a source population and draw both a cohort sample and a
+  nested case-control sample from it.
+- Map a study report to the STROBE checklist.
+
+## Prerequisites
+
+Course 1 (inference) and Course 2 (regression). Familiarity with
+tibbles and `glm()`.
+
+## Background
+
+Observational designs differ primarily in how participants enter the
+study and when the outcome is measured relative to the exposure. In a
+cohort we sample on exposure and wait; in a case-control we sample on
+the outcome and look back; in a cross-sectional we sample once and
+measure everything together. The choice is driven by how common the
+outcome is, how long it takes to develop, and how easy the exposure
+is to measure retrospectively.
+
+STROBE (Strengthening the Reporting of Observational Studies in
+Epidemiology) is the reporting checklist that keeps observational
+papers honest. It has 22 items covering title and abstract,
+introduction, methods, results, and discussion, with specific
+branches for the three main designs. You do not need to memorise it;
+you need to know that reviewers will check it.
+
+::: {.content-visible when-format="html"}
+A nested case-control sampled from a defined cohort behaves
+statistically like the full cohort for odds ratios that approximate
+risk ratios when the outcome is rare. This is the trick behind most
+large pharmacoepidemiology studies: a full-cohort analysis is
+wasteful when measurement on every unexposed person is expensive, so
+analysts sample controls from the risk set instead.
+:::
+
+## Setup
+
+```{r}
+#| label: setup
+library(tidyverse)
+set.seed(42)
+theme_set(theme_minimal(base_size = 12))
+```
+
+## 1. Goal
+
+Simulate a source population, carve a cohort study and a nested
+case-control study out of it, and compare the exposure–outcome
+association recovered by each.
+
+## 2. Approach
+
+We generate a population of 5000 people with a binary exposure and a
+binary outcome whose probability depends on exposure and a confounder
+(age). We then (a) analyse the full cohort and (b) draw a
+case-control sample with four controls per case.
+
+```{r}
+n_pop <- 5000
+pop <- tibble(
+  id       = seq_len(n_pop),
+  age      = rnorm(n_pop, 55, 10),
+  exposure = rbinom(n_pop, 1, 0.30)
+)
+# outcome depends on exposure (log OR ~ 0.8) and age
+lp <- -4 + 0.8 * pop$exposure + 0.04 * (pop$age - 55)
+pop <- pop |>
+  mutate(prob = plogis(lp),
+         outcome = rbinom(n_pop, 1, prob))
+```
+
+```{r}
+#| fig-width: 6
+#| fig-height: 3.5
+pop |>
+  count(exposure, outcome) |>
+  mutate(exposure = factor(exposure, labels = c("unexposed", "exposed")),
+         outcome  = factor(outcome,  labels = c("no", "yes"))) |>
+  ggplot(aes(exposure, n, fill = outcome)) +
+  geom_col(position = "dodge", alpha = 0.8) +
+  labs(x = NULL, y = "Count", fill = "Outcome")
+```
+
+## 3. Execution
+
+```{r}
+# Cohort analysis on full population
+fit_cohort <- glm(outcome ~ exposure + age, data = pop, family = binomial)
+coef_cohort <- broom::tidy(fit_cohort, conf.int = TRUE, exponentiate = TRUE)
+coef_cohort
+```
+
+```{r}
+# Nested case-control: all cases, 4 controls per case
+cases    <- pop |> filter(outcome == 1)
+controls <- pop |>
+  filter(outcome == 0) |>
+  slice_sample(n = 4 * nrow(cases))
+ncc <- bind_rows(cases, controls)
+fit_ncc <- glm(outcome ~ exposure + age, data = ncc, family = binomial)
+coef_ncc <- broom::tidy(fit_ncc, conf.int = TRUE, exponentiate = TRUE)
+coef_ncc
+```
+
+## 4. Check
+
+The exposure odds ratio from the nested case-control should be close
+to that from the cohort, because the outcome is uncommon. Precision
+is worse in the case-control sample but the point estimate is not
+biased by the sampling scheme.
+
+```{r}
+bind_rows(
+  cohort = coef_cohort |> filter(term == "exposure"),
+  ncc    = coef_ncc    |> filter(term == "exposure"),
+  .id = "design"
+) |>
+  select(design, estimate, conf.low, conf.high)
+```
+
+## 5. Report
+
+> In a simulated source population of 5000 adults, exposure was
+> associated with the outcome with an adjusted odds ratio of
+> `r round(coef_cohort$estimate[2], 2)` (95% CI:
+> `r round(coef_cohort$conf.low[2], 2)` to
+> `r round(coef_cohort$conf.high[2], 2)`) in a full-cohort analysis,
+> and `r round(coef_ncc$estimate[2], 2)` (95% CI:
+> `r round(coef_ncc$conf.low[2], 2)` to
+> `r round(coef_ncc$conf.high[2], 2)`) in a 1:4 nested case-control
+> sample.
+
+### STROBE in one paragraph
+
+Report the sampling frame, the eligibility criteria, the exposure and
+outcome definitions, how confounders were chosen and handled,
+whatever you did about missing data, and a flow diagram of who was
+included, excluded, and lost. If you can do those six things clearly,
+you have answered most of the STROBE items for free.
+
+::: {.notes}
+The point of this lab is that the design choice is not about the
+model — it is about who gets measured. Reinforce that during the
+slides.
+:::
+
+## Common pitfalls
+
+- Treating a cross-sectional association as evidence of a causal
+  effect when temporality is unknown.
+- Reporting an odds ratio as a risk ratio when the outcome is
+  common.
+- Drawing controls from a different population than the cases.
+- Skipping a flow diagram in an observational paper.
+
+## Further reading
+
+- von Elm E et al. (2007), *The STROBE Statement*.
+- Rothman KJ, Greenland S, Lash TL. *Modern Epidemiology*, ch. 6–8.
+- Pearce N (2016), *Analysis of matched case-control studies*, BMJ.
+
+## Session info
+
+```{r}
+sessionInfo()
+```

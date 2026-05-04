@@ -1,0 +1,176 @@
+---
+title: "Week 4, Session 1 — Dichotomisation, change scores, regression to the mean"
+subtitle: "Course 2 — Biostatistics Courses"
+format:
+  html:
+    toc: true
+    toc-depth: 3
+    code-fold: false
+    code-tools: true
+  revealjs:
+    output-file: "lab_week4_session1_slides.html"
+    theme: [default, ../../assets/slides.scss]
+    slide-number: c/t
+    progress: true
+    scrollable: true
+    transition: none
+    preview-links: auto
+execute:
+  warning: false
+  message: false
+---
+
+::: {.callout-note}
+**Inference labs** use the five-step template:
+Hypothesis → Visualise → Assumptions → Conduct → Conclude.
+:::
+
+## Learning objectives
+
+- Quantify the power loss of a median split on a continuous predictor.
+- Demonstrate regression to the mean in a simulated pre-post design.
+- Distinguish apparent improvement due to RTM from a true treatment
+  effect.
+
+## Prerequisites
+
+Basic regression; ANCOVA from Week 3 Session 2.
+
+## Background
+
+Dichotomising a continuous predictor — *high vs low* — loses
+information in proportion to the variability thrown away. A
+well-known rule of thumb is that the median split reduces power in a
+comparison equivalent to throwing away roughly a third of the sample.
+The only time a dichotomy is defensible is when the clinical decision
+it feeds into is itself binary, and even then the continuous
+underlying variable should enter the analysis.
+
+Regression to the mean is a statistical fact about correlated pairs of
+measurements: participants who score unusually high on a first
+measurement will, on average, score less extremely on a second
+measurement of the same quantity, even with no intervention. In a
+pre-post study this produces apparent *improvement* in the high
+baseline group and apparent *worsening* in the low baseline group.
+ANCOVA handles this automatically; a simple comparison of pre and post
+in the extreme group does not.
+
+::: {.content-visible when-format="html"}
+RTM is not the same as measurement error, but measurement error is one
+source of RTM. Any non-perfect correlation between measurements
+produces it. This is why baseline stratification by a continuous
+variable must be prespecified — selecting on a single noisy baseline
+guarantees RTM.
+:::
+
+## Setup
+
+```{r}
+#| label: setup
+library(tidyverse)
+library(broom)
+set.seed(42)
+theme_set(theme_minimal(base_size = 12))
+```
+
+## 1. Hypothesis
+
+Two simulations:
+
+1. A continuous predictor truly associated with a continuous outcome;
+   compare the *p*-value when treated as continuous vs median-split.
+2. A pre-post dataset with no intervention; show apparent improvement
+   in the high-baseline group.
+
+## 2. Visualise
+
+```{r}
+n <- 200
+x <- rnorm(n)
+y <- 0.3 * x + rnorm(n, 0, 1)
+dat1 <- tibble(x, y, x_bin = factor(ifelse(x > median(x), "high", "low")))
+
+ggplot(dat1, aes(x, y)) +
+  geom_point(alpha = 0.5) +
+  geom_smooth(method = "lm", colour = "steelblue") +
+  labs(x = "x (continuous)", y = "y")
+```
+
+## 3. Assumptions
+
+Independence, approximate normality; standard regression assumptions.
+
+## 4. Conduct
+
+Power loss from dichotomisation:
+
+```{r}
+tidy(lm(y ~ x, data = dat1))     # continuous
+tidy(lm(y ~ x_bin, data = dat1)) # median split
+```
+
+The *p*-value for x_bin should be larger than for x; the standard
+error is larger and the estimate is attenuated.
+
+Regression to the mean:
+
+```{r}
+n2 <- 1000
+pre  <- rnorm(n2, 100, 15)
+post <- 0.7 * (pre - 100) + 100 + rnorm(n2, 0, 11)
+dat2 <- tibble(pre, post) |>
+  mutate(high_baseline = pre > quantile(pre, 0.8))
+
+dat2 |>
+  group_by(high_baseline) |>
+  summarise(pre_mean = mean(pre), post_mean = mean(post),
+            change = mean(post - pre))
+```
+
+The "high baseline" group shows a large negative mean change; the rest
+of the sample shows a small positive change. No intervention occurred.
+
+```{r}
+ggplot(dat2, aes(pre, post)) +
+  geom_point(alpha = 0.3) +
+  geom_abline(slope = 1, intercept = 0, linetype = 2, colour = "grey50") +
+  geom_smooth(method = "lm", colour = "firebrick") +
+  labs(x = "Baseline", y = "Follow-up")
+```
+
+The fitted line is flatter than the identity line; that flattening is
+RTM.
+
+## 5. Concluding statement
+
+> Dichotomising the continuous predictor inflated its *p*-value from
+> `r signif(tidy(lm(y ~ x, data = dat1))$p.value[2], 2)` to
+> `r signif(tidy(lm(y ~ x_bin, data = dat1))$p.value[2], 2)` and
+> widened its standard error. In the pre-post simulation with no
+> intervention, the top-baseline quintile showed a mean decline of
+> `r round(dat2 |> filter(high_baseline) |> summarise(mean(post - pre)) |> pull(), 1)`
+> units, entirely attributable to regression to the mean.
+
+::: {.notes}
+If time permits, loop the power simulation at different effect sizes
+to make the power loss visceral.
+:::
+
+## Common pitfalls
+
+- Dichotomising to avoid thinking about the slope.
+- Comparing pre-post within a high-baseline subgroup and calling the
+  decline an effect.
+- Using a paired *t*-test on change in a selected subgroup.
+
+## Further reading
+
+- MacCallum RC et al. (2002), *On the practice of dichotomization…*
+- Altman DG, Royston P (2006), *The cost of dichotomising continuous…*
+- Senn S (2011), *Francis Galton and regression to the mean*.
+
+## Session info
+
+```{r}
+sessionInfo()
+```

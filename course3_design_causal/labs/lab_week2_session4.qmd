@@ -1,0 +1,179 @@
+---
+title: "Week 2, Session 4 — GLMMs and GEE"
+subtitle: "Course 3 — Biostatistics Courses"
+format:
+  html:
+    toc: true
+    toc-depth: 3
+    code-fold: false
+    code-tools: true
+  revealjs:
+    output-file: "lab_week2_session4_slides.html"
+    theme: [default, ../../assets/slides.scss]
+    slide-number: c/t
+    progress: true
+    scrollable: true
+    transition: none
+    preview-links: auto
+execute:
+  warning: false
+  message: false
+---
+
+::: {.callout-note}
+**Inference lab** using the five-step template:
+Hypothesis → Visualise → Assumptions → Conduct → Conclude.
+:::
+
+## Learning objectives
+
+- Fit a binary GLMM for clustered data with `lme4::glmer` and with
+  `glmmTMB`.
+- Fit a GEE with `geepack::geeglm` and compare coefficient
+  interpretations.
+- Say why GLMM and GEE estimate different things (subject-specific
+  vs population-average).
+
+## Prerequisites
+
+Week 2 Session 3 (linear mixed models) and Course 2 logistic
+regression.
+
+## Background
+
+For binary outcomes in clustered data, the two standard approaches
+are generalised linear mixed models (GLMM) and generalised
+estimating equations (GEE). A GLMM is a random-effects model on the
+link scale; its fixed-effect coefficients are conditional on the
+random effect and describe subject-specific effects. A GEE fits a
+marginal model using a working correlation structure; its
+coefficients describe population-averaged effects. For logistic
+models, the two will not in general agree even when both are
+correctly specified.
+
+`lme4::glmer` is the classic random-effects fitter; `glmmTMB`
+handles larger and more complex random structures including
+correlated random effects and zero-inflated distributions. `geepack`
+fits GEEs with several working correlation choices; the standard
+errors are robust to misspecification of the correlation structure
+but the point estimate can shift.
+
+::: {.content-visible when-format="html"}
+The choice between GLMM and GEE is not a statistical technicality;
+it is a choice of estimand. If you care about what happens inside a
+person over time, you want a GLMM. If you care about a population-
+average effect for policy or for a marginal treatment effect, you
+want a GEE (or a marginalised GLMM).
+:::
+
+## Setup
+
+```{r}
+#| label: setup
+library(tidyverse)
+library(lme4)
+library(glmmTMB)
+library(geepack)
+set.seed(42)
+theme_set(theme_minimal(base_size = 12))
+```
+
+## 1. Hypothesis
+
+Treatment reduces the probability of a repeated binary event in a
+clustered study (clusters = clinics). The true log-odds fixed
+effect is −0.5.
+
+## 2. Visualise
+
+```{r}
+J  <- 30
+nj <- 20
+dat <- tibble(
+  clinic = factor(rep(seq_len(J), each = nj)),
+  trt    = rbinom(J * nj, 1, 0.5),
+  u      = rep(rnorm(J, 0, 0.8), each = nj)
+) |>
+  mutate(lp = -0.5 * trt + u,
+         y  = rbinom(n(), 1, plogis(lp)))
+
+dat |>
+  group_by(clinic, trt) |>
+  summarise(p = mean(y), .groups = "drop") |>
+  ggplot(aes(factor(trt), p)) +
+  geom_boxplot(alpha = 0.6) +
+  labs(x = "Treatment", y = "Event probability per clinic")
+```
+
+## 3. Assumptions
+
+GLMM: normal random intercepts for clinic, correct link.
+GEE: correct mean structure; standard errors robust to working
+correlation.
+
+## 4. Conduct
+
+```{r}
+fit_glmer <- glmer(y ~ trt + (1 | clinic),
+                   data = dat, family = binomial)
+fit_tmb   <- glmmTMB(y ~ trt + (1 | clinic),
+                     data = dat, family = binomial)
+fit_gee   <- geeglm(y ~ trt, id = clinic, data = dat,
+                    family = binomial, corstr = "exchangeable")
+
+summary(fit_glmer)$coefficients
+summary(fit_tmb)$coefficients$cond
+summary(fit_gee)$coefficients
+```
+
+```{r}
+bind_rows(
+  glmer   = broom.mixed::tidy(fit_glmer, effects = "fixed"),
+  glmmTMB = broom.mixed::tidy(fit_tmb,   effects = "fixed"),
+  gee     = broom::tidy(fit_gee),
+  .id = "model"
+) |>
+  filter(term == "trt") |>
+  select(model, estimate, std.error)
+```
+
+## 5. Concluding statement
+
+> The GLMM gave a subject-specific treatment log-odds of about
+> `r round(fixef(fit_glmer)["trt"], 2)`; the GEE gave a population-
+> averaged log-odds of about
+> `r round(coef(fit_gee)["trt"], 2)`. The GEE estimate is typically
+> attenuated toward zero relative to the GLMM; both are correct
+> answers to different questions.
+
+::: {.notes}
+Make sure students report which correlation structure they used in
+the GEE; it matters for small samples even though the standard
+errors are robust.
+:::
+
+## Common pitfalls
+
+- Comparing GLMM and GEE coefficients as if they estimate the same
+  thing.
+- Using a working independence structure in GEE when clusters are
+  large and treatment is heterogeneous within them.
+- Ignoring overdispersion in a count GLMM by assuming Poisson when
+  negative binomial fits better.
+- Fitting a GLMM with too few clusters (< 10) and trusting the
+  variance component.
+
+## Further reading
+
+- Liang KY, Zeger SL (1986), *Longitudinal data analysis using
+  generalized linear models*.
+- Zeger SL, Liang KY, Albert PS (1988), *Models for longitudinal
+  data: a generalized estimating equation approach*.
+- Brooks ME et al. (2017), *glmmTMB balances speed and
+  flexibility*.
+
+## Session info
+
+```{r}
+sessionInfo()
+```

@@ -1,0 +1,179 @@
+---
+title: "Week 3, Session 3 — Biomarker statistics (Youden, NRI, decision curves)"
+subtitle: "Course 4 — Biostatistics Courses"
+format:
+  html:
+    toc: true
+    toc-depth: 3
+    code-fold: false
+    code-tools: true
+  revealjs:
+    output-file: "lab_week3_session3_slides.html"
+    theme: [default, ../../assets/slides.scss]
+    slide-number: c/t
+    progress: true
+    scrollable: true
+    transition: none
+    preview-links: auto
+execute:
+  warning: false
+  message: false
+---
+
+::: {.callout-note}
+**Testing labs** use the main template:
+Hypothesis → Visualise → Assumptions → Conduct → Conclude.
+:::
+
+## Learning objectives
+
+- Compute ROC-AUC, Youden's index, sensitivity, and specificity at the
+  optimal cut-point.
+- Compute a net reclassification index between two predictive models.
+- Construct a decision curve and interpret net benefit at a range of
+  threshold probabilities.
+
+## Prerequisites
+
+Binary classification and ROC curves from Course 1; logistic regression.
+
+## Background
+
+A candidate biomarker is not useful until it is tied to a decision.
+ROC-AUC summarises discrimination across all thresholds but is
+insensitive to *where* on the curve the action happens. Youden's index
+(sensitivity + specificity − 1) picks the threshold that maximises the
+equal-weighted sum. The net reclassification index (NRI) quantifies
+whether a new model reclassifies cases and non-cases in the correct
+direction relative to a baseline. Decision curve analysis plots *net
+benefit* as a function of the threshold probability, and lets a reader
+compare strategies ("treat all", "treat none", "treat by model") across
+a clinically relevant range.
+
+Discrimination, calibration, and net benefit are three complementary
+axes. A biomarker with high AUC that is poorly calibrated can produce
+harmful decisions; a perfectly calibrated biomarker with low AUC gives
+no useful ranking. Reporting all three keeps the evaluation honest.
+
+::: {.content-visible when-format="html"}
+Decision curves are not hypothesis tests. They are a principled way
+to put a clinical question — what is the harm-to-benefit ratio of
+acting on this prediction? — into the analysis, and to see how the
+answer depends on that ratio.
+:::
+
+## Setup
+
+```{r}
+#| label: setup
+library(tidyverse)
+library(pROC)
+library(MASS)
+set.seed(42)
+theme_set(theme_minimal(base_size = 12))
+```
+
+## 1. Hypothesis
+
+Can a logistic model on `Pima.tr` (glucose, BMI, age) distinguish
+diabetic from non-diabetic patients well enough to support a screening
+decision?
+
+## 2. Visualise
+
+```{r}
+d <- as_tibble(MASS::Pima.tr)
+ggplot(d, aes(glu, bmi, colour = type)) + geom_point(alpha = 0.7)
+```
+
+## 3. Assumptions
+
+Independence of observations; probability of diabetes is monotone in
+the linear predictor; no missingness.
+
+## 4. Conduct
+
+Fit a simple logistic regression and compute discrimination.
+
+```{r}
+fit <- glm(type ~ glu + bmi + age, data = d, family = binomial())
+d$p <- predict(fit, type = "response")
+r  <- roc(d$type, d$p, direction = "<", quiet = TRUE)
+auc(r)
+coords(r, "best", ret = c("threshold", "sensitivity", "specificity",
+                          "youden"), transpose = FALSE)
+```
+
+NRI against a glucose-only baseline.
+
+```{r}
+fit0 <- glm(type ~ glu, data = d, family = binomial())
+p0 <- predict(fit0, type = "response")
+p1 <- d$p
+# Continuous NRI
+case   <- d$type == "Yes"
+nri_up <- mean(p1[case]  > p0[case])   - mean(p1[case]  < p0[case])
+nri_dn <- mean(p1[!case] < p0[!case])  - mean(p1[!case] > p0[!case])
+nri <- nri_up + nri_dn
+c(nri_cases = nri_up, nri_noncases = nri_dn, nri_total = nri)
+```
+
+A manual decision curve.
+
+```{r}
+thr <- seq(0.05, 0.6, by = 0.02)
+dca <- sapply(thr, function(t) {
+  treat <- p1 > t
+  tp <- sum(treat &  case); fp <- sum(treat & !case); N <- length(case)
+  tp / N - (fp / N) * (t / (1 - t))
+})
+nb_all <- sapply(thr, function(t) {
+  tp <- sum(case); fp <- sum(!case); N <- length(case)
+  tp / N - (fp / N) * (t / (1 - t))
+})
+tibble(threshold = thr, model = dca, treat_all = nb_all, treat_none = 0) |>
+  pivot_longer(-threshold) |>
+  ggplot(aes(threshold, value, colour = name)) + geom_line() +
+  labs(x = "threshold probability", y = "net benefit")
+```
+
+## 5. Concluding statement
+
+> A logistic model using glucose, BMI, and age discriminated diabetic
+> from non-diabetic patients in `MASS::Pima.tr` with AUC
+> `r round(as.numeric(auc(r)), 3)`. The Youden-optimal cut-point
+> occurred at a predicted probability of
+> `r round(coords(r, "best", ret = "threshold", transpose = FALSE)[1, 1], 2)`.
+> Adding BMI and age to a glucose-only baseline produced an NRI of
+> `r round(nri, 2)`; the decision curve showed net benefit above
+> "treat all" for threshold probabilities from roughly 0.15 to 0.5.
+
+Decision curves give the clinical context: if the decision to
+intervene at, say, p = 0.2 is under discussion, the model is useful;
+at p = 0.05 or p = 0.7, it is barely distinguishable from treat-all
+or treat-none.
+
+::: {.notes}
+If time, show bootstrap CIs for AUC with `pROC::ci.auc` and for net
+benefit with resampling.
+:::
+
+## Common pitfalls
+
+- Reporting AUC without calibration or decision curves.
+- Computing NRI with a categorical risk cut-point and failing to
+  disclose the cut-off.
+- Using the same data to develop and evaluate the biomarker (apparent
+  performance).
+
+## Further reading
+
+- Pencina MJ, D'Agostino RB Sr, et al. (2008), *Evaluating the added
+  predictive ability of a new marker*.
+- Vickers AJ, Elkin EB (2006), *Decision curve analysis*.
+
+## Session info
+
+```{r}
+sessionInfo()
+```

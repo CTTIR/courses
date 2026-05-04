@@ -1,0 +1,158 @@
+---
+title: "Week 4, Session 4 — SIR and SEIR models with deSolve"
+subtitle: "Course 3 — Biostatistics Courses"
+format:
+  html:
+    toc: true
+    toc-depth: 3
+    code-fold: false
+    code-tools: true
+  revealjs:
+    output-file: "lab_week4_session4_slides.html"
+    theme: [default, ../../assets/slides.scss]
+    slide-number: c/t
+    progress: true
+    scrollable: true
+    transition: none
+    preview-links: auto
+execute:
+  warning: false
+  message: false
+---
+
+::: {.callout-note}
+**Workflow lab:** Goal → Approach → Execution → Check → Report.
+:::
+
+## Learning objectives
+
+- Write a compartmental SIR / SEIR model as a system of ODEs.
+- Solve it with `deSolve::ode` and plot the trajectories.
+- Compute the basic reproduction number R₀ from model parameters and
+  illustrate its effect.
+
+## Prerequisites
+
+Basic calculus intuition and comfort with differential-equation
+notation.
+
+## Background
+
+Compartmental models partition a population into states — *Susceptible*,
+*Exposed*, *Infectious*, *Recovered* — and describe flows between them
+with ordinary differential equations. The SIR model has three
+compartments and two parameters (transmission rate β, recovery rate γ);
+the SEIR model adds an exposed-but-not-yet-infectious class and a
+progression rate σ. These models are caricatures, but they capture the
+shape of an epidemic — exponential rise, peak, decline — surprisingly
+well, and they make the role of R₀ = β/γ visible.
+
+::: {.content-visible when-format="html"}
+The real power of compartmental models in practice is not prediction
+but counterfactual reasoning: *what if* we had vaccinated half the
+population on day zero, or *what if* the infectious period were a day
+shorter? Tuning β and γ to reflect interventions is the bread and
+butter of public-health modelling.
+:::
+
+## Setup
+
+```{r}
+#| label: setup
+library(tidyverse)
+library(deSolve)
+set.seed(42)
+theme_set(theme_minimal(base_size = 12))
+```
+
+## 1. Goal
+
+Simulate an SIR outbreak in a population of 1 million, for R₀ values
+1.5, 2.5, and 4.
+
+## 2. Approach
+
+```{r}
+sir <- function(time, state, params) {
+  with(as.list(c(state, params)), {
+    N  <- S + I + R
+    dS <- -beta * S * I / N
+    dI <-  beta * S * I / N - gamma * I
+    dR <-  gamma * I
+    list(c(dS, dI, dR))
+  })
+}
+```
+
+## 3. Execution
+
+```{r}
+run_sir <- function(R0, gamma = 1/7, days = 180, N = 1e6, I0 = 10) {
+  params <- c(beta = R0 * gamma, gamma = gamma)
+  state  <- c(S = N - I0, I = I0, R = 0)
+  times  <- seq(0, days, by = 1)
+  out <- as.data.frame(ode(state, times, sir, params))
+  out$R0 <- R0
+  out
+}
+
+trajectories <- bind_rows(
+  run_sir(1.5), run_sir(2.5), run_sir(4.0)
+) |>
+  pivot_longer(c(S, I, R), names_to = "compartment", values_to = "n")
+```
+
+```{r}
+#| fig-width: 7.5
+#| fig-height: 4.5
+ggplot(trajectories, aes(time, n, colour = compartment)) +
+  geom_line(linewidth = 0.8) +
+  facet_wrap(~ R0, labeller = labeller(R0 = \(x) paste0("R0 = ", x))) +
+  labs(x = "Day", y = "People")
+```
+
+## 4. Check
+
+Peak prevalence and attack rate should rise with R₀.
+
+```{r}
+trajectories |>
+  filter(compartment == "I") |>
+  group_by(R0) |>
+  summarise(peak_I = max(n), peak_day = time[which.max(n)]) |>
+  arrange(R0)
+```
+
+## 5. Report
+
+> An SIR compartmental model was simulated for a population of one
+> million with a 7-day mean infectious period across three basic
+> reproduction numbers (R₀ = 1.5, 2.5, 4). Peak prevalence and the
+> final attack rate increased sharply with R₀, illustrating how small
+> changes in transmission translate into large changes in epidemic
+> size. Calibrated analogues of this model underpin much real-world
+> outbreak forecasting.
+
+::: {.notes}
+Note that β and γ are not directly observed; they are inferred from
+case counts, and the uncertainty in R₀ propagates from that inference.
+:::
+
+## Common pitfalls
+
+- Interpreting SIR trajectories as forecasts rather than scenarios.
+- Forgetting that a constant β across time ignores interventions.
+- Comparing peak prevalence across parameter settings without holding
+  N and I₀ constant.
+
+## Further reading
+
+- Keeling MJ, Rohani P. *Modeling Infectious Diseases in Humans and
+  Animals.*
+- Soetaert K et al. *Solving Differential Equations in R.*
+
+## Session info
+
+```{r}
+sessionInfo()
+```

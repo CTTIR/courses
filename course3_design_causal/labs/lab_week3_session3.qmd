@@ -1,0 +1,186 @@
+---
+title: "Week 3, Session 3 — DAGs with dagitty and ggdag"
+subtitle: "Course 3 — Biostatistics Courses"
+format:
+  html:
+    toc: true
+    toc-depth: 3
+    code-fold: false
+    code-tools: true
+  revealjs:
+    output-file: "lab_week3_session3_slides.html"
+    theme: [default, ../../assets/slides.scss]
+    slide-number: c/t
+    progress: true
+    scrollable: true
+    transition: none
+    preview-links: auto
+execute:
+  warning: false
+  message: false
+---
+
+::: {.callout-note}
+**Workflow lab** using the variant template:
+Goal → Approach → Execution → Check → Report.
+:::
+
+## Learning objectives
+
+- Express a causal scenario as a directed acyclic graph (DAG).
+- Identify confounders, mediators, and colliders from a DAG.
+- Use `dagitty::adjustmentSets()` to find sufficient adjustment
+  sets.
+
+## Prerequisites
+
+Conceptual knowledge of confounding.
+
+## Background
+
+A DAG is a set of variables joined by arrows that encode assumed
+causal directions. The graph distinguishes three kinds of third
+variable on a path between exposure and outcome: a *confounder* is
+a common cause; a *mediator* lies on the causal path from exposure
+to outcome; a *collider* is a common effect of two variables on the
+path. The practical upshot is that adjusting for a confounder
+reduces bias, adjusting for a mediator removes part of the effect
+you are trying to estimate, and adjusting for a collider *creates*
+bias where none existed.
+
+`dagitty` and `ggdag` let you declare a DAG in text, visualise it,
+and then query it for adjustment sets — the minimal variable sets
+that block all back-door paths from exposure to outcome without
+opening new ones. The right adjustment set depends on the question.
+For the total effect of X on Y, you want to close all back-door
+paths but leave mediators alone; for the direct effect, you also
+block mediators.
+
+::: {.content-visible when-format="html"}
+M-bias is the classic example of collider adjustment: conditioning
+on a variable that is a common effect of an unmeasured cause of X
+and an unmeasured cause of Y opens a path and biases the estimate.
+This is why "adjust for everything" is bad advice.
+:::
+
+## Setup
+
+```{r}
+#| label: setup
+library(tidyverse)
+library(dagitty)
+library(ggdag)
+set.seed(42)
+theme_set(theme_minimal(base_size = 12))
+```
+
+## 1. Goal
+
+Write a confounder, mediator, and collider scenario as DAGs; ask
+`dagitty` which variables to adjust for.
+
+## 2. Approach
+
+```{r}
+dag1 <- dagitty('dag {
+  X -> Y
+  C -> X
+  C -> Y
+  X [exposure]
+  Y [outcome]
+}')
+
+dag2 <- dagitty('dag {
+  X -> M -> Y
+  X -> Y
+  X [exposure]
+  Y [outcome]
+}')
+
+dag3 <- dagitty('dag {
+  X -> Z
+  Y -> Z
+  X -> Y
+  X [exposure]
+  Y [outcome]
+}')
+
+ggdag(dag1) + theme_dag()
+ggdag(dag2) + theme_dag()
+ggdag(dag3) + theme_dag()
+```
+
+## 3. Execution
+
+```{r}
+adjustmentSets(dag1, exposure = "X", outcome = "Y",
+               effect = "total")
+```
+
+```{r}
+# Total vs direct effect when a mediator exists
+adjustmentSets(dag2, exposure = "X", outcome = "Y",
+               effect = "total")
+adjustmentSets(dag2, exposure = "X", outcome = "Y",
+               effect = "direct")
+```
+
+```{r}
+# Collider: do not adjust for Z
+adjustmentSets(dag3, exposure = "X", outcome = "Y")
+```
+
+## 4. Check
+
+Simulate dag1 and verify that adjusting for C recovers the true
+effect while failing to adjust biases it.
+
+```{r}
+n  <- 2000
+c_ <- rnorm(n)
+x  <- 0.6 * c_ + rnorm(n)
+y  <- 0.4 * x + 0.7 * c_ + rnorm(n)
+df <- tibble(c_, x, y)
+
+coef(lm(y ~ x,        data = df))["x"]
+coef(lm(y ~ x + c_,   data = df))["x"]
+```
+
+The unadjusted coefficient is inflated; the adjusted one is close
+to 0.4 as simulated.
+
+## 5. Report
+
+> A directed acyclic graph is a compact, testable statement of
+> causal assumptions. Dagitty identified the confounder C as the
+> required adjustment set in the first DAG; the collider Z in the
+> third DAG is explicitly *not* in any adjustment set, and
+> conditioning on it would introduce selection bias.
+
+::: {.notes}
+Draw the M-bias example on the board during lecture; it is the
+single clearest argument against automatic variable-inclusion
+procedures.
+:::
+
+## Common pitfalls
+
+- Listing "every variable we measured" as the adjustment set.
+- Adjusting for a mediator and calling the result a total effect.
+- Using automated variable selection on observational data without
+  a DAG.
+- Drawing the DAG after the analysis.
+
+## Further reading
+
+- Textor J et al. (2016), *Robust causal inference using directed
+  acyclic graphs: the R package 'dagitty'*.
+- Hernán MA, Robins JM. *Causal Inference: What If*.
+- Greenland S, Pearl J, Robins JM (1999), *Causal diagrams for
+  epidemiologic research*.
+
+## Session info
+
+```{r}
+sessionInfo()
+```

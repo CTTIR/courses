@@ -1,0 +1,74 @@
+project:
+  type: website
+  output-dir: docs
+  render:
+    - "*.qmd"
+    - "course1_foundations/**/*.qmd"
+    - "course2_regression/**/*.qmd"
+    - "course3_design_causal/**/*.qmd"
+    - "course4_ml_highdim/**/*.qmd"
+    - "appendices/**/*.qmd"
+    - "cheatsheets/**/*.qmd"
+
+execute:
+  freeze: auto
+
+website:
+  title: "#courses"
+  description: "A four-course biostatistics programme in R and Quarto."
+  site-url: "https://r-heller.github.io/courses/"
+  navbar:
+    title: "#courses"
+    left:
+      - href: overview.qmd
+        text: "Overview"
+      - text: "Courses"
+        menu:
+          - href: course1_foundations/index.qmd
+            text: "Course 1 — Foundations"
+          - href: course2_regression/index.qmd
+            text: "Course 2 — Regression"
+          - href: course3_design_causal/index.qmd
+            text: "Course 3 — Design & Causal"
+          - href: course4_ml_highdim/index.qmd
+            text: "Course 4 — ML & High-Dim"
+      - href: about.qmd
+        text: "About"
+    right:
+      - icon: github
+        href: https://github.com/r-heller/courses
+  page-navigation: true
+  page-footer:
+    left: "Biostatistics Courses · MIT"
+    center: |
+      [Get Started](/get_started.qmd) · [Overview](/overview.qmd) · [Schedule](/schedule.qmd) ·
+      [Cheatsheets](/cheatsheets.qmd) ·
+      [Interactive apps](/shiny.qmd) ·
+      [Research workflow](/appendices/research_workflow.qmd) ·
+      [Decision tree](/appendices/decision_tree.qmd) ·
+      [Glossary](/appendices/glossary.qmd) ·
+      [Common errors](/appendices/common_errors.qmd) ·
+      [Writing a report](/appendices/writing_a_report.qmd) ·
+      [References](/references.qmd) ·
+      [Acknowledgements](/acknowledgements.qmd)
+    right: "Built with [Quarto](https://quarto.org)"
+
+format:
+  html:
+    theme:
+      light: [flatly, assets/light.scss]
+      dark:  [darkly, assets/dark.scss]
+    toc: true
+    toc-depth: 3
+    toc-location: right
+    code-copy: true
+    code-overflow: wrap
+    link-external-newwindow: true
+    include-in-header:
+      - text: |
+          <link rel="preconnect" href="https://fonts.googleapis.com">
+          <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+          <link href="https://fonts.googleapis.com/css2?family=Source+Sans+3:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+      - file: _includes/plausible.html
+
+editor: source

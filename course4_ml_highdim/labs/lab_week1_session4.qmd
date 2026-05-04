@@ -1,0 +1,169 @@
+---
+title: "Week 1, Session 4 — Clustering: k-means, hierarchical, model-based"
+subtitle: "Course 4 — Biostatistics Courses"
+format:
+  html:
+    toc: true
+    toc-depth: 3
+    code-fold: false
+    code-tools: true
+  revealjs:
+    output-file: "lab_week1_session4_slides.html"
+    theme: [default, ../../assets/slides.scss]
+    slide-number: c/t
+    progress: true
+    scrollable: true
+    transition: none
+    preview-links: auto
+execute:
+  warning: false
+  message: false
+---
+
+::: {.callout-note}
+**Workflow labs** use the variant template:
+Goal → Approach → Execution → Check → Report.
+:::
+
+## Learning objectives
+
+- Fit k-means and hierarchical clusterings, and choose k by elbow and
+  silhouette.
+- Fit a model-based clustering with `mclust` and select the number of
+  components by BIC.
+- Explain why "number of clusters" is often not the right question.
+
+## Prerequisites
+
+PCA from Session 3; distance and linkage from Course 1.
+
+## Background
+
+Clustering is a search for structure in unlabelled data, and unlike
+classification it has no gold standard. Any algorithm will return a
+partition if asked to, and the partitions it returns depend on
+assumptions about what a cluster is. K-means assumes roughly spherical,
+equal-variance clusters and needs k in advance. Hierarchical clustering
+produces a nested sequence of partitions at every k, which you cut at a
+level you choose. Model-based clustering fits a Gaussian mixture and
+selects k by information criterion, which at least makes the assumption
+explicit.
+
+In biomedicine, the honest version of "how many clusters?" is usually
+"is there more than one?" A good clustering lab focuses on stability
+and interpretability of the partition rather than on the number
+returned.
+
+::: {.content-visible when-format="html"}
+When you report a clustering, report the number of clusters, the
+criterion used to select it, a visualisation in a 2-D projection
+(PCA or UMAP), and the size and key features of each cluster. Do not
+report p-values for cluster labels against the data that produced the
+labels; that circularity is a classic error.
+:::
+
+## Setup
+
+```{r}
+#| label: setup
+library(tidyverse)
+library(mclust)
+library(cluster)
+set.seed(42)
+theme_set(theme_minimal(base_size = 12))
+```
+
+## 1. Goal
+
+Cluster a simulated dataset with three known groups using three
+algorithms, and see which recovers the structure.
+
+## 2. Approach
+
+Three Gaussian blobs in 5 dimensions with different sizes.
+
+```{r}
+make_blob <- function(n, mu, sd = 1) matrix(rnorm(n * 5, 0, sd), n, 5) +
+  rep(mu, each = n)
+X <- rbind(
+  make_blob(60, c(0, 0, 0, 0, 0)),
+  make_blob(40, c(3, 0, 0, 0, 0)),
+  make_blob(30, c(0, 3, 0, 0, 0))
+)
+true_lbl <- rep(c("A", "B", "C"), c(60, 40, 30))
+
+pc <- prcomp(X)$x[, 1:2]
+tibble(PC1 = pc[, 1], PC2 = pc[, 2], group = true_lbl) |>
+  ggplot(aes(PC1, PC2, colour = group)) + geom_point(alpha = 0.7)
+```
+
+## 3. Execution
+
+K-means with k sweep; silhouette.
+
+```{r}
+wss <- sapply(2:8, function(k) kmeans(X, centers = k, nstart = 10)$tot.withinss)
+sil <- sapply(2:8, function(k) {
+  km <- kmeans(X, centers = k, nstart = 10)
+  mean(silhouette(km$cluster, dist(X))[, 3])
+})
+tibble(k = 2:8, wss = wss, sil = sil) |>
+  pivot_longer(-k) |>
+  ggplot(aes(k, value)) + geom_line() + geom_point() +
+  facet_wrap(~ name, scales = "free_y")
+```
+
+Hierarchical with Ward linkage.
+
+```{r}
+hc <- hclust(dist(X), method = "ward.D2")
+plot(hc, labels = FALSE, main = "Ward hierarchical clustering")
+```
+
+## 4. Check
+
+Model-based clustering by BIC.
+
+```{r}
+mc <- Mclust(X, G = 1:6)
+summary(mc)
+```
+
+## 5. Report
+
+> On three simulated Gaussian blobs (n = 130 in R⁵), model-based
+> clustering selected G = `r mc$G` by BIC; k-means with
+> k = `r which.max(sil) + 1` maximised mean silhouette
+> (`r round(max(sil), 2)`). Hierarchical clustering with Ward linkage
+> produced a dendrogram consistent with three primary branches.
+
+When the generating model is actually Gaussian, `mclust` tends to win.
+On real data, no single method is best; the test is whether the
+partition is stable under resampling and interpretable in terms of the
+features.
+
+::: {.notes}
+Show how to bootstrap the clustering and compute an ARI across
+resamples to quantify stability if time.
+:::
+
+## Common pitfalls
+
+- Treating k-means output as ground truth; it is an optimisation answer
+  given k.
+- Running hierarchical clustering on a very large dataset without
+  noting the O(n²) memory cost.
+- Testing post-hoc differences between clusters with the same data
+  that produced them.
+
+## Further reading
+
+- Fraley C, Raftery AE (2002), *Model-based clustering, discriminant
+  analysis, and density estimation*.
+- Hastie, Tibshirani, Friedman, *ESL*, §14.3.
+
+## Session info
+
+```{r}
+sessionInfo()
+```

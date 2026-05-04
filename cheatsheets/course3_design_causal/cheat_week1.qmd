@@ -1,0 +1,85 @@
+---
+title: "Course 3 · Week 1 — Designing studies"
+subtitle: "Cheatsheet — biostats_courses"
+author: "R. Heller"
+format:
+  html: {toc: true, toc-depth: 2, page-layout: full}
+  typst: {papersize: a4, margin: {x: 1.8cm, y: 2cm}, fontsize: 10pt}
+execute: {echo: true, warning: false, message: false}
+---
+
+## Observational designs
+
+| Design | Strengths | Weaknesses |
+|---|---|---|
+| Cohort | temporality, incidence | expensive, loss to follow-up |
+| Case-control | rare outcomes, cheap | recall + selection bias |
+| Cross-sectional | prevalence, screening | no temporality |
+| Case-crossover | within-person comparison | for transient exposures only |
+
+STROBE checklist: <https://www.strobe-statement.org/>
+
+## Trial designs
+
+| Type | When |
+|---|---|
+| Parallel-group | most common; independent arms |
+| Crossover       | stable chronic condition, carry-over washable |
+| Cluster         | intervention at group level (schools, clinics) |
+| Factorial       | two or more interventions, test interactions |
+| Adaptive        | pre-specified modifications based on interim data |
+| Non-inferiority | new treatment not worse than control by margin $\Delta$ |
+| Equivalence     | two-sided non-inferiority |
+
+CONSORT for RCTs: <https://www.consort-statement.org/>
+
+## Bench / translational
+
+- **Blocking** reduces nuisance variation (plate, day, operator).
+- **Factorial** tests interactions efficiently.
+- **Split-plot** handles two levels of randomisation.
+- **Pseudoreplication**: technical replicates ≠ biological replicates.
+
+## Power — closed form
+
+```r
+library(pwr)
+pwr.t.test(d = 0.5, power = 0.80, sig.level = 0.05,
+           type = "two.sample")
+pwr.2p.test(h = ES.h(0.3, 0.2), power = 0.80)
+pwr.r.test(r = 0.3, power = 0.80)
+pwr.anova.test(k = 4, f = 0.25, power = 0.80)
+```
+
+Effect-size conventions (Cohen): small $d$ = 0.2, medium 0.5, large 0.8.
+
+## Power — simulation
+
+```r
+library(simr)
+# Build a pilot model, increase N, or tweak fixef, then:
+ps <- powerSim(model, nsim = 500, test = fixed("arm"))
+ps
+```
+
+Simulation wins for any design the textbook skips: mixed models,
+adaptive rules, non-standard outcomes.
+
+## Decision rule for Week 1
+
+- Randomise if you can. If not, draw a DAG and name the biases.
+- Power calculation before the protocol freeze, not after data collection.
+- Cluster randomisation → design effect $1 + (\bar m - 1)\rho$; inflate N.
+- Bench experiments → treat batch, plate, and operator as random effects.
+
+## Common pitfalls
+
+- Planning a cluster RCT without inflating N for design effect.
+- Borrowing a pilot effect size without acknowledging noise.
+- Running a non-inferiority trial as if it were superiority.
+- Treating technical replicates as if they were biological.
+
+## Further reading
+
+- Matthews, *Introduction to Randomized Controlled Clinical Trials*.
+- Chow & Liu, *Design and Analysis of Clinical Trials*.

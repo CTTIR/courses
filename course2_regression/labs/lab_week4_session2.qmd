@@ -1,0 +1,174 @@
+---
+title: "Week 4, Session 2 — Kappa, ICC, Bland–Altman"
+subtitle: "Course 2 — Biostatistics Courses"
+format:
+  html:
+    toc: true
+    toc-depth: 3
+    code-fold: false
+    code-tools: true
+  revealjs:
+    output-file: "lab_week4_session2_slides.html"
+    theme: [default, ../../assets/slides.scss]
+    slide-number: c/t
+    progress: true
+    scrollable: true
+    transition: none
+    preview-links: auto
+execute:
+  warning: false
+  message: false
+---
+
+::: {.callout-note}
+**Workflow labs** use the variant template:
+Goal → Approach → Execution → Check → Report.
+:::
+
+## Learning objectives
+
+- Compute Cohen's kappa for categorical agreement and explain its
+  chance-correction.
+- Compute an intraclass correlation coefficient for continuous
+  agreement and distinguish consistency from absolute agreement.
+- Draw a Bland–Altman plot and report limits of agreement.
+
+## Prerequisites
+
+Basic R and ggplot2.
+
+## Background
+
+Measurement-agreement studies ask whether two raters, two methods, or
+two instruments give the same answer on the same units. The choice of
+statistic depends on the scale of the measurement. Cohen's kappa
+adjusts simple percent agreement for the agreement expected by chance
+given the marginal frequencies; it ranges from −1 to 1 with common
+landmarks at 0.4 and 0.6. Its main weakness is sensitivity to
+prevalence.
+
+For continuous measurements, the intraclass correlation (ICC) and the
+Bland–Altman plot answer complementary questions. The ICC is a
+single-number summary of reliability, defined in several flavours
+(one-way, two-way, consistency vs absolute). The Bland–Altman plot
+shows *pattern*: it plots the difference between two raters against
+their mean and marks the limits of agreement (typically mean ± 1.96
+SD). It reveals bias, proportional bias, and heteroscedasticity that
+ICCs hide.
+
+::: {.content-visible when-format="html"}
+Reliability is not the same as agreement. Two raters can be highly
+correlated (one is always twice the other) and have a terrible
+agreement. Always report both and let the picture tell the pattern.
+:::
+
+## Setup
+
+```{r}
+#| label: setup
+library(tidyverse)
+library(broom)
+library(psych)
+library(irr)
+set.seed(42)
+theme_set(theme_minimal(base_size = 12))
+```
+
+## 1. Goal
+
+Build two small rater datasets — one categorical, one continuous — and
+compute the matching agreement statistics.
+
+## 2. Approach
+
+For the categorical example, simulate 100 radiograph classifications
+(3 categories) by two readers with substantial but not perfect
+agreement. For the continuous example, simulate 60 measurements by
+two instruments, one with a small constant bias.
+
+```{r}
+# categorical
+cats <- c("normal", "mild", "severe")
+truth <- sample(cats, 100, replace = TRUE, prob = c(0.5, 0.3, 0.2))
+r1 <- ifelse(runif(100) < 0.2, sample(cats, 100, replace = TRUE), truth)
+r2 <- ifelse(runif(100) < 0.25, sample(cats, 100, replace = TRUE), truth)
+kap_tbl <- tibble(r1 = factor(r1, levels = cats),
+                  r2 = factor(r2, levels = cats))
+
+# continuous
+n <- 60
+true_val <- rnorm(n, 100, 15)
+inst1 <- true_val + rnorm(n, 0, 3)
+inst2 <- true_val + 2 + rnorm(n, 0, 3)    # small positive bias
+meas <- tibble(inst1, inst2)
+```
+
+## 3. Execution
+
+Cohen's kappa:
+
+```{r}
+kappa2(kap_tbl[, c("r1", "r2")])
+```
+
+ICC via `psych`:
+
+```{r}
+ICC(as.matrix(meas))
+```
+
+Bland–Altman:
+
+```{r}
+ba <- meas |>
+  mutate(mean_val = (inst1 + inst2) / 2,
+         diff_val = inst2 - inst1)
+loa <- mean(ba$diff_val) + c(-1.96, 0, 1.96) * sd(ba$diff_val)
+
+ggplot(ba, aes(mean_val, diff_val)) +
+  geom_point(alpha = 0.7) +
+  geom_hline(yintercept = loa[1], linetype = 2, colour = "firebrick") +
+  geom_hline(yintercept = loa[2], linetype = 1, colour = "steelblue") +
+  geom_hline(yintercept = loa[3], linetype = 2, colour = "firebrick") +
+  labs(x = "Mean of two instruments",
+       y = "Difference (inst2 − inst1)")
+```
+
+## 4. Check
+
+The ICC should be high (> 0.9) because the raters are well correlated,
+but the Bland–Altman plot shows a small positive bias (inst2 reads
+about 2 units higher on average).
+
+## 5. Report
+
+> Cohen's kappa for the two radiograph readers was
+> `r round(kappa2(kap_tbl[, c("r1","r2")])$value, 2)`. For the two
+> instruments, the ICC (absolute agreement, two-way random) was
+> `r round(ICC(as.matrix(meas))$results$ICC[2], 2)`, but the
+> Bland–Altman plot revealed a mean bias of
+> `r round(mean(ba$diff_val), 1)` units with 95% limits of agreement
+> from `r round(loa[1], 1)` to `r round(loa[3], 1)`.
+
+::: {.notes}
+Two takeaways: bias and precision are separate components of
+agreement, and neither kappa nor a single correlation captures both.
+:::
+
+## Common pitfalls
+
+- Reporting percent agreement instead of kappa.
+- Using Pearson *r* on two raters and calling it agreement.
+- Omitting the limits of agreement from a Bland–Altman plot.
+
+## Further reading
+
+- Bland JM, Altman DG (1986), *Statistical methods for assessing agreement…*
+- Shrout PE, Fleiss JL (1979), *Intraclass correlations...*
+- McGraw KO, Wong SP (1996), *Forming inferences about some ICCs*.
+
+## Session info
+
+```{r}
+sessionInfo()
+```

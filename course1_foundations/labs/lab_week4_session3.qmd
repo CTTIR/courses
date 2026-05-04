@@ -1,0 +1,199 @@
+---
+title: "Week 4, Session 3 — Pearson and Spearman correlation"
+subtitle: "Course 1 — Biostatistics Courses"
+format:
+  html:
+    toc: true
+    toc-depth: 3
+    code-fold: false
+    code-tools: true
+  revealjs:
+    output-file: "lab_week4_session3_slides.html"
+    theme: [default, ../../assets/slides.scss]
+    slide-number: c/t
+    progress: true
+    scrollable: true
+    transition: none
+    preview-links: auto
+execute:
+  warning: false
+  message: false
+---
+
+::: {.callout-note}
+**Inference labs** use the five-step template:
+Hypothesis → Visualise → Assumptions → Conduct → Conclude.
+:::
+
+## Learning objectives
+
+- Compute Pearson and Spearman correlations with `cor.test()` and
+  interpret the coefficient and its CI.
+- Distinguish linear association from monotonic association.
+- Use visualisation to diagnose situations where a correlation
+  coefficient misleads (Anscombe, DatasauRus).
+
+## Prerequisites
+
+Week 1, Lab 2.5.
+
+## Background
+
+Pearson's *r* measures linear association. It is the standardised
+covariance of two variables; it is sensitive to outliers and assumes
+a roughly linear, bivariate-normal relationship. Spearman's *ρ*
+measures monotonic association. It is Pearson's *r* applied to the
+ranks of the variables; it is robust to outliers and to non-linear
+monotonic transformations.
+
+Neither coefficient captures non-linear, non-monotonic relationships
+well. Anscombe's quartet and the DatasauRus dozen are the canonical
+demonstrations that a coefficient without a plot can lie — datasets
+engineered to have identical Pearson *r* but radically different
+shapes. The conclusion is not to abandon correlations but never to
+report one without first plotting the data.
+
+A correlation coefficient is not a causal quantity. Two variables can
+be perfectly correlated without one causing the other — a lurking
+variable, a common cause, a coincidence of sample selection. The word
+"correlation" is often used loosely in the press to mean "weak
+causation"; in this course it means exactly what `cor.test()` returns.
+
+## Setup
+
+```{r}
+#| label: setup
+library(tidyverse)
+library(datasauRus)
+set.seed(42)
+theme_set(theme_minimal(base_size = 12))
+```
+
+## 1. Hypothesis
+
+Two scenarios:
+
+1. A linear relationship between two simulated variables.
+2. A monotonic but non-linear relationship where Pearson misleads.
+
+H0 in each case: ρ = 0. H1: ρ ≠ 0.
+
+## 2. Visualise
+
+```{r}
+n <- 200
+x <- rnorm(n)
+y_linear   <- 0.6 * x + rnorm(n, 0, 0.8)
+y_monotone <- exp(x) + rnorm(n, 0, 0.5)
+df <- tibble(x, y_linear, y_monotone) |>
+  pivot_longer(starts_with("y_"), names_to = "type", values_to = "y")
+```
+
+```{r}
+#| fig-width: 7
+#| fig-height: 3.5
+df |>
+  ggplot(aes(x, y)) +
+  geom_point(alpha = 0.5) +
+  facet_wrap(~ type, scales = "free") +
+  geom_smooth(method = "lm", se = FALSE, colour = "firebrick", linewidth = 0.5)
+```
+
+## 3. Assumptions
+
+Pearson assumes linearity and roughly bivariate-normal data.
+Spearman assumes monotonicity. Neither handles non-monotonic
+relationships. For both, the observations must be independent; both
+are sensitive to extreme sample-size-induced significance when *n*
+is huge.
+
+## 4. Conduct
+
+```{r}
+p1_pearson  <- cor.test(x, y_linear,   method = "pearson")
+p1_spearman <- cor.test(x, y_linear,   method = "spearman", exact = FALSE)
+p2_pearson  <- cor.test(x, y_monotone, method = "pearson")
+p2_spearman <- cor.test(x, y_monotone, method = "spearman", exact = FALSE)
+
+tibble(
+  relationship = c("linear", "linear", "monotone", "monotone"),
+  method = c("Pearson", "Spearman", "Pearson", "Spearman"),
+  r_or_rho = c(p1_pearson$estimate, p1_spearman$estimate,
+               p2_pearson$estimate, p2_spearman$estimate),
+  p = c(p1_pearson$p.value, p1_spearman$p.value,
+        p2_pearson$p.value, p2_spearman$p.value)
+)
+```
+
+The monotonic non-linear relationship gives a much higher Spearman
+than Pearson — the rank correlation sees the perfect monotonicity.
+
+### The DatasauRus demonstration
+
+```{r}
+ds_summary <- datasaurus_dozen |>
+  group_by(dataset) |>
+  summarise(mean_x = mean(x),
+            mean_y = mean(y),
+            sd_x = sd(x),
+            sd_y = sd(y),
+            r = cor(x, y), .groups = "drop")
+head(ds_summary)
+```
+
+```{r}
+#| fig-width: 8
+#| fig-height: 6
+datasaurus_dozen |>
+  ggplot(aes(x, y)) +
+  geom_point(alpha = 0.4, size = 0.8) +
+  facet_wrap(~ dataset) +
+  labs(x = NULL, y = NULL)
+```
+
+Thirteen datasets; all have mean *x* ≈ 54, mean *y* ≈ 47, SDs ≈ 17
+and 26, and Pearson *r* ≈ −0.06. The shapes are wildly different.
+
+## 5. Concluding statement
+
+> In the linear case, Pearson *r* =
+> `r round(p1_pearson$estimate, 2)` (*p* =
+> `r signif(p1_pearson$p.value, 2)`) and Spearman
+> ρ = `r round(p1_spearman$estimate, 2)`; the two agreed. In the
+> monotonic non-linear case, Pearson *r* =
+> `r round(p2_pearson$estimate, 2)` was substantially smaller
+> than Spearman ρ = `r round(p2_spearman$estimate, 2)`, revealing
+> that the association was strong but not linear. The DatasauRus
+> dozen reproduced identical summary statistics across 13 radically
+> different shapes, reinforcing the rule: never report a correlation
+> without the scatter plot.
+
+Correlation is a single number. Its honest use requires a picture
+alongside.
+
+::: {.notes}
+Show the DatasauRus grid large and silent for ten seconds — the
+visual impact makes the point that no verbal argument can.
+:::
+
+## Common pitfalls
+
+- Reporting a Pearson *r* on data with an obvious curvilinear shape.
+- Using *r* to compare groups with different sample sizes; small
+  *r* can be "significant" at huge *n*.
+- Inferring causation from a correlation.
+- Computing correlations on data that include outliers without a
+  robustness check.
+
+## Further reading
+
+- Anscombe FJ (1973). *Graphs in Statistical Analysis*.
+- Matejka J, Fitzmaurice G (2017). *Same stats, different graphs:
+  generating datasets with varied appearance and identical
+  statistics*.
+
+## Session info
+
+```{r}
+sessionInfo()
+```

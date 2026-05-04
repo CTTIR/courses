@@ -1,0 +1,175 @@
+---
+title: "Week 1, Session 5 — Robust regression, weighted LS, HC (sandwich) standard errors"
+subtitle: "Course 2 — Biostatistics Courses"
+format:
+  html:
+    toc: true
+    toc-depth: 3
+    code-fold: false
+    code-tools: true
+  revealjs:
+    output-file: "lab_week1_session5_slides.html"
+    theme: [default, ../../assets/slides.scss]
+    slide-number: c/t
+    progress: true
+    scrollable: true
+    transition: none
+    preview-links: auto
+execute:
+  warning: false
+  message: false
+---
+
+::: {.callout-note}
+**Inference labs** use the five-step template:
+Hypothesis → Visualise → Assumptions → Conduct → Conclude.
+:::
+
+## Learning objectives
+
+- Fit a robust regression with `MASS::rlm()` and compare coefficients
+  with OLS.
+- Use weighted least squares when variance is known to vary with a
+  predictor.
+- Replace OLS standard errors with heteroscedasticity-consistent
+  (sandwich) ones using `sandwich::vcovHC` and `lmtest::coeftest`.
+
+## Prerequisites
+
+Sessions 2–4 of this week.
+
+## Background
+
+Classical OLS is optimal under a narrow set of assumptions. When
+residuals have heavy tails, a few observations can dominate the fit;
+M-estimators such as those in `rlm` downweight extreme residuals and
+return coefficients that reflect the bulk of the data. When variance
+is known to depend on a predictor, weighted least squares restores
+efficiency by weighting each observation by the inverse of its
+variance. When the variance pattern is unknown but you want valid
+*inference*, sandwich (HC) standard errors correct the standard errors
+without changing the point estimates.
+
+The three tools solve different problems. Robust regression changes
+the coefficient. Weighted LS changes both the coefficient and the
+standard error if you have the correct weights. HC standard errors
+keep the OLS coefficient and replace only the standard errors. Choose
+the one that matches your threat.
+
+::: {.content-visible when-format="html"}
+The most common use of HC standard errors in practice is in
+cross-sectional regression where you suspect heteroscedasticity but
+have no good model for it. HC3 is a sensible default in small
+samples; HC0 is classical but liberal.
+:::
+
+## Setup
+
+```{r}
+#| label: setup
+library(tidyverse)
+library(broom)
+library(MASS)        # rlm; load before tidyverse dplyr::select is not needed here
+library(sandwich)
+library(lmtest)
+set.seed(42)
+theme_set(theme_minimal(base_size = 12))
+```
+
+## 1. Hypothesis
+
+Fit an OLS, a robust, and a weighted regression to the same data and
+compare. Then repeat the OLS with sandwich standard errors.
+
+## 2. Visualise
+
+```{r}
+n <- 200
+x <- runif(n, 0, 10)
+eps <- rnorm(n, 0, 0.3 + 0.2 * x)     # heteroscedastic
+# a few extreme outliers
+outl <- sample(seq_len(n), 8)
+eps[outl] <- eps[outl] + rnorm(8, 0, 6)
+y <- 2 + 0.7 * x + eps
+dat <- tibble(x, y)
+
+ggplot(dat, aes(x, y)) +
+  geom_point(alpha = 0.6) +
+  labs(x = "x", y = "y")
+```
+
+## 3. Assumptions
+
+```{r}
+fit_ols <- lm(y ~ x, data = dat)
+par(mfrow = c(2, 2))
+plot(fit_ols)
+par(mfrow = c(1, 1))
+```
+
+Fan-shaped residuals and heavy QQ tails — textbook cue for robust or
+sandwich treatment.
+
+## 4. Conduct
+
+OLS, robust, and weighted fits:
+
+```{r}
+fit_rlm <- MASS::rlm(y ~ x, data = dat)
+# variance grows roughly with x; weight by 1 / (fitted variance proxy)
+w <- 1 / (0.3 + 0.2 * dat$x)^2
+fit_wls <- lm(y ~ x, data = dat, weights = w)
+
+bind_rows(
+  tidy(fit_ols) |> mutate(model = "OLS"),
+  tibble(term = c("(Intercept)", "x"),
+         estimate = coef(fit_rlm),
+         std.error = sqrt(diag(vcov(fit_rlm))),
+         model = "robust"),
+  tidy(fit_wls) |> mutate(model = "WLS")
+) |>
+  filter(term == "x") |>
+  dplyr::select(model, estimate, std.error)
+```
+
+Sandwich SEs on the OLS fit:
+
+```{r}
+coeftest(fit_ols, vcov. = vcovHC(fit_ols, type = "HC3"))
+```
+
+## 5. Concluding statement
+
+> OLS, robust, and weighted fits gave similar slope estimates
+> (approximately
+> `r round(coef(fit_ols)[2], 2)`,
+> `r round(coef(fit_rlm)[2], 2)`, and
+> `r round(coef(fit_wls)[2], 2)` respectively). Classical OLS
+> standard errors were biased by heteroscedasticity; HC3 sandwich
+> standard errors were preferred for inference.
+
+::: {.notes}
+The three methods are complements, not substitutes. Teach the decision
+tree: outliers → robust; known variance pattern → weighted; unknown
+variance pattern → sandwich.
+:::
+
+## Common pitfalls
+
+- Using `rlm` and then testing coefficients with classical OLS code
+  that does not know the residuals were reweighted.
+- Choosing weights from the residuals of an earlier fit without
+  acknowledging the circularity.
+- Quoting HC standard errors without saying which HC flavour was used.
+
+## Further reading
+
+- Huber PJ, Ronchetti EM. *Robust Statistics*, 2nd ed.
+- MacKinnon JG, White H (1985), *Some heteroscedasticity-consistent...*
+- Zeileis A (2004), *Econometric computing with HC and HAC errors*.
+
+## Session info
+
+```{r}
+sessionInfo()
+```

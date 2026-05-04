@@ -1,0 +1,173 @@
+---
+title: "Get started"
+toc: true
+---
+
+::: {.hero}
+::: {.kicker}
+SETUP · CLONE · RENDER
+:::
+# From a fresh laptop to a local site
+::: {.lead}
+From a fresh laptop to a locally rendered version of this site in about
+twenty minutes.
+:::
+:::
+
+## Before you start
+
+You need four things installed on your machine:
+
+- **R**, version 4.3 or newer — <https://cloud.r-project.org>
+- **RStudio Desktop** (or Positron) — <https://posit.co/download/rstudio-desktop/>
+- **Quarto**, version 1.4 or newer — <https://quarto.org/docs/get-started/>
+- **Git** — <https://git-scm.com/downloads>
+
+If you would rather not install anything locally, every lab also runs on
+[**Posit Cloud**](https://posit.cloud): create a new project, clone the
+repository, and use the in-browser RStudio.
+
+A few OS-specific notes:
+
+- On **macOS**, install the Xcode command-line tools once with
+  `xcode-select --install` so R can build packages from source.
+- On **Windows**, install [Rtools](https://cran.r-project.org/bin/windows/Rtools/)
+  matching your R version; some packages in the `renv` lock file build from
+  source on first use.
+- On **Linux**, install the development headers listed by `sudo apt install`
+  — most commonly `libcurl4-openssl-dev`, `libssl-dev`, `libxml2-dev`,
+  `libfontconfig1-dev`, `libfreetype6-dev`, `libharfbuzz-dev`, `libfribidi-dev`,
+  and `libgit2-dev`.
+
+## Clone and check
+
+```bash
+git clone https://github.com/CHANGE_ME/biostats_curriculum.git
+cd biostats_curriculum
+Rscript setup_check.R
+```
+
+`setup_check.R` prints your R version and platform, walks through the
+list of required packages, attempts to install anything missing from
+CRAN, and reports how many succeeded and how many failed. If a package
+fails, the most common cause is a missing system library — the error
+message usually names the header file, and the appendix on
+[Common errors](appendices/common_errors.qmd) collects the fixes we see
+most often.
+
+## Restore the environment
+
+The project is pinned with [`renv`](https://rstudio.github.io/renv/).
+To install the exact package versions listed in `renv.lock`:
+
+```bash
+Rscript -e 'renv::restore()'
+```
+
+`renv` keeps each project's packages in a private library, so installing
+packages for this curriculum will not interfere with anything else on your
+machine. On first run it prints a list of packages it intends to install
+and asks for confirmation — answer `y`.
+
+## Render the site locally
+
+Two commands, depending on what you want:
+
+```bash
+quarto preview    # live-reloading local server (good for writing)
+quarto render     # one-shot build into docs/
+```
+
+To render a single lab without touching the rest of the site:
+
+```bash
+quarto render course1_foundations/labs/lab_week1_session1.qmd
+```
+
+This will produce both the HTML article and the Reveal.js slide deck,
+because each lab declares both formats in its front matter.
+
+## Render only articles or only slides
+
+Occasionally you want just one of the two outputs:
+
+```bash
+quarto render course1_foundations/labs/lab_week1_session1.qmd --to html
+quarto render course1_foundations/labs/lab_week1_session1.qmd --to revealjs
+```
+
+The `--to` flag selects one of the formats declared in the front matter
+and skips the other.
+
+## Folder tour
+
+```
+biostats_curriculum/
+├── _quarto.yml                  site configuration
+├── index.qmd                    home
+├── about.qmd                    philosophy and licence
+├── get_started.qmd              you are here
+├── schedule.qmd                 linked index of every artefact
+├── references.qmd               sources and teaching ecosystems
+├── styles.css / custom.scss     site-wide look and feel
+├── assets/slides.scss           Reveal.js theme
+├── setup_check.R                one-time environment audit
+├── renv.lock                    pinned package versions
+├── appendices/                  research workflow, decision tree, glossary, …
+├── shared/                      data notes and site-wide images
+├── course1_foundations/
+│   ├── index.qmd                course landing page
+│   ├── schedule.qmd             course-level linked index
+│   ├── labs/                    20 .qmd labs (each renders HTML + slides)
+│   └── code/                    20 matching R scripts
+├── course2_regression/          …same structure
+├── course3_design_causal/       …same structure
+└── course4_ml_highdim/          …same structure
+```
+
+## How to read a lab
+
+Every inference lab follows the same five steps:
+**Hypothesis → Visualise → Assumptions → Conduct → Conclude.**
+Workflow labs (setup, visualisation, reporting) use the variant
+**Goal → Approach → Execution → Check → Report.** Once you have read
+one lab the rest will feel familiar: the first section tells you what is
+being asked, the second shows what the data looks like before any
+modelling, the third says whether the method is appropriate, the fourth
+runs it, and the fifth writes the conclusion in the form a reviewer
+wants to see it.
+
+Sections are consistent across labs:
+
+1. **Learning objectives** — three bullets you should be able to tick off.
+1. **Background** — the why and the where-this-fits.
+1. **Setup** — packages and seed.
+1. **1. Hypothesis** (or Goal)
+1. **2. Visualise** (or Approach)
+1. **3. Assumptions** (or Execution)
+1. **4. Conduct** (or Check)
+1. **5. Concluding statement** (or Report)
+1. **Common pitfalls** — two to four bullets worth knowing by heart.
+1. **Further reading** — one to three freely accessible references.
+1. **Session info** — R and package versions used to build this page.
+
+## How to present a lab
+
+Open any file named `*_slides.html` in your browser. These are standard
+[Reveal.js](https://revealjs.com) presentations:
+
+- <kbd>F</kbd> — full-screen
+- <kbd>S</kbd> — speaker-notes window (second screen)
+- <kbd>O</kbd> — slide overview
+- <kbd>?</kbd> — keyboard-shortcut help
+
+If you are presenting from your own clone, `quarto preview` will hot-reload
+the slides as you edit — which is a surprisingly enjoyable way to iterate
+on a talk.
+
+## Getting help
+
+- The [Common errors](appendices/common_errors.qmd) appendix covers most
+  setup and render problems.
+- Open a GitHub issue for anything we have not covered; include your OS,
+  your R version, your Quarto version, and the exact command you ran.

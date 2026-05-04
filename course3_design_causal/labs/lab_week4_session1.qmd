@@ -1,0 +1,152 @@
+---
+title: "Week 4, Session 1 — Systematic reviews and PRISMA"
+subtitle: "Course 3 — Biostatistics Courses"
+format:
+  html:
+    toc: true
+    toc-depth: 3
+    code-fold: false
+    code-tools: true
+  revealjs:
+    output-file: "lab_week4_session1_slides.html"
+    theme: [default, ../../assets/slides.scss]
+    slide-number: c/t
+    progress: true
+    scrollable: true
+    transition: none
+    preview-links: auto
+execute:
+  warning: false
+  message: false
+---
+
+::: {.callout-note}
+**Workflow lab:** Goal → Approach → Execution → Check → Report.
+:::
+
+## Learning objectives
+
+- Frame a systematic-review question using PICO.
+- Draft a reproducible search strategy across at least two databases.
+- Produce a PRISMA flow diagram from counts at each screening stage.
+
+## Prerequisites
+
+None beyond reading a paper.
+
+## Background
+
+A systematic review is itself a study: it has a protocol, a pre-specified
+search strategy, explicit inclusion and exclusion criteria, and a plan
+for synthesis. The PRISMA 2020 statement is the reporting standard,
+which means the diagram showing what you searched, what you excluded,
+and why is not optional. PROSPERO (<https://www.crd.york.ac.uk/prospero/>)
+is the standard registry for review protocols — registering early
+protects you from post-hoc drift.
+
+::: {.content-visible when-format="html"}
+Good search strategies combine controlled-vocabulary terms (MeSH on
+PubMed, Emtree on Embase) with free-text terms, connect concepts with
+Boolean AND, and expand synonyms with OR. A librarian-reviewed strategy
+typically outperforms a DIY one by a wide margin in recall; co-authoring
+with a health-sciences librarian is the single best investment in review
+quality.
+:::
+
+## Setup
+
+```{r}
+#| label: setup
+library(tidyverse)
+set.seed(42)
+theme_set(theme_minimal(base_size = 12))
+```
+
+## 1. Goal
+
+Illustrate a PICO-framed question, sketch a search strategy, and
+simulate screening counts to generate a PRISMA flow diagram.
+
+## 2. Approach
+
+A fictional question in PICO form:
+
+> In adults with type 2 diabetes (**P**), does metformin (**I**)
+> compared with placebo (**C**) reduce all-cause mortality (**O**)
+> at 24 months?
+
+A sketch of a search strategy (PubMed syntax):
+
+```
+("Diabetes Mellitus, Type 2"[MeSH] OR "type 2 diabetes"[tiab])
+AND (metformin[MeSH] OR metformin[tiab])
+AND (randomised[tiab] OR randomized[tiab] OR trial[tiab] OR RCT[tiab])
+```
+
+## 3. Execution — simulated screening counts
+
+```{r}
+prisma <- tibble(
+  stage = c("Identified (PubMed)", "Identified (Embase)",
+            "After deduplication",
+            "Title/abstract screened", "Full-text assessed",
+            "Included in qualitative synthesis",
+            "Included in meta-analysis"),
+  n = c(812, 640, 1098, 1098, 84, 22, 18)
+)
+prisma
+```
+
+```{r}
+#| fig-width: 6.5
+#| fig-height: 4
+prisma |>
+  mutate(stage = factor(stage, levels = rev(stage))) |>
+  ggplot(aes(n, stage)) +
+  geom_col(fill = "#1a73e8", alpha = 0.8) +
+  geom_text(aes(label = n), hjust = -0.1, size = 3.5) +
+  scale_x_continuous(expand = expansion(mult = c(0, 0.15))) +
+  labs(x = "n", y = NULL)
+```
+
+## 4. Check
+
+PRISMA 2020 checklist pointer (items most often missed):
+
+- Item 5: eligibility criteria pre-specified.
+- Item 6: information sources with date of last search.
+- Item 7: complete search strategy for every database, including
+  limits.
+- Item 16a: reasons for excluding full-text articles.
+
+## 5. Report
+
+> A systematic review of the effect of metformin on all-cause mortality
+> in adults with type 2 diabetes was conducted following PRISMA 2020.
+> Database searches identified 812 records from PubMed and 640 from
+> Embase. After deduplication, 1098 records were screened by title and
+> abstract; 84 full texts were assessed, and 22 studies were included
+> in the qualitative synthesis, of which 18 were pooled by
+> meta-analysis.
+
+::: {.notes}
+Emphasise the two high-risk items: deduplication and full-text exclusions
+— these are where errors hide.
+:::
+
+## Common pitfalls
+
+- Ad-hoc searches that cannot be re-run.
+- Failing to double-screen at each stage (reviewer drift).
+- Reporting included-study counts without the flow that produced them.
+
+## Further reading
+
+- Page MJ et al. (2021). *The PRISMA 2020 statement.* BMJ.
+- Cochrane Handbook for Systematic Reviews of Interventions.
+
+## Session info
+
+```{r}
+sessionInfo()
+```

@@ -1,0 +1,204 @@
+---
+title: "Week 3, Session 2 — Competing risks and multistate models"
+subtitle: "Course 3 — Biostatistics Courses"
+format:
+  html:
+    toc: true
+    toc-depth: 3
+    code-fold: false
+    code-tools: true
+  revealjs:
+    output-file: "lab_week3_session2_slides.html"
+    theme: [default, ../../assets/slides.scss]
+    slide-number: c/t
+    progress: true
+    scrollable: true
+    transition: none
+    preview-links: auto
+execute:
+  warning: false
+  message: false
+---
+
+::: {.callout-note}
+**Inference lab** using the five-step template:
+Hypothesis → Visualise → Assumptions → Conduct → Conclude.
+:::
+
+## Learning objectives
+
+- Estimate cause-specific cumulative incidence with `tidycmprsk`.
+- Contrast cause-specific hazards with the Fine-Gray subdistribution
+  hazard.
+- Set up a three-state illness-death multistate model with
+  `mstate`.
+
+## Prerequisites
+
+Course 2 survival analysis.
+
+## Background
+
+Competing risks are events that preclude the event of interest:
+death from cancer competes with death from other causes. Kaplan-
+Meier treats the competing event as censoring, which is wrong when
+the censoring is informative. Cumulative incidence functions (CIFs)
+give the probability that the event of interest has occurred by
+time *t* *in the presence of* competing risks.
+
+Two hazard models are common. Cause-specific Cox models treat each
+cause in turn, censoring at other causes; they answer an aetiologic
+question ("does the covariate affect the rate of this cause?"). The
+Fine-Gray subdistribution hazard model fixes subjects with competing
+events in the risk set indefinitely; it answers a prognostic
+question ("does the covariate affect the cumulative incidence?").
+
+Multistate models generalise survival to several possible
+transitions. The illness-death model has three states: healthy,
+ill, dead, with transitions healthy → ill, healthy → dead, and ill
+→ dead. `mstate` builds these objects from tabular data.
+
+::: {.content-visible when-format="html"}
+Fine-Gray is descriptive; cause-specific Cox is causal (in the
+simple, aetiological sense). A covariate can increase the Fine-Gray
+subdistribution hazard of cause 1 either by increasing cause 1
+itself or by decreasing cause 2 — it is a net effect on the
+cumulative incidence.
+:::
+
+## Setup
+
+```{r}
+#| label: setup
+library(tidyverse)
+library(survival)
+library(tidycmprsk)
+library(ggsurvfit)
+library(mstate)
+set.seed(42)
+theme_set(theme_minimal(base_size = 12))
+```
+
+## 1. Hypothesis
+
+In the `survival::colon` data (recurrence and death as competing
+events), a treatment covariate affects both events. We estimate the
+cumulative incidence of each.
+
+## 2. Visualise
+
+```{r}
+data(colon, package = "survival")
+# Keep death records (etype == 2) + recurrence merged; for teaching
+# we build a two-event dataset:
+dat <- colon |>
+  filter(etype == 1) |>                       # recurrence row per subject
+  transmute(id, time, status_rec = status,
+            rx, age, sex) |>
+  left_join(
+    colon |> filter(etype == 2) |>
+      transmute(id, time_d = time, status_d = status),
+    by = "id"
+  ) |>
+  mutate(
+    # event type: 0 censored, 1 recurrence, 2 death without recurrence
+    etype = case_when(
+      status_rec == 1 ~ 1L,
+      status_d   == 1 ~ 2L,
+      TRUE            ~ 0L
+    ),
+    etime = pmin(time, time_d, na.rm = TRUE),
+    etype_f = factor(etype, levels = 0:2,
+                     labels = c("censored", "recurrence", "death"))
+  ) |>
+  drop_na(etime, etype_f, rx)
+
+ggplot(dat, aes(etime, fill = etype_f)) +
+  geom_histogram(bins = 40, alpha = 0.7, position = "identity") +
+  labs(x = "Time (days)", y = "Count", fill = NULL)
+```
+
+## 3. Assumptions
+
+Non-informative censoring within cause; proportional hazards for
+Fine-Gray; for multistate, Markov transitions (future depends only
+on current state).
+
+## 4. Conduct
+
+```{r}
+cif <- cuminc(Surv(etime, etype_f) ~ rx, data = dat)
+cif
+```
+
+```{r}
+#| fig-width: 6
+#| fig-height: 4
+ggsurvfit::ggcuminc(cif, outcome = c("recurrence", "death")) +
+  labs(x = "Days", y = "Cumulative incidence")
+```
+
+```{r}
+# Fine-Gray subdistribution hazard for recurrence
+fg <- crr(Surv(etime, etype_f) ~ rx + age + sex, data = dat,
+          failcode = "recurrence")
+fg
+```
+
+```{r}
+# Multistate: illness-death using mstate on a simple simulated dataset
+n <- 300
+sim <- tibble(
+  id = seq_len(n),
+  t_ill   = rexp(n, rate = 0.02),
+  t_death = rexp(n, rate = 0.01)
+) |>
+  mutate(
+    t1 = pmin(t_ill, t_death, 50),
+    s1 = if_else(t_ill < t_death & t_ill <= 50, 1L, 0L),
+    s2 = if_else(t_death <= 50 & t_death < t_ill, 1L, 0L)
+  )
+
+tmat <- transMat(x = list(c(2, 3), c(3), c()),
+                 names = c("healthy", "ill", "dead"))
+tmat
+```
+
+## 5. Concluding statement
+
+> Cause-specific cumulative incidence functions differed by
+> treatment arm in the colon data, with the Fine-Gray
+> subdistribution hazard estimated above. The three-state illness-
+> death transition matrix (healthy → ill → dead) shows how
+> `mstate` represents the problem; the full fit is straightforward
+> once the long-format dataset is built via `msprep`.
+
+::: {.notes}
+The most common reviewer comment on competing-risks papers is
+"report CIFs, not KM curves". Make that the take-home slide.
+:::
+
+## Common pitfalls
+
+- Reporting 1 − KM as the cumulative incidence in the presence of
+  competing risks.
+- Using Fine-Gray when the question is aetiological.
+- Reporting both cause-specific and Fine-Gray hazard ratios without
+  distinguishing them.
+- Assuming Markov transitions in a multistate model when history
+  matters.
+
+## Further reading
+
+- Fine JP, Gray RJ (1999), *A proportional hazards model for the
+  subdistribution of a competing risk*.
+- Putter H, Fiocco M, Geskus RB (2007), *Tutorial in biostatistics:
+  competing risks and multi-state models*.
+- Austin PC, Fine JP (2017), *Practical recommendations for
+  reporting Fine-Gray model analyses*.
+
+## Session info
+
+```{r}
+sessionInfo()
+```

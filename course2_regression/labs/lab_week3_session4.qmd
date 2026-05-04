@@ -1,0 +1,153 @@
+---
+title: "Week 3, Session 4 — Poisson and negative-binomial regression"
+subtitle: "Course 2 — Biostatistics Courses"
+format:
+  html:
+    toc: true
+    toc-depth: 3
+    code-fold: false
+    code-tools: true
+  revealjs:
+    output-file: "lab_week3_session4_slides.html"
+    theme: [default, ../../assets/slides.scss]
+    slide-number: c/t
+    progress: true
+    scrollable: true
+    transition: none
+    preview-links: auto
+execute:
+  warning: false
+  message: false
+---
+
+::: {.callout-note}
+**Inference labs** use the five-step template:
+Hypothesis → Visualise → Assumptions → Conduct → Conclude.
+:::
+
+## Learning objectives
+
+- Fit a Poisson GLM for counts with `glm(family = poisson)` and use an
+  offset for exposure.
+- Diagnose overdispersion and switch to negative-binomial regression
+  with `MASS::glm.nb` when needed.
+- Report incidence rate ratios with intervals.
+
+## Prerequisites
+
+Week 3 Session 1 on logistic regression.
+
+## Background
+
+Counts with a known exposure are the natural habitat of the Poisson
+GLM: number of events per person-year, per square metre, per trap
+night. The canonical link is the log, so the exponentiated coefficient
+is an incidence rate ratio. Exposure enters the model as an offset —
+a term with a fixed coefficient of 1 on the log scale.
+
+The Poisson model assumes variance equals the mean. Most real count
+data violate this, with variance growing faster than the mean.
+Overdispersion inflates Type-I error when ignored. Checking the ratio
+of residual deviance to its degrees of freedom gives a quick read;
+when it is substantially above 1, the negative-binomial GLM (or a
+quasi-Poisson variance) is a better fit.
+
+::: {.content-visible when-format="html"}
+Poisson regression without an offset is a common trap. If the
+denominators vary, a coefficient on an exposure variable is
+confounded with exposure; the offset separates the two and restores
+the interpretation of the log-rate ratio.
+:::
+
+## Setup
+
+```{r}
+#| label: setup
+library(tidyverse)
+library(broom)
+library(MASS)
+set.seed(42)
+theme_set(theme_minimal(base_size = 12))
+```
+
+## 1. Hypothesis
+
+Simulate counts of events with a dispersion parameter larger than 1
+(so negative-binomial is the correct model), plus a known exposure.
+
+## 2. Visualise
+
+```{r}
+n <- 300
+x <- rnorm(n)
+exposure <- runif(n, 0.5, 2)
+mu <- exposure * exp(0.5 + 0.4 * x)
+# negative-binomial counts with theta = 2 (overdispersion)
+y <- rnegbin(n, mu = mu, theta = 2)
+dat <- tibble(x, exposure, y)
+
+ggplot(dat, aes(x, y)) +
+  geom_point(alpha = 0.6) +
+  labs(x = "x", y = "Count")
+```
+
+## 3. Assumptions
+
+Independent counts; correct mean structure; for Poisson, variance = mean.
+
+```{r}
+fit_p <- glm(y ~ x + offset(log(exposure)), data = dat, family = poisson)
+# dispersion
+dev_over_df <- deviance(fit_p) / df.residual(fit_p)
+dev_over_df
+```
+
+Dispersion >> 1 signals negative-binomial.
+
+## 4. Conduct
+
+```{r}
+fit_nb <- glm.nb(y ~ x + offset(log(exposure)), data = dat)
+
+bind_rows(
+  tidy(fit_p, conf.int = TRUE, exponentiate = TRUE) |> mutate(model = "Poisson"),
+  tidy(fit_nb, conf.int = TRUE, exponentiate = TRUE) |> mutate(model = "NB")
+) |>
+  filter(term == "x") |>
+  dplyr::select(model, estimate, conf.low, conf.high, std.error)
+```
+
+The estimates are similar but the NB standard error is larger and
+honest.
+
+## 5. Concluding statement
+
+> Event counts increased with x (NB IRR per unit x =
+> `r round(exp(coef(fit_nb))["x"], 2)`; 95% CI
+> `r round(exp(confint(fit_nb))["x", 1], 2)` to
+> `r round(exp(confint(fit_nb))["x", 2], 2)`). Poisson residual
+> deviance indicated overdispersion; we therefore report the
+> negative-binomial fit as primary.
+
+::: {.notes}
+Encourage students to always fit both and report the NB when
+dispersion is above 1.2 or so; it will very rarely hurt.
+:::
+
+## Common pitfalls
+
+- Forgetting the offset when denominators vary.
+- Using Poisson when overdispersion is present.
+- Reporting the rate ratio without an interval.
+
+## Further reading
+
+- McCullagh P, Nelder JA. *Generalized Linear Models*, ch. 6.
+- Hilbe JM. *Negative Binomial Regression*.
+- Zeileis A, Kleiber C, Jackman S (2008), *Regression models for count data*.
+
+## Session info
+
+```{r}
+sessionInfo()
+```

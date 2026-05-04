@@ -1,0 +1,172 @@
+---
+title: "Week 4, Session 5 — Explanation vs prediction; reporting"
+subtitle: "Course 2 — Biostatistics Courses"
+format:
+  html:
+    toc: true
+    toc-depth: 3
+    code-fold: false
+    code-tools: true
+  revealjs:
+    output-file: "lab_week4_session5_slides.html"
+    theme: [default, ../../assets/slides.scss]
+    slide-number: c/t
+    progress: true
+    scrollable: true
+    transition: none
+    preview-links: auto
+execute:
+  warning: false
+  message: false
+---
+
+::: {.callout-note}
+**Workflow lab:** Goal → Approach → Execution → Check → Report.
+:::
+
+## Learning objectives
+
+- Distinguish explanatory from predictive modelling, and choose the
+  correct evaluation metric for each.
+- Map STROBE, TRIPOD, STARD, and CONSORT onto the study designs each
+  is meant for.
+- Produce a publication-ready regression table with `gtsummary` whose
+  numbers trace directly to the fitted model.
+
+## Prerequisites
+
+The regression tools covered across Course 2.
+
+## Background
+
+Breiman's 1998 essay *The Two Cultures* and Shmueli's 2010 essay *To
+Explain or to Predict?* draw the same line from opposite sides. In
+explanatory modelling the goal is inference — what is the estimated
+effect of X on Y, adjusted for confounders? — and the right evaluation
+metric is bias-unbiasedness, interval coverage, and interpretability.
+In predictive modelling the goal is accuracy on unseen data, and the
+right evaluation metric is out-of-sample loss, calibration, and
+decision utility. The statistical machinery overlaps but the habits
+around it do not; a regression that makes an excellent explanation often
+makes a lacklustre prediction, and vice versa.
+
+::: {.content-visible when-format="html"}
+Reporting guidelines are the mechanism by which the field enforces
+discipline around these two cultures. STROBE for observational studies,
+CONSORT for randomised trials, STARD for diagnostic accuracy, and
+TRIPOD (now TRIPOD-AI) for prediction models each specify the items a
+reader needs to evaluate the claim. A checklist filled in as you write
+is much easier than one filled in at submission.
+:::
+
+## Setup
+
+```{r}
+#| label: setup
+library(tidyverse)
+library(gtsummary)
+library(broom)
+library(palmerpenguins)
+set.seed(42)
+theme_set(theme_minimal(base_size = 12))
+```
+
+## 1. Goal
+
+Fit a single linear model to the penguins data and present it two ways:
+once as an explanatory analysis (what drives body mass?) and once as a
+predictive model (can we predict body mass on held-out birds?).
+
+## 2. Approach
+
+```{r}
+peng <- penguins |> drop_na(body_mass_g, flipper_length_mm, sex, species)
+fit_expl <- lm(body_mass_g ~ flipper_length_mm + sex + species, data = peng)
+```
+
+## 3. Execution
+
+```{r}
+#| fig-width: 6.5
+#| fig-height: 4
+peng |>
+  ggplot(aes(flipper_length_mm, body_mass_g, colour = species)) +
+  geom_point(alpha = 0.6) +
+  geom_smooth(method = "lm", se = FALSE, linewidth = 0.8) +
+  labs(x = "Flipper length (mm)", y = "Body mass (g)")
+```
+
+## 4. Check
+
+Explanatory evaluation: effect sizes with intervals, residual
+diagnostics, and adjusted *R*².
+
+```{r}
+glance(fit_expl) |> select(r.squared, adj.r.squared, sigma, df, df.residual)
+```
+
+Predictive evaluation: a 5-fold split, hand-coded to keep the example
+transparent.
+
+```{r}
+k <- 5
+folds <- sample(rep(seq_len(k), length.out = nrow(peng)))
+rmse_k <- sapply(seq_len(k), function(i) {
+  tr <- peng[folds != i, ]
+  te <- peng[folds == i, ]
+  f  <- lm(body_mass_g ~ flipper_length_mm + sex + species, data = tr)
+  sqrt(mean((predict(f, te) - te$body_mass_g)^2))
+})
+mean_rmse <- mean(rmse_k)
+mean_rmse
+```
+
+## 5. Report
+
+```{r}
+#| results: asis
+tbl_regression(fit_expl, intercept = TRUE) |>
+  modify_caption("**Table 1. Linear-regression estimates for body mass (g).**")
+```
+
+> In the Palmer penguins dataset (*n* = `r nrow(peng)`), body mass was
+> associated with flipper length, sex, and species (adjusted *R*² =
+> `r round(summary(fit_expl)$adj.r.squared, 2)`). Out-of-sample
+> performance, estimated by 5-fold cross-validation, was RMSE =
+> `r round(mean_rmse, 0)` g.
+
+### Reporting-guideline map
+
+| Design | Guideline | URL |
+|---|---|---|
+| Randomised trial | CONSORT | <https://www.consort-statement.org/> |
+| Observational study | STROBE | <https://www.strobe-statement.org/> |
+| Diagnostic-accuracy study | STARD | <https://www.equator-network.org/reporting-guidelines/stard/> |
+| Prediction-model study | TRIPOD / TRIPOD-AI | <https://www.tripod-statement.org/> |
+| Systematic review | PRISMA | <http://prisma-statement.org/> |
+
+::: {.notes}
+The distinction to impress on a PhD audience: an effect size in an
+explanatory model is an answer to a scientific question; in a predictive
+model it is an implementation detail.
+:::
+
+## Common pitfalls
+
+- Choosing a predictor set by *R*² and reporting a predictive claim, or
+  tuning a predictive model and reporting causal-sounding coefficients.
+- Filling in a reporting checklist at submission rather than while
+  drafting.
+- Assuming in-sample *R*² generalises.
+
+## Further reading
+
+- Breiman L. (2001). *Statistical Modeling: The Two Cultures.*
+- Shmueli G. (2010). *To Explain or to Predict?* Statistical Science.
+- [Writing a report](../../appendices/writing_a_report.qmd).
+
+## Session info
+
+```{r}
+sessionInfo()
+```

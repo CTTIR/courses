@@ -1,0 +1,173 @@
+---
+title: "References"
+toc: true
+---
+
+::: {.hero}
+::: {.kicker}
+ACKNOWLEDGEMENTS · SOURCES · TEACHING ECOSYSTEMS
+:::
+# The sources we drew on
+::: {.lead}
+This curriculum did not grow in a vacuum. Everything worth keeping in
+it came from somewhere else first.
+:::
+:::
+
+The list below is not exhaustive — nothing that tries to cover an
+entire field ever is — but it names the sources we leaned on hardest and
+the teachers whose own openly available material shaped the pedagogy.
+Every entry links to something you can read for free today. Where a book
+is not open-access we have flagged it, and where a web resource exists in
+parallel we have linked to that instead.
+
+## Direct inspiration
+
+::: {.card-grid}
+
+::: {.card}
+::: {.kicker}
+Course structure
+:::
+### [Chi Zhang — *MF9130E*, University of Oslo](https://ocbe-uio.github.io/teaching_mf9130e/)
+The OCBE introductory course that inspired the layout of this site. A
+model of how to teach biostatistics transparently and openly, with every
+lab reproducible from source. See also the
+[GitHub repository](https://github.com/ocbe-uio/teaching_mf9130e).
+:::
+
+:::
+
+## Comprehensive references
+
+::: {.card-grid}
+
+::: {.card}
+::: {.kicker}
+Clinical biostatistics
+:::
+### [Frank Harrell — *Biostatistics for Biomedical Research*](https://hbiostat.org/bbr/)
+The single most opinionated, densest, most useful reference for applied
+biostatistics in medicine. Required reading for anyone who wants to stop
+being surprised by reviewers.
+:::
+
+::: {.card}
+::: {.kicker}
+Regression modelling
+:::
+### [Frank Harrell — *Regression Modeling Strategies*](https://hbiostat.org/rms/)
+The companion to BBR. Spline fitting, calibration, validation, and the
+`rms` package, all in one place.
+:::
+
+::: {.card}
+::: {.kicker}
+Statistical learning
+:::
+### [Hastie, Tibshirani, Witten, James — *ISLR2*](https://www.statlearning.com/)
+Introduction to Statistical Learning with R — the definitive first book on
+modern ML. The second edition adds deep-learning and survival chapters.
+:::
+
+::: {.card}
+::: {.kicker}
+Causal inference
+:::
+### [Hernán & Robins — *Causal Inference: What If*](https://www.hsph.harvard.edu/miguel-hernan/causal-inference-book/)
+The canonical modern treatment. G-methods, IV, and the careful statement
+of the questions that precede them.
+:::
+
+:::
+
+## Teaching ecosystems
+
+::: {.card-grid}
+
+::: {.card}
+::: {.kicker}
+Bergen
+:::
+### [Biostats-R](https://biostats-r.github.io/biostats/)
+A rich ecosystem of openly licensed courses in R for biosciences, hosted
+by the University of Bergen.
+:::
+
+::: {.card}
+::: {.kicker}
+eR-Biostat
+:::
+### [eR-Biostat initiative](https://er-biostat.github.io/)
+Community-maintained R-based materials for applied biostatistics.
+:::
+
+::: {.card}
+::: {.kicker}
+UBC Okanagan
+:::
+### [BIOL202 — Introduction to Biostatistics](https://ubco-biology.github.io/BIOL202/)
+One of the clearest undergraduate introductions freely available online.
+:::
+
+::: {.card}
+::: {.kicker}
+Sheffield
+:::
+### [Introductory Biostatistics with R](https://dzchilds.github.io/stats-for-bio/)
+Short, friendly, and opinionated. A good pairing with the first half of
+Course 1.
+:::
+
+:::
+
+## Pedagogy and reproducibility
+
+::: {.card-grid}
+
+::: {.card}
+::: {.kicker}
+Data-science teaching
+:::
+### [Mine Çetinkaya-Rundel — Data Science in a Box](https://datasciencebox.org/)
+Every contemporary data-science course owes Mine a debt. Teach-the-teacher
+material at its best.
+:::
+
+::: {.card}
+::: {.kicker}
+Quarto
+:::
+### [Quarto documentation](https://quarto.org/docs/guide/)
+The reference manual for the publishing system this site is built on.
+:::
+
+::: {.card}
+::: {.kicker}
+Posit Education
+:::
+### [Posit Education](https://posit.co/about/posit-education/)
+Openly licensed teaching resources from the makers of RStudio.
+:::
+
+::: {.card}
+::: {.kicker}
+`renv`
+:::
+### [renv: Project Environments for R](https://rstudio.github.io/renv/)
+The tool that keeps this site reproducible across machines.
+:::
+
+:::
+
+## Packages used
+
+Every R package loaded by the labs is listed in `renv.lock` and re-exported
+by `citation()` in the session-info block at the foot of each lab. If you
+reuse any analysis here, cite the package authors alongside this site.
+
+## Closing note
+
+We are grateful to all the educators above for making their work openly
+available. The entire point of a site like this one is that the next
+version of it, wherever and by whomever it is written, will be better.

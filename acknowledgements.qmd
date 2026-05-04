@@ -1,0 +1,217 @@
+---
+title: "Acknowledgements"
+toc: true
+---
+
+::: {.hero}
+::: {.kicker}
+DIDACTICS · CONTENT · TOOLING · INSPIRATION
+:::
+# The people whose work made this possible
+::: {.lead}
+Nothing on this site is original in isolation. Every choice — how the
+labs are paced, how the prose is written, which methods got a full lab
+and which got a paragraph — comes from somewhere, and that somewhere
+deserves to be named.
+:::
+:::
+
+## Didactics and pedagogy
+
+The shape of the labs — same five-step template, same "plot before the
+formula" rhythm, same reluctance to ask a reader to memorise before they
+can experiment — is drawn from a small number of teachers whose public
+materials have set the standard for contemporary data-science and
+statistics teaching.
+
+::: {.card-grid}
+
+::: {.card}
+::: {.kicker}
+Teach the teacher
+:::
+### [Mine Çetinkaya-Rundel — *Data Science in a Box*](https://datasciencebox.org/)
+The modern canon on how to teach data science openly. Every lab in
+this curriculum carries some Mine DNA: the discipline of writing
+learning objectives first, the habit of simulating before modelling,
+and the expectation that any serious teaching artefact is itself
+reproducible from source.
+:::
+
+::: {.card}
+::: {.kicker}
+Opinionated biostats teaching
+:::
+### [Biostats-R (Bergen)](https://biostats-r.github.io/biostats/)
+A living ecosystem of openly licensed biosciences / biostatistics
+courses from the University of Bergen. Their approach to lab
+modularity — each session self-contained, each concept introduced once
+and referenced thereafter — informs the structure of every course
+here.
+:::
+
+::: {.card}
+::: {.kicker}
+Community-driven R teaching
+:::
+### [eR-Biostat](https://er-biostat.github.io/)
+A volunteer-maintained set of biostatistics teaching materials. Their
+commitment to freely redistributable content, built from plain-text
+sources, is the norm this site tries to honour.
+:::
+
+::: {.card}
+::: {.kicker}
+Undergraduate entry point
+:::
+### [UBC Okanagan — BIOL202](https://ubco-biology.github.io/BIOL202/)
+One of the clearest first-pass introductions to biostatistics on the
+open web. Course 1 borrows its instinct to name the workflow stages
+explicitly before teaching any of them.
+:::
+
+::: {.card}
+::: {.kicker}
+Short, opinionated primer
+:::
+### [Sheffield — *Introductory Biostatistics with R*](https://dzchilds.github.io/stats-for-bio/)
+Short, opinionated, and almost completely free of jargon. The tone of
+Course 1's backgrounds owes it a visible debt.
+:::
+
+::: {.card}
+::: {.kicker}
+Publishing system
+:::
+### [Quarto](https://quarto.org/docs/guide/)
+The reason every lab here renders twice from one source, the reason
+the slides and the article never drift out of sync, and the reason
+this site can be built by anyone with `quarto render`. Quarto's team
+has raised the ceiling of what an openly published curriculum can look
+like.
+:::
+
+::: {.card}
+::: {.kicker}
+Free courseware at scale
+:::
+### [Posit Education](https://posit.co/about/posit-education/)
+Posit's education team maintains a quantity of high-quality, openly
+licensed teaching resources that is frankly hard to overstate. The
+patterns for running `renv`, setting up a Quarto project, and wiring
+a CI render came from their materials first.
+:::
+
+::: {.card}
+::: {.kicker}
+Structural inspiration
+:::
+### [Chi Zhang & OCBE — *MF9130E*](https://ocbe-uio.github.io/teaching_mf9130e/)
+Chi Zhang and the OCBE team at the University of Oslo run an
+open-source [*Introductory Course in Statistics*](https://ocbe-uio.github.io/teaching_mf9130e/)
+with a public [GitHub repository](https://github.com/ocbe-uio/teaching_mf9130e).
+Their site provided the layout pattern this one starts from: course
+landing pages, linked schedules, per-session labs, a GitHub Pages
+build.
+:::
+
+:::
+
+## Content depth
+
+Which topics got a full lab, which methods are taught the "Harrell way"
+versus the "Hastie way", which trade-offs are named on every slide —
+this bucket collects the texts and courses that shaped the *what* of
+the curriculum rather than the *how*.
+
+::: {.card-grid}
+
+::: {.card}
+::: {.kicker}
+Applied biostatistics
+:::
+### [Frank Harrell — *Biostatistics for Biomedical Research* (BBR)](https://hbiostat.org/bbr/)
+The densest, most opinionated, and most useful applied-statistics text
+in medicine. Much of what Course 2 and Course 4 teach about
+calibration, decision analysis, and prediction is a simplified
+retelling of BBR chapters.
+:::
+
+::: {.card}
+::: {.kicker}
+Regression modelling
+:::
+### [Frank Harrell — *Regression Modeling Strategies*](https://hbiostat.org/rms/)
+The spline-fitting, calibration, and validation discipline of Course 2
+W3–W4 is straight RMS.
+:::
+
+::: {.card}
+::: {.kicker}
+Statistical learning
+:::
+### [Hastie, Tibshirani, Witten, James — *ISLR2*](https://www.statlearning.com/)
+Course 4's structure — regularisation → trees → interpretability →
+modern methods — is an homage to ISLR2. Their commitment to teaching
+the intuition before the linear algebra made our life easier at every
+step.
+:::
+
+::: {.card}
+::: {.kicker}
+Causal inference
+:::
+### [Hernán & Robins — *Causal Inference: What If*](https://www.hsph.harvard.edu/miguel-hernan/causal-inference-book/)
+The DAG, propensity-score, and g-methods labs in Course 3 are
+restatements of *What If* at a pace that fits a single evening of
+reading. The original remains non-optional for anyone making causal
+claims in earnest.
+:::
+
+::: {.card}
+::: {.kicker}
+Cochrane methodology
+:::
+### [Cochrane Handbook](https://training.cochrane.org/handbook)
+Course 3 W4 on systematic reviews and meta-analysis follows Cochrane
+conventions directly.
+:::
+
+:::
+
+## Tooling
+
+Every lab on this site exists because free, high-quality open-source
+software exists. We cite the tools we lean on hardest:
+
+- **R Core Team** and the CRAN maintainers, for the language and its
+  package archive.
+- **Bioconductor**, for the genomics tooling referenced in Course 4 W4.
+- The **tidyverse** team (Hadley Wickham and colleagues) for `dplyr`,
+  `ggplot2`, `tidyr`, `purrr`, `readr`, and `tibble`.
+- The authors of `lme4`, `brms`, `mgcv`, `survival`, `glmnet`, `metafor`,
+  `dagitty`, `mice`, `DESeq2`, `Seurat`, `tidymodels` — every one of them
+  gets a citation via `citation()` in the session-info block at the
+  foot of every lab.
+- **Posit** (formerly RStudio) for RStudio, Quarto, and Shiny.
+- **Pandoc** and the **Reveal.js** project, for making the dual-format
+  render of every lab possible.
+
+## Personal
+
+- Colleagues and students who read early drafts of individual labs and
+  flagged everything from typos to circular arguments.
+- Everyone who opened an issue or a pull request against this
+  repository.
+- The anonymous reviewers whose criticism, over the years, shaped the
+  definition of "useful" that this curriculum now tries to meet.
+
+Any errors here are our own. If you spot one, please
+[open an issue](https://github.com/r-heller/courses/issues).
+
+## Licence
+
+This curriculum is released under the MIT licence. You are free to
+use, adapt, and redistribute it, including in commercial or
+institutional teaching contexts, as long as the copyright notice and
+these acknowledgements travel with it.

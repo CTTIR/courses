@@ -1,0 +1,128 @@
+name: Render and deploy
+
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+concurrency:
+  group: pages
+  cancel-in-progress: false
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v4
+
+      - name: Set up Quarto
+        uses: quarto-dev/quarto-actions/setup@v2
+
+      - name: Set up R
+        uses: r-lib/actions/setup-r@v2
+        with:
+          r-version: "4.4.1"
+          use-public-rspm: true
+
+      - name: Install R packages needed to render the site
+        uses: r-lib/actions/setup-r-dependencies@v2
+        with:
+          packages: |
+            any::tidyverse
+            any::gtsummary
+            any::broom
+            any::broom.mixed
+            any::patchwork
+            any::knitr
+            any::rmarkdown
+            any::palmerpenguins
+            any::pwr
+            any::effectsize
+            any::performance
+            any::MASS
+            any::car
+            any::emmeans
+            any::mgcv
+            any::gratia
+            any::nnet
+            any::VGAM
+            any::pROC
+            any::DHARMa
+            any::survival
+            any::ggsurvfit
+            any::lme4
+            any::lmerTest
+            any::glmmTMB
+            any::geepack
+            any::mice
+            any::metafor
+            any::netmeta
+            any::deSolve
+            any::glmnet
+            any::tidymodels
+            any::ranger
+            any::xgboost
+            any::DALEX
+            any::iml
+            any::FactoMineR
+            any::factoextra
+            any::mclust
+            any::uwot
+            any::MatchIt
+            any::cobalt
+            any::dagitty
+            any::ggdag
+            any::forecast
+            any::changepoint
+            any::tidycmprsk
+            any::mstate
+            any::Rtsne
+            any::sandwich
+            any::lmtest
+            any::datasauRus
+            any::simr
+            any::psych
+            any::irr
+            any::randomForestSRC
+            any::see
+            any::qqplotr
+            any::broom.helpers
+            any::cards
+            any::gt
+            any::ggrepel
+
+      - name: Restore Quarto freeze cache
+        uses: actions/cache@v4
+        with:
+          path: _freeze
+          key: ${{ runner.os }}-quarto-freeze-${{ hashFiles('**/*.qmd') }}
+          restore-keys: ${{ runner.os }}-quarto-freeze-
+
+      - name: Render site
+        run: quarto render
+
+      - name: Configure Pages
+        uses: actions/configure-pages@v5
+
+      - name: Upload Pages artifact
+        uses: actions/upload-pages-artifact@v3
+        with:
+          path: docs
+
+  deploy:
+    needs: build
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - name: Deploy to GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v4
+

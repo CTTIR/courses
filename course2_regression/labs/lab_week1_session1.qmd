@@ -1,0 +1,192 @@
+---
+title: "Week 1, Session 1 — Correlation vs regression; Model-I/II regression"
+subtitle: "Course 2 — Biostatistics Courses"
+format:
+  html:
+    toc: true
+    toc-depth: 3
+    code-fold: false
+    code-tools: true
+  revealjs:
+    output-file: "lab_week1_session1_slides.html"
+    theme: [default, ../../assets/slides.scss]
+    slide-number: c/t
+    progress: true
+    scrollable: true
+    transition: none
+    preview-links: auto
+execute:
+  warning: false
+  message: false
+---
+
+::: {.callout-note}
+**Inference labs** use the five-step template:
+Hypothesis → Visualise → Assumptions → Conduct → Conclude.
+:::
+
+## Learning objectives
+
+- Distinguish correlation from regression and say when each is appropriate.
+- Fit Model-I (OLS) and Model-II (major-axis / SMA) lines and interpret
+  the difference.
+- Report an association with a slope, interval, and *p*-value rather
+  than with a correlation alone.
+
+## Prerequisites
+
+Course 1, or equivalent exposure to hypothesis testing and basic R.
+
+## Background
+
+Correlation and regression answer related but different questions.
+Correlation asks *how tightly do two variables track each other?* and is
+symmetric in X and Y. Regression asks *how does the mean of Y change
+with X?* and treats the two axes asymmetrically: X is assumed to be
+measured without error and Y is modelled. This asymmetry matters for
+prediction (which needs a regression line) and for comparing slopes
+across groups (which also needs regression), but it becomes problematic
+when both variables carry measurement error and neither can be declared
+the predictor.
+
+Model-II regression — of which the standardised major axis (SMA) and
+reduced major axis are the common flavours — was developed for exactly
+this case. When both X and Y are measured with error, ordinary least
+squares (OLS) is biased toward zero, because it attributes all residual
+variation to Y. Model-II methods acknowledge error in both directions
+and give a less biased estimate of the true functional relationship.
+The price is a weaker theoretical grounding for inference and the need
+to report the method used.
+
+::: {.content-visible when-format="html"}
+Model-II regression has a respectable history in allometry and in
+method-comparison studies, where the instruments on both axes are
+imperfect. In a clinical lab context you will often see Deming
+regression for comparing two assays; SMA and Deming are close cousins
+under reasonable assumptions. The choice should follow the science:
+*is X a fixed, controlled input, or a noisy measurement of something?*
+:::
+
+## Setup
+
+```{r}
+#| label: setup
+library(tidyverse)
+library(broom)
+set.seed(42)
+theme_set(theme_minimal(base_size = 12))
+```
+
+## 1. Hypothesis
+
+We will simulate two noisy measurements of the same underlying
+quantity — say, body size measured by two instruments — and ask how
+OLS and SMA differ.
+
+Null hypothesis: the two measurements are uncorrelated.
+Working alternative: they are positively associated, with a slope near
+1 if the instruments agree.
+
+## 2. Visualise
+
+```{r}
+n <- 200
+true_size <- rnorm(n, mean = 50, sd = 10)
+x <- true_size + rnorm(n, 0, 3)
+y <- true_size + rnorm(n, 0, 3)
+dat <- tibble(x, y)
+
+ggplot(dat, aes(x, y)) +
+  geom_point(alpha = 0.6, colour = "grey30") +
+  labs(x = "Instrument 1", y = "Instrument 2")
+```
+
+A cloud of points that climbs from lower-left to upper-right. Both
+instruments carry error, so neither deserves to be called the truth.
+
+## 3. Assumptions
+
+OLS assumes X is measured without error and residuals in Y are
+approximately normal with constant variance. SMA assumes errors in both
+variables are comparable in scale. Both assume linearity.
+
+```{r}
+fit_ols <- lm(y ~ x, data = dat)
+par(mfrow = c(1, 2))
+plot(fit_ols, which = c(1, 2))
+par(mfrow = c(1, 1))
+```
+
+Residuals look patternless; the QQ plot is close to the diagonal. The
+OLS diagnostics are fine; they just do not capture the fact that X is
+also noisy.
+
+## 4. Conduct
+
+```{r}
+cor.test(dat$x, dat$y)
+
+fit_ols <- lm(y ~ x, data = dat)
+tidy(fit_ols, conf.int = TRUE)
+```
+
+Now a hand-coded SMA slope. The SMA slope is the ratio of standard
+deviations, signed by the correlation:
+
+```{r}
+sma_slope <- function(x, y) sign(cor(x, y)) * sd(y) / sd(x)
+sma_intercept <- function(x, y) mean(y) - sma_slope(x, y) * mean(x)
+
+b_sma <- sma_slope(dat$x, dat$y)
+a_sma <- sma_intercept(dat$x, dat$y)
+b_ols <- coef(fit_ols)[2]
+
+c(ols_slope = unname(b_ols), sma_slope = b_sma)
+```
+
+```{r}
+ggplot(dat, aes(x, y)) +
+  geom_point(alpha = 0.5, colour = "grey40") +
+  geom_abline(intercept = coef(fit_ols)[1], slope = b_ols,
+              colour = "steelblue", linewidth = 0.9) +
+  geom_abline(intercept = a_sma, slope = b_sma,
+              colour = "firebrick", linewidth = 0.9, linetype = 2) +
+  labs(x = "Instrument 1", y = "Instrument 2",
+       title = "OLS (blue) vs SMA (red)")
+```
+
+The SMA slope is closer to 1. OLS is attenuated because it treats X as
+fixed when it is not.
+
+## 5. Concluding statement
+
+> In simulated data (*n* = 200), instrument 2 increased with instrument
+> 1 (Pearson *r* = `r round(cor(dat$x, dat$y), 2)`; OLS slope
+> `r round(unname(b_ols), 2)`; SMA slope `r round(b_sma, 2)`). Because
+> both instruments carry measurement error, we report the SMA slope as
+> the functional relationship and note the OLS slope for comparison.
+
+::: {.notes}
+Emphasise that the question — prediction vs functional relationship —
+drives the choice, not a preference for one method.
+:::
+
+## Common pitfalls
+
+- Reporting a correlation when a slope is what the reader needs.
+- Using OLS to compare two noisy measurements and concluding the
+  slope differs from 1 when the attenuation is an artefact.
+- Forgetting that *r* has no units and therefore cannot substitute for
+  an effect size on the measurement scale.
+
+## Further reading
+
+- Warton DI et al. (2006), *Bivariate line-fitting methods for allometry*.
+- Legendre P, Legendre L. *Numerical Ecology*, ch. 10.
+- Altman DG, Bland JM (1983), *Measurement in Medicine*.
+
+## Session info
+
+```{r}
+sessionInfo()
+```

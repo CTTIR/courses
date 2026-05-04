@@ -1,0 +1,141 @@
+---
+title: "Course 2 — Regression, ANOVA & Model Diagnostics"
+toc: true
+---
+
+::: {.hero}
+::: {.kicker}
+INTERMEDIATE · 4 WEEKS · 20 LABS
+:::
+# Regression, ANOVA & Model Diagnostics
+::: {.lead}
+Linear models, ANOVA, GLMs, calibration, and the diagnostic discipline
+that separates an analysis from a guess.
+:::
+:::
+
+## What you'll be able to do by the end
+
+- Specify, fit, and diagnose linear and generalised linear models for the
+  most common biomedical outcomes — continuous, binary, ordinal, and
+  count.
+- Distinguish confounding from interaction, and design model formulae
+  that answer the scientific question being asked rather than the
+  convenient one.
+- Read a residual plot, a QQ plot, a Cook's distance plot, and a calibration
+  plot, and know what to do when each of them misbehaves.
+- Quantify a model's discrimination and calibration with ROC/AUC and
+  Brier score, and decide which of them matters for your decision.
+- Write up a regression analysis honestly, with effect sizes, confidence
+  intervals, and an explicit statement of what the model is and is not
+  for.
+
+## Who should take this course
+
+Course 2 assumes Course 1, or the equivalent: comfort with R, with
+hypothesis testing, and with the basic distributions. It does not assume
+any matrix algebra. If you have fit `lm()` once or twice but have never
+checked whether it was a sensible thing to do, this is the right course
+for you.
+
+## The shape of the four weeks
+
+::: {.card-grid}
+
+::: {.card}
+::: {.kicker}
+Week 1
+:::
+### Linear models end-to-end
+Correlation vs regression; simple and multiple LR; diagnostics; robust
+and weighted regression.
+:::
+
+::: {.card}
+::: {.kicker}
+Week 2
+:::
+### ANOVA and non-linear extensions
+One-way and factorial ANOVA; RCBD; repeated measures; GAMs; non-linear
+regression with `nls`.
+:::
+
+::: {.card}
+::: {.kicker}
+Week 3
+:::
+### GLMs, ANCOVA, evaluation
+Logistic, ordinal, multinomial, Poisson, negative binomial; ANCOVA;
+calibration, discrimination, ROC/AUC, Brier.
+:::
+
+::: {.card}
+::: {.kicker}
+Week 4
+:::
+### Measurement, change, survival, reporting
+Dichotomisation, change scores, RTM; agreement and reliability; survival
+primer; decision curves and NRI/IDI; explanation vs prediction.
+:::
+
+:::
+
+## Weekly summaries
+
+**Week 1 — linear models end-to-end.** We open with the distinction
+between correlation and regression and the two kinds of regression line
+(Model I and Model II). Simple linear regression is introduced with
+emphasis on the geometry of least squares; multiple regression brings in
+confounding, interaction, centring, and the semantics of adjustment.
+Diagnostics — residuals vs fitted, QQ, leverage, Cook's distance, and
+VIF — occupy a full lab. The week closes with robust regression, weighted
+least squares, and heteroscedasticity-consistent standard errors, tools
+that let you keep using linear models when the assumptions quietly fail.
+Key packages: `stats`, `car`, `broom`, `performance`, `sandwich`, `MASS`.
+
+**Week 2 — ANOVA and non-linear extensions.** One-way ANOVA is reframed
+as a linear model with a categorical predictor, and custom contrasts
+with `emmeans` are introduced as the mature alternative to post-hoc soup.
+Factorial ANOVA adds interaction; RCBD adds blocking; repeated measures
+naturally lift us into mixed models. We then cross into the non-linear
+world with generalised additive models (`mgcv`, `gratia`) and non-linear
+least squares (`nls`), two tools that handle most curves a biomedical
+scientist will ever meet. Key packages: `stats`, `emmeans`, `car`, `mgcv`,
+`gratia`, `lme4`.
+
+**Week 3 — GLMs, ANCOVA, evaluation.** Logistic regression opens the
+week and introduces link functions, odds ratios, and deviance. ANCOVA
+in RCTs is covered next because so many trial analyses get it wrong.
+Ordinal and multinomial models follow, then Poisson and negative-binomial
+regression with offsets and overdispersion. The week closes with a lab
+on evaluating prediction models: calibration by binning and smoothing,
+discrimination by ROC/AUC, overall performance by the Brier score,
+and the decision-curve framework that connects all three to clinical
+utility. Key packages: `stats`, `MASS`, `VGAM`, `nnet`, `pROC`, `rms`,
+`performance`, `DHARMa`.
+
+**Week 4 — measurement, change, survival, reporting.** We begin with
+information loss from dichotomisation and the regression-to-the-mean
+traps that plague change-score analyses. Agreement and reliability
+follow — κ, ICC, and Bland-Altman — with the distinctions that reviewers
+care about. A survival primer (Kaplan-Meier, log-rank, Cox PH) sets up
+Course 3, Week 3. The decision-curve, NRI, and IDI lab tackles "does
+my new model add anything clinically useful?" The final lab reprises
+Breiman's two cultures and Shmueli's explanation-vs-prediction distinction,
+and pins down the reporting guidelines (STROBE, TRIPOD, STARD, CONSORT)
+you will want bookmarked for the rest of your career.
+
+## How to work through it
+
+If you are pressed for time, prioritise Weeks 1 and 3 — these cover the
+tools that appear most often in biomedical papers. Weeks 2 and 4 are
+essential for anyone doing their own modelling but can be revisited
+later if the schedule is tight. The GAM lab (W2 S4) and the non-linear
+regression lab (W2 S5) are comfortable to skip on a faster pass; every
+other lab is referenced by at least one later course.
+
+## Further along
+
+- [Course 2 schedule](schedule.qmd) — linked index of every lab, deck, and
+  R script.
+- [Unified references](../references.qmd).

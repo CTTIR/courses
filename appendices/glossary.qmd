@@ -1,0 +1,194 @@
+---
+title: "Glossary"
+toc: true
+---
+
+::: {.hero}
+::: {.kicker}
+APPENDIX · GLOSSARY
+:::
+# Glossary
+::: {.lead}
+Plain-English definitions of the terms this curriculum uses the most.
+:::
+:::
+
+Each entry links to the first lab in which the term appears.
+
+## A
+
+**α (alpha).** The probability of a type I error — rejecting a true null hypothesis. Conventional values are 0.05 and 0.01. [Course 1 W3 S5](../course1_foundations/labs/lab_week3_session5.qmd).
+
+**ANCOVA.** Analysis of covariance: a linear model combining categorical predictors and continuous covariates, commonly used to adjust RCT analyses for baseline. [Course 2 W3 S2](../course2_regression/labs/lab_week3_session2.qmd).
+
+**ANOVA.** Analysis of variance: a linear model with categorical predictors. [Course 2 W2 S1](../course2_regression/labs/lab_week2_session1.qmd).
+
+**Assumption.** A condition the chosen test needs to be interpretable — normality, equal variance, independence, linearity. [Course 1 W4 S1](../course1_foundations/labs/lab_week4_session1.qmd).
+
+## B
+
+**Bias.** Systematic deviation of an estimator from the quantity being estimated. [Course 1 W3 S1](../course1_foundations/labs/lab_week3_session1.qmd).
+
+**Bootstrap.** Resampling with replacement to approximate the sampling distribution of a statistic. [Course 1 W3 S2](../course1_foundations/labs/lab_week3_session2.qmd).
+
+**Brier score.** Mean squared error between predicted probabilities and observed outcomes. [Course 2 W3 S5](../course2_regression/labs/lab_week3_session5.qmd).
+
+## C
+
+**CI (confidence interval).** A range of plausible values for a parameter; in repeated sampling, 95% CIs cover the true value 95% of the time. [Course 1 W3 S2](../course1_foundations/labs/lab_week3_session2.qmd).
+
+**Cohen's d.** Standardised difference in means; a common effect size for two-group comparisons. [Course 1 W4 S1](../course1_foundations/labs/lab_week4_session1.qmd).
+
+**Competing risk.** An event whose occurrence precludes or alters the probability of the event of interest. [Course 3 W3 S2](../course3_design_causal/labs/lab_week3_session2.qmd).
+
+**Confounding.** A third variable distorting the association between exposure and outcome. [Course 2 W1 S3](../course2_regression/labs/lab_week1_session3.qmd).
+
+**Cox model.** A proportional-hazards regression for time-to-event outcomes. [Course 2 W4 S3](../course2_regression/labs/lab_week4_session3.qmd).
+
+**CV (cross-validation).** Splitting data into folds to estimate generalisation error. [Course 4 W1 S1](../course4_ml_highdim/labs/lab_week1_session1.qmd).
+
+## D
+
+**DAG (directed acyclic graph).** A graphical representation of causal assumptions. [Course 3 W3 S3](../course3_design_causal/labs/lab_week3_session3.qmd).
+
+## E
+
+**Effect size.** A standardised measure of the magnitude of an effect, independent of sample size. [Course 1 W4 S1](../course1_foundations/labs/lab_week4_session1.qmd).
+
+## F
+
+**FDR (false discovery rate).** The expected proportion of false positives among rejected nulls. [Course 4 W4 S4](../course4_ml_highdim/labs/lab_week4_session4.qmd).
+
+**Fisher's exact test.** Exact test of independence for 2×2 tables, appropriate when expected cell counts are small. [Course 1 W4 S2](../course1_foundations/labs/lab_week4_session2.qmd).
+
+## G
+
+**GAM (generalised additive model).** A regression with smooth non-linear terms, fitted via penalised splines. [Course 2 W2 S4](../course2_regression/labs/lab_week2_session4.qmd).
+
+**GEE (generalised estimating equations).** A marginal-model approach for clustered or repeated data. [Course 3 W2 S4](../course3_design_causal/labs/lab_week2_session4.qmd).
+
+**GLM (generalised linear model).** A regression with a link function and exponential-family error. [Course 2 W3](../course2_regression/labs/lab_week3_session1.qmd).
+
+## H
+
+**Hazard ratio.** Ratio of hazard rates between two groups in a survival model. [Course 2 W4 S3](../course2_regression/labs/lab_week4_session3.qmd).
+
+## I
+
+**ICC (intraclass correlation).** Proportion of variance attributable to clustering. [Course 2 W4 S2](../course2_regression/labs/lab_week4_session2.qmd).
+
+**Interaction.** The effect of one predictor depends on the value of another. [Course 2 W1 S3](../course2_regression/labs/lab_week1_session3.qmd).
+
+**IPTW (inverse-probability-of-treatment weighting).** Propensity-score method that reweights observations to emulate a trial. [Course 3 W3 S4](../course3_design_causal/labs/lab_week3_session4.qmd).
+
+## K
+
+**Kaplan-Meier.** Non-parametric estimator of the survival function. [Course 2 W4 S3](../course2_regression/labs/lab_week4_session3.qmd).
+
+**Kruskal-Wallis.** Non-parametric one-way ANOVA on ranks. [Course 1 W4 S4](../course1_foundations/labs/lab_week4_session4.qmd).
+
+## L
+
+**Lasso.** L1-regularised regression; produces sparse coefficient estimates. [Course 4 W1 S2](../course4_ml_highdim/labs/lab_week1_session2.qmd).
+
+**Likelihood.** The probability of the observed data under a model, viewed as a function of the parameters. [Course 1 W3 S3](../course1_foundations/labs/lab_week3_session3.qmd).
+
+**Linear model.** A model of the form $y = X\beta + \varepsilon$. [Course 2 W1 S2](../course2_regression/labs/lab_week1_session2.qmd).
+
+**Logistic regression.** GLM with a logit link for binary outcomes. [Course 2 W3 S1](../course2_regression/labs/lab_week3_session1.qmd).
+
+## M
+
+**MAR (missing at random).** Missingness depends on observed variables only. [Course 3 W2 S1](../course3_design_causal/labs/lab_week2_session1.qmd).
+
+**MCAR (missing completely at random).** Missingness is independent of all variables. [Course 3 W2 S1](../course3_design_causal/labs/lab_week2_session1.qmd).
+
+**MCMC.** Markov-chain Monte Carlo; the Bayesian posterior-sampling workhorse. [Course 4 W3 S2](../course4_ml_highdim/labs/lab_week3_session2.qmd).
+
+**MDE (minimum detectable effect).** Smallest effect your study has power to detect. [Course 3 W1 S5](../course3_design_causal/labs/lab_week1_session5.qmd).
+
+**Meta-analysis.** Combining effect estimates across studies. [Course 3 W4 S2](../course3_design_causal/labs/lab_week4_session2.qmd).
+
+**Mixed model.** Regression combining fixed and random effects. [Course 3 W2 S3](../course3_design_causal/labs/lab_week2_session3.qmd).
+
+**MNAR (missing not at random).** Missingness depends on unobserved values. [Course 3 W2 S1](../course3_design_causal/labs/lab_week2_session1.qmd).
+
+**Multiple imputation.** Imputing missing values several times and pooling the analyses. [Course 3 W2 S2](../course3_design_causal/labs/lab_week2_session2.qmd).
+
+## N
+
+**Non-parametric.** A test or estimator that makes weak distributional assumptions. [Course 1 W4 S4](../course1_foundations/labs/lab_week4_session4.qmd).
+
+## O
+
+**Odds ratio.** Ratio of odds between two groups; the natural scale for logistic regression. [Course 2 W3 S1](../course2_regression/labs/lab_week3_session1.qmd).
+
+**Outlier.** An observation far from the bulk of the data. [Course 2 W1 S4](../course2_regression/labs/lab_week1_session4.qmd).
+
+**Overdispersion.** Variance exceeding the model's nominal variance; common in Poisson regression. [Course 2 W3 S4](../course2_regression/labs/lab_week3_session4.qmd).
+
+## P
+
+**p-value.** Probability of data as or more extreme than observed, assuming the null. [Course 1 W3 S5](../course1_foundations/labs/lab_week3_session5.qmd).
+
+**Paired test.** A test comparing matched observations rather than independent samples. [Course 1 W4 S1](../course1_foundations/labs/lab_week4_session1.qmd).
+
+**PCA (principal components analysis).** Linear dimension reduction by orthogonal projection onto directions of maximum variance. [Course 4 W1 S3](../course4_ml_highdim/labs/lab_week1_session3.qmd).
+
+**Permutation test.** Inference by shuffling labels to build a null distribution. [Course 1 W3 S2](../course1_foundations/labs/lab_week3_session2.qmd).
+
+**Poisson regression.** GLM with a log link for counts. [Course 2 W3 S4](../course2_regression/labs/lab_week3_session4.qmd).
+
+**Power.** Probability of detecting an effect if it exists; 1 − β. [Course 1 W4 S5](../course1_foundations/labs/lab_week4_session5.qmd).
+
+**Pre-registration.** A timestamped record of the research plan before data analysis. [Course 3 W4 S5](../course3_design_causal/labs/lab_week4_session5.qmd).
+
+**Propensity score.** Probability of treatment given covariates. [Course 3 W3 S4](../course3_design_causal/labs/lab_week3_session4.qmd).
+
+**Pseudoreplication.** Treating correlated observations as independent replicates. [Course 3 W1 S4](../course3_design_causal/labs/lab_week1_session4.qmd).
+
+## R
+
+**Random effect.** A model coefficient treated as a draw from a distribution. [Course 3 W2 S3](../course3_design_causal/labs/lab_week2_session3.qmd).
+
+**Randomisation.** Allocating units to arms by a chance mechanism. [Course 3 W1 S2](../course3_design_causal/labs/lab_week1_session2.qmd).
+
+**Regression to the mean.** Tendency of extreme values to be closer to the mean on remeasurement. [Course 2 W4 S1](../course2_regression/labs/lab_week4_session1.qmd).
+
+**Reliability.** Consistency of repeated measurements. [Course 2 W4 S2](../course2_regression/labs/lab_week4_session2.qmd).
+
+**Resampling.** Bootstrap, permutation, and cross-validation collectively. [Course 1 W3 S2](../course1_foundations/labs/lab_week3_session2.qmd).
+
+**Residual.** Observed minus predicted. [Course 2 W1 S4](../course2_regression/labs/lab_week1_session4.qmd).
+
+**Risk ratio.** Ratio of event probabilities between two groups. [Course 1 W4 S2](../course1_foundations/labs/lab_week4_session2.qmd).
+
+**Robust SE.** A standard error computed without assuming homoscedasticity. [Course 2 W1 S5](../course2_regression/labs/lab_week1_session5.qmd).
+
+**ROC / AUC.** Receiver operating characteristic; area under it measures discrimination. [Course 2 W3 S5](../course2_regression/labs/lab_week3_session5.qmd).
+
+## S
+
+**SAP (statistical analysis plan).** The formal plan for a trial's analysis, written before data are seen. [Course 3 W4 S5](../course3_design_causal/labs/lab_week4_session5.qmd).
+
+**SE (standard error).** Standard deviation of a sampling distribution. [Course 1 W3 S1](../course1_foundations/labs/lab_week3_session1.qmd).
+
+**SEM (standard error of the mean).** Standard error of a sample mean. [Course 1 W3 S1](../course1_foundations/labs/lab_week3_session1.qmd).
+
+**Shapiro-Wilk.** A test of normality, powerful in small samples. [Course 1 W4 S1](../course1_foundations/labs/lab_week4_session1.qmd).
+
+**Spearman correlation.** Rank-based correlation. [Course 1 W4 S3](../course1_foundations/labs/lab_week4_session3.qmd).
+
+**Survival.** Time-to-event analysis. [Course 2 W4 S3](../course2_regression/labs/lab_week4_session3.qmd).
+
+## T
+
+**Type I / II error.** False-positive and false-negative errors of a test. [Course 1 W3 S5](../course1_foundations/labs/lab_week3_session5.qmd).
+
+## V
+
+**VIF (variance inflation factor).** Measure of collinearity among regression predictors. [Course 2 W1 S4](../course2_regression/labs/lab_week1_session4.qmd).
+
+## W
+
+**Wilcoxon test.** Non-parametric test for paired (signed-rank) or unpaired (rank-sum) data. [Course 1 W4 S4](../course1_foundations/labs/lab_week4_session4.qmd).

@@ -1,0 +1,20 @@
+/*-- scss:defaults --*/
+$body-bg: #1d1f21;
+$body-color: #e8e8e8;
+$link-color: #79b8ff;
+$presentation-font-size-root: 32px;
+$presentation-font-family: "Source Sans 3", sans-serif;
+$presentation-heading-font: "Source Sans 3", sans-serif;
+$presentation-heading-color: #e8e8e8;
+$code-block-bg: #2a2d31;
+$code-color: #e8e8e8;
+
+/*-- scss:rules --*/
+.reveal pre code { font-family: "JetBrains Mono", monospace; font-size: 0.8em; }
+.reveal .kicker {
+  font-family: "JetBrains Mono", monospace;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  font-size: 0.6em;
+  color: #79b8ff;
+}

@@ -1,0 +1,204 @@
+---
+title: "Week 2, Session 4 — Discrete distributions: Bernoulli, binomial, Poisson"
+subtitle: "Course 1 — Biostatistics Courses"
+format:
+  html:
+    toc: true
+    toc-depth: 3
+    code-fold: false
+    code-tools: true
+  revealjs:
+    output-file: "lab_week2_session4_slides.html"
+    theme: [default, ../../assets/slides.scss]
+    slide-number: c/t
+    progress: true
+    scrollable: true
+    transition: none
+    preview-links: auto
+execute:
+  warning: false
+  message: false
+---
+
+::: {.callout-note}
+**Inference labs** use the five-step template:
+Hypothesis → Visualise → Assumptions → Conduct → Conclude.
+:::
+
+## Learning objectives
+
+- Simulate Bernoulli trials and aggregate them to a binomial.
+- Show the Poisson approximation to the binomial when *n* is large
+  and *p* is small.
+- Use `dbinom()`, `pbinom()`, and `rbinom()` (and their Poisson
+  counterparts) to answer probability questions.
+
+## Prerequisites
+
+Lab 2.2 (probability).
+
+## Background
+
+The Bernoulli distribution is the simplest non-trivial distribution:
+one coin, two outcomes, a single probability *p*. The binomial adds
+structure — *n* independent Bernoulli trials with the same *p* — and
+gives the distribution of the count of successes. The Poisson arises
+in the limit where *n* is large, *p* is small, and *np* stays fixed;
+it describes counts of rare events over a fixed window of opportunity,
+without needing to specify *n* and *p* separately.
+
+Most count-like quantities in biomedicine can be modelled by one of
+these three. Whether a tumour is responding (Bernoulli), how many of
+twenty patients relapse (binomial), how many emergency admissions
+arrive in an hour (Poisson) — the same three distributions cover a
+great deal of ground. The simulation-first approach makes them
+concrete before we write a formula.
+
+::: {.content-visible when-format="html"}
+There is a common conflation between the binomial and the Poisson in
+the clinical literature. When the sample size is large and the event
+is rare, the two distributions give nearly identical probabilities
+and either is defensible. When the event is not rare, the Poisson can
+assign meaningful probability to impossible events (more successes
+than trials), so the binomial is strictly better.
+:::
+
+## Setup
+
+```{r}
+#| label: setup
+library(tidyverse)
+set.seed(42)
+theme_set(theme_minimal(base_size = 12))
+```
+
+## 1. Hypothesis
+
+We characterise three discrete distributions by simulation, then
+compare the empirical frequencies to the theoretical probabilities.
+No hypothesis is tested.
+
+## 2. Visualise
+
+A Bernoulli trial: one coin, success probability 0.3.
+
+```{r}
+n_trials <- 1000
+bern <- rbinom(n_trials, 1, 0.3)
+mean(bern)   # empirical p
+```
+
+A binomial count: how many successes in 20 trials each at *p* = 0.3,
+repeated 10,000 times.
+
+```{r}
+n_rep <- 10000
+bin  <- rbinom(n_rep, size = 20, prob = 0.3)
+
+bin_tibble <- tibble(k = bin) |>
+  count(k) |>
+  mutate(prop = n / sum(n),
+         theo = dbinom(k, 20, 0.3))
+```
+
+```{r}
+#| fig-width: 6
+#| fig-height: 3.5
+bin_tibble |>
+  ggplot(aes(k, prop)) +
+  geom_col(fill = "grey70", alpha = 0.8) +
+  geom_point(aes(y = theo), colour = "firebrick", size = 2) +
+  labs(x = "Successes in 20 trials",
+       y = "Proportion (bars) vs. P(k) (points)")
+```
+
+## 3. Assumptions
+
+Binomial assumes fixed *n*, independence, and constant *p*. Poisson
+assumes a constant rate and independent counts over disjoint
+intervals. When *n* is large and *p* is small with *np* = *λ*, the
+binomial approaches Poisson.
+
+```{r}
+# n=1000, p=0.003, so np = 3. Compare binomial and Poisson probabilities.
+probs <- tibble(
+  k = 0:10,
+  binom  = dbinom(k, 1000, 0.003),
+  pois   = dpois(k, 3)
+)
+probs
+```
+
+## 4. Conduct
+
+Answer two specific questions.
+
+```{r}
+# Q1: In a trial of 20 patients at p=0.3 response rate, what is
+# P(at least 8 responders)?
+p_ge8 <- 1 - pbinom(7, size = 20, prob = 0.3)
+p_ge8
+
+# Q2: An ER admits patients at a rate of 3/hour. What is
+# P(7 or more patients in a given hour)?
+p_pois_ge7 <- 1 - ppois(6, lambda = 3)
+p_pois_ge7
+```
+
+Simulate Q2 to confirm.
+
+```{r}
+sim <- rpois(10000, lambda = 3)
+mean(sim >= 7)
+```
+
+```{r}
+#| fig-width: 6
+#| fig-height: 3.5
+tibble(k = 0:15) |>
+  mutate(pois_density = dpois(k, 3)) |>
+  ggplot(aes(k, pois_density)) +
+  geom_col(fill = "steelblue") +
+  labs(x = "Number of events", y = "P(X = k)")
+```
+
+## 5. Concluding statement
+
+> A response rate of 0.3 in a 20-patient trial implies a probability
+> of `r round(p_ge8, 3)` of observing eight or more responders.
+> An ER with a mean admission rate of 3/hour has a probability of
+> `r round(p_pois_ge7, 3)` of receiving seven or more admissions in
+> a given hour; 10,000 simulated hours recovered an empirical
+> proportion of `r round(mean(sim >= 7), 3)`. The binomial with
+> *n* = 1000, *p* = 0.003 and the Poisson with λ = 3 gave nearly
+> indistinguishable probabilities across *k* = 0–10.
+
+Discrete distributions are under-appreciated. Many designs that are
+reached for as continuous (eg regressions on a rate) have a cleaner
+count-based model sitting next to them.
+
+::: {.notes}
+Make the binomial → Poisson limit visible: plot the two PMFs on the
+same axes at decreasing *p* and watch them converge.
+:::
+
+## Common pitfalls
+
+- Using the normal approximation to the binomial when *n* is small.
+  For small *n* use `pbinom()` directly.
+- Modelling a rate as a proportion when the denominator is
+  person-time, not persons.
+- Treating a Poisson with a known *λ* as if its variance had to be
+  estimated. For Poisson, mean = variance.
+
+## Further reading
+
+- Rosner B. *Fundamentals of Biostatistics*, chapter on discrete
+  distributions.
+- Agresti A. *Categorical Data Analysis*, opening chapter.
+
+## Session info
+
+```{r}
+sessionInfo()
+```

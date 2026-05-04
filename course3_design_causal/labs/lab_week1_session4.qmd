@@ -1,0 +1,187 @@
+---
+title: "Week 1, Session 4 — Bench and translational design"
+subtitle: "Course 3 — Biostatistics Courses"
+format:
+  html:
+    toc: true
+    toc-depth: 3
+    code-fold: false
+    code-tools: true
+  revealjs:
+    output-file: "lab_week1_session4_slides.html"
+    theme: [default, ../../assets/slides.scss]
+    slide-number: c/t
+    progress: true
+    scrollable: true
+    transition: none
+    preview-links: auto
+execute:
+  warning: false
+  message: false
+---
+
+::: {.callout-note}
+**Inference lab** using the five-step template:
+Hypothesis → Visualise → Assumptions → Conduct → Conclude.
+:::
+
+## Learning objectives
+
+- Recognise blocking, factorial, and split-plot designs in a bench
+  setting.
+- Simulate a 2 × 2 factorial experiment and test the interaction.
+- Spot and correct a pseudoreplication error in a cell-culture
+  example.
+
+## Prerequisites
+
+Course 2 linear regression and ANOVA; familiarity with the formula
+interface.
+
+## Background
+
+Bench and translational biology lives on small, carefully structured
+experiments whose designs are often misread as simple one-way
+comparisons. Blocking groups observations that share a nuisance
+variable (a batch, a day, a plate) so that comparisons are made
+within blocks. Factorial designs manipulate two or more factors at
+once and estimate main effects and interactions from a single
+experiment. Split-plot designs randomise two factors at different
+scales — a hard-to-change factor (oven temperature) at the whole-
+plot level, an easier one (position on the tray) at the sub-plot
+level — and the analysis must respect that structure.
+
+Pseudoreplication is what happens when the experimental unit and the
+observational unit are confused. If one animal's blood is pipetted
+into ten wells, the ten wells are not ten independent samples; they
+are ten technical replicates of one biological replicate. Analysing
+them as independent inflates the apparent sample size, shrinks the
+standard error, and produces spuriously small *p*-values. The fix is
+to aggregate within the experimental unit or use a mixed model that
+knows about the nested structure.
+
+::: {.content-visible when-format="html"}
+A useful question to ask before every analysis: *what is the unit I
+could have independently randomised?* That is the unit of analysis.
+If an intervention was applied to a cage but measurements were taken
+on each mouse, the cage is the unit.
+:::
+
+## Setup
+
+```{r}
+#| label: setup
+library(tidyverse)
+set.seed(42)
+theme_set(theme_minimal(base_size = 12))
+```
+
+## 1. Hypothesis
+
+A drug and a diet each affect a continuous biomarker, and their
+combination may have a non-additive effect (interaction).
+
+## 2. Visualise
+
+```{r}
+n_per_cell <- 10
+fact <- expand_grid(
+  drug = c("no", "yes"),
+  diet = c("standard", "modified"),
+  rep  = seq_len(n_per_cell)
+) |>
+  mutate(
+    y = 10 +
+      (drug == "yes")  * 1.5 +
+      (diet == "modified") * 1.0 +
+      (drug == "yes" & diet == "modified") * 2.0 +
+      rnorm(n(), 0, 1.5)
+  )
+
+fact |>
+  ggplot(aes(diet, y, fill = drug)) +
+  geom_boxplot(alpha = 0.6, colour = "grey30") +
+  labs(x = NULL, y = "Biomarker", fill = "Drug")
+```
+
+## 3. Assumptions
+
+Independent observations *within each cell* (every replicate is a
+separate biological unit), approximately normal residuals, and equal
+variance across cells. For the pseudoreplication demonstration we
+deliberately break the independence assumption.
+
+```{r}
+fact |>
+  group_by(drug, diet) |>
+  summarise(mean = mean(y), sd = sd(y), n = n(), .groups = "drop")
+```
+
+## 4. Conduct
+
+```{r}
+fit <- lm(y ~ drug * diet, data = fact)
+anova(fit)
+```
+
+Now a pseudoreplication error. Suppose each biological replicate was
+measured three times (technical replicates) and we naively treated
+the 3 × rows as independent.
+
+```{r}
+pseudo <- fact |>
+  slice(rep(seq_len(n()), each = 3)) |>
+  mutate(tech_noise = rnorm(n(), 0, 0.3),
+         y = y + tech_noise)
+
+fit_bad  <- lm(y ~ drug * diet, data = pseudo)
+fit_good <- lm(y ~ drug * diet, data = fact)  # aggregated (original)
+
+bind_rows(
+  bad  = broom::tidy(fit_bad)  |> filter(term == "drugyes:dietmodified"),
+  good = broom::tidy(fit_good) |> filter(term == "drugyes:dietmodified"),
+  .id = "analysis"
+)
+```
+
+The point estimate barely moves; the standard error in the bad
+analysis is smaller because the apparent *n* is three times larger.
+
+## 5. Concluding statement
+
+> In a simulated 2 × 2 factorial experiment (10 biological
+> replicates per cell), there was evidence of an interaction between
+> drug and diet on the biomarker (*F* and *p* from the ANOVA table
+> above). Naive analysis of technical replicates as independent
+> observations shrinks the standard error of the interaction
+> estimate without changing the point estimate — a textbook
+> pseudoreplication artefact.
+
+::: {.notes}
+A slide that shows the same point estimate with two CIs, one wide
+and one narrow, is usually the clearest way to convey
+pseudoreplication to a wet-lab audience.
+:::
+
+## Common pitfalls
+
+- Counting wells, sections, or reads as independent samples.
+- Forgetting to include the block in the model when the design was
+  blocked.
+- Running a one-way ANOVA on a factorial design and losing the
+  interaction.
+- Split-plot designs analysed with a single-error-term model.
+
+## Further reading
+
+- Montgomery DC. *Design and Analysis of Experiments*.
+- Lazic SE (2010), *The problem of pseudoreplication in
+  neuroscientific studies*.
+- Festing MFW (2006), *Design and statistical methods in studies
+  using animal models*.
+
+## Session info
+
+```{r}
+sessionInfo()
+```

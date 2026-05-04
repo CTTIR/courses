@@ -1,0 +1,172 @@
+---
+title: "Common errors"
+toc: true
+---
+
+::: {.hero}
+::: {.kicker}
+APPENDIX · COMMON ERRORS
+:::
+# Common errors
+::: {.lead}
+A field guide to the R, Quarto, and `renv` errors that will bite you
+first.
+:::
+:::
+
+Each entry lists the error message, the usual cause, and the fix that
+works most of the time.
+
+## R
+
+**Error:**
+`there is no package called 'xyz'`
+
+*Cause:* the package is not installed in the library R is looking in.
+
+*Fix:* `install.packages("xyz")`. If you are using `renv`, run
+`renv::restore()` instead to keep the lock file authoritative.
+
+**Error:**
+`could not find function "ggplot"`
+
+*Cause:* package is installed but not loaded.
+
+*Fix:* `library(ggplot2)` (or `library(tidyverse)`).
+
+**Error:**
+`non-finite value supplied by optim`
+
+*Cause:* the model failed to converge, often because of extreme starting
+values, perfect separation (logistic regression), or a misspecified
+formula.
+
+*Fix:* rescale predictors, use sensible starting values, or for logistic
+regression check for zero cells in the outcome-by-predictor table.
+
+**Error:**
+`contrasts can be applied only to factors with 2 or more levels`
+
+*Cause:* a factor predictor has been filtered down to a single level.
+
+*Fix:* check `table(your_data$predictor)` and restore levels, or drop
+that predictor from the model.
+
+**Error:**
+`Error in UseMethod("predict") : no applicable method for 'predict' applied to an object of class "c('list')"`
+
+*Cause:* you passed the wrong object to `predict()`. Usually a list
+instead of the fitted model.
+
+*Fix:* check the object with `class()` and pass the model object itself,
+e.g. `predict(fit, newdata = nd)`.
+
+**Error:**
+`Loading required package: foo — there is no package called 'foo'`
+
+*Cause:* an installed package has a dependency that is missing.
+
+*Fix:* `install.packages("foo", dependencies = TRUE)`.
+
+## Quarto
+
+**Error:**
+`quarto: command not found`
+
+*Cause:* Quarto is not on your PATH.
+
+*Fix:* install from <https://quarto.org> and restart your terminal.
+On macOS, check that `/usr/local/bin` (or the Homebrew prefix) is in
+your PATH.
+
+**Error:**
+`Failed to render: your system is missing pandoc`
+
+*Cause:* older versions of R Quarto missed the bundled pandoc.
+
+*Fix:* upgrade Quarto to the latest release.
+
+**Error:**
+`Error running filter shortcodes`
+
+*Cause:* a Quarto extension is missing after cloning.
+
+*Fix:* run `quarto add` for the extension, or ignore if the extension is
+optional.
+
+**Error:**
+`output file: docs/index.html does not exist`
+
+*Cause:* `quarto render` was interrupted or `output-dir` changed.
+
+*Fix:* re-run `quarto render` from a clean state; if the interruption
+wedged `.quarto/`, delete that cache directory and try again.
+
+**Error:**
+`GitHub Pages deployment failed: 404`
+
+*Cause:* Pages is pointing at the wrong branch or path.
+
+*Fix:* in the repo Settings → Pages, select the `gh-pages` branch and
+the `/ (root)` folder. Our workflow deploys to `gh-pages` by default.
+
+## `renv`
+
+**Error:**
+`renv::restore() failed with: cannot install package 'xyz' from source`
+
+*Cause:* a system library is missing. The error above this line usually
+names the header file.
+
+*Fix:* install the matching `-dev` package on Linux, the corresponding
+Homebrew package on macOS, or Rtools on Windows. Common culprits:
+
+- `libcurl4-openssl-dev` for `curl`
+- `libxml2-dev` for `XML` / `xml2`
+- `libssl-dev` for `openssl`
+- `libfontconfig1-dev`, `libfreetype6-dev`, `libharfbuzz-dev`, `libfribidi-dev` for `systemfonts`, `ragg`, `textshaping`
+- `libgit2-dev` for `gert`
+
+**Error:**
+`renv is out of sync with the lockfile`
+
+*Cause:* the project library differs from `renv.lock`.
+
+*Fix:* `renv::status()` to see what, then `renv::restore()` to synchronise.
+
+## knitr / rmarkdown
+
+**Error:**
+`pandoc document conversion failed with error 2`
+
+*Cause:* YAML front matter is malformed — often an unquoted colon in a
+title.
+
+*Fix:* quote the offending string. `title: "Two:peas in a pod"`.
+
+**Error:**
+`Error in chunkname: object 'xyz' not found`
+
+*Cause:* an earlier chunk was skipped or cached stale.
+
+*Fix:* clear the knitr cache (`knitr::clean_cache()`) and re-render;
+check chunk evaluation with `eval = TRUE`.
+
+## Git
+
+**Error:**
+`fatal: refusing to merge unrelated histories`
+
+*Cause:* you cloned one repo and then tried to pull from a different
+initialisation.
+
+*Fix:* only run `git pull --allow-unrelated-histories` if you are sure
+you want to merge.
+
+**Error:**
+`Permission denied (publickey)`
+
+*Cause:* your SSH key is not registered with GitHub.
+
+*Fix:* add your key via Settings → SSH and GPG keys, or switch the
+remote to HTTPS: `git remote set-url origin https://github.com/...`.

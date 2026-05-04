@@ -1,0 +1,146 @@
+---
+title: "Week 4, Session 2 — Meta-analysis basics"
+subtitle: "Course 3 — Biostatistics Courses"
+format:
+  html:
+    toc: true
+    toc-depth: 3
+    code-fold: false
+    code-tools: true
+  revealjs:
+    output-file: "lab_week4_session2_slides.html"
+    theme: [default, ../../assets/slides.scss]
+    slide-number: c/t
+    progress: true
+    scrollable: true
+    transition: none
+    preview-links: auto
+execute:
+  warning: false
+  message: false
+---
+
+::: {.callout-note}
+**Inference lab:** Hypothesis → Visualise → Assumptions → Conduct → Conclude.
+:::
+
+## Learning objectives
+
+- Fit a random-effects meta-analysis with `metafor::rma`.
+- Produce forest and funnel plots, and interpret between-study
+  heterogeneity (τ², I²).
+- Assess small-study effects and publication bias informally.
+
+## Prerequisites
+
+Comfort with effect sizes on the log scale.
+
+## Background
+
+Meta-analysis pools effect estimates across studies to sharpen an
+overall answer. Fixed-effect models assume all studies estimate one true
+effect; random-effects models assume true effects vary around a common
+mean. In biomedical research, heterogeneity is the rule rather than the
+exception, so random effects are the default — and between-study
+variance (τ²) and the proportion of total variance due to heterogeneity
+(I²) become part of the primary reporting, not an afterthought.
+
+::: {.content-visible when-format="html"}
+Forest plots display each study's estimate with its confidence interval
+next to the pooled estimate. Funnel plots display study precision
+against effect size; asymmetry hints at small-study effects and
+potential publication bias. Neither plot settles the question — Egger's
+test, trim-and-fill, and careful inspection of which small studies are
+missing are all part of the routine.
+:::
+
+## Setup
+
+```{r}
+#| label: setup
+library(tidyverse)
+library(metafor)
+set.seed(42)
+theme_set(theme_minimal(base_size = 12))
+```
+
+## 1. Hypothesis
+
+H₀: pooled log risk ratio = 0 (no overall effect). H₁: pooled log RR ≠ 0.
+α = 0.05.
+
+## 2. Visualise — use a built-in dataset
+
+```{r}
+dat <- escalc(measure = "RR",
+              ai = tpos, bi = tneg, ci = cpos, di = cneg,
+              data = dat.bcg, slab = paste(author, year))
+```
+
+```{r}
+#| fig-width: 7
+#| fig-height: 5
+forest(rma(yi, vi, data = dat), header = TRUE, cex = 0.8)
+```
+
+## 3. Assumptions
+
+- Between-study heterogeneity exists (τ² > 0) in virtually every real
+  meta-analysis — a random-effects model absorbs it, a fixed-effect
+  model does not.
+- Funnel-plot asymmetry does not prove publication bias; it is
+  consistent with several mechanisms.
+
+## 4. Conduct
+
+```{r}
+fit <- rma(yi, vi, data = dat, method = "REML")
+fit
+```
+
+```{r}
+#| fig-width: 6
+#| fig-height: 4.5
+funnel(fit, main = "Funnel plot — BCG vaccine dataset")
+regtest(fit, model = "lm")
+```
+
+## 5. Concluding statement
+
+```{r}
+#| echo: false
+rr   <- exp(fit$b[1])
+lo   <- exp(fit$ci.lb)
+hi   <- exp(fit$ci.ub)
+```
+
+> Across `r nrow(dat)` trials of the BCG vaccine, the pooled risk ratio
+> for tuberculosis was `r round(rr, 2)` (95% CI `r round(lo, 2)` to
+> `r round(hi, 2)`; τ² = `r round(fit$tau2, 2)`, I² =
+> `r round(fit$I2, 1)`%). Between-trial heterogeneity was substantial;
+> the pooled estimate should be interpreted with the heterogeneity
+> statistics in view.
+
+::: {.notes}
+Quote τ² and I² alongside the pooled effect. A "significant" pooled
+effect with I² = 90% is a different creature from one with I² = 10%.
+:::
+
+## Common pitfalls
+
+- Fixed-effect pooling when between-study heterogeneity is real.
+- Quoting a pooled effect without its heterogeneity measures.
+- Treating funnel-plot symmetry as a formal test rather than a visual
+  prompt.
+
+## Further reading
+
+- Viechtbauer W. (2010). *Conducting meta-analyses in R with the metafor
+  package.* J Stat Softw.
+- Higgins JPT et al. *Cochrane Handbook for Systematic Reviews of Interventions.*
+
+## Session info
+
+```{r}
+sessionInfo()
+```

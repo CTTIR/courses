@@ -1,0 +1,210 @@
+---
+title: "Cheatsheets"
+toc: true
+---
+
+::: {.hero}
+::: {.kicker}
+ONE PAGE PER WEEK · HTML + PDF
+:::
+# Sixteen one-pagers, one per week
+::: {.lead}
+Sixteen dense one-pagers — one per week, across the four courses.
+View in the browser or download the PDF for printing.
+:::
+:::
+
+Each cheatsheet condenses a week's five sessions into: the key
+decisions, the R functions, the effect sizes or diagnostics to
+report, and a short list of pitfalls. They are not a substitute for
+the labs — but they are what you want next to you when you are
+analysing real data at 6 pm and cannot remember which `glm` family
+you want.
+
+## Course 1 — Foundations
+
+::: {.card-grid}
+
+::: {.card}
+::: {.kicker}
+WEEK 1
+:::
+### Toolchain & data hygiene
+[HTML](cheatsheets/course1_foundations/cheat_week1.qmd) ·
+[PDF](cheatsheets/course1_foundations/cheat_week1.pdf){download=""}
+:::
+
+::: {.card}
+::: {.kicker}
+WEEK 2
+:::
+### Describing data, probability, distributions
+[HTML](cheatsheets/course1_foundations/cheat_week2.qmd) ·
+[PDF](cheatsheets/course1_foundations/cheat_week2.pdf){download=""}
+:::
+
+::: {.card}
+::: {.kicker}
+WEEK 3
+:::
+### Sampling, estimation, one-sample inference
+[HTML](cheatsheets/course1_foundations/cheat_week3.qmd) ·
+[PDF](cheatsheets/course1_foundations/cheat_week3.pdf){download=""}
+:::
+
+::: {.card}
+::: {.kicker}
+WEEK 4
+:::
+### Two-group comparisons, associations, reporting
+[HTML](cheatsheets/course1_foundations/cheat_week4.qmd) ·
+[PDF](cheatsheets/course1_foundations/cheat_week4.pdf){download=""}
+:::
+
+:::
+
+## Course 2 — Regression, ANOVA & Diagnostics
+
+::: {.card-grid}
+
+::: {.card}
+::: {.kicker}
+WEEK 1
+:::
+### Linear models end-to-end
+[HTML](cheatsheets/course2_regression/cheat_week1.qmd) ·
+[PDF](cheatsheets/course2_regression/cheat_week1.pdf){download=""}
+:::
+
+::: {.card}
+::: {.kicker}
+WEEK 2
+:::
+### ANOVA and non-linear extensions
+[HTML](cheatsheets/course2_regression/cheat_week2.qmd) ·
+[PDF](cheatsheets/course2_regression/cheat_week2.pdf){download=""}
+:::
+
+::: {.card}
+::: {.kicker}
+WEEK 3
+:::
+### GLMs, ANCOVA, evaluation
+[HTML](cheatsheets/course2_regression/cheat_week3.qmd) ·
+[PDF](cheatsheets/course2_regression/cheat_week3.pdf){download=""}
+:::
+
+::: {.card}
+::: {.kicker}
+WEEK 4
+:::
+### Measurement, change, survival, reporting
+[HTML](cheatsheets/course2_regression/cheat_week4.qmd) ·
+[PDF](cheatsheets/course2_regression/cheat_week4.pdf){download=""}
+:::
+
+:::
+
+## Course 3 — Design, Longitudinal Data & Causal Inference
+
+::: {.card-grid}
+
+::: {.card}
+::: {.kicker}
+WEEK 1
+:::
+### Designing studies
+[HTML](cheatsheets/course3_design_causal/cheat_week1.qmd) ·
+[PDF](cheatsheets/course3_design_causal/cheat_week1.pdf){download=""}
+:::
+
+::: {.card}
+::: {.kicker}
+WEEK 2
+:::
+### Missing data, longitudinal, time series
+[HTML](cheatsheets/course3_design_causal/cheat_week2.qmd) ·
+[PDF](cheatsheets/course3_design_causal/cheat_week2.pdf){download=""}
+:::
+
+::: {.card}
+::: {.kicker}
+WEEK 3
+:::
+### Survival II, causal inference, HTE
+[HTML](cheatsheets/course3_design_causal/cheat_week3.qmd) ·
+[PDF](cheatsheets/course3_design_causal/cheat_week3.pdf){download=""}
+:::
+
+::: {.card}
+::: {.kicker}
+WEEK 4
+:::
+### Evidence synthesis, ID, pre-registration
+[HTML](cheatsheets/course3_design_causal/cheat_week4.qmd) ·
+[PDF](cheatsheets/course3_design_causal/cheat_week4.pdf){download=""}
+:::
+
+:::
+
+## Course 4 — Modern Statistical Learning & High-Dimensional Biomedicine
+
+::: {.card-grid}
+
+::: {.card}
+::: {.kicker}
+WEEK 1
+:::
+### Validation, regularisation, multivariate
+[HTML](cheatsheets/course4_ml_highdim/cheat_week1.qmd) ·
+[PDF](cheatsheets/course4_ml_highdim/cheat_week1.pdf){download=""}
+:::
+
+::: {.card}
+::: {.kicker}
+WEEK 2
+:::
+### ML done honestly
+[HTML](cheatsheets/course4_ml_highdim/cheat_week2.qmd) ·
+[PDF](cheatsheets/course4_ml_highdim/cheat_week2.pdf){download=""}
+:::
+
+::: {.card}
+::: {.kicker}
+WEEK 3
+:::
+### Bayesian, biomarkers, survival ML
+[HTML](cheatsheets/course4_ml_highdim/cheat_week3.qmd) ·
+[PDF](cheatsheets/course4_ml_highdim/cheat_week3.pdf){download=""}
+:::
+
+::: {.card}
+::: {.kicker}
+WEEK 4
+:::
+### Omics, fairness, reproducibility
+[HTML](cheatsheets/course4_ml_highdim/cheat_week4.qmd) ·
+[PDF](cheatsheets/course4_ml_highdim/cheat_week4.pdf){download=""}
+:::
+
+:::
+
+## How they're built
+
+Each cheatsheet is a single `.qmd` in `cheatsheets/courseN_…/` that
+declares two output formats:
+
+```yaml
+format:
+  html: {toc: true, toc-depth: 2, page-layout: full}
+  typst: {papersize: a4, margin: {x: 1.8cm, y: 2cm}, fontsize: 10pt}
+```
+
+Quarto renders them to both on every site build. The PDF uses Typst
+(bundled with Quarto) so no LaTeX install is needed. To render one
+locally:
+
+```bash
+quarto render cheatsheets/course1_foundations/cheat_week1.qmd
+# produces both .html and .pdf in _site / docs
+```

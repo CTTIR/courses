@@ -1,0 +1,163 @@
+---
+title: "Week 4, Session 5 — Pre-registration and statistical analysis plans"
+subtitle: "Course 3 — Biostatistics Courses"
+format:
+  html:
+    toc: true
+    toc-depth: 3
+    code-fold: false
+    code-tools: true
+  revealjs:
+    output-file: "lab_week4_session5_slides.html"
+    theme: [default, ../../assets/slides.scss]
+    slide-number: c/t
+    progress: true
+    scrollable: true
+    transition: none
+    preview-links: auto
+execute:
+  warning: false
+  message: false
+---
+
+::: {.callout-note}
+**Workflow lab:** Goal → Approach → Execution → Check → Report.
+:::
+
+## Learning objectives
+
+- Distinguish a pre-registration from a statistical analysis plan.
+- Draft the core sections of each for a realistic study.
+- Recognise the forms of post-hoc flexibility that pre-registration is
+  designed to prevent.
+
+## Prerequisites
+
+Course 3 to date.
+
+## Background
+
+A pre-registration is a timestamped public record of a study's
+hypotheses, design, and primary analysis. A statistical analysis plan
+(SAP) is a more detailed, often confidential companion document that
+specifies exactly how the data will be handled — variable definitions,
+handling of missing data, subgroup analyses, sensitivity analyses, and
+reporting conventions. Between them, these two documents make the
+difference between "we planned this" and "we planned this, we can
+prove it, and here is the file to show when it was signed."
+
+::: {.content-visible when-format="html"}
+Flexibility during analysis — *researcher degrees of freedom* — is not
+fraud. It is usually well-meaning curiosity. But aggregated across a
+field it produces a literature of spurious findings, and for any one
+study it produces an analysis that will not replicate. A
+pre-registration does not forbid curiosity. It separates *confirmatory*
+analyses (specified in advance) from *exploratory* ones, and requires
+each to be labelled when reported.
+:::
+
+## Setup
+
+```{r}
+#| label: setup
+library(tidyverse)
+set.seed(42)
+theme_set(theme_minimal(base_size = 12))
+```
+
+## 1. Goal
+
+Produce a minimal-but-complete pre-registration template for a
+fictional two-arm randomised trial, plus a SAP skeleton.
+
+## 2. Approach
+
+A pre-registration has four mandatory elements:
+
+1. **Question and hypotheses** — exact form of H₀ and H₁ for each
+   primary outcome.
+2. **Design** — eligibility, allocation, blinding, intervention,
+   follow-up.
+3. **Primary analysis** — the single specification whose *p*-value
+   will be quoted as the headline result.
+4. **Sample size justification** — the calculation behind the target N.
+
+A SAP adds:
+
+5. **Secondary analyses** — ordered and pre-specified.
+6. **Handling of missing data** — mechanism assumed, method used.
+7. **Subgroup analyses** — pre-specified, limited in number.
+8. **Sensitivity analyses** — especially for primary outcomes.
+
+## 3. Execution — template
+
+```{markdown}
+# Pre-registration — Trial X
+
+Protocol version 1.0 | Date 2026-04-18 | PI [NAME]
+
+## 1. Research question
+Primary: Does [intervention] reduce [outcome] relative to [control]
+in [population] over [time frame]?
+
+## 2. Hypotheses
+H0: difference in [outcome] = 0.
+H1: difference in [outcome] != 0. Two-sided, alpha = 0.05.
+
+## 3. Design
+Two-arm, parallel-group, double-blind, placebo-controlled trial.
+1:1 allocation, block randomisation (block size 4), stratified by site.
+
+## 4. Primary analysis
+ITT. Linear regression of outcome at follow-up on arm, adjusted for
+baseline value and stratification factors. Primary estimand:
+adjusted mean difference with 95% CI.
+
+## 5. Sample size
+Target n = 200 per arm; power = 0.80 for d = 0.3, alpha = 0.05.
+
+## 6. Data handling
+- Missing data: multiple imputation under MAR (m = 20).
+- Outliers: retained in primary analysis.
+- Adherence: per-protocol analysis as sensitivity.
+```
+
+## 4. Check
+
+Three questions to ask of any pre-registration before posting:
+
+1. Could a reader reconstruct the primary analysis from the text
+   without contacting you?
+2. Are exploratory analyses labelled as such?
+3. Is the target N justified by a calculation a reader can redo?
+
+## 5. Report
+
+> A pre-registration for Trial X was deposited on the OSF on
+> [date] (DOI [doi]). The primary analysis, statistical model, and
+> sample-size justification are specified therein. Any deviation from
+> the pre-registered plan is reported in the Deviations section of
+> the manuscript with its rationale.
+
+::: {.notes}
+Emphasise the "deviations" norm — pre-registration does not forbid
+change, it requires disclosure of change.
+:::
+
+## Common pitfalls
+
+- Treating pre-registration as a checkbox without a concrete analysis
+  plan.
+- Pre-registering two primary outcomes and quoting the winner.
+- Failing to report deviations from plan.
+
+## Further reading
+
+- Nosek BA et al. (2018). *The preregistration revolution.*
+- AMRC / NIHR Statistical Analysis Plan templates.
+
+## Session info
+
+```{r}
+sessionInfo()
+```

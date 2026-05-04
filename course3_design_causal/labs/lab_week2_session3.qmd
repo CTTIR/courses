@@ -1,0 +1,172 @@
+---
+title: "Week 2, Session 3 — Linear mixed models with lme4"
+subtitle: "Course 3 — Biostatistics Courses"
+format:
+  html:
+    toc: true
+    toc-depth: 3
+    code-fold: false
+    code-tools: true
+  revealjs:
+    output-file: "lab_week2_session3_slides.html"
+    theme: [default, ../../assets/slides.scss]
+    slide-number: c/t
+    progress: true
+    scrollable: true
+    transition: none
+    preview-links: auto
+execute:
+  warning: false
+  message: false
+---
+
+::: {.callout-note}
+**Inference lab** using the five-step template:
+Hypothesis → Visualise → Assumptions → Conduct → Conclude.
+:::
+
+## Learning objectives
+
+- Fit random-intercept and random-slope linear mixed models to
+  longitudinal data.
+- Test whether adding a random slope improves fit (likelihood ratio
+  test with ML).
+- Interpret REML estimates of variance components.
+
+## Prerequisites
+
+Course 2 regression; familiarity with `lm()`.
+
+## Background
+
+Longitudinal data have two sources of variation: differences between
+people and differences over time within a person. A random-intercept
+model lets each person have their own average level; a random-slope
+model lets each person also have their own rate of change. When the
+slopes genuinely vary, omitting the random slope underestimates the
+standard error of the fixed-effect slope and produces *p*-values
+that are too small.
+
+REML (restricted maximum likelihood) is the default because it gives
+unbiased estimates of the variance components by integrating out the
+fixed effects. It is the right choice for reporting variance
+components. For comparing models that differ in fixed effects, you
+must refit with ML (likelihood ratio tests on REML fits are
+invalid); for comparing models that differ only in random effects,
+REML is fine.
+
+::: {.content-visible when-format="html"}
+A common misstep is to interpret the variance of the random
+intercept as the "within-subject variance". It is the between-
+subject variance of the intercept. The within-subject variance is
+the residual variance, σ², once the random effects are accounted
+for.
+:::
+
+## Setup
+
+```{r}
+#| label: setup
+library(tidyverse)
+library(lme4)
+library(lmerTest)
+set.seed(42)
+theme_set(theme_minimal(base_size = 12))
+```
+
+## 1. Hypothesis
+
+In the `sleepstudy` data, reaction time increases with days of
+sleep deprivation, and the *rate* of increase varies by subject.
+
+## 2. Visualise
+
+```{r}
+data(sleepstudy, package = "lme4")
+
+sleepstudy |>
+  ggplot(aes(Days, Reaction, group = Subject)) +
+  geom_line(alpha = 0.3) +
+  geom_smooth(aes(group = 1), method = "lm", se = FALSE,
+              colour = "firebrick") +
+  labs(x = "Days of deprivation", y = "Reaction time (ms)")
+```
+
+## 3. Assumptions
+
+Linear relationship between Days and Reaction for each subject;
+normally distributed random intercepts and slopes (if included);
+residuals independent within and across subjects after random
+effects account for clustering; approximately constant residual
+variance.
+
+## 4. Conduct
+
+```{r}
+ri <- lmer(Reaction ~ Days + (1 | Subject),
+           data = sleepstudy, REML = TRUE)
+rs <- lmer(Reaction ~ Days + (Days | Subject),
+           data = sleepstudy, REML = TRUE)
+summary(rs)
+```
+
+```{r}
+# LRT on REML OK here because only random-effects structure differs,
+# but we use REFIT = TRUE in anova() to get correct comparison.
+anova(ri, rs, refit = FALSE)
+```
+
+```{r}
+# Fit with ML if the fixed effects changed
+fm_ml <- lmer(Reaction ~ Days + (Days | Subject),
+              data = sleepstudy, REML = FALSE)
+fm_ml
+```
+
+```{r}
+#| fig-width: 6
+#| fig-height: 3.5
+sleepstudy |>
+  mutate(fit_rs = predict(rs)) |>
+  ggplot(aes(Days, Reaction, group = Subject)) +
+  geom_point(alpha = 0.4) +
+  geom_line(aes(y = fit_rs), colour = "steelblue") +
+  facet_wrap(~ Subject, ncol = 6) +
+  theme(strip.text = element_text(size = 7))
+```
+
+## 5. Concluding statement
+
+> In the sleepstudy data, reaction time increased by about
+> `r round(fixef(rs)["Days"], 1)` ms per day of deprivation, with
+> substantial subject-to-subject variation in slope (SD
+> ≈ `r round(sqrt(VarCorr(rs)$Subject[2, 2]), 1)` ms/day). Adding a
+> random slope significantly improved fit over a random-intercept
+> model (likelihood-ratio test *p* < 0.001).
+
+::: {.notes}
+Emphasise that significance testing for random effects is at the
+boundary of the parameter space, so the reference distribution is a
+mixture of chi-squares. `lmerTest` and `anova()` do this for you.
+:::
+
+## Common pitfalls
+
+- Testing random-effects with REML-based LRTs without refitting.
+- Ignoring the random slope when slopes clearly vary.
+- Treating the `Intercept` variance as the within-subject error.
+- Using *p*-values from the Wald *z* on small samples.
+
+## Further reading
+
+- Bates D et al. (2015), *Fitting linear mixed-effects models
+  using lme4*.
+- Pinheiro JC, Bates DM. *Mixed-Effects Models in S and S-PLUS*.
+- Gelman A, Hill J. *Data Analysis Using Regression and
+  Multilevel/Hierarchical Models*.
+
+## Session info
+
+```{r}
+sessionInfo()
+```

@@ -1,0 +1,167 @@
+---
+title: "Week 1, Session 2 — Randomised controlled trials"
+subtitle: "Course 3 — Biostatistics Courses"
+format:
+  html:
+    toc: true
+    toc-depth: 3
+    code-fold: false
+    code-tools: true
+  revealjs:
+    output-file: "lab_week1_session2_slides.html"
+    theme: [default, ../../assets/slides.scss]
+    slide-number: c/t
+    progress: true
+    scrollable: true
+    transition: none
+    preview-links: auto
+execute:
+  warning: false
+  message: false
+---
+
+::: {.callout-note}
+**Inference lab** using the five-step template:
+Hypothesis → Visualise → Assumptions → Conduct → Conclude.
+:::
+
+## Learning objectives
+
+- Contrast parallel-group, crossover, cluster, and factorial RCT
+  designs.
+- Simulate a parallel-group RCT with a realistic allocation procedure.
+- Interpret intention-to-treat (ITT) and per-protocol (PP) analyses
+  and say why they can differ.
+
+## Prerequisites
+
+Course 1 inference; `t.test()`, `lm()`, and basic tidyverse.
+
+## Background
+
+The randomised controlled trial (RCT) is the reference design for
+causal inference because randomisation balances both measured and
+unmeasured confounders in expectation. Parallel-group RCTs assign
+each participant to one arm for the duration of the study. Crossover
+trials give each participant every treatment in a randomised order
+and rely on a washout period. Cluster trials randomise groups
+(clinics, villages) rather than individuals. Factorial trials vary
+more than one treatment at once and can answer more than one
+question per patient.
+
+Every RCT has two analyses that will often disagree. Intention-to-
+treat analyses everyone in the arm they were randomised to,
+regardless of what they actually received. Per-protocol analyses
+only those who received the assigned treatment as planned. ITT is
+conservative for superiority and preserves the randomisation; PP is
+informative for efficacy in compliant patients but can be biased.
+Report both, and say which is primary in the protocol.
+
+::: {.content-visible when-format="html"}
+Allocation concealment — the process that keeps the next assignment
+unknown until the patient has been enrolled — is not the same as
+blinding. You can have one without the other, and you need both for
+the trial to protect itself from selection bias and differential
+outcome ascertainment.
+:::
+
+## Setup
+
+```{r}
+#| label: setup
+library(tidyverse)
+set.seed(42)
+theme_set(theme_minimal(base_size = 12))
+```
+
+## 1. Hypothesis
+
+Treatment reduces the outcome (a continuous symptom score) relative
+to placebo. We will also see what happens when 15% of participants
+cross over from treatment to placebo after randomisation.
+
+## 2. Visualise
+
+```{r}
+n <- 200
+trial <- tibble(
+  id    = seq_len(n),
+  arm   = sample(rep(c("placebo", "treatment"), each = n / 2)),
+  # 15% of treatment arm never take the drug (will be placebo in reality)
+  crossed = if_else(arm == "treatment" & runif(n) < 0.15, TRUE, FALSE),
+  received = if_else(crossed, "placebo", arm),
+  y = rnorm(n, mean = 50, sd = 8) +
+      if_else(received == "treatment", -5, 0)
+)
+
+trial |>
+  ggplot(aes(arm, y, fill = arm)) +
+  geom_boxplot(alpha = 0.6, colour = "grey30") +
+  labs(x = NULL, y = "Symptom score") +
+  theme(legend.position = "none")
+```
+
+## 3. Assumptions
+
+A two-sample *t*-test on the ITT population assumes independent
+observations within arms and roughly normal residuals within each
+arm. We do not assume equal variances; `t.test()` uses Welch by
+default. The more important assumption is that randomisation worked —
+that the allocation is independent of every baseline covariate.
+
+```{r}
+trial |>
+  group_by(arm) |>
+  summarise(mean = mean(y), sd = sd(y), n = n())
+```
+
+## 4. Conduct
+
+```{r}
+itt <- t.test(y ~ arm, data = trial)
+pp  <- t.test(y ~ received, data = trial)
+itt
+pp
+```
+
+The ITT estimate is closer to zero than the PP estimate because the
+crossed-over patients pull the treatment arm mean toward placebo.
+
+## 5. Concluding statement
+
+> In a simulated parallel-group RCT (*n* = 200), the ITT analysis
+> showed a mean difference of
+> `r round(diff(itt$estimate) * -1, 1)` (95% CI:
+> `r round(-itt$conf.int[2], 1)` to `r round(-itt$conf.int[1], 1)`)
+> on the symptom score; a per-protocol analysis gave a larger
+> estimated benefit of
+> `r round(diff(pp$estimate) * -1, 1)`, illustrating the usual
+> direction of disagreement when non-adherence is informative.
+
+::: {.notes}
+The practical takeaway is that ITT protects the randomisation, PP
+answers a different question, and reporting only the one that looks
+good is a quiet form of bias.
+:::
+
+## Common pitfalls
+
+- Calling a non-random allocation "randomised" because a coin was
+  flipped after enrolment.
+- Reporting only PP and calling it primary.
+- Ignoring stratification variables in the analysis when they were
+  used at randomisation.
+- Cluster trials analysed as if individuals were independent.
+
+## Further reading
+
+- Schulz KF, Altman DG, Moher D (2010), *CONSORT 2010 Statement*.
+- Pocock SJ. *Clinical Trials: A Practical Approach*.
+- Hernán MA, Hernández-Díaz S (2012), *Beyond the intention-to-treat
+  in comparative effectiveness research*.
+
+## Session info
+
+```{r}
+sessionInfo()
+```

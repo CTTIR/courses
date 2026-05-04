@@ -1,0 +1,299 @@
+/*-- scss:rules --*/
+
+/* =========================================================================
+   Shared layout — palette-free.
+   Every colour value is read from CSS custom properties defined per-theme
+   in light.scss / dark.scss. Do not put hex codes in this file.
+   ========================================================================= */
+
+html, body, .navbar, .nav-footer, .page-footer, body > footer, footer.footer {
+  background: var(--bg) !important;
+  color: var(--fg);
+}
+
+html { font-size: 17px; }
+body {
+  font-family: var(--font-body);
+  line-height: 1.65;
+  -webkit-font-smoothing: antialiased;
+  color: var(--fg);
+}
+
+.content, main {
+  max-width: var(--content-max);
+  margin: 0 auto;
+  padding: 0 1rem;
+}
+
+h1, h2, h3, h4, h5, h6 {
+  font-family: var(--font-body);
+  font-weight: 600;
+  letter-spacing: -0.01em;
+  line-height: 1.25;
+  color: var(--fg);
+  margin-top: 1.8em;
+  margin-bottom: 0.6em;
+}
+h1 { font-size: 2.1rem; font-weight: 700; letter-spacing: -0.02em; }
+h2 { font-size: 1.5rem; }
+h3 { font-size: 1.18rem; color: var(--fg-alt); }
+
+a {
+  color: var(--accent);
+  text-decoration: none;
+  border-bottom: 1px solid transparent;
+  transition: border-color 120ms, color 120ms;
+}
+a:hover {
+  color: var(--accent-hover);
+  border-bottom-color: var(--accent-hover);
+}
+
+hr {
+  border: none;
+  border-top: 1px solid var(--rule);
+  margin: 2.5rem 0;
+}
+
+/* Navbar — quiet, with brand in monospace; force palette overrides because
+   Quarto sets data-bs-theme on the .navbar element itself, and stock
+   flatly/darkly rules will otherwise win. */
+.navbar,
+.navbar-expand-lg {
+  background: var(--bg) !important;
+  border-bottom: 1px solid var(--rule);
+  box-shadow: none;
+  padding: 0.6rem 0;
+}
+.navbar .navbar-brand {
+  font-family: var(--font-mono);
+  font-size: 0.95rem;
+  font-weight: 500;
+  letter-spacing: 0.02em;
+  color: var(--fg) !important;
+}
+.navbar .nav-link,
+.navbar .dropdown-item {
+  color: var(--fg) !important;
+  font-size: 0.95rem;
+  padding: 0.4rem 0.9rem !important;
+  border-radius: 4px;
+  background-color: transparent;
+}
+.navbar .nav-link:hover,
+.navbar .nav-link.active,
+.navbar .dropdown-item:hover,
+.navbar .dropdown-item:focus {
+  color: var(--accent) !important;
+  background: transparent;
+}
+.navbar .dropdown-menu {
+  background: var(--surface) !important;
+  border: 1px solid var(--rule) !important;
+  box-shadow: var(--shadow-md);
+}
+.navbar .dropdown-menu .dropdown-item {
+  color: var(--fg) !important;
+}
+.navbar .dropdown-menu .dropdown-item:hover,
+.navbar .dropdown-menu .dropdown-item:focus {
+  color: var(--accent) !important;
+  background: var(--bg) !important;
+}
+
+/* Quarto pre-sets data-bs-theme="dark" on the .navbar element so flatly's
+   navbar inherits its blue/white styling. Once we force the navbar
+   background to var(--bg), Bootstrap's dark-navbar text colour (white)
+   leaves search and theme-toggle icons invisible on a white page. Force
+   every navbar control to track our palette regardless of that attribute. */
+.navbar[data-bs-theme="dark"],
+.navbar[data-bs-theme="light"] {
+  --bs-navbar-color: var(--fg);
+  --bs-navbar-hover-color: var(--accent);
+  --bs-navbar-active-color: var(--accent);
+  --bs-navbar-brand-color: var(--fg);
+  --bs-navbar-brand-hover-color: var(--fg);
+  --bs-navbar-toggler-icon-bg: none;
+  --bs-navbar-disabled-color: var(--fg-alt);
+}
+
+/* Search and color-scheme toggle icons inherit navbar text colour, but
+   flatly hardcodes them; explicit override keeps them visible in both modes. */
+.navbar .quarto-search .aa-DetachedSearchButtonIcon,
+.navbar .quarto-search-button,
+.navbar .quarto-search a,
+.navbar .quarto-search i,
+.navbar .quarto-search svg,
+.navbar .quarto-color-scheme-toggle,
+.navbar .quarto-color-scheme-toggle i,
+.navbar .quarto-color-scheme-toggle svg,
+.navbar .aa-DetachedSearchButton {
+  color: var(--fg) !important;
+  fill: currentColor !important;
+  background: transparent !important;
+  border-color: transparent !important;
+}
+.navbar .quarto-search:hover i,
+.navbar .quarto-search:hover svg,
+.navbar .quarto-search:hover .aa-DetachedSearchButtonIcon,
+.navbar .quarto-color-scheme-toggle:hover,
+.navbar .quarto-color-scheme-toggle:hover i,
+.navbar .quarto-color-scheme-toggle:hover svg {
+  color: var(--accent) !important;
+}
+
+/* TOC */
+#TOC, .sidebar-navigation {
+  font-size: 0.9rem;
+  border-left: 1px solid var(--rule);
+  padding-left: 1rem;
+}
+#TOC a {
+  color: var(--fg-alt);
+  border-bottom: none;
+  padding: 2px 0;
+  display: block;
+}
+#TOC a:hover, #TOC a.active { color: var(--accent); }
+
+/* Hero block */
+.hero {
+  padding: 2.5rem 0 2rem 0;
+  border-bottom: 1px solid var(--rule);
+  margin-bottom: 2rem;
+}
+.hero h1 { margin-top: 0; font-size: 2.3rem; }
+.hero .lead {
+  font-size: 1.1rem;
+  color: var(--fg-alt);
+  max-width: 52ch;
+}
+.hero .kicker {
+  font-family: var(--font-mono);
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  font-size: 0.72rem;
+  color: var(--accent);
+  margin-bottom: 0.5rem;
+}
+
+/* Card grid */
+.card-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+  gap: 1rem;
+  margin: 2rem 0;
+}
+.card-grid .card {
+  background: var(--bg);
+  border: 1px solid var(--rule);
+  border-radius: var(--radius);
+  padding: 1.1rem 1.2rem;
+  transition: border-color 180ms, transform 180ms, box-shadow 180ms;
+}
+.card-grid .card:hover {
+  border-color: var(--accent);
+  transform: translateY(-2px);
+  box-shadow: var(--shadow-md);
+}
+.card-grid .card h3 {
+  margin-top: 0;
+  font-size: 1.02rem;
+  color: var(--accent);
+}
+.card-grid .card p {
+  font-size: 0.93rem;
+  color: var(--fg-alt);
+  margin-bottom: 0;
+}
+.card-grid .card .kicker {
+  font-family: var(--font-mono);
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  font-size: 0.68rem;
+  color: var(--fg-alt);
+  margin-bottom: 0.3rem;
+}
+
+/* Callouts */
+.callout {
+  border-left: 3px solid var(--accent);
+  background: var(--surface);
+  padding: 0.85rem 1rem;
+  border-radius: 0 var(--radius) var(--radius) 0;
+  margin: 1.5rem 0;
+}
+
+/* Code */
+pre, code, kbd {
+  font-family: var(--font-mono);
+  font-size: 0.9em;
+}
+pre > code {
+  background: var(--code-bg);
+  color: var(--code-fg);
+  padding: 0.9rem 1rem;
+  border-radius: var(--radius);
+  display: block;
+  overflow-x: auto;
+  border: 1px solid var(--rule);
+}
+:not(pre) > code {
+  background: var(--code-bg);
+  color: var(--code-fg);
+  padding: 0.1em 0.3em;
+  border-radius: 4px;
+}
+
+/* Tables */
+table {
+  width: 100%;
+  margin: 1.3rem 0;
+  border-collapse: collapse;
+}
+th, td {
+  padding: 0.55rem 0.8rem;
+  border-bottom: 1px solid var(--rule);
+  text-align: left;
+}
+th {
+  background: var(--surface);
+  font-weight: 600;
+}
+tbody tr:hover { background: var(--surface); }
+
+/* Footer */
+.nav-footer,
+.page-footer,
+body > footer,
+footer.footer {
+  background: var(--bg) !important;
+  border-top: 1px solid var(--rule);
+  padding: 1.3rem 0;
+  font-size: 0.88rem;
+  color: var(--fg-alt) !important;
+}
+.nav-footer a,
+.page-footer a,
+body > footer a,
+footer.footer a {
+  color: var(--fg-alt) !important;
+  border-bottom-color: transparent;
+}
+.nav-footer a:hover,
+.page-footer a:hover,
+body > footer a:hover,
+footer.footer a:hover {
+  color: var(--accent) !important;
+}
+
+img {
+  max-width: 100%;
+  height: auto;
+  border-radius: var(--radius);
+}
+blockquote {
+  border-left: 3px solid var(--rule);
+  padding: 0.3rem 1rem;
+  color: var(--fg-alt);
+}

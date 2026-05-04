@@ -1,0 +1,170 @@
+---
+title: "Week 3, Session 5 — Calibration, discrimination, ROC/AUC, Brier score"
+subtitle: "Course 2 — Biostatistics Courses"
+format:
+  html:
+    toc: true
+    toc-depth: 3
+    code-fold: false
+    code-tools: true
+  revealjs:
+    output-file: "lab_week3_session5_slides.html"
+    theme: [default, ../../assets/slides.scss]
+    slide-number: c/t
+    progress: true
+    scrollable: true
+    transition: none
+    preview-links: auto
+execute:
+  warning: false
+  message: false
+---
+
+::: {.callout-note}
+**Inference labs** use the five-step template:
+Hypothesis → Visualise → Assumptions → Conduct → Conclude.
+:::
+
+## Learning objectives
+
+- Separate discrimination (AUC) from calibration and from overall
+  performance (Brier score).
+- Draw an ROC curve with `pROC` and a calibration plot by binning
+  predicted probabilities.
+- Understand that a high AUC does not imply well-calibrated
+  probabilities.
+
+## Prerequisites
+
+Week 3 Session 1 on logistic regression.
+
+## Background
+
+A risk prediction model should do three things well: separate events
+from non-events (discrimination), produce predicted probabilities that
+match observed frequencies (calibration), and balance both in a single
+summary of overall performance (the Brier score). A model can have
+high discrimination and poor calibration — for instance, if the
+predicted probabilities are systematically too extreme — and a model
+with perfect calibration can still be useless if it cannot separate
+cases from non-cases.
+
+ROC analysis walks the decision threshold across all possible values
+and plots sensitivity against 1 − specificity. The area under the
+curve (AUC) is the probability that a randomly chosen case receives a
+higher predicted probability than a randomly chosen non-case. The
+Brier score is the mean squared error between predicted probabilities
+and the 0/1 outcome; a perfect model has a Brier of 0 and the no-skill
+model has Brier equal to the variance of the outcome.
+
+::: {.content-visible when-format="html"}
+Calibration plots group predicted probabilities into bins and plot the
+observed event rate in each bin against the mean predicted
+probability. A 45° reference line is perfect calibration. Smoothed
+(LOESS) calibration curves are an alternative in larger samples.
+:::
+
+## Setup
+
+```{r}
+#| label: setup
+library(tidyverse)
+library(broom)
+library(MASS)
+library(pROC)
+set.seed(42)
+theme_set(theme_minimal(base_size = 12))
+```
+
+## 1. Hypothesis
+
+Using `MASS::Pima.tr` (train) and `MASS::Pima.te` (test), fit a
+logistic regression and evaluate its discrimination, calibration, and
+Brier score.
+
+## 2. Visualise
+
+```{r}
+train <- as_tibble(Pima.tr) |> mutate(y = as.integer(type == "Yes"))
+test  <- as_tibble(Pima.te) |> mutate(y = as.integer(type == "Yes"))
+
+fit <- glm(y ~ glu + bmi + age + ped, data = train, family = binomial)
+test$p <- predict(fit, test, type = "response")
+
+ggplot(test, aes(p, fill = factor(y))) +
+  geom_histogram(position = "identity", alpha = 0.5, bins = 30) +
+  labs(x = "Predicted probability", y = "Count", fill = "Diabetes")
+```
+
+## 3. Assumptions
+
+The usual logistic-regression assumptions for the training fit;
+evaluation is on held-out data.
+
+## 4. Conduct
+
+Discrimination:
+
+```{r}
+roc_obj <- roc(test$y, test$p, quiet = TRUE)
+auc(roc_obj)
+ci.auc(roc_obj)
+
+plot(roc_obj, main = sprintf("ROC — AUC = %.2f", auc(roc_obj)))
+```
+
+Calibration (decile binning):
+
+```{r}
+cal <- test |>
+  mutate(bin = ntile(p, 10)) |>
+  group_by(bin) |>
+  summarise(predicted = mean(p), observed = mean(y), n = n())
+
+ggplot(cal, aes(predicted, observed)) +
+  geom_abline(linetype = 2, colour = "grey50") +
+  geom_point(size = 3) +
+  geom_line() +
+  coord_equal() +
+  labs(x = "Predicted probability (bin mean)",
+       y = "Observed event rate")
+```
+
+Brier score:
+
+```{r}
+brier <- mean((test$p - test$y)^2)
+brier
+```
+
+## 5. Concluding statement
+
+> On the held-out test set (*n* = `r nrow(test)`), the four-predictor
+> logistic model achieved AUC =
+> `r round(as.numeric(auc(roc_obj)), 2)` (95% CI:
+> `r round(ci.auc(roc_obj)[1], 2)` to
+> `r round(ci.auc(roc_obj)[3], 2)`) and a Brier score of
+> `r round(brier, 3)`. Calibration by decile was close to the 45° line.
+
+::: {.notes}
+Emphasise that AUC alone is a performance *half-story*. Clinicians
+using the predicted probability as a risk need calibration too.
+:::
+
+## Common pitfalls
+
+- Reporting AUC on the training set without cross-validation.
+- Using accuracy at a 0.5 threshold when the prevalence is not 0.5.
+- Treating a single deciles-calibration plot as a formal test.
+
+## Further reading
+
+- Steyerberg EW. *Clinical Prediction Models*.
+- Harrell FE. *Regression Modeling Strategies*, ch. 10.
+- Van Calster B et al. (2019), *Calibration: the Achilles heel…*
+
+## Session info
+
+```{r}
+sessionInfo()
+```

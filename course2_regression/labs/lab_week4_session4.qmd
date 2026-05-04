@@ -1,0 +1,175 @@
+---
+title: "Week 4, Session 4 — Decision curves, NRI, IDI"
+subtitle: "Course 2 — Biostatistics Courses"
+format:
+  html:
+    toc: true
+    toc-depth: 3
+    code-fold: false
+    code-tools: true
+  revealjs:
+    output-file: "lab_week4_session4_slides.html"
+    theme: [default, ../../assets/slides.scss]
+    slide-number: c/t
+    progress: true
+    scrollable: true
+    transition: none
+    preview-links: auto
+execute:
+  warning: false
+  message: false
+---
+
+::: {.callout-note}
+**Workflow lab:** Goal → Approach → Execution → Check → Report.
+:::
+
+## Learning objectives
+
+- Compute net benefit and draw a decision-curve plot for two competing
+  risk models.
+- Compute category-free NRI and IDI and read what each adds beyond
+  ROC/AUC.
+- Decide which of the three to report in which setting.
+
+## Prerequisites
+
+Course 2 Week 3 Session 5 (calibration, discrimination) and a working
+logistic-regression fit.
+
+## Background
+
+A prediction model is useful when its decisions, weighted by clinical
+consequence, beat any alternative policy. Decision-curve analysis makes
+that comparison explicit: across a range of threshold probabilities, it
+plots *net benefit* — true positives minus false positives, weighted by
+the threshold — against the "treat all" and "treat none" default
+policies. A model whose decision curve dominates the defaults across a
+clinically plausible range of thresholds is providing decision value.
+
+::: {.content-visible when-format="html"}
+The net reclassification improvement (NRI) and integrated discrimination
+improvement (IDI) are category-free alternatives to comparing AUCs.
+NRI summarises how well the new model moves events upwards and non-events
+downwards in risk; IDI summarises the mean change in predicted
+probabilities. Both are noisy in small samples and both are prone to
+optimistic interpretation, so report them alongside, not instead of, the
+decision curve.
+:::
+
+## Setup
+
+```{r}
+#| label: setup
+library(tidyverse)
+library(broom)
+set.seed(42)
+theme_set(theme_minimal(base_size = 12))
+```
+
+## 1. Goal
+
+Compare a baseline logistic model with a model that adds a new marker,
+using decision curves, NRI, and IDI.
+
+## 2. Approach
+
+```{r}
+n <- 800
+x1 <- rnorm(n)
+x2 <- rnorm(n) + 0.3 * x1
+lp <- -1 + 0.9 * x1 + 0.6 * x2
+y  <- rbinom(n, 1, plogis(lp))
+df <- tibble(y = y, x1 = x1, x2 = x2)
+
+base_fit <- glm(y ~ x1,       data = df, family = binomial)
+new_fit  <- glm(y ~ x1 + x2,  data = df, family = binomial)
+df <- df |>
+  mutate(p_base = predict(base_fit, type = "response"),
+         p_new  = predict(new_fit,  type = "response"))
+```
+
+## 3. Execution — decision curve (hand-coded)
+
+```{r}
+net_benefit <- function(y, p, thr) {
+  n <- length(y)
+  pred_pos <- p >= thr
+  tp <- sum(pred_pos &  y == 1)
+  fp <- sum(pred_pos &  y == 0)
+  tp / n - fp / n * (thr / (1 - thr))
+}
+
+thresholds <- seq(0.05, 0.6, by = 0.01)
+dc <- tibble(
+  threshold    = thresholds,
+  base_model   = sapply(thresholds, \(t) net_benefit(df$y, df$p_base, t)),
+  new_model    = sapply(thresholds, \(t) net_benefit(df$y, df$p_new,  t)),
+  treat_all    = sapply(thresholds, \(t)
+                         mean(df$y) - (1 - mean(df$y)) * t / (1 - t)),
+  treat_none   = 0
+) |>
+  pivot_longer(-threshold, names_to = "strategy", values_to = "net_benefit")
+```
+
+```{r}
+#| fig-width: 6.5
+#| fig-height: 4
+ggplot(dc, aes(threshold, net_benefit, colour = strategy)) +
+  geom_line(linewidth = 0.8) +
+  scale_y_continuous(limits = c(-0.05, max(dc$net_benefit))) +
+  labs(x = "Threshold probability", y = "Net benefit",
+       colour = NULL)
+```
+
+## 4. Check — NRI and IDI
+
+```{r}
+nri <- function(y, p_old, p_new) {
+  up   <- mean((p_new > p_old)[y == 1]) - mean((p_new < p_old)[y == 1])
+  down <- mean((p_new < p_old)[y == 0]) - mean((p_new > p_old)[y == 0])
+  c(events = up, non_events = down, overall = up + down)
+}
+
+idi <- function(y, p_old, p_new) {
+  ev <- mean((p_new - p_old)[y == 1])
+  ne <- mean((p_old - p_new)[y == 0])
+  c(events = ev, non_events = ne, overall = ev + ne)
+}
+
+nri(df$y, df$p_base, df$p_new)
+idi(df$y, df$p_base, df$p_new)
+```
+
+## 5. Report
+
+> Adding the new marker to a baseline logistic model yielded higher net
+> benefit than the baseline across clinically plausible threshold
+> probabilities. The category-free NRI was positive for events and
+> non-events; the IDI was also positive overall. Absolute magnitudes
+> should be interpreted alongside the decision curve, not in isolation.
+
+::: {.notes}
+Reviewers increasingly expect decision curves. NRI alone has been
+criticised for optimism under misspecification — do not rely on it.
+:::
+
+## Common pitfalls
+
+- Reporting NRI without an interval or decision-curve context.
+- Choosing the threshold range post-hoc to maximise apparent gain.
+- Forgetting that decision curves assume the cost/benefit ratio implied
+  by the threshold is clinically reasonable.
+
+## Further reading
+
+- Vickers AJ, Elkin EB. (2006). *Decision curve analysis: a novel
+  method for evaluating prediction models.* Medical Decision Making.
+- Pencina MJ et al. (2008). *Evaluating the added predictive ability
+  of a new marker.*
+
+## Session info
+
+```{r}
+sessionInfo()
+```

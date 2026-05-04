@@ -1,0 +1,202 @@
+---
+title: "Week 3, Session 5 — Time-dependent Brier, IPA, external validation"
+subtitle: "Course 4 — Biostatistics Courses"
+format:
+  html:
+    toc: true
+    toc-depth: 3
+    code-fold: false
+    code-tools: true
+  revealjs:
+    output-file: "lab_week3_session5_slides.html"
+    theme: [default, ../../assets/slides.scss]
+    slide-number: c/t
+    progress: true
+    scrollable: true
+    transition: none
+    preview-links: auto
+execute:
+  warning: false
+  message: false
+---
+
+::: {.callout-note}
+**Testing labs** use the main template:
+Hypothesis → Visualise → Assumptions → Conduct → Conclude.
+:::
+
+## Learning objectives
+
+- Compute a time-dependent Brier score and the Index of Prediction
+  Accuracy (IPA).
+- Simulate an external-validation cohort with distribution shift and
+  evaluate a fitted model on it.
+- Describe why a model can have a high internal AUC and a bad
+  external IPA.
+
+## Prerequisites
+
+Survival ML from Session 4; calibration from Course 1.
+
+## Background
+
+Validation is the point at which a prediction model either earns its
+keep or does not. Internal validation — CV or the bootstrap on the
+training data — controls optimism from the fitting step. External
+validation applies the fixed model to an independent cohort and
+measures discrimination, calibration, and clinical utility. Time-
+dependent Brier scores and IPA (1 − Brier/Brier_null) summarise the
+cost of a probabilistic prediction at a given horizon, combining
+discrimination and calibration into a single number per time.
+
+Real biomedical models routinely lose performance on external cohorts.
+Distribution shift (different age, comorbidities, measurement
+protocols) is the usual reason; miscalibration is the usual failure
+mode. This lab simulates both and shows the diagnostic signature each
+leaves behind.
+
+::: {.content-visible when-format="html"}
+TRIPOD-AI asks you to report all three — discrimination, calibration,
+clinical utility — on both internal and external data, and to disclose
+the shift between them. A reader who only sees AUC on internal data
+has no basis for deploying the model.
+:::
+
+## Setup
+
+```{r}
+#| label: setup
+library(tidyverse)
+library(survival)
+library(pROC)
+set.seed(42)
+theme_set(theme_minimal(base_size = 12))
+```
+
+## 1. Hypothesis
+
+A Cox model fit on a development cohort retains its calibration and
+discrimination on an external cohort with shifted covariate
+distribution.
+
+## 2. Visualise
+
+```{r}
+make_cohort <- function(n, mu_x = 0, beta = 0.6) {
+  x <- rnorm(n, mu_x)
+  lp <- beta * x
+  t <- rexp(n, rate = exp(lp - 1))
+  c <- rexp(n, rate = 0.1)
+  time <- pmin(t, c)
+  event <- as.integer(t <= c)
+  tibble(x = x, time = time, event = event)
+}
+dev  <- make_cohort(500, mu_x = 0)
+ext  <- make_cohort(500, mu_x = 1.0)   # distribution shift
+bind_rows(dev |> mutate(cohort = "dev"),
+          ext |> mutate(cohort = "ext")) |>
+  ggplot(aes(x, fill = cohort)) +
+  geom_histogram(bins = 30, alpha = 0.7, position = "identity")
+```
+
+## 3. Assumptions
+
+Independent right censoring; Cox proportional hazards in the
+development cohort; no time-varying covariates.
+
+## 4. Conduct
+
+Fit on dev; predict survival at a fixed horizon on both cohorts.
+
+```{r}
+fit <- coxph(Surv(time, event) ~ x, data = dev)
+horizon <- 3
+
+predict_surv <- function(fit, newdata, t) {
+  bh <- basehaz(fit, centered = FALSE)
+  H0 <- approx(bh$time, bh$hazard, xout = t, rule = 2)$y
+  lp <- predict(fit, newdata = newdata, type = "lp")
+  exp(-H0 * exp(lp))
+}
+
+s_dev <- predict_surv(fit, dev, horizon)
+s_ext <- predict_surv(fit, ext, horizon)
+
+# Observed indicator (for simple Brier w/out censoring at horizon)
+obs_dev <- dev$event == 1 & dev$time <= horizon
+obs_ext <- ext$event == 1 & ext$time <= horizon
+
+brier <- function(p_event, obs) mean((p_event - obs)^2)
+brier_null <- function(obs) mean((mean(obs) - obs)^2)
+b_dev <- brier(1 - s_dev, obs_dev); b0_dev <- brier_null(obs_dev)
+b_ext <- brier(1 - s_ext, obs_ext); b0_ext <- brier_null(obs_ext)
+ipa_dev <- 1 - b_dev / b0_dev
+ipa_ext <- 1 - b_ext / b0_ext
+
+auc_dev <- as.numeric(auc(roc(obs_dev, 1 - s_dev, quiet = TRUE)))
+auc_ext <- as.numeric(auc(roc(obs_ext, 1 - s_ext, quiet = TRUE)))
+
+tibble(cohort = c("dev", "ext"),
+       auc = c(auc_dev, auc_ext),
+       brier = c(b_dev, b_ext),
+       ipa  = c(ipa_dev, ipa_ext))
+```
+
+A calibration plot at the horizon.
+
+```{r}
+mk_cal <- function(p, y, lab) {
+  tibble(p = p, y = y, cohort = lab) |>
+    mutate(bin = cut(p, quantile(p, seq(0, 1, by = 0.1)),
+                     include.lowest = TRUE)) |>
+    group_by(cohort, bin) |>
+    summarise(mean_pred = mean(p), obs = mean(y), .groups = "drop")
+}
+bind_rows(mk_cal(1 - s_dev, obs_dev, "dev"),
+          mk_cal(1 - s_ext, obs_ext, "ext")) |>
+  ggplot(aes(mean_pred, obs, colour = cohort)) +
+  geom_point() + geom_line() +
+  geom_abline(slope = 1, intercept = 0, colour = "grey50") +
+  labs(x = "predicted event prob at horizon",
+       y = "observed event proportion")
+```
+
+## 5. Concluding statement
+
+> On a simulated external cohort with shifted covariate distribution,
+> a Cox model fit on the development cohort retained discrimination
+> (AUC `r round(auc_ext, 2)`) but lost calibration, with IPA falling
+> from `r round(ipa_dev, 2)` (development) to `r round(ipa_ext, 2)`
+> (external). The calibration plot showed systematic
+> over-prediction in the shifted cohort.
+
+Distribution shift does not always show up in AUC; it often shows up
+first in calibration. Reporting Brier/IPA alongside AUC catches this
+failure mode.
+
+::: {.notes}
+Mention that recalibration (update the baseline hazard or the
+intercept of a logistic model) often fixes calibration without
+retraining the whole model.
+:::
+
+## Common pitfalls
+
+- Reporting AUC as the only discrimination metric on an external
+  cohort.
+- Ignoring censoring when computing a Brier score at a horizon;
+  `pec` or `riskRegression` handle this properly.
+- Recalibrating on external data and then reporting the resulting
+  performance as external validation.
+
+## Further reading
+
+- Kattan MW, Gerds TA (2018), *The index of prediction accuracy: an
+  intuitive measure useful for evaluating risk prediction models*.
+- Steyerberg EW, *Clinical Prediction Models*, ch. 15–17.
+
+## Session info
+
+```{r}
+sessionInfo()
+```

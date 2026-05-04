@@ -1,0 +1,139 @@
+---
+title: "Course 1 — Foundations of Biostatistics with R"
+toc: true
+---
+
+::: {.hero}
+::: {.kicker}
+INTRODUCTORY · 4 WEEKS · 20 LABS
+:::
+# Foundations of Biostatistics with R
+::: {.lead}
+The scientific process, the R toolchain, and the core statistical ideas
+that every later course assumes. Everything begins here.
+:::
+:::
+
+## What you'll be able to do by the end
+
+- State a scientific question, choose appropriate measurements, and map
+  both onto a defensible analysis plan before any data are collected.
+- Tidy, join, and describe a biomedical dataset in R without needing a
+  spreadsheet.
+- Produce publication-quality graphics with `ggplot2` and tables with
+  `gtsummary`.
+- Derive confidence intervals by two routes — the bootstrap and the
+  classical formula — and recognise when one is trustworthy and the other
+  is not.
+- Run and correctly interpret the workhorse tests: one- and two-sample
+  t-tests, chi-square, Fisher's exact, Wilcoxon, Kruskal-Wallis, and
+  Pearson and Spearman correlation.
+- Produce a Quarto manuscript whose numbers, tables, and figures all
+  regenerate from a single render.
+
+## Who should take this course
+
+Course 1 is the foundation for everything else on the site. It assumes
+basic R fluency — you have read a CSV, written a function with an `if`
+statement, and survived your first `ggplot2` plot — but it does not
+assume any formal statistics beyond high-school algebra. PhD students,
+clinicians returning to research, and practising scientists who never
+had a rigorous course in frequentist inference will all find this the
+right place to start.
+
+## The shape of the four weeks
+
+::: {.card-grid}
+
+::: {.card}
+::: {.kicker}
+Week 1
+:::
+### Scientific process, toolchain, data hygiene
+Research workflow; R/RStudio/Quarto/`renv`; data types and quality;
+dplyr basics; the grammar of graphics.
+:::
+
+::: {.card}
+::: {.kicker}
+Week 2
+:::
+### Describing data, probability, distributions
+Descriptives and Table 1; Bayes' theorem; diagnostic testing;
+discrete and continuous distributions.
+:::
+
+::: {.card}
+::: {.kicker}
+Week 3
+:::
+### Sampling, estimation, one-sample inference
+Sampling and the CLT; bootstrap and permutation; MLE; one-sample tests;
+hypothesis-testing philosophy.
+:::
+
+::: {.card}
+::: {.kicker}
+Week 4
+:::
+### Two-group comparisons, associations, reporting
+Two-sample and paired t; two proportions; correlation; non-parametric
+tests; power and reporting.
+:::
+
+:::
+
+## Weekly summaries
+
+**Week 1 — toolchain and data hygiene.** We begin with the shape of a
+research project: the arc from question to validated knowledge, and the
+distinction between biological and statistical significance. The next
+three labs set up the tooling — R, RStudio, Quarto, and `renv` — and
+walk through tidy data, import, joining, and the small daily habits
+that make later statistics possible. Week 1 closes with a grammar-of-
+graphics tour in `ggplot2`: facets, scales, and the handful of plot
+families you will reuse throughout the curriculum.
+
+**Week 2 — describing data and naming uncertainty.** Before any modelling
+we need vocabulary. We build up descriptive statistics, contingency
+tables, and a publication-ready Table 1 with `gtsummary`; we introduce
+probability through simulation and Bayes' theorem through diagnostic
+testing, where its relevance is visible to any clinician; and we close
+with the distributions — Bernoulli, binomial, Poisson, normal, t,
+chi-square, F, exponential — that every later lab will take for granted.
+
+**Week 3 — from samples to inference.** This is the theoretical heart of
+Course 1. We simulate the central limit theorem before we quote it,
+derive confidence intervals by bootstrap before we write a formula,
+introduce maximum likelihood as a generalisation of least squares, and
+end with one-sample tests cast in the five-step template that organises
+every inference lab in this curriculum. The week closes with a sober
+account of hypothesis testing, p-values, and the two error rates —
+the pieces most scientists use badly because nobody taught them well.
+
+**Week 4 — comparisons, associations, reporting.** With the scaffolding
+in place we can run the workhorse tests: two-sample and paired t, chi-
+square and Fisher for two proportions, Pearson and Spearman correlation,
+and the Wilcoxon/Mann-Whitney/Kruskal-Wallis trio for data that refuses
+to be normal. The final lab covers sample size and power for all of the
+above and closes with a Quarto-driven reporting workflow that wires
+`gtsummary`, CONSORT diagrams, and reproducible figures into a single
+render.
+
+## How to work through it
+
+Twenty labs over four weeks suggests roughly one lab per weekday. If that
+is too fast, a sustainable pace is two labs per week with time for the
+exercises; if you already know the tooling, the first week can be
+compressed into a single afternoon. Labs that are comfortable to skip on
+a faster pass are Week 1 Session 2 (environment setup), Week 2 Session 3
+(diagnostic testing — lovely but mathematically light), and Week 3
+Session 5 (p-value philosophy, already covered implicitly by the other
+labs in that week). Every other lab is load-bearing for Course 2.
+
+## Further along
+
+- [Course 1 schedule](schedule.qmd) — linked index of every lab, deck, and
+  R script.
+- [Unified references](../references.qmd) — the sources behind this course
+  (and every course on the site).

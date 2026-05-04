@@ -1,0 +1,199 @@
+---
+title: "Week 3, Session 5 — Hypothesis testing, p-values, type I/II errors"
+subtitle: "Course 1 — Biostatistics Courses"
+format:
+  html:
+    toc: true
+    toc-depth: 3
+    code-fold: false
+    code-tools: true
+  revealjs:
+    output-file: "lab_week3_session5_slides.html"
+    theme: [default, ../../assets/slides.scss]
+    slide-number: c/t
+    progress: true
+    scrollable: true
+    transition: none
+    preview-links: auto
+execute:
+  warning: false
+  message: false
+---
+
+::: {.callout-note}
+**Inference labs** use the five-step template:
+Hypothesis → Visualise → Assumptions → Conduct → Conclude.
+:::
+
+## Learning objectives
+
+- State what a *p*-value is, and — just as importantly — what it is
+  not.
+- Demonstrate by simulation that *p*-values are uniform under H0.
+- Quantify type I error, type II error, and power, and show their
+  relationship.
+
+## Prerequisites
+
+Lab 3.4.
+
+## Background
+
+A *p*-value is the probability of observing a test statistic at least
+as extreme as the one computed, under the null hypothesis. It is not
+the probability that the null is true. It is not the probability that
+the result was due to chance. Both of those are common, plausible
+misreadings; both are wrong. The *p*-value is a function of the data
+under one specific hypothetical: *if H0 were true, how often would we
+see this much apparent signal?*
+
+Under H0, the *p*-value is uniformly distributed on [0, 1]. This is a
+direct consequence of the probability integral transform, and it is
+the reason the familiar threshold 0.05 gives a 5% type I error rate
+when applied across many independent tests of true nulls.
+
+Type I error is the rate of false positives; type II error is the rate
+of false negatives. Power is 1 − type II error: the probability of
+detecting a true effect. Power depends on the effect size, the
+variability, the sample size, and α. Increasing *n* buys you power;
+increasing α buys you power at the cost of more false positives.
+
+## Setup
+
+```{r}
+#| label: setup
+library(tidyverse)
+set.seed(42)
+theme_set(theme_minimal(base_size = 12))
+```
+
+## 1. Hypothesis
+
+The lab has two claims to verify:
+
+1. Under H0 (no effect), the *p*-value from a two-sample *t*-test is
+   uniform on [0, 1].
+2. Under H1 (effect present), the probability of rejecting H0 depends
+   on sample size and effect size.
+
+## 2. Visualise
+
+Generate many datasets with no effect, run a *t*-test on each, and
+plot the distribution of *p*-values.
+
+```{r}
+simulate_pvals <- function(n_per_group = 30, delta = 0, B = 5000) {
+  replicate(B, {
+    a <- rnorm(n_per_group, 0, 1)
+    b <- rnorm(n_per_group, delta, 1)
+    t.test(a, b)$p.value
+  })
+}
+p_h0 <- simulate_pvals(30, delta = 0)
+```
+
+```{r}
+#| fig-width: 6
+#| fig-height: 3.5
+tibble(p = p_h0) |>
+  ggplot(aes(p)) +
+  geom_histogram(bins = 20, fill = "grey60", colour = "white") +
+  geom_hline(yintercept = length(p_h0) / 20,
+             linetype = 2, colour = "firebrick") +
+  labs(x = "p-value under H0", y = "Count")
+```
+
+Flat histogram. Any other shape is a sign the test is misspecified.
+
+## 3. Assumptions
+
+The claim that *p*-values are uniform under H0 requires that H0 be
+*correctly specified* — the distributional assumptions of the test
+must hold. If the *t*-test is applied to strongly skewed data at small
+*n*, the histogram will not be flat, and the type I error will depart
+from α.
+
+## 4. Conduct
+
+### Type I error rate
+
+```{r}
+type_I <- mean(p_h0 < 0.05)
+type_I
+```
+
+Close to the nominal 0.05.
+
+### Power under H1 (effect size 0.5, *n* per group 30)
+
+```{r}
+p_h1 <- simulate_pvals(30, delta = 0.5)
+power_obs <- mean(p_h1 < 0.05)
+power_obs
+```
+
+### Power by effect size and sample size
+
+```{r}
+grid <- expand_grid(
+  n = c(10, 20, 50, 100),
+  delta = seq(0, 1.2, by = 0.2)
+)
+grid$power <- with(grid, mapply(function(nn, dd) {
+  mean(simulate_pvals(nn, dd, B = 1000) < 0.05)
+}, n, delta))
+```
+
+```{r}
+#| fig-width: 6
+#| fig-height: 3.5
+grid |>
+  ggplot(aes(delta, power, colour = factor(n))) +
+  geom_line(linewidth = 1) +
+  geom_point() +
+  geom_hline(yintercept = 0.8, linetype = 2, colour = "grey40") +
+  labs(x = "Effect size (delta)", y = "Power",
+       colour = "n per group")
+```
+
+## 5. Concluding statement
+
+> In 5000 simulated datasets with no true effect, the empirical type
+> I error rate of the two-sample *t*-test was
+> `r signif(type_I, 2)` (nominal 0.05), and the *p*-value histogram
+> was flat as theory requires. With a true effect δ = 0.5 at *n* = 30
+> per group, the empirical power was `r signif(power_obs, 2)`. Power
+> grew with both effect size and sample size as expected; 80% power
+> at δ = 0.5 required roughly *n* = 65 per group.
+
+A *p*-value is a random variable, uniform under H0. The common bar of
+0.05 is a convention, not a discovery about nature, and rejecting
+results above it is a statement about rates of evidence in a long run
+of studies — not about the truth of any single study.
+
+::: {.notes}
+The flat histogram is the single most important picture in the course.
+It is the demonstration that we understand what a p-value means.
+:::
+
+## Common pitfalls
+
+- Reporting *p* = 0.051 as "not significant" and *p* = 0.049 as
+  "significant" as if the dichotomy were informative.
+- Confusing *P*(data | H0) with *P*(H0 | data).
+- Running many tests without adjustment and reporting the smallest
+  *p*-value.
+- Declaring "no effect" when a non-significant *p*-value comes from an
+  underpowered study.
+
+## Further reading
+
+- Wasserstein RL, Lazar NA (2016). *The ASA's Statement on p-Values*.
+- Greenland S et al. (2016). *Statistical tests, P values,
+  confidence intervals, and power: a guide to misinterpretations*.
+
+## Session info
+
+```{r}
+sessionInfo()
+```

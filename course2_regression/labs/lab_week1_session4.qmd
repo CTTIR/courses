@@ -1,0 +1,170 @@
+---
+title: "Week 1, Session 4 — Diagnostics: residuals, QQ, leverage, Cook's distance, VIF"
+subtitle: "Course 2 — Biostatistics Courses"
+format:
+  html:
+    toc: true
+    toc-depth: 3
+    code-fold: false
+    code-tools: true
+  revealjs:
+    output-file: "lab_week1_session4_slides.html"
+    theme: [default, ../../assets/slides.scss]
+    slide-number: c/t
+    progress: true
+    scrollable: true
+    transition: none
+    preview-links: auto
+execute:
+  warning: false
+  message: false
+---
+
+::: {.callout-note}
+**Inference labs** use the five-step template:
+Hypothesis → Visualise → Assumptions → Conduct → Conclude.
+:::
+
+## Learning objectives
+
+- Read the four default `plot(lm)` diagnostics and say what each is for.
+- Identify leverage and influence separately and combine them using
+  Cook's distance.
+- Detect collinearity with VIF and decide when to act on it.
+
+## Prerequisites
+
+Sessions 2 and 3 of this week.
+
+## Background
+
+Diagnostics are the step in a regression workflow that protects the
+report from the dataset. A coefficient is only as trustworthy as the
+assumptions behind it. The four classical plots — residuals vs
+fitted, QQ, scale-location, and residuals vs leverage — answer four
+questions: is the mean right, are the errors roughly normal, is the
+variance constant, and is any single point running the show?
+
+Leverage measures how unusual a point's predictor values are; influence
+measures how much the fit changes when that point is removed. Cook's
+distance combines the two. A point can have high leverage without
+high influence if it sits on the regression line, and it can have high
+influence without spectacular residuals if its predictors are extreme.
+
+::: {.content-visible when-format="html"}
+The `performance::check_model()` function wraps many of these ideas in
+a single call and is increasingly the way teams read diagnostics on
+screen. `car::vif()` gives the variance inflation factors; a rule of
+thumb is that values above 5 deserve attention and above 10 demand it,
+but rules of thumb are no substitute for thinking about which
+predictors are truly redundant.
+:::
+
+## Setup
+
+```{r}
+#| label: setup
+library(tidyverse)
+library(broom)
+library(car)
+library(performance)
+set.seed(42)
+theme_set(theme_minimal(base_size = 12))
+```
+
+## 1. Hypothesis
+
+Simulate a regression with mild heteroscedasticity, a high-leverage
+point, and two correlated predictors. Ask which diagnostics flag which
+problem.
+
+## 2. Visualise
+
+```{r}
+n <- 150
+x1 <- rnorm(n, 0, 1)
+x2 <- x1 + rnorm(n, 0, 0.3)      # x1 and x2 correlated
+x3 <- rnorm(n, 0, 1)
+y  <- 1 + 2 * x1 - 1.5 * x2 + 0.5 * x3 + rnorm(n, 0, 1 + 0.4 * abs(x1))
+# add one influential point
+x1[1] <- 5; x2[1] <- 5; y[1] <- 0
+dat <- tibble(y, x1, x2, x3)
+
+ggplot(dat, aes(x1, y)) +
+  geom_point(alpha = 0.6) +
+  labs(x = "x1", y = "y")
+```
+
+## 3. Assumptions
+
+```{r}
+fit <- lm(y ~ x1 + x2 + x3, data = dat)
+par(mfrow = c(2, 2))
+plot(fit)
+par(mfrow = c(1, 1))
+```
+
+The residuals-vs-fitted plot should show no trend. The QQ plot should
+track the line. Scale-location should be flat. Residuals-vs-leverage
+should have no points outside the Cook's-distance contours.
+
+## 4. Conduct
+
+Influence diagnostics:
+
+```{r}
+infl <- augment(fit) |> mutate(row = row_number())
+infl |> arrange(desc(.cooksd)) |> head(5) |>
+  select(row, .fitted, .resid, .hat, .cooksd)
+```
+
+VIF:
+
+```{r}
+vif(fit)
+```
+
+Performance summary:
+
+```{r}
+#| fig-width: 7
+#| fig-height: 6
+check_model(fit, check = c("vif", "qq", "outliers", "linearity"))
+```
+
+VIF for x1 and x2 should be high; x3 should be fine. The first row
+(the injected leverage point) should dominate Cook's distance.
+
+## 5. Concluding statement
+
+> Regression diagnostics identified one high-influence observation
+> (Cook's *D* = `r round(max(infl$.cooksd), 2)`) and collinearity
+> between x1 and x2 (VIF = `r round(max(vif(fit)), 1)`). Refitting
+> without the influential point or after combining the collinear
+> predictors would be the next step before reporting coefficients.
+
+::: {.notes}
+Stress that diagnostics should be documented, not just inspected: the
+paper should say which diagnostics were run and what was done about
+any findings.
+:::
+
+## Common pitfalls
+
+- Treating a single Cook's distance number as a verdict. Always look
+  at the plot.
+- Solving a VIF problem by dropping one variable at a time when the
+  underlying issue is that two predictors measure the same thing.
+- Declaring the assumptions met because the numbers pass. Plot first.
+
+## Further reading
+
+- Fox J, Weisberg S. *An R Companion to Applied Regression*, ch. 8.
+- Belsley DA, Kuh E, Welsch RE. *Regression Diagnostics*.
+- Lüdecke D et al. (2021), *performance: An R Package for Assessment...*
+
+## Session info
+
+```{r}
+sessionInfo()
+```

@@ -1,0 +1,160 @@
+---
+title: "Week 1, Session 1 — Scientific process and research workflow"
+subtitle: "Course 1 — Biostatistics Courses"
+format:
+  html:
+    toc: true
+    toc-depth: 3
+    code-fold: false
+    code-tools: true
+  revealjs:
+    output-file: "lab_week1_session1_slides.html"
+    theme: [default, ../../assets/slides.scss]
+    slide-number: c/t
+    progress: true
+    scrollable: true
+    transition: none
+    preview-links: auto
+execute:
+  warning: false
+  message: false
+---
+
+::: {.callout-note}
+**Workflow labs** use the variant template:
+Goal → Approach → Execution → Check → Report.
+:::
+
+## Learning objectives
+
+- Name the nine stages of the research workflow and say what goes wrong
+  if each is skipped.
+- Distinguish biological from statistical significance with an example.
+- Frame a research question that can survive a methods section.
+
+## Prerequisites
+
+R, RStudio, and Quarto installed (see [Get started](../../get_started.qmd)).
+
+## Background
+
+Statistics is a thread running through a longer process that begins
+before a dataset exists. The research workflow — Question → Measurements
+→ Design → Acquisition → Description → Analysis → Interpretation →
+Validation → Knowledge — names the stages of that process and makes
+clear that errors made at one stage are paid for at the next. A
+well-posed question protects you from a bad design; a good design
+protects you from a noisy dataset; a clean dataset protects you from
+needing exotic methods. Much of what looks like statistical failure in
+the literature is in fact a workflow failure three stages earlier.
+
+::: {.content-visible when-format="html"}
+The workflow also organises how you write up the work. The Introduction
+names the question; the Methods describe the measurements, design, and
+analysis; the Results describe the data and the inference; the
+Discussion interprets. When you plan an analysis in this order, the
+paper nearly writes itself. When you skip a stage, reviewers notice
+exactly which one.
+:::
+
+## Setup
+
+```{r}
+#| label: setup
+library(tidyverse)
+set.seed(42)
+theme_set(theme_minimal(base_size = 12))
+```
+
+## 1. Goal
+
+Make the research workflow concrete by simulating a small clinical
+scenario and mapping each stage to a specific decision.
+
+## 2. Approach
+
+Imagine a new blood-pressure drug. Our simulated question: *does drug X
+reduce systolic blood pressure compared with placebo in adults with
+hypertension?* We will generate data that reflect a realistic effect and
+walk through the workflow.
+
+```{r}
+n <- 120
+df <- tibble(
+  id    = seq_len(n),
+  arm   = rep(c("placebo", "drug"), each = n / 2),
+  sbp_0 = rnorm(n, mean = 150, sd = 10),
+  sbp_1 = sbp_0 + ifelse(arm == "drug", -6, 0) + rnorm(n, 0, 8)
+)
+```
+
+## 3. Execution
+
+```{r}
+#| fig-width: 6
+#| fig-height: 3.5
+df |>
+  mutate(delta = sbp_1 - sbp_0) |>
+  ggplot(aes(arm, delta, fill = arm)) +
+  geom_boxplot(alpha = 0.6, colour = "grey30") +
+  labs(x = NULL, y = "Change in SBP (mmHg)") +
+  theme(legend.position = "none")
+```
+
+The plot is the Description stage. Without it, we would skip straight
+from raw numbers to a test. With it, the direction and spread of the
+change are visible before a single calculation.
+
+## 4. Check
+
+```{r}
+fit <- t.test(sbp_1 - sbp_0 ~ arm, data = df)
+fit
+```
+
+The drug arm has a lower change-in-SBP on average; the interval is
+compatible with a clinically meaningful effect.
+
+## 5. Report
+
+> In a simulated two-arm trial (*n* = 120), mean change in systolic
+> blood pressure was `r round(diff(tapply(df$sbp_1 - df$sbp_0, df$arm, mean)), 1)` mmHg lower in the drug arm than in
+> placebo (95% CI: `r round(fit$conf.int[1], 1)` to
+> `r round(fit$conf.int[2], 1)`; *p* = `r signif(fit$p.value, 2)`).
+
+Note the three pieces every report needs: direction and magnitude, an
+interval, and a *p*-value reported alongside — never instead of — the
+effect.
+
+### Biological vs statistical significance
+
+A *p*-value below 0.05 does not, on its own, mean the effect matters
+clinically. A reduction of 0.1 mmHg in SBP would be statistically
+significant with a million patients but biologically meaningless. The
+discipline of asking *how large is the effect?* — not *is there any
+effect?* — is the single most important habit to form in Course 1.
+
+::: {.notes}
+Spend a minute on biological vs statistical significance during the
+presentation. Most reviewers catch this, most readers do not.
+:::
+
+## Common pitfalls
+
+- Skipping the description stage and running a test on data you have
+  never plotted.
+- Reporting a *p*-value without an effect size and interval.
+- Conflating biological and statistical significance.
+- Treating the research workflow as optional once data are in hand.
+
+## Further reading
+
+- [Research workflow appendix](../../appendices/research_workflow.qmd).
+- Altman DG. *Practical Statistics for Medical Research*, ch. 1.
+- Wasserstein RL & Lazar NA (2016), *The ASA's Statement on p-Values*.
+
+## Session info
+
+```{r}
+sessionInfo()
+```

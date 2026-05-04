@@ -1,0 +1,169 @@
+---
+title: "Week 1, Session 2 — Regularisation: ridge, lasso, elastic net"
+subtitle: "Course 4 — Biostatistics Courses"
+format:
+  html:
+    toc: true
+    toc-depth: 3
+    code-fold: false
+    code-tools: true
+  revealjs:
+    output-file: "lab_week1_session2_slides.html"
+    theme: [default, ../../assets/slides.scss]
+    slide-number: c/t
+    progress: true
+    scrollable: true
+    transition: none
+    preview-links: auto
+execute:
+  warning: false
+  message: false
+---
+
+::: {.callout-note}
+**Workflow labs** use the variant template:
+Goal → Approach → Execution → Check → Report.
+:::
+
+## Learning objectives
+
+- Fit ridge, lasso, and elastic-net regressions with `glmnet`, and
+  explain what each penalty does to the coefficient path.
+- Select `lambda` and `alpha` by cross-validation, and describe the
+  bias–variance trade-off the choice implies.
+- Interpret a coefficient path figure and a set of standardised
+  coefficients.
+
+## Prerequisites
+
+OLS and GLMs from Course 1; the CV lab from Session 1.
+
+## Background
+
+The ordinary least-squares solution is unbiased but, when *p* is close
+to or larger than *n*, it is unstable: small perturbations of the data
+move the fitted coefficients a long way. Regularisation trades a little
+bias for a lot of variance reduction by adding a penalty to the fitting
+criterion. Ridge shrinks all coefficients toward zero, lasso sets some
+exactly to zero, and elastic net blends the two. Each lives on the
+`glmnet` coefficient path and is selected by the same basic mechanism:
+cross-validation over `lambda` (and optionally `alpha`).
+
+In biomedical data the motivation is rarely pure prediction. A lasso
+that selects 7 of 400 genes is also a shortlist for the next
+experiment. A ridge that keeps every variable but shrinks their effects
+is an honest admission that signal is diffuse and that no small subset
+will carry the story. Elastic net is the default when variables come in
+correlated groups, because the lasso tends to pick one at random from a
+correlated cluster while ridge keeps them all.
+
+::: {.content-visible when-format="html"}
+Standardise before fitting. The penalty is scale-sensitive, and a
+variable in raw units will be penalised differently from the same
+variable in standardised units. `glmnet` standardises by default, but
+it is worth knowing what the coefficients refer to when you plot them.
+:::
+
+## Setup
+
+```{r}
+#| label: setup
+library(tidyverse)
+library(glmnet)
+set.seed(42)
+theme_set(theme_minimal(base_size = 12))
+```
+
+## 1. Goal
+
+Compare ridge, lasso, and elastic net on a simulated high-dimensional
+regression problem and pick a final model.
+
+## 2. Approach
+
+`n = 100`, `p = 200`, block-correlated design with a handful of true
+signals, to exercise both the sparsity of lasso and the group-handling
+of elastic net.
+
+```{r}
+n <- 100; p <- 200
+Z <- matrix(rnorm(n * (p / 10)), n, p / 10)
+X <- Z[, rep(seq_len(p / 10), each = 10)] + 0.2 * matrix(rnorm(n * p), n, p)
+beta <- c(rep(2, 5), rep(-1.5, 5), rep(0, p - 10))
+y <- as.numeric(X %*% beta + rnorm(n))
+
+tibble(i = seq_along(beta), beta = beta) |>
+  ggplot(aes(i, beta)) + geom_segment(aes(xend = i, yend = 0)) +
+  labs(x = "feature index", y = "true coefficient")
+```
+
+## 3. Execution
+
+```{r}
+#| fig-width: 7
+#| fig-height: 4
+fit_ridge <- glmnet(X, y, alpha = 0)
+fit_lasso <- glmnet(X, y, alpha = 1)
+fit_enet  <- glmnet(X, y, alpha = 0.5)
+par(mfrow = c(1, 3), mar = c(4, 4, 2, 1))
+plot(fit_ridge, xvar = "lambda"); title("ridge")
+plot(fit_lasso, xvar = "lambda"); title("lasso")
+plot(fit_enet,  xvar = "lambda"); title("elastic net")
+```
+
+## 4. Check
+
+Pick `lambda` by CV for each; compare minimum CV MSE.
+
+```{r}
+cv_ridge <- cv.glmnet(X, y, alpha = 0,   nfolds = 5)
+cv_lasso <- cv.glmnet(X, y, alpha = 1,   nfolds = 5)
+cv_enet  <- cv.glmnet(X, y, alpha = 0.5, nfolds = 5)
+tibble(
+  model = c("ridge", "lasso", "enet"),
+  min_cvmse = c(min(cv_ridge$cvm), min(cv_lasso$cvm), min(cv_enet$cvm)),
+  nonzero   = c(sum(coef(cv_ridge, s = "lambda.min") != 0),
+                sum(coef(cv_lasso, s = "lambda.min") != 0),
+                sum(coef(cv_enet,  s = "lambda.min") != 0))
+)
+```
+
+## 5. Report
+
+> On a simulated `n = 100`, `p = 200` regression with 10 true signals,
+> elastic net (α = 0.5) achieved the lowest 5-fold CV MSE
+> (`r round(min(cv_enet$cvm), 2)`) and retained
+> `r sum(coef(cv_enet, s = "lambda.min") != 0) - 1` features. Lasso
+> was comparable but dropped one member of each correlated signal pair;
+> ridge was smoothest but produced no sparse shortlist.
+
+The choice is problem-dependent: if the next step is validation of a
+candidate biomarker panel, lasso or elastic net is preferable for the
+interpretable sparsity; if the next step is prediction only, ridge is
+often more stable.
+
+::: {.notes}
+Mention that `lambda.1se` is often a better choice than `lambda.min`
+for reporting: it is the simplest model within one SE of the
+minimum-CV model.
+:::
+
+## Common pitfalls
+
+- Interpreting lasso coefficients as unbiased effect estimates.
+- Forgetting that correlated features share shrinkage: lasso may pick
+  any one of them.
+- Reporting CV-minimum error as generalisation error (see Session 1).
+
+## Further reading
+
+- Friedman J, Hastie T, Tibshirani R (2010), *Regularization paths for
+  generalized linear models via coordinate descent*.
+- Zou H, Hastie T (2005), *Regularization and variable selection via
+  the elastic net*.
+
+## Session info
+
+```{r}
+sessionInfo()
+```

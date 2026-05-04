@@ -1,0 +1,168 @@
+---
+title: "Week 1, Session 3 — PCA, factor analysis, CCA, LDA"
+subtitle: "Course 4 — Biostatistics Courses"
+format:
+  html:
+    toc: true
+    toc-depth: 3
+    code-fold: false
+    code-tools: true
+  revealjs:
+    output-file: "lab_week1_session3_slides.html"
+    theme: [default, ../../assets/slides.scss]
+    slide-number: c/t
+    progress: true
+    scrollable: true
+    transition: none
+    preview-links: auto
+execute:
+  warning: false
+  message: false
+---
+
+::: {.callout-note}
+**Workflow labs** use the variant template:
+Goal → Approach → Execution → Check → Report.
+:::
+
+## Learning objectives
+
+- Compute a PCA, read a biplot, and explain loadings and scores without
+  resorting to magical reasoning about "directions of variance".
+- Distinguish PCA, factor analysis, canonical correlation analysis,
+  and linear discriminant analysis by the question each answers.
+- Fit an LDA classifier and interpret the discriminant coefficients.
+
+## Prerequisites
+
+Matrix algebra from Course 1 (eigendecomposition); basic multivariate
+intuition.
+
+## Background
+
+Dimension reduction is often described as "finding structure", but each
+of these methods has a concrete question behind it. PCA asks which
+directions in feature space have the largest variance; its axes are
+eigenvectors of the covariance matrix. Factor analysis asks which latent
+factors, plus unique variance per feature, reproduce the observed
+covariance; it is PCA's statistical cousin with a proper error model.
+Canonical correlation analysis asks which linear combinations of two
+feature sets are maximally correlated. Linear discriminant analysis
+asks which direction separates known classes while collapsing
+within-class variance.
+
+They share machinery — all four involve eigenvalues of something — but
+they are not interchangeable. Using PCA where LDA was called for will
+waste the label information; using LDA where PCA was called for will
+produce a single, class-dependent axis and nothing else.
+
+::: {.content-visible when-format="html"}
+When you report a PCA, report the variance explained by each of the
+first few components and a biplot with named observations and loadings.
+When you report an LDA, report the classification accuracy on held-out
+data and the direction of each discriminant, not just the confusion
+matrix.
+:::
+
+## Setup
+
+```{r}
+#| label: setup
+library(tidyverse)
+library(MASS)
+set.seed(42)
+theme_set(theme_minimal(base_size = 12))
+```
+
+## 1. Goal
+
+Use `iris` to illustrate PCA and LDA on the same data, compare their
+projections, and classify species with LDA.
+
+## 2. Approach
+
+Four morphometric variables, three species. PCA ignores the label;
+LDA uses it.
+
+```{r}
+iris |>
+  pivot_longer(-Species) |>
+  ggplot(aes(value, fill = Species)) +
+  geom_density(alpha = 0.5) +
+  facet_wrap(~ name, scales = "free") +
+  labs(x = NULL, y = "density")
+```
+
+## 3. Execution
+
+PCA on the four numeric features, then LDA.
+
+```{r}
+pca <- prcomp(iris[, 1:4], scale. = TRUE)
+summary(pca)$importance[, 1:3]
+
+lda_fit <- lda(Species ~ ., data = iris)
+lda_fit$scaling
+```
+
+```{r}
+#| fig-width: 7
+#| fig-height: 3.5
+scores_pca <- as_tibble(pca$x[, 1:2]) |> mutate(Species = iris$Species)
+scores_lda <- as_tibble(predict(lda_fit)$x) |> mutate(Species = iris$Species)
+p1 <- ggplot(scores_pca, aes(PC1, PC2, colour = Species)) +
+  geom_point(alpha = 0.7) + labs(title = "PCA (unsupervised)")
+p2 <- ggplot(scores_lda, aes(LD1, LD2, colour = Species)) +
+  geom_point(alpha = 0.7) + labs(title = "LDA (uses labels)")
+gridExtra::grid.arrange(p1, p2, ncol = 2)
+```
+
+## 4. Check
+
+Hold-out accuracy for LDA (simple 70/30 split).
+
+```{r}
+idx <- sample(nrow(iris), 0.7 * nrow(iris))
+fit2 <- lda(Species ~ ., data = iris[idx, ])
+pred <- predict(fit2, iris[-idx, ])$class
+mean(pred == iris$Species[-idx])
+```
+
+## 5. Report
+
+> On the *iris* data, the first two principal components explained
+> `r round(sum(summary(pca)$importance[2, 1:2]) * 100, 1)`% of the
+> total variance. A linear discriminant classifier achieved
+> hold-out accuracy of `r round(mean(pred == iris$Species[-idx]) * 100, 1)`%
+> on a 70/30 split.
+
+In this low-dimensional problem, PCA already separates the species
+visually because the morphometric variables are correlated with
+species. In realistic biomedical data, that is rarely true: the
+supervised projection (LDA, or a classifier's decision function) is
+usually sharper.
+
+::: {.notes}
+Skip factor analysis and CCA in the demo unless time permits; keep
+them as reading. The conceptual move — from unsupervised (PCA, FA) to
+supervised (LDA) to two-view (CCA) — is the point.
+:::
+
+## Common pitfalls
+
+- Reporting "PC1 is age" because age happens to correlate with it.
+- Running LDA when classes are hugely imbalanced; use QDA or a proper
+  classifier instead.
+- Comparing variance-explained across datasets as if it were a quality
+  score.
+
+## Further reading
+
+- Jolliffe IT (2002), *Principal Component Analysis*, 2nd ed.
+- Mardia, Kent, Bibby, *Multivariate Analysis*, chapters on LDA/CCA.
+
+## Session info
+
+```{r}
+sessionInfo()
+```

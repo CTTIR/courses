@@ -1,0 +1,182 @@
+---
+title: "Week 1, Session 5 — Power: closed-form and simulation"
+subtitle: "Course 3 — Biostatistics Courses"
+format:
+  html:
+    toc: true
+    toc-depth: 3
+    code-fold: false
+    code-tools: true
+  revealjs:
+    output-file: "lab_week1_session5_slides.html"
+    theme: [default, ../../assets/slides.scss]
+    slide-number: c/t
+    progress: true
+    scrollable: true
+    transition: none
+    preview-links: auto
+execute:
+  warning: false
+  message: false
+---
+
+::: {.callout-note}
+**Inference lab** using the five-step template:
+Hypothesis → Visualise → Assumptions → Conduct → Conclude.
+:::
+
+## Learning objectives
+
+- Run a closed-form power calculation for a two-sample *t*-test with
+  `pwr`.
+- Simulate power for a scenario where closed-form solutions do not
+  exist using `simr`.
+- Describe the inputs to any power calculation (effect, variance,
+  alpha, design).
+
+## Prerequisites
+
+Course 1 inference and Course 2 mixed-model basics (we will fit a
+small `lmer`).
+
+## Background
+
+Power is the probability of rejecting the null hypothesis when a
+specific alternative is true. Four inputs set it: the effect size
+you care about, the variability of the outcome, the significance
+level, and the sample size (with the design). Closed-form formulas
+exist for standard one- and two-sample tests and for some simple
+regression settings. For anything more elaborate — clustered data,
+non-linear models, interim looks, complex survival designs — you
+simulate.
+
+Simulation-based power is conceptually straightforward: for a given
+scenario, generate many datasets under the alternative, run the
+planned analysis on each, and compute the fraction of times you
+reject the null. The `simr` package does this for models fit with
+`lme4`, allowing you to vary the sample size or the effect and
+trace out a power curve.
+
+::: {.content-visible when-format="html"}
+A useful rule of thumb: if your closed-form calculation is for a
+model simpler than the one you will actually fit, the closed-form
+is giving you a lower bound on the sample size you need, not an
+answer.
+:::
+
+## Setup
+
+```{r}
+#| label: setup
+library(tidyverse)
+library(pwr)
+library(lme4)
+library(lmerTest)
+library(simr)
+set.seed(42)
+theme_set(theme_minimal(base_size = 12))
+```
+
+## 1. Hypothesis
+
+Detect a standardised mean difference of *d* = 0.4 between two
+groups with 80% power at a 5% two-sided significance level. Then
+power a mixed model with 20 clusters and 10 observations each to
+detect a fixed effect of 0.3.
+
+## 2. Visualise
+
+```{r}
+ns <- seq(20, 400, by = 20)
+pw <- map_dbl(ns, \(n) pwr.t.test(
+  n = n / 2, d = 0.4, sig.level = 0.05, type = "two.sample"
+)$power)
+
+tibble(n = ns, power = pw) |>
+  ggplot(aes(n, power)) +
+  geom_line() +
+  geom_hline(yintercept = 0.8, linetype = "dashed", colour = "grey40") +
+  labs(x = "Total sample size", y = "Power")
+```
+
+## 3. Assumptions
+
+Closed-form assumes equal variance across arms, independent
+observations, and the nominal effect size. The simulation below adds
+random intercepts at the cluster level and therefore relaxes
+independence.
+
+## 4. Conduct
+
+```{r}
+# Closed-form
+res <- pwr.t.test(d = 0.4, power = 0.8, sig.level = 0.05, type = "two.sample")
+res
+```
+
+```{r}
+# Simulation: a small two-arm cluster study
+J   <- 20                              # clusters
+nj  <- 10                              # obs per cluster
+dat <- tibble(
+  cluster = factor(rep(seq_len(J), each = nj)),
+  arm     = rep(rep(c(0, 1), each = nj), length.out = J * nj),
+  y       = rnorm(J * nj)              # placeholder; simr overwrites
+)
+
+m0 <- makeLmer(
+  y ~ arm + (1 | cluster),
+  fixef   = c(0, 0.3),
+  VarCorr = 0.5,
+  sigma   = 1.0,
+  data    = dat
+)
+m0
+```
+
+```{r}
+#| cache: true
+ps <- powerSim(m0, nsim = 50, test = fixed("arm"), progress = FALSE)
+ps
+```
+
+Fifty simulations is enough for a teaching demo; in practice use at
+least 1000 for a stable estimate.
+
+## 5. Concluding statement
+
+> A two-sample *t*-test targeting *d* = 0.4 at 80% power requires
+> about `r ceiling(res$n) * 2` participants in total. A mixed
+> model with 20 clusters of size 10 and a fixed effect of 0.3 has
+> estimated power of `r round(summary(ps)$mean * 100)`% in this
+> simulation (50 replicates).
+
+::: {.notes}
+When students ask how many simulations they need, remind them the
+Monte Carlo standard error of an estimated power is about
+sqrt(p(1-p)/nsim). With nsim = 50 this is roughly 0.07, which is
+fine for teaching but too loose for planning.
+:::
+
+## Common pitfalls
+
+- Using the power formula for independent observations on a
+  clustered design.
+- Quoting an effect size taken from a pilot study without
+  acknowledging its noise.
+- Computing power from the smallest clinically important effect and
+  the observed pilot effect interchangeably.
+- Simulating with too few replicates.
+
+## Further reading
+
+- Cohen J. *Statistical Power Analysis for the Behavioral Sciences*.
+- Green P, MacLeod CJ (2016), *simr: an R package for power
+  analysis of generalized linear mixed models*.
+- Chow SC et al. *Sample Size Calculations in Clinical Research*.
+
+## Session info
+
+```{r}
+sessionInfo()
+```

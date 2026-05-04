@@ -1,0 +1,171 @@
+---
+title: "Week 3, Session 5 — G-methods, IV, DiD, RDD; heterogeneity of treatment effect"
+subtitle: "Course 3 — Biostatistics Courses"
+format:
+  html:
+    toc: true
+    toc-depth: 3
+    code-fold: false
+    code-tools: true
+  revealjs:
+    output-file: "lab_week3_session5_slides.html"
+    theme: [default, ../../assets/slides.scss]
+    slide-number: c/t
+    progress: true
+    scrollable: true
+    transition: none
+    preview-links: auto
+execute:
+  warning: false
+  message: false
+---
+
+::: {.callout-note}
+**Workflow lab:** Goal → Approach → Execution → Check → Report.
+:::
+
+## Learning objectives
+
+- Use inverse-probability weighting as a g-method for time-varying
+  confounding.
+- Recognise the data-generating situations that justify an
+  instrumental-variable (IV), difference-in-differences (DiD), or
+  regression-discontinuity (RDD) design.
+- Estimate and interpret heterogeneity of treatment effect (HTE) with a
+  subgroup-agnostic method.
+
+## Prerequisites
+
+Propensity-score and IPTW basics (W3 S4).
+
+## Background
+
+Traditional regression adjustment fails for time-varying confounders
+that are affected by prior treatment — adjusting for them blocks part of
+the treatment effect, failing to adjust leaves residual confounding.
+Robins's g-methods solve this by reweighting or standardising in a way
+that respects the temporal order. IV methods exploit a variable that
+affects treatment but not outcome directly; DiD compares changes over
+time between groups sharing a counterfactual trend; RDD exploits a
+sharp assignment rule around a threshold.
+
+::: {.content-visible when-format="html"}
+Heterogeneity of treatment effect is the shift from "is the average
+effect non-zero?" to "for whom is it largest?" Model-based HTE uses
+causal forests, meta-learners (S-, T-, X-learner), or Bayesian
+hierarchical models to estimate conditional average treatment effects
+(CATEs) while controlling for multiple testing.
+:::
+
+## Setup
+
+```{r}
+#| label: setup
+library(tidyverse)
+library(broom)
+set.seed(42)
+theme_set(theme_minimal(base_size = 12))
+```
+
+## 1. Goal
+
+Simulate a time-varying-confounding scenario, estimate the causal effect
+naively and then with IPTW (a marginal structural model), and finish
+with a simple HTE estimate.
+
+## 2. Approach
+
+```{r}
+n <- 2000
+df <- tibble(
+  l0 = rnorm(n),
+  a0 = rbinom(n, 1, plogis(0.2 * l0)),
+  l1 = rnorm(n, mean = 0.5 * a0 + 0.3 * l0),
+  a1 = rbinom(n, 1, plogis(0.3 * l1 + 0.2 * a0)),
+  y  = 1.0 * a0 + 0.8 * a1 + 0.5 * l0 + 0.5 * l1 + rnorm(n)
+)
+```
+
+The true effect of each treatment is positive and additive. `l1` is a
+time-varying confounder because it is affected by `a0` and predicts
+both `a1` and `y`.
+
+## 3. Execution
+
+Naive regression adjusting for `l1` blocks part of the `a0` effect.
+
+```{r}
+naive <- lm(y ~ a0 + a1 + l0 + l1, data = df)
+tidy(naive, conf.int = TRUE) |>
+  filter(term %in% c("a0", "a1"))
+```
+
+IPTW with stabilised weights:
+
+```{r}
+num0 <- glm(a0 ~ 1, data = df, family = binomial)
+den0 <- glm(a0 ~ l0, data = df, family = binomial)
+num1 <- glm(a1 ~ a0, data = df, family = binomial)
+den1 <- glm(a1 ~ a0 + l0 + l1, data = df, family = binomial)
+
+w0 <- ifelse(df$a0 == 1, fitted(num0), 1 - fitted(num0)) /
+      ifelse(df$a0 == 1, fitted(den0), 1 - fitted(den0))
+w1 <- ifelse(df$a1 == 1, fitted(num1), 1 - fitted(num1)) /
+      ifelse(df$a1 == 1, fitted(den1), 1 - fitted(den1))
+df$sw <- w0 * w1
+
+msm <- lm(y ~ a0 + a1, data = df, weights = sw)
+tidy(msm, conf.int = TRUE) |>
+  filter(term %in% c("a0", "a1"))
+```
+
+## 4. Check
+
+Balance and weight sanity:
+
+```{r}
+summary(df$sw)
+```
+
+Stabilised weights should centre on 1 with no extreme tail. If they do
+not, a term in the treatment model is likely misspecified.
+
+## 5. Report
+
+> In a simulated cohort with time-varying confounding (*n* = 2000),
+> naive regression underestimated the effect of initial treatment. An
+> inverse-probability-weighted marginal structural model recovered
+> effects close to the true data-generating values. Instrumental
+> variable, difference-in-differences, and regression-discontinuity
+> designs exploit alternative identification strategies, each with
+> its own assumptions. Heterogeneity of treatment effect can be
+> explored with causal forests or meta-learners.
+
+### Brief sketches
+
+- **IV:** regress `y` on an instrument `z` to recover `β = cov(y,z)/cov(a,z)`.
+- **DiD:** fit `lm(y ~ time*group)` on repeated measures.
+- **RDD:** fit local linear regression on each side of the assignment cutoff.
+
+::: {.notes}
+Flag the identifying assumption for each method — IV: exclusion
+restriction; DiD: parallel trends; RDD: continuity at the cutoff.
+:::
+
+## Common pitfalls
+
+- Using ordinary regression adjustment for time-varying confounders.
+- Trimming extreme weights silently, hiding model misspecification.
+- Reporting subgroup p-values without multiplicity control as HTE
+  evidence.
+
+## Further reading
+
+- Hernán MA, Robins JM. *Causal Inference: What If.*
+- Athey S, Imbens GW. (2019). *Machine Learning Methods That Economists Should Know About.*
+
+## Session info
+
+```{r}
+sessionInfo()
+```

@@ -1,0 +1,141 @@
+---
+title: "Course 3 — Study Design, Longitudinal Data & Causal Inference"
+toc: true
+---
+
+::: {.hero}
+::: {.kicker}
+ADVANCED · 4 WEEKS · 20 LABS
+:::
+# Study Design, Longitudinal Data & Causal Inference
+::: {.lead}
+Designing studies; handling missing, clustered, and time-to-event data;
+and making causal claims with the care they deserve.
+:::
+:::
+
+## What you'll be able to do by the end
+
+- Pick a study design that actually answers your research question, and
+  defend the choice in a pre-registration.
+- Distinguish MCAR, MAR, and MNAR missingness in a dataset you have, and
+  apply multiple imputation correctly.
+- Fit linear and generalised linear mixed models to repeated-measures
+  and clustered data, and interpret random-effect variances honestly.
+- Draw a DAG, derive the adjustment set from it, and recognise which
+  causal claims a given design can support.
+- Apply propensity-score, IPTW, and g-methods analyses; know the
+  difference between an average treatment effect, an ATT, and a
+  heterogeneous treatment effect.
+- Perform meta-analysis of a small handful of studies, including network
+  meta-analysis when several treatments are compared.
+
+## Who should take this course
+
+Course 3 is aimed at researchers who are past the "is there an effect?"
+stage and into the "is the effect I estimated actually the effect I
+wanted?" stage. It assumes Courses 1 and 2, or equivalent comfort with
+regression, GLMs, and reading a residual plot. Clinicians running trials,
+epidemiologists with observational data, and bench scientists whose
+experiments are now clustered by batch or animal will all find this the
+most directly useful course on the site.
+
+## The shape of the four weeks
+
+::: {.card-grid}
+
+::: {.card}
+::: {.kicker}
+Week 1
+:::
+### Designing studies
+Observational designs; RCTs; adaptive and non-inferiority trials; bench
+design; power by closed form and simulation.
+:::
+
+::: {.card}
+::: {.kicker}
+Week 2
+:::
+### Missing data, longitudinal, time series
+MCAR/MAR/MNAR; multiple imputation with `mice`; LMMs with `lme4`; GLMMs
+and GEE; time series basics.
+:::
+
+::: {.card}
+::: {.kicker}
+Week 3
+:::
+### Survival II, causal inference, HTE
+Time-varying covariates and landmarking; competing risks and multistate;
+DAGs; propensity scores and IPTW; g-methods and HTE.
+:::
+
+::: {.card}
+::: {.kicker}
+Week 4
+:::
+### Evidence synthesis, ID, pre-registration
+Systematic reviews, PRISMA; meta-analysis; network meta-analysis; SIR/SEIR
+with `deSolve`; pre-registration and SAPs.
+:::
+
+:::
+
+## Weekly summaries
+
+**Week 1 — designing studies.** The first lab covers observational
+designs (cohort, case-control, cross-sectional, case-crossover) and
+STROBE. The RCT lab moves through parallel-group, crossover, cluster,
+and factorial trials; the adaptive lab adds non-inferiority and
+equivalence testing. Bench-science design (blocking, factorial,
+split-plot, pseudoreplication) gets its own lab because the typical
+omics lab ignores most of it. The week closes with a power lab that
+does closed-form calculations with `pwr` and `WebPower` and then
+redoes them by simulation with `simr` so you can handle any design
+analytically or otherwise. Key packages: `pwr`, `WebPower`, `simr`.
+
+**Week 2 — missing data, longitudinal, time series.** The MCAR/MAR/MNAR
+lab clarifies what the acronyms mean using a small simulated study; the
+`mice` lab walks through multiple imputation, pooling, and convergence
+diagnostics. Linear mixed models with `lme4` and `lmerTest` follow, then
+GLMMs and GEE for binary and count responses with `lme4`, `glmmTMB`, and
+`geepack`. A time-series primer on decomposition, ARIMA, and change-point
+detection closes the week. Key packages: `mice`, `lme4`, `glmmTMB`,
+`geepack`, `forecast`, `changepoint`.
+
+**Week 3 — survival II, causal inference, and heterogeneous effects.**
+Time-varying covariates, landmarking, and the immortal-time bias open the
+week and set up the competing-risks and multistate-model lab that
+follows. The DAG lab introduces `dagitty` and `ggdag` and formalises
+adjustment-set selection. Propensity-score matching and IPTW follow,
+with balance diagnostics via `cobalt`. The final lab covers g-methods,
+instrumental variables, difference-in-differences, regression
+discontinuity, and heterogeneity of treatment effect. Key packages:
+`survival`, `tidycmprsk`, `mstate`, `dagitty`, `ggdag`, `MatchIt`,
+`cobalt`.
+
+**Week 4 — evidence synthesis, infectious disease, pre-registration.**
+Systematic reviews and PRISMA open the week; meta-analysis with
+`metafor` follows; network meta-analysis with `netmeta` takes a full
+lab because graphical comparison methods are worth the investment. The
+penultimate lab uses `deSolve` to build SIR and SEIR compartmental
+models and to fit them to simulated epidemic data — an unusual but
+important skill in an era of recurrent outbreaks. The course closes with
+a lab on pre-registration and statistical analysis plans, including a
+reusable template. Key packages: `metafor`, `netmeta`, `deSolve`.
+
+## How to work through it
+
+Course 3 is the densest on the site. A sustainable pace is one week of
+labs per fortnight. The DAG, propensity-score, and g-methods labs
+(W3 S3–S5) are the intellectual core of the course and repay a slow
+reading. The time-series lab (W2 S5) and the infectious-disease lab
+(W4 S4) are beautiful but skippable if your research domain has no use
+for them.
+
+## Further along
+
+- [Course 3 schedule](schedule.qmd) — linked index of every lab, deck, and
+  R script.
+- [Unified references](../references.qmd).

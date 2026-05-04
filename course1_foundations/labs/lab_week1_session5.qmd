@@ -1,0 +1,190 @@
+---
+title: "Week 1, Session 5 — ggplot2 grammar and multi-panel layouts"
+subtitle: "Course 1 — Biostatistics Courses"
+format:
+  html:
+    toc: true
+    toc-depth: 3
+    code-fold: false
+    code-tools: true
+  revealjs:
+    output-file: "lab_week1_session5_slides.html"
+    theme: [default, ../../assets/slides.scss]
+    slide-number: c/t
+    progress: true
+    scrollable: true
+    transition: none
+    preview-links: auto
+execute:
+  warning: false
+  message: false
+---
+
+::: {.callout-note}
+**Workflow labs** use the variant template:
+Goal → Approach → Execution → Check → Report.
+:::
+
+## Learning objectives
+
+- Build a ggplot by naming data, aesthetics, geoms, and scales rather
+  than by calling a plot type.
+- Use faceting to display the same relationship across subgroups.
+- Combine several plots into a single figure with patchwork.
+
+## Prerequisites
+
+Labs 1.2 through 1.4.
+
+## Background
+
+ggplot2 is built on a grammar of graphics. Rather than call a function
+named "scatterplot" or "boxplot", you declare what the plot contains:
+a dataset, mappings from variables to aesthetics (x, y, colour, size,
+shape), and one or more geoms that render those mappings. The result
+is that *any* plot you can picture can be built by the same small
+vocabulary. Once the vocabulary is second nature, you will spend less
+time searching for a plotting function and more time thinking about
+what the graph should show.
+
+Multi-panel figures are the standard unit of publication. Faceting
+breaks one plot into small multiples — the same relationship repeated
+across a grouping variable — which is almost always a better answer
+than crowding more colours onto a single panel. The patchwork package
+takes independent ggplots and assembles them into a single figure
+using `+`, `|`, and `/` operators, so you can build a three-panel
+manuscript figure without leaving R.
+
+::: {.content-visible when-format="html"}
+A common beginner mistake is to treat ggplot as a collection of
+`geom_*` functions. It is cleaner to think of a plot as a data-plus-
+aesthetics object to which geoms are added. Changing the underlying
+data is then a substitution, not a rewrite.
+:::
+
+## Setup
+
+```{r}
+#| label: setup
+library(tidyverse)
+library(palmerpenguins)
+library(patchwork)
+set.seed(42)
+theme_set(theme_minimal(base_size = 12))
+```
+
+## 1. Goal
+
+Build a three-panel figure that describes bill morphology and body
+mass in the `penguins` dataset, using a scatter plot, a boxplot, and
+a faceted scatter plot, assembled with patchwork.
+
+## 2. Approach
+
+```{r}
+p <- penguins |>
+  drop_na(bill_length_mm, bill_depth_mm, body_mass_g, species, sex)
+```
+
+The plot object is built in three lines: data, aesthetics, geom.
+
+```{r}
+#| fig-width: 5
+#| fig-height: 3.5
+p1 <- p |>
+  ggplot(aes(bill_length_mm, bill_depth_mm, colour = species)) +
+  geom_point(alpha = 0.7) +
+  labs(x = "Bill length (mm)",
+       y = "Bill depth (mm)",
+       colour = NULL)
+p1
+```
+
+## 3. Execution
+
+```{r}
+#| fig-width: 5
+#| fig-height: 3.5
+p2 <- p |>
+  ggplot(aes(species, body_mass_g, fill = species)) +
+  geom_boxplot(alpha = 0.6, colour = "grey30") +
+  labs(x = NULL, y = "Body mass (g)") +
+  theme(legend.position = "none")
+p2
+```
+
+```{r}
+#| fig-width: 7
+#| fig-height: 3.5
+p3 <- p |>
+  ggplot(aes(bill_length_mm, body_mass_g, colour = sex)) +
+  geom_point(alpha = 0.6) +
+  facet_wrap(~ species) +
+  labs(x = "Bill length (mm)",
+       y = "Body mass (g)",
+       colour = NULL)
+p3
+```
+
+Faceting shows the same relationship in three panels, one per
+species. The within-species slopes are visually separable from the
+between-species differences.
+
+## 4. Check
+
+Assemble the three panels with patchwork.
+
+```{r}
+#| fig-width: 10
+#| fig-height: 7
+(p1 | p2) / p3 +
+  plot_annotation(
+    title = "Palmer penguins: bill morphology and body mass",
+    tag_levels = "A"
+  )
+```
+
+The layout operators: `|` places side-by-side, `/` stacks, `+` groups.
+`plot_annotation()` adds title and the familiar A/B/C labels used in
+manuscripts.
+
+## 5. Report
+
+> A three-panel figure was assembled from the `palmerpenguins` data
+> (*n* = `r nrow(p)` complete cases) using ggplot2 and patchwork.
+> Panel A shows a clear separation of bill morphology among the three
+> species. Panel B shows Gentoo as markedly heavier than the other two.
+> Panel C, faceted by species, reveals a within-species positive
+> association between bill length and body mass, with a sex offset
+> visible in each panel.
+
+Within-group and between-group variation are separate features of the
+data. Faceting is the simplest way to let a reader see both at once.
+
+::: {.notes}
+Live-build the figure one geom at a time, adding the facet at the end.
+Resist the temptation to show a finished plot straight away; the
+pedagogy is in watching a plot grow.
+:::
+
+## Common pitfalls
+
+- Using colour to encode more than one thing at a time (group *and*
+  magnitude — pick one).
+- Mapping a continuous variable to shape.
+- Overlaying more than four or five categories on a single scatter
+  plot; use faceting instead.
+- Defaulting to `theme_grey()`; the in-house convention is
+  `theme_minimal(base_size = 12)`.
+
+## Further reading
+
+- Wickham H. *ggplot2: Elegant Graphics for Data Analysis*, chapters
+  on the grammar and on faceting.
+- Pedersen T. *patchwork* package documentation.
+
+## Session info
+
+```{r}
+sessionInfo()
+```

@@ -1,0 +1,223 @@
+---
+title: "Week 2, Session 3 — Diagnostic testing: Se, Sp, PPV, NPV, LR"
+subtitle: "Course 1 — Biostatistics Courses"
+format:
+  html:
+    toc: true
+    toc-depth: 3
+    code-fold: false
+    code-tools: true
+  revealjs:
+    output-file: "lab_week2_session3_slides.html"
+    theme: [default, ../../assets/slides.scss]
+    slide-number: c/t
+    progress: true
+    scrollable: true
+    transition: none
+    preview-links: auto
+execute:
+  warning: false
+  message: false
+---
+
+::: {.callout-note}
+**Inference labs** use the five-step template:
+Hypothesis → Visualise → Assumptions → Conduct → Conclude.
+:::
+
+## Learning objectives
+
+- Compute sensitivity, specificity, PPV, NPV, and positive and
+  negative likelihood ratios from a 2x2 table.
+- Convert pre-test probability to post-test probability with an LR.
+- Sketch a receiver-operating characteristic curve from a continuous
+  test statistic.
+
+## Prerequisites
+
+Lab 2.2.
+
+## Background
+
+A diagnostic test has two operating characteristics intrinsic to the
+test itself: *sensitivity* is the probability that a diseased person
+tests positive; *specificity* is the probability that a disease-free
+person tests negative. These quantities are properties of the test.
+They do not change with prevalence.
+
+Two other quantities are properties of the test *and* the population
+in which it is applied: *positive predictive value* is the probability
+of disease given a positive test; *negative predictive value* is the
+probability of no disease given a negative test. These change with
+prevalence, sometimes dramatically.
+
+Likelihood ratios unify the two pairs. *LR+* is sens / (1 − spec);
+*LR−* is (1 − sens) / spec. They convert pre-test odds to post-test
+odds by multiplication, which is the cleanest way to combine a test
+result with prior information. An LR+ greater than 10 is a strong
+positive; less than 0.1 is a strong negative; values near 1 are
+uninformative.
+
+## Setup
+
+```{r}
+#| label: setup
+library(tidyverse)
+set.seed(42)
+theme_set(theme_minimal(base_size = 12))
+```
+
+## 1. Hypothesis
+
+Question of interest: how does a continuous biomarker behave as a
+diagnostic test? We are not running an inferential test; we are
+characterising a test's discrimination.
+
+## 2. Visualise
+
+Simulate a biomarker that is higher in diseased cases than in
+disease-free controls, with overlap.
+
+```{r}
+N <- 500
+prev <- 0.2
+pop <- tibble(
+  id = seq_len(N),
+  disease = rbinom(N, 1, prev),
+  biomarker = rnorm(N, mean = if_else(disease == 1, 7, 5), sd = 1)
+)
+```
+
+```{r}
+#| fig-width: 6
+#| fig-height: 3.5
+pop |>
+  mutate(status = if_else(disease == 1, "disease", "no disease")) |>
+  ggplot(aes(biomarker, fill = status)) +
+  geom_density(alpha = 0.5, colour = NA) +
+  geom_vline(xintercept = 6, linetype = 2) +
+  labs(x = "Biomarker level", y = "Density", fill = NULL)
+```
+
+## 3. Assumptions
+
+The gold standard for disease status is assumed perfect. The biomarker
+is continuous and must be dichotomised at some cutoff to behave like
+a positive/negative test. We choose 6 as the cutoff for illustration;
+in practice, the cutoff is itself an outcome of the analysis.
+
+```{r}
+cutoff <- 6
+pop <- pop |> mutate(test = as.integer(biomarker > cutoff))
+tab <- table(disease = pop$disease, test = pop$test)
+tab
+```
+
+## 4. Conduct
+
+```{r}
+TP <- tab["1", "1"]; FN <- tab["1", "0"]
+FP <- tab["0", "1"]; TN <- tab["0", "0"]
+
+sens <- TP / (TP + FN)
+spec <- TN / (TN + FP)
+ppv  <- TP / (TP + FP)
+npv  <- TN / (TN + FN)
+lrp  <- sens / (1 - spec)
+lrn  <- (1 - sens) / spec
+
+diag_tbl <- tibble(
+  quantity = c("Sensitivity", "Specificity",
+               "PPV", "NPV", "LR+", "LR-"),
+  value = c(sens, spec, ppv, npv, lrp, lrn)
+)
+diag_tbl
+```
+
+Convert pre-test odds to post-test odds with the LR.
+
+```{r}
+pre_prob <- 0.1
+pre_odds <- pre_prob / (1 - pre_prob)
+post_odds_pos <- pre_odds * lrp
+post_prob_pos <- post_odds_pos / (1 + post_odds_pos)
+post_odds_neg <- pre_odds * lrn
+post_prob_neg <- post_odds_neg / (1 + post_odds_neg)
+
+tibble(
+  pre_prob,
+  post_prob_if_positive = post_prob_pos,
+  post_prob_if_negative = post_prob_neg
+)
+```
+
+Sketch an ROC by sweeping the cutoff.
+
+```{r}
+roc <- tibble(
+  cut = seq(min(pop$biomarker), max(pop$biomarker), length.out = 200)
+) |>
+  rowwise() |>
+  mutate(
+    tp = sum(pop$biomarker > cut & pop$disease == 1),
+    fn = sum(pop$biomarker <= cut & pop$disease == 1),
+    fp = sum(pop$biomarker > cut & pop$disease == 0),
+    tn = sum(pop$biomarker <= cut & pop$disease == 0),
+    sens = tp / (tp + fn),
+    fpr  = fp / (fp + tn)
+  ) |>
+  ungroup()
+```
+
+```{r}
+#| fig-width: 5
+#| fig-height: 4
+ggplot(roc, aes(fpr, sens)) +
+  geom_path(linewidth = 1) +
+  geom_abline(linetype = 2, colour = "grey50") +
+  coord_equal() +
+  labs(x = "False positive rate (1 - specificity)",
+       y = "Sensitivity")
+```
+
+## 5. Concluding statement
+
+> With a cutoff of `r cutoff`, the biomarker had sensitivity
+> `r round(sens, 2)`, specificity `r round(spec, 2)`, PPV
+> `r round(ppv, 2)`, and NPV `r round(npv, 2)`. The positive
+> likelihood ratio was `r round(lrp, 2)` and the negative
+> `r round(lrn, 2)`. A pre-test probability of 10% becomes
+> `r round(post_prob_pos, 2)` after a positive test and
+> `r round(post_prob_neg, 3)` after a negative test.
+
+A single cutoff collapses a rich continuous score into two states. The
+ROC curve shows the trade-off across all cutoffs; the area under it
+summarises overall discrimination without committing to a threshold.
+
+::: {.notes}
+Walk through the ROC construction cut-by-cut. Emphasise that no point
+on the curve is the "right" one — the right one depends on the
+relative cost of a false positive vs. a false negative.
+:::
+
+## Common pitfalls
+
+- Quoting a single cutoff's sensitivity and specificity as if they
+  were fixed properties of the test, ignoring that a different cutoff
+  gives different numbers.
+- Confusing sensitivity with PPV in everyday speech.
+- Forgetting that PPV and NPV depend on prevalence.
+- Using an ROC to compare tests with different prevalence in each
+  sample.
+
+## Further reading
+
+- Altman DG & Bland JM, *Diagnostic tests* series, BMJ.
+- Pepe MS. *The Statistical Evaluation of Medical Tests for
+  Classification and Prediction*.
+
+## Session info
+
+```{r}
+sessionInfo()
+```

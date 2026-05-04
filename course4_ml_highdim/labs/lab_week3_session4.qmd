@@ -1,0 +1,184 @@
+---
+title: "Week 3, Session 4 — Survival ML (random survival forest, DeepSurv)"
+subtitle: "Course 4 — Biostatistics Courses"
+format:
+  html:
+    toc: true
+    toc-depth: 3
+    code-fold: false
+    code-tools: true
+  revealjs:
+    output-file: "lab_week3_session4_slides.html"
+    theme: [default, ../../assets/slides.scss]
+    slide-number: c/t
+    progress: true
+    scrollable: true
+    transition: none
+    preview-links: auto
+execute:
+  warning: false
+  message: false
+---
+
+::: {.callout-note}
+**Workflow labs** use the variant template:
+Goal → Approach → Execution → Check → Report.
+:::
+
+## Learning objectives
+
+- Fit a random survival forest and interpret its variable importance
+  and risk stratification.
+- Describe the DeepSurv architecture conceptually and when it is
+  preferred over the forest.
+- Compare against a Cox model on the same features.
+
+## Prerequisites
+
+Cox regression and censoring from Course 2.
+
+## Background
+
+Survival analysis deals with time-to-event data in the presence of
+censoring. The Cox proportional-hazards model is the workhorse linear
+method; random survival forests (RSF) extend the idea of random
+forests to right-censored outcomes, using a log-rank split rule and
+Harrell's concordance as the default fit criterion. They handle
+nonlinearities and interactions automatically and are a good first
+nonparametric benchmark.
+
+DeepSurv is a neural-network generalisation of the Cox partial
+likelihood: the linear predictor is replaced by a feed-forward
+network. In small biomedical datasets it rarely beats a well-tuned RSF
+or a Cox model with splines, but the approach scales to large cohorts
+and to inputs where a representation must be learned.
+
+::: {.content-visible when-format="html"}
+Evaluation of survival models uses time-integrated concordance
+(Harrell's C), the integrated Brier score, and — increasingly —
+decision curves at a clinically relevant horizon. Reporting only C on
+a single test set is weak evidence.
+:::
+
+## Setup
+
+```{r}
+#| label: setup
+library(tidyverse)
+library(survival)
+library(randomForestSRC)
+set.seed(42)
+theme_set(theme_minimal(base_size = 12))
+```
+
+## 1. Goal
+
+Fit an RSF on `survival::pbc` and compare to a Cox model using
+Harrell's concordance.
+
+## 2. Approach
+
+```{r}
+d <- survival::pbc |>
+  as_tibble() |>
+  drop_na(bili, albumin, age, edema, protime, stage) |>
+  mutate(status = ifelse(status == 2, 1, 0))
+
+ggplot(d, aes(time / 365.25, fill = factor(status))) +
+  geom_histogram(bins = 30, alpha = 0.7, position = "identity") +
+  labs(x = "follow-up (years)", y = "count", fill = "event")
+```
+
+## 3. Execution
+
+```{r}
+fit_cox <- coxph(Surv(time, status) ~ bili + albumin + age + edema +
+                   protime + stage, data = d)
+fit_rsf <- rfsrc(Surv(time, status) ~ bili + albumin + age + edema +
+                   protime + stage,
+                 data = as.data.frame(d), ntree = 500,
+                 importance = TRUE)
+fit_rsf
+```
+
+```{r}
+tibble(var = names(fit_rsf$importance),
+       imp = as.numeric(fit_rsf$importance)) |>
+  arrange(desc(imp)) |>
+  ggplot(aes(reorder(var, imp), imp)) +
+  geom_col() + coord_flip() + labs(x = NULL, y = "VIMP")
+```
+
+## 4. Check
+
+Compare concordance on held-out data.
+
+```{r}
+idx <- sample(nrow(d), 0.7 * nrow(d))
+tr <- d[idx, ]; te <- d[-idx, ]
+cox2 <- coxph(Surv(time, status) ~ bili + albumin + age + edema +
+                protime + stage, data = tr)
+rsf2 <- rfsrc(Surv(time, status) ~ bili + albumin + age + edema +
+                protime + stage,
+              data = as.data.frame(tr), ntree = 500)
+c_cox <- survival::concordance(cox2, newdata = te)$concordance
+p_rsf <- predict(rsf2, newdata = as.data.frame(te))$predicted
+c_rsf <- survival::concordance(Surv(te$time, te$status) ~ p_rsf,
+                               reverse = TRUE)$concordance
+c(cox = c_cox, rsf = c_rsf)
+```
+
+DeepSurv conceptual sketch.
+
+```{r}
+#| eval: false
+library(torch)
+# A DeepSurv-style loss computes the partial log-likelihood on the
+# sorted risk set. The network output h(x) replaces the Cox linear
+# predictor; the loss is  -(sum_{i:event}  h(x_i) - log sum_{j in R_i} exp(h(x_j))).
+deepsurv_loss <- function(risk, time, event) {
+  ord <- order(time, decreasing = TRUE)
+  risk <- risk[ord]; event <- event[ord]
+  log_cumsum <- torch_logcumsumexp(risk, dim = 1)
+  -torch_sum(event * (risk - log_cumsum)) / torch_sum(event)
+}
+```
+
+## 5. Report
+
+> On `survival::pbc`, a random survival forest achieved test
+> concordance `r round(c_rsf, 3)` compared with
+> `r round(c_cox, 3)` for a multivariable Cox model. Bilirubin,
+> albumin, and age dominated VIMP. A DeepSurv network with the
+> partial-likelihood loss would be the natural next step on a larger
+> cohort.
+
+On this sample size, the RSF and Cox model are close; on larger
+datasets with nonlinearities, the forest often pulls ahead.
+
+::: {.notes}
+Mention that `randomForestSRC::vimp` has a permutation variant worth
+preferring for correlated predictors.
+:::
+
+## Common pitfalls
+
+- Treating the Cox proportional-hazards assumption as always met; it
+  often is not, and the RSF is more robust to violation.
+- Comparing models without the same censoring distribution in the
+  test set.
+- Reporting only C without a calibration or decision curve at the
+  horizon of interest.
+
+## Further reading
+
+- Ishwaran H et al. (2008), *Random survival forests*.
+- Katzman JL et al. (2018), *DeepSurv: Personalized treatment
+  recommender system using a Cox proportional hazards deep neural
+  network*.
+
+## Session info
+
+```{r}
+sessionInfo()
+```

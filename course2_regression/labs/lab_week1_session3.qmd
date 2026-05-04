@@ -1,0 +1,172 @@
+---
+title: "Week 1, Session 3 — Multiple regression: confounding, interaction, centring"
+subtitle: "Course 2 — Biostatistics Courses"
+format:
+  html:
+    toc: true
+    toc-depth: 3
+    code-fold: false
+    code-tools: true
+  revealjs:
+    output-file: "lab_week1_session3_slides.html"
+    theme: [default, ../../assets/slides.scss]
+    slide-number: c/t
+    progress: true
+    scrollable: true
+    transition: none
+    preview-links: auto
+execute:
+  warning: false
+  message: false
+---
+
+::: {.callout-note}
+**Inference labs** use the five-step template:
+Hypothesis → Visualise → Assumptions → Conduct → Conclude.
+:::
+
+## Learning objectives
+
+- Distinguish confounding from mediation and from effect modification.
+- Read a multiple regression coefficient as an *adjusted* effect.
+- Centre predictors before fitting interactions and explain why.
+
+## Prerequisites
+
+Sessions 1 and 2 of this week.
+
+## Background
+
+Multiple regression is the standard way to estimate the effect of one
+predictor while holding others constant. The word *holding* is doing a
+lot of work: the adjusted coefficient is the effect conditional on the
+other variables in the model, not the effect one would observe in a
+new study that intervened on them. Confounding, mediation, and
+collider bias all pivot on which covariates are in the model. The
+statistics textbook cannot answer that question; the subject-matter
+science must.
+
+Interactions complicate this picture. When two predictors interact, the
+effect of one depends on the level of the other, and the main-effect
+coefficient becomes the effect when the interacting variable is zero.
+Centring continuous predictors before fitting an interaction restores
+a readable interpretation: the main effect becomes the effect at the
+sample mean of the other variable, which is usually what the reader
+wants.
+
+::: {.content-visible when-format="html"}
+Collinearity and scale are often discussed together. Centring does not
+reduce *real* collinearity between X and Z, but it does reduce the
+algebraic collinearity between X and X·Z that otherwise makes the
+coefficients hard to interpret and inflates their standard errors.
+:::
+
+## Setup
+
+```{r}
+#| label: setup
+library(tidyverse)
+library(broom)
+set.seed(42)
+theme_set(theme_minimal(base_size = 12))
+```
+
+## 1. Hypothesis
+
+Simulate a scenario in which a confounder masks the effect of interest,
+then add an interaction to show effect modification.
+
+## 2. Visualise
+
+```{r}
+n <- 300
+age <- rnorm(n, 55, 10)
+# smoker more common among older people in this simulation (confounding)
+smoker <- rbinom(n, 1, plogis(-3 + 0.05 * age))
+# outcome depends on both; smoker effect is stronger at older ages (interaction)
+y <- 120 + 0.6 * age + 5 * smoker + 0.2 * smoker * (age - mean(age)) +
+  rnorm(n, 0, 8)
+dat <- tibble(age, smoker = factor(smoker, labels = c("no", "yes")), y)
+
+ggplot(dat, aes(age, y, colour = smoker)) +
+  geom_point(alpha = 0.6) +
+  geom_smooth(method = "lm", se = FALSE) +
+  labs(x = "Age (years)", y = "Outcome", colour = "Smoker")
+```
+
+Both lines climb with age; the smoker line sits higher and may slope
+more steeply.
+
+## 3. Assumptions
+
+The usual linear-model assumptions, plus an implicit assumption that
+all relevant confounders are in the model.
+
+```{r}
+fit_full <- lm(y ~ age * smoker, data = dat)
+par(mfrow = c(2, 2))
+plot(fit_full)
+par(mfrow = c(1, 1))
+```
+
+## 4. Conduct
+
+Crude smoker effect, then adjusted for age, then with interaction:
+
+```{r}
+crude    <- lm(y ~ smoker, data = dat)
+adjusted <- lm(y ~ smoker + age, data = dat)
+inter    <- lm(y ~ smoker * age, data = dat)
+
+bind_rows(
+  tidy(crude, conf.int = TRUE) |> mutate(model = "crude"),
+  tidy(adjusted, conf.int = TRUE) |> mutate(model = "adjusted"),
+  tidy(inter, conf.int = TRUE) |> mutate(model = "interaction")
+) |>
+  filter(term != "(Intercept)") |>
+  select(model, term, estimate, conf.low, conf.high, p.value)
+```
+
+Now with centred age, which makes the `smokeryes` coefficient the
+smoker effect *at mean age*:
+
+```{r}
+dat_c <- dat |> mutate(age_c = age - mean(age))
+inter_c <- lm(y ~ smoker * age_c, data = dat_c)
+tidy(inter_c, conf.int = TRUE)
+```
+
+## 5. Concluding statement
+
+> After adjusting for age, the estimated smoker-effect at the sample
+> mean age was
+> `r round(coef(inter_c)["smokeryes"], 1)` units (95% CI:
+> `r round(confint(inter_c)["smokeryes", 1], 1)` to
+> `r round(confint(inter_c)["smokeryes", 2], 1)`), with evidence of
+> effect modification by age (interaction coefficient
+> `r round(coef(inter_c)["smokeryes:age_c"], 2)`).
+
+::: {.notes}
+The point here is that *adjusted* is not a synonym for *causal*, and
+that centring is a small habit with a large readability payoff.
+:::
+
+## Common pitfalls
+
+- Reading an adjusted coefficient as a population-level causal effect
+  without thinking about what the adjustment set represents.
+- Fitting an interaction without centring and then trying to interpret
+  the main effects.
+- Dropping covariates that look non-significant one at a time.
+
+## Further reading
+
+- Greenland S (1998), *Confounding and collapsibility in causal inference*.
+- VanderWeele TJ. *Explanation in Causal Inference*.
+- Fox J. *Applied Regression Analysis and Generalized Linear Models*.
+
+## Session info
+
+```{r}
+sessionInfo()
+```

@@ -1,0 +1,206 @@
+---
+title: "Week 3, Session 2 — Bootstrap and permutation tests"
+subtitle: "Course 1 — Biostatistics Courses"
+format:
+  html:
+    toc: true
+    toc-depth: 3
+    code-fold: false
+    code-tools: true
+  revealjs:
+    output-file: "lab_week3_session2_slides.html"
+    theme: [default, ../../assets/slides.scss]
+    slide-number: c/t
+    progress: true
+    scrollable: true
+    transition: none
+    preview-links: auto
+execute:
+  warning: false
+  message: false
+---
+
+::: {.callout-note}
+**Inference labs** use the five-step template:
+Hypothesis → Visualise → Assumptions → Conduct → Conclude.
+:::
+
+## Learning objectives
+
+- Compute a bootstrap confidence interval for a statistic whose
+  sampling distribution is not easily derived.
+- Run a permutation test for a two-group comparison and state what
+  null hypothesis it tests.
+- Explain when bootstrap and permutation answer different questions.
+
+## Prerequisites
+
+Lab 3.1.
+
+## Background
+
+Classical inference writes down the sampling distribution of an
+estimator analytically, usually by invoking the central limit theorem
+and assuming a parametric family for the data. Resampling methods
+replace this step with computation. A bootstrap confidence interval
+for a statistic is built by drawing repeated samples *with replacement*
+from the observed data and recomputing the statistic; the empirical
+distribution of the recomputed values is treated as a proxy for the
+sampling distribution.
+
+A permutation test answers a different question. It randomly reassigns
+the group labels on the observed data and recomputes the test
+statistic; the empirical distribution of the recomputed values is the
+sampling distribution under the null of *exchangeability* — that is,
+under a null in which the group labels are interchangeable. It gives a
+*p*-value without any assumption about the shape of the underlying
+distributions.
+
+The two techniques look similar — both involve a loop and a `replicate()`
+— but they are different tools. Bootstrap estimates uncertainty under
+the observed data-generating process; permutation tests a sharp null
+of no association.
+
+## Setup
+
+```{r}
+#| label: setup
+library(tidyverse)
+set.seed(42)
+theme_set(theme_minimal(base_size = 12))
+```
+
+## 1. Hypothesis
+
+Two hypotheses in this lab:
+
+1. For a sample median of body mass in Gentoo penguins, build a
+   95% bootstrap CI.
+2. For flipper length in Gentoo vs Adelie penguins, test the sharp
+   null that the distributions are exchangeable against the
+   two-sided alternative.
+
+## 2. Visualise
+
+Use `palmerpenguins`.
+
+```{r}
+library(palmerpenguins)
+dat <- penguins |>
+  filter(species %in% c("Gentoo", "Adelie")) |>
+  drop_na(body_mass_g, flipper_length_mm)
+```
+
+```{r}
+#| fig-width: 6
+#| fig-height: 3.5
+dat |>
+  ggplot(aes(species, flipper_length_mm, fill = species)) +
+  geom_boxplot(alpha = 0.6, colour = "grey30") +
+  labs(x = NULL, y = "Flipper length (mm)") +
+  theme(legend.position = "none")
+```
+
+## 3. Assumptions
+
+Bootstrap: the observed sample is representative of the population we
+wish to generalise to. Resampling with replacement preserves the
+univariate structure but assumes exchangeability of observations.
+
+Permutation: under H0, group labels can be reshuffled without changing
+the joint distribution. The test does not assume normality or equal
+variances.
+
+## 4. Conduct
+
+### Bootstrap CI for the median body mass of Gentoo
+
+```{r}
+gen <- dat |> filter(species == "Gentoo") |> pull(body_mass_g)
+B <- 2000
+boot_meds <- replicate(B, median(sample(gen, replace = TRUE)))
+ci_med <- quantile(boot_meds, c(0.025, 0.975))
+obs_med <- median(gen)
+tibble(statistic = "median body mass",
+       observed = obs_med,
+       ci_low = ci_med[1],
+       ci_high = ci_med[2])
+```
+
+```{r}
+#| fig-width: 6
+#| fig-height: 3.5
+tibble(boot = boot_meds) |>
+  ggplot(aes(boot)) +
+  geom_histogram(bins = 40, fill = "grey60", colour = "white") +
+  geom_vline(xintercept = obs_med, colour = "firebrick") +
+  geom_vline(xintercept = ci_med, linetype = 2) +
+  labs(x = "Bootstrap median", y = "Count")
+```
+
+### Permutation test for flipper length Gentoo vs Adelie
+
+```{r}
+g <- dat$species
+x <- dat$flipper_length_mm
+observed_diff <- mean(x[g == "Gentoo"]) - mean(x[g == "Adelie"])
+
+perm_diff <- replicate(5000, {
+  gp <- sample(g)
+  mean(x[gp == "Gentoo"]) - mean(x[gp == "Adelie"])
+})
+p_perm <- mean(abs(perm_diff) >= abs(observed_diff))
+p_perm
+```
+
+```{r}
+#| fig-width: 6
+#| fig-height: 3.5
+tibble(perm = perm_diff) |>
+  ggplot(aes(perm)) +
+  geom_histogram(bins = 50, fill = "grey60", colour = "white") +
+  geom_vline(xintercept = observed_diff, colour = "firebrick", linewidth = 1) +
+  labs(x = "Permuted mean difference", y = "Count")
+```
+
+## 5. Concluding statement
+
+> Based on *B* = 2000 bootstrap resamples, the median body mass in
+> Gentoo penguins (*n* = `r length(gen)`) was `r round(obs_med, 0)` g
+> (95% percentile bootstrap CI `r round(ci_med[1], 0)` to
+> `r round(ci_med[2], 0)` g). Flipper length was much longer in
+> Gentoo than Adelie (mean difference
+> `r round(observed_diff, 1)` mm); a permutation test over 5000
+> reshuffles produced *p* = `r format(p_perm, scientific = FALSE)`,
+> providing strong evidence against exchangeability.
+
+Bootstrap and permutation give you parametric-free tools for
+estimation and testing respectively. Neither rescues you from a
+biased sample; both depend on the data at hand being representative.
+
+::: {.notes}
+Emphasise the difference in what each method does: bootstrap = CI for
+the observed sampling regime; permutation = test of a sharp null.
+They do not compete.
+:::
+
+## Common pitfalls
+
+- Using bootstrap SEs for a statistic with heavy tails (eg the
+  maximum) — it does not have a well-defined bootstrap distribution.
+- Permutation with more than two groups: you still need a single
+  test statistic (eg *F*), not pairwise comparisons by default.
+- Reading a bootstrap CI as a confidence interval for the population
+  parameter when the sample is biased.
+
+## Further reading
+
+- Efron B, Tibshirani RJ. *An Introduction to the Bootstrap*.
+- Good PI. *Permutation, Parametric, and Bootstrap Tests of
+  Hypotheses*.
+
+## Session info
+
+```{r}
+sessionInfo()
+```

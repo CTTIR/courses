@@ -1,0 +1,153 @@
+---
+title: "Week 2, Session 4 — GAMs with mgcv"
+subtitle: "Course 2 — Biostatistics Courses"
+format:
+  html:
+    toc: true
+    toc-depth: 3
+    code-fold: false
+    code-tools: true
+  revealjs:
+    output-file: "lab_week2_session4_slides.html"
+    theme: [default, ../../assets/slides.scss]
+    slide-number: c/t
+    progress: true
+    scrollable: true
+    transition: none
+    preview-links: auto
+execute:
+  warning: false
+  message: false
+---
+
+::: {.callout-note}
+**Inference labs** use the five-step template:
+Hypothesis → Visualise → Assumptions → Conduct → Conclude.
+:::
+
+## Learning objectives
+
+- Fit a generalised additive model with `mgcv::gam()` and a single
+  smooth term.
+- Read effective degrees of freedom as a data-driven measure of
+  flexibility.
+- Visualise a smooth with `gratia::draw()` and report its shape in
+  plain language.
+
+## Prerequisites
+
+Sessions 1–2 of Week 1.
+
+## Background
+
+Generalised additive models replace the linear term β·X in a regression
+with a smooth function f(X) estimated from the data. The smooth is
+regularised so that wiggliness is penalised; the penalty strength is
+chosen by restricted maximum likelihood or generalised cross-validation.
+The effective degrees of freedom (edf) of the smooth quantifies how
+much of that flexibility was used: an edf near 1 means the smooth is
+essentially a line; an edf of 5 means something meaningfully curved.
+
+GAMs are particularly useful when the *shape* of the relationship is
+the scientific question. They are also useful as diagnostics for
+linear models, because plotting a smooth against a predictor can
+reveal a curve that the linear term would miss.
+
+::: {.content-visible when-format="html"}
+The `mgcv` package is the reference implementation. `gratia` is a
+newer graphics layer on top of `mgcv` that produces tidy, ggplot-based
+plots of smooths, partial effects, and derivatives.
+:::
+
+## Setup
+
+```{r}
+#| label: setup
+library(tidyverse)
+library(mgcv)
+library(gratia)
+library(broom)
+set.seed(42)
+theme_set(theme_minimal(base_size = 12))
+```
+
+## 1. Hypothesis
+
+Simulate a sine-wave-plus-noise relationship and ask whether a GAM
+recovers it while a linear model misses it.
+
+## 2. Visualise
+
+```{r}
+n <- 300
+x <- runif(n, 0, 4 * pi)
+y <- sin(x) + rnorm(n, 0, 0.4)
+dat <- tibble(x, y)
+
+ggplot(dat, aes(x, y)) +
+  geom_point(alpha = 0.5, colour = "grey30") +
+  labs(x = "x", y = "y")
+```
+
+## 3. Assumptions
+
+GAMs assume independent observations and a correctly specified
+response distribution. The smooth flexibility is chosen automatically;
+the user chooses the basis and, if relevant, the upper limit on
+flexibility via `k`.
+
+```{r}
+fit_lm  <- lm(y ~ x, data = dat)
+fit_gam <- gam(y ~ s(x, bs = "cr", k = 20), data = dat, method = "REML")
+
+plot(fit_gam, residuals = TRUE, pch = 1, shade = TRUE)
+gam.check(fit_gam)
+```
+
+`gam.check` reports `k-index` and effective df — an indication of
+whether `k` is large enough.
+
+## 4. Conduct
+
+```{r}
+summary(fit_gam)
+AIC(fit_lm, fit_gam)
+```
+
+```{r}
+#| fig-width: 6
+#| fig-height: 4
+draw(fit_gam)
+```
+
+## 5. Concluding statement
+
+> A GAM with a single smooth of x captured the non-linear relationship
+> (edf = `r round(summary(fit_gam)$s.table[,"edf"], 1)`; approximate
+> *p* < 0.001). A linear model gave a near-zero slope because the
+> underlying function is a full sine wave. The GAM is preferred when
+> the shape, not a scalar slope, is the scientific object.
+
+::: {.notes}
+Explain that a large edf is not a problem; the penalty prevents the
+smooth from interpolating noise. The *p*-value reported for a smooth
+is approximate.
+:::
+
+## Common pitfalls
+
+- Setting `k` too small and constraining the smooth.
+- Comparing GAMs with AIC as if it were a likelihood-ratio test.
+- Reporting only the smooth without showing its plot.
+
+## Further reading
+
+- Wood SN. *Generalized Additive Models: An Introduction with R*.
+- Pedersen EJ et al. (2019), *Hierarchical generalized additive models*.
+- Simpson GL. *gratia* package vignette.
+
+## Session info
+
+```{r}
+sessionInfo()
+```

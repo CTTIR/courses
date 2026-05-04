@@ -1,0 +1,104 @@
+---
+title: "Course 3 · Week 4 — Evidence synthesis, ID, pre-registration"
+subtitle: "Cheatsheet — biostats_courses"
+author: "R. Heller"
+format:
+  html: {toc: true, toc-depth: 2, page-layout: full}
+  typst: {papersize: a4, margin: {x: 1.8cm, y: 2cm}, fontsize: 10pt}
+execute: {echo: true, warning: false, message: false}
+---
+
+## Systematic review workflow
+
+1. PICO: Population, Intervention, Comparator, Outcome.
+2. Register protocol on PROSPERO.
+3. Build search across ≥ 2 databases; peer-review with a librarian.
+4. Two-screener title/abstract and full-text.
+5. Extract, appraise (RoB 2 / ROBINS-I), synthesise.
+6. Report with the PRISMA 2020 checklist and flow diagram.
+
+## Meta-analysis
+
+```r
+library(metafor)
+dat <- escalc(measure = "RR",
+              ai = tpos, bi = tneg, ci = cpos, di = cneg,
+              data = studies)
+fit <- rma(yi, vi, data = dat, method = "REML")
+fit
+forest(fit, header = TRUE)
+funnel(fit); regtest(fit)
+```
+
+| Statistic | Meaning |
+|---|---|
+| $\tau^2$ | between-study variance |
+| $I^2$    | % of total variance due to heterogeneity |
+| Egger's test | funnel-plot asymmetry (small-study effects) |
+
+Fixed-effect only when heterogeneity is effectively zero. Default to
+random effects.
+
+## Network meta-analysis
+
+```r
+library(netmeta)
+net <- netmeta(TE, seTE, treat1, treat2, studlab,
+               data = dat, sm = "MD", random = TRUE)
+netgraph(net)
+netrank(net, small.values = "good")    # SUCRA ranking
+decomp.design(net)                     # inconsistency
+```
+
+Transitivity + consistency are the core assumptions.
+
+## Infectious disease — SIR / SEIR
+
+```r
+library(deSolve)
+sir <- function(t, y, p) with(as.list(c(y, p)), {
+  N <- S + I + R
+  list(c(-beta * S * I / N,
+          beta * S * I / N - gamma * I,
+          gamma * I))
+})
+out <- ode(c(S = 999, I = 1, R = 0),
+           times = 0:120,
+           func = sir,
+           parms = c(beta = 0.3, gamma = 0.1))
+```
+
+$R_0 = \beta / \gamma$. Herd-immunity threshold $\approx 1 - 1/R_0$.
+
+## Pre-registration and SAP
+
+A pre-registration specifies, before data analysis:
+
+- Primary outcome + exact estimand.
+- Analysis model (fixed terms, adjustments, interactions).
+- Handling of missing data.
+- Multiplicity control.
+- Sample-size justification.
+
+OSF and ClinicalTrials.gov are the two common registries.
+
+## Decision rule for Week 4
+
+- More than a handful of studies on a question → plan a systematic review.
+- Multiple comparators of interest → network meta-analysis.
+- Outbreak modelling → start with SIR, extend only as data justify.
+- Confirmatory analysis → pre-registered; exploratory analyses are
+  labelled as such in the manuscript.
+
+## Common pitfalls
+
+- Declaring a review "systematic" without a pre-registered protocol.
+- Pooling studies with fundamentally different populations / outcomes.
+- Interpreting SUCRA rankings as if they were certain.
+- Calling a compartmental model a "forecast" without uncertainty.
+
+## Further reading
+
+- Higgins et al., *Cochrane Handbook for Systematic Reviews*.
+- Keeling & Rohani, *Modeling Infectious Diseases in Humans and Animals*.
+- Nosek et al. (2018), *The preregistration revolution*.

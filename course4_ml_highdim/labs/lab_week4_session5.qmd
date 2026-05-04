@@ -1,0 +1,214 @@
+---
+title: "Week 4, Session 5 — TRIPOD-AI, fairness auditing, reproducibility at scale"
+subtitle: "Course 4 — Biostatistics Courses"
+format:
+  html:
+    toc: true
+    toc-depth: 3
+    code-fold: false
+    code-tools: true
+  revealjs:
+    output-file: "lab_week4_session5_slides.html"
+    theme: [default, ../../assets/slides.scss]
+    slide-number: c/t
+    progress: true
+    scrollable: true
+    transition: none
+    preview-links: auto
+execute:
+  warning: false
+  message: false
+---
+
+::: {.callout-note}
+**Workflow labs** use the variant template:
+Goal → Approach → Execution → Check → Report.
+:::
+
+## Learning objectives
+
+- Enumerate the TRIPOD-AI reporting items relevant to a prediction-
+  model manuscript.
+- Compute group-stratified AUC and calibration as a fairness audit.
+- Sketch a reproducible analysis pipeline with the `targets` package.
+
+## Prerequisites
+
+Validation (Week 3 Session 5); biomarker evaluation (Week 3
+Session 3).
+
+## Background
+
+TRIPOD-AI extends the original TRIPOD statement to cover machine-
+learning prediction models. It asks authors to describe the data
+source, the participants, the outcome, the predictors, sample size
+and missing data, the model specification and its hyperparameter
+tuning, the performance on internal and external data, and the
+intended use of the model. A report that fails on any of these items
+is difficult to reproduce and difficult to deploy safely.
+
+Fairness auditing extends validation to population subgroups. A
+model with strong overall AUC can have markedly worse performance in
+a minority subgroup; the remedy is first to detect the gap and then
+to decide whether to retrain, reweight, or accept the limitation
+explicitly.
+
+The `targets` package is the modern R approach to reproducible
+pipelines. It builds a directed acyclic graph of analysis steps,
+caches intermediate outputs, and reruns only what has changed. This
+separation between pipeline definition and execution is what lets a
+study survive the months between submission and revision.
+
+::: {.content-visible when-format="html"}
+Reproducibility at scale is not a purity test. It is an insurance
+policy: when a reviewer asks for a recomputed sensitivity, or when
+a colleague tries to replicate the analysis two years later, the
+cost of doing the work as a scripted DAG is paid back many times.
+:::
+
+## Setup
+
+```{r}
+#| label: setup
+library(tidyverse)
+library(pROC)
+library(MASS)
+set.seed(42)
+theme_set(theme_minimal(base_size = 12))
+```
+
+## 1. Goal
+
+Audit a logistic prediction model on `Pima.tr` by a simulated
+subgroup attribute, and sketch a `targets` pipeline for the full
+analysis.
+
+## 2. Approach
+
+Attach a synthetic subgroup label — imagine this were clinic of
+enrolment — and compare performance.
+
+```{r}
+d <- as_tibble(MASS::Pima.tr) |>
+  mutate(subgroup = sample(c("A", "B"), n(), replace = TRUE,
+                           prob = c(0.7, 0.3)))
+ggplot(d, aes(glu, fill = subgroup)) +
+  geom_histogram(alpha = 0.7, bins = 20, position = "identity")
+```
+
+## 3. Execution
+
+```{r}
+fit <- glm(type ~ glu + bmi + age, data = d, family = binomial())
+d$p <- predict(fit, type = "response")
+
+auc_overall <- as.numeric(auc(roc(d$type, d$p, quiet = TRUE)))
+auc_by <- d |>
+  group_by(subgroup) |>
+  summarise(auc = as.numeric(auc(roc(type, p, quiet = TRUE))),
+            n   = n(), .groups = "drop")
+auc_by
+```
+
+Calibration stratified by subgroup.
+
+```{r}
+d |>
+  mutate(bin = cut(p, quantile(p, seq(0, 1, by = 0.2)),
+                   include.lowest = TRUE)) |>
+  group_by(subgroup, bin) |>
+  summarise(pred = mean(p), obs = mean(type == "Yes"),
+            n = n(), .groups = "drop") |>
+  ggplot(aes(pred, obs, colour = subgroup)) +
+  geom_point(aes(size = n)) + geom_line() +
+  geom_abline(slope = 1, intercept = 0, colour = "grey50") +
+  labs(x = "mean predicted", y = "observed proportion")
+```
+
+A minimal `targets` pipeline (sketch).
+
+```{r}
+#| eval: false
+library(targets)
+tar_script({
+  library(tidyverse); library(MASS); library(pROC)
+  list(
+    tar_target(raw, as_tibble(MASS::Pima.tr)),
+    tar_target(fit, glm(type ~ glu + bmi + age, data = raw, family = binomial())),
+    tar_target(auc_overall,
+               as.numeric(auc(roc(raw$type, predict(fit, type = "response"), quiet = TRUE)))),
+    tar_target(report, tibble(auc = auc_overall))
+  )
+})
+tar_make()
+tar_read(report)
+```
+
+## 4. Check
+
+TRIPOD-AI-style checklist (abbreviated).
+
+```{r}
+checklist <- tribble(
+  ~item,                            ~status,
+  "Study design stated",            "yes",
+  "Source and eligibility",         "yes",
+  "Outcome definition",             "yes",
+  "Predictor definitions",          "yes",
+  "Sample size justified",          "partial",
+  "Missing-data handling",          "yes",
+  "Model specification",            "yes",
+  "Hyperparameter tuning",          "NA (no tuning)",
+  "Internal validation",            "yes",
+  "External validation",            "NOT in this lab",
+  "Calibration reported",           "yes",
+  "Fairness audit by subgroup",     "yes",
+  "Code available",                 "yes"
+)
+checklist
+```
+
+## 5. Report
+
+> A logistic prediction model on `Pima.tr` achieved overall AUC
+> `r round(auc_overall, 2)`. A fairness audit by synthetic subgroup
+> revealed AUCs of
+> `r round(auc_by$auc[1], 2)` in subgroup A (n = `r auc_by$n[1]`)
+> and `r round(auc_by$auc[2], 2)` in subgroup B (n = `r auc_by$n[2]`).
+> A `targets` pipeline capturing raw data, fit, evaluation, and report
+> would make the entire analysis re-runnable by any collaborator.
+
+TRIPOD-AI, fairness auditing, and a pipeline tool are not independent
+initiatives; they are three faces of the same commitment to make
+modelling decisions legible, auditable, and reproducible.
+
+::: {.notes}
+Mention that the subgroup label here is synthetic; in real work,
+audits must be done on protected attributes collected under
+appropriate governance.
+:::
+
+## Common pitfalls
+
+- Reporting overall metrics and stopping; fairness gaps are only
+  visible after stratification.
+- Using `targets` as a static pipeline and not updating the DAG when
+  inputs change.
+- Treating TRIPOD-AI as a post-hoc checklist rather than a planning
+  document written before analysis.
+
+## Further reading
+
+- Collins GS et al. (2024), *TRIPOD+AI statement: updated guidance for
+  reporting clinical prediction models that use regression or machine
+  learning methods*.
+- Obermeyer Z et al. (2019), *Dissecting racial bias in an algorithm
+  used to manage the health of populations*.
+- Landau WM (2021), *The targets R package: a dynamic
+  make-like function-oriented pipeline toolkit*.
+
+## Session info
+
+```{r}
+sessionInfo()
+```

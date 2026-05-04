@@ -1,0 +1,142 @@
+---
+title: "Course 4 — Modern Statistical Learning & High-Dimensional Biomedicine"
+toc: true
+---
+
+::: {.hero}
+::: {.kicker}
+SPECIALIST · 4 WEEKS · 20 LABS
+:::
+# Modern Statistical Learning & High-Dimensional Biomedicine
+::: {.lead}
+Regularisation, tree ensembles, Bayesian modelling, omics, and the
+discipline that keeps modern methods from becoming modern folklore.
+:::
+:::
+
+## What you'll be able to do by the end
+
+- Use cross-validation — including nested CV — to estimate generalisation
+  error honestly, and explain why a bare bootstrap or a single split
+  usually does not.
+- Fit and tune regularised regressions, tree ensembles, and tabular neural
+  networks with `tidymodels` and `torch`.
+- Perform a basic Bayesian analysis with `brms`, and interpret the
+  posterior in a form a reviewer will accept.
+- Differentiate, cluster, and embed omics-scale data — bulk RNA-seq with
+  DESeq2, single-cell with Seurat, and general high-dimensional data with
+  PCA, UMAP, and t-SNE.
+- Apply FDR, knockoffs, and the logic of the replication crisis to your
+  own work, and produce a TRIPOD-AI-compliant report for a predictive
+  model.
+
+## Who should take this course
+
+Course 4 assumes Courses 1–3, or at minimum the ability to fit a
+regularised linear model and read a confusion matrix without flinching.
+If you are a computational biologist moving into ML, a statistician
+taking on omics data, or an ML engineer trying to understand what makes
+biomedical datasets different, this is the course written for you.
+
+## The shape of the four weeks
+
+::: {.card-grid}
+
+::: {.card}
+::: {.kicker}
+Week 1
+:::
+### Validation, regularisation, multivariate
+CV and nested CV; ridge, lasso, elastic net; PCA/FA/CCA/LDA; clustering;
+UMAP and t-SNE.
+:::
+
+::: {.card}
+::: {.kicker}
+Week 2
+:::
+### ML done honestly
+Trees, random forests, boosting; interpretability and SHAP; tabular
+neural nets with `torch`; imaging/sequence intro; `tidymodels` pipelines.
+:::
+
+::: {.card}
+::: {.kicker}
+Week 3
+:::
+### Bayesian, biomarkers, survival ML
+Bayesian thinking; `brms` and Stan; biomarker statistics; survival ML;
+time-dependent Brier, IPA, external validation.
+:::
+
+::: {.card}
+::: {.kicker}
+Week 4
+:::
+### Omics, fairness, reproducibility
+Bulk RNA-seq with DESeq2/edgeR; enrichment; scRNA-seq with Seurat; FDR
+and knockoffs; TRIPOD-AI, fairness, reporting at scale.
+:::
+
+:::
+
+## Weekly summaries
+
+**Week 1 — validation, regularisation, multivariate.** Resampling is the
+conscience of modern ML. The first lab pins down k-fold and nested CV
+with a simulation that reveals how an honest-looking analysis can still
+overfit. Regularisation (`glmnet`) follows, with ridge, lasso, and
+elastic-net contrasted on a high-p-low-n problem. PCA, factor analysis,
+canonical correlation, and linear discriminant analysis occupy a single
+dense lab on dimension reduction. Clustering (`mclust`, hierarchical,
+k-means) and non-linear embeddings (`uwot`, `Rtsne`) close the week.
+Key packages: `glmnet`, `caret`/`tidymodels`, `FactoMineR`, `factoextra`,
+`mclust`, `uwot`.
+
+**Week 2 — ML done honestly.** Tree models open the week: CART, random
+forests (`ranger`), gradient boosting (`xgboost`, `lightgbm`). The
+interpretability lab uses `DALEX`, `iml`, and SHAP values to inspect
+them. A tabular neural-network lab with `torch` gives a controlled
+introduction to deep learning; an imaging / sequence lab sketches the
+conceptual extensions without asking the reader to train on a million
+samples. The week closes with `tidymodels`, the pipeline framework that
+ties everything together. Key packages: `ranger`, `xgboost`, `lightgbm`,
+`DALEX`, `iml`, `torch`, `tidymodels`.
+
+**Week 3 — Bayesian, biomarkers, survival ML.** The Bayesian-thinking
+lab introduces posteriors, priors, and the distinction between α-level
+error control and decision error. `brms` (built on Stan) gets a full
+lab, with LOO model comparison and a hierarchical example. The biomarker
+lab covers Youden's index, NRI, and decision-curve analysis in the
+biomarker context. Survival ML (random-survival-forest, DeepSurv
+conceptually) is followed by a lab on time-dependent Brier, the
+index-of-prediction-accuracy (IPA), and external validation of risk
+models. Key packages: `brms`, `rstanarm`, `randomForestSRC`,
+`survival`, `timeROC`, `riskRegression`.
+
+**Week 4 — omics, fairness, reproducibility.** Bulk RNA-seq with DESeq2
+or edgeR opens the week, with an emphasis on design matrices, dispersion
+estimation, and multiple testing. Enrichment analysis (GSEA,
+over-representation, camera) follows. Single-cell RNA-seq with Seurat
+demonstrates the full cycle of QC, normalisation, integration, and
+cluster annotation. The FDR/knockoffs lab reframes multiple testing in a
+way that works for genome-scale problems, and ties the replication crisis
+to analytic choices researchers routinely make. The capstone lab walks
+through TRIPOD-AI reporting, fairness auditing of a predictive model,
+and reproducibility at scale with `targets`. Key packages: `DESeq2`,
+`edgeR`, `limma`, `fgsea`, `Seurat`, `knockoff`, `targets`.
+
+## How to work through it
+
+Course 4 is breadth-first: each lab introduces a family of tools rather
+than drilling one to the bottom. Read it through once to know what
+exists, then return to the labs that match your current problem. The
+omics labs (W4 S1–S3) depend on Bioconductor packages whose install
+time is measured in minutes; they are well worth the wait. The
+capstone lab (W4 S5) is the one to present at a group meeting.
+
+## Further along
+
+- [Course 4 schedule](schedule.qmd) — linked index of every lab, deck, and
+  R script.
+- [Unified references](../references.qmd).

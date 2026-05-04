@@ -1,0 +1,174 @@
+---
+title: "Week 4, Session 4 — FDR, knockoffs, replication crisis"
+subtitle: "Course 4 — Biostatistics Courses"
+format:
+  html:
+    toc: true
+    toc-depth: 3
+    code-fold: false
+    code-tools: true
+  revealjs:
+    output-file: "lab_week4_session4_slides.html"
+    theme: [default, ../../assets/slides.scss]
+    slide-number: c/t
+    progress: true
+    scrollable: true
+    transition: none
+    preview-links: auto
+execute:
+  warning: false
+  message: false
+---
+
+::: {.callout-note}
+**Workflow labs** use the variant template:
+Goal → Approach → Execution → Check → Report.
+:::
+
+## Learning objectives
+
+- Simulate *p*-values under a mixture of null and alternative
+  hypotheses and apply Benjamini–Hochberg FDR control.
+- Describe the knockoff filter in words and explain what "exchangeable"
+  means in that context.
+- Connect FDR discipline to the replication crisis in biomedicine.
+
+## Prerequisites
+
+Multiple-testing basics from Course 1.
+
+## Background
+
+Multiple-testing corrections come in two families: family-wise error
+rate (Bonferroni, Holm) control the probability of *any* false
+discovery; false-discovery rate methods (Benjamini–Hochberg, Storey's
+*q*-value) control the *proportion* of false discoveries among the
+discoveries. FDR is the appropriate target for the typical screen with
+thousands of simultaneous tests and a tolerance for some false
+positives on the shortlist.
+
+Knockoffs are a newer idea that replace the classical *p*-value route
+entirely. For each feature a "knockoff" variable is constructed that
+matches the feature's joint distribution with other features but is
+conditionally independent of the outcome. A statistic comparing the
+original and the knockoff then controls the FDR without distributional
+assumptions on the test statistic, provided the knockoffs are
+exchangeable.
+
+The replication crisis in biomedicine is not usually a failure of FDR
+in the technical sense; it is usually a failure to control *researcher
+degrees of freedom* — the multiple analyses that precede the reported
+test. No post-hoc correction can rescue a flexible, undocumented
+workflow.
+
+::: {.content-visible when-format="html"}
+Pre-registration, code availability, and transparent reporting
+discipline the part of the pipeline that FDR cannot. They are not
+optional extras.
+:::
+
+## Setup
+
+```{r}
+#| label: setup
+library(tidyverse)
+set.seed(42)
+theme_set(theme_minimal(base_size = 12))
+```
+
+## 1. Goal
+
+Simulate 1 000 tests, most null and a few alternative, and compare
+uncorrected, Bonferroni, and BH discovery sets.
+
+## 2. Approach
+
+```{r}
+m <- 1000
+m1 <- 50
+is_alt <- c(rep(TRUE, m1), rep(FALSE, m - m1))
+mu <- ifelse(is_alt, 3, 0)
+z <- rnorm(m, mu, 1)
+p <- 2 * (1 - pnorm(abs(z)))
+
+tibble(p = p, is_alt = is_alt) |>
+  ggplot(aes(p, fill = is_alt)) +
+  geom_histogram(bins = 40, position = "identity", alpha = 0.7) +
+  labs(x = "p-value", y = "count")
+```
+
+## 3. Execution
+
+```{r}
+bonf <- p.adjust(p, method = "bonferroni")
+bh   <- p.adjust(p, method = "BH")
+
+res <- tibble(
+  method = c("raw p<0.05", "Bonferroni<0.05", "BH q<0.05"),
+  discovered  = c(sum(p < 0.05), sum(bonf < 0.05), sum(bh < 0.05)),
+  true_pos    = c(sum(p[is_alt] < 0.05),
+                  sum(bonf[is_alt] < 0.05),
+                  sum(bh[is_alt] < 0.05)),
+  false_pos   = c(sum(p[!is_alt] < 0.05),
+                  sum(bonf[!is_alt] < 0.05),
+                  sum(bh[!is_alt] < 0.05))
+) |> mutate(fdp = false_pos / pmax(discovered, 1))
+res
+```
+
+## 4. Check
+
+Knockoff discussion — the idea, in words.
+
+```{r}
+#| eval: false
+library(knockoff)
+# For a linear regression y ~ X with X gaussian, construct
+# Xk matching the second-order structure of X but conditionally
+# independent of y given X. Then fit a penalised regression on
+# [X, Xk]; the per-feature statistic W_j = |beta_j| - |beta_{j+p}|
+# controls the FDR among selected features.
+ko <- knockoff.filter(X, y, fdr = 0.1)
+ko$selected
+```
+
+## 5. Report
+
+> On 1 000 simulated tests (50 alternative, 950 null), raw *p*-value
+> cut-off at 0.05 produced `r res$discovered[1]` discoveries with a
+> false-discovery proportion of `r round(res$fdp[1], 2)`. Bonferroni
+> correction produced `r res$discovered[2]` discoveries; the BH
+> procedure at *q* < 0.05 produced `r res$discovered[3]` with a
+> false-discovery proportion of `r round(res$fdp[3], 2)`.
+
+Knockoffs would give a similar FDR guarantee via a different route,
+and would remain valid under correlation between features provided
+the joint distribution can be modelled.
+
+::: {.notes}
+Connect the demo to the replication crisis: none of this corrects
+for analyses that were tried but not reported.
+:::
+
+## Common pitfalls
+
+- Reporting nominal *p* < 0.05 cut-offs in a high-dimensional screen.
+- Applying BH to a set of tests that are not approximately independent
+  or positive-dependent.
+- Treating knockoffs as a drop-in for *p*-values without checking the
+  exchangeability assumption.
+
+## Further reading
+
+- Benjamini Y, Hochberg Y (1995), *Controlling the false discovery
+  rate: A practical and powerful approach to multiple testing*.
+- Barber RF, Candès EJ (2015), *Controlling the false discovery rate
+  via knockoffs*.
+- Ioannidis JPA (2005), *Why most published research findings are
+  false*.
+
+## Session info
+
+```{r}
+sessionInfo()
+```

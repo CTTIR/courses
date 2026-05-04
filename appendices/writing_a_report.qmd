@@ -1,0 +1,101 @@
+---
+title: "Writing a report"
+toc: true
+---
+
+::: {.hero}
+::: {.kicker}
+APPENDIX · WRITING A REPORT
+:::
+# Writing a report
+::: {.lead}
+How to turn an analysis into a document a reviewer, a PI, or a future
+version of yourself will trust.
+:::
+:::
+
+## IMRaD
+
+Biomedical writing follows a durable convention: **Introduction, Methods,
+Results, and Discussion.** The structure is not an aesthetic choice — it
+mirrors the order in which the reader can evaluate your work. You
+motivate the question, describe exactly what you did, present the
+findings, and only then interpret them. Pre-registration and statistical
+analysis plans make the Methods section possible to write before the
+Results exist, and the five-step template taught throughout this site
+feeds directly into the Methods paragraph for every inferential test.
+
+## Effect sizes and intervals
+
+Every result worth reporting is reported with both a point estimate and
+an interval. A p-value alone is rarely useful: it tells you whether the
+data are surprising under the null, but not how large the effect is or
+how much uncertainty you have about its magnitude. A concluding
+statement that will not embarrass you in five years reads like this:
+
+> Mean arterial pressure was lower in the treatment group than in the
+> placebo group by 6.4 mmHg (95% CI: 2.1 to 10.7; *p* = 0.004;
+> Cohen's *d* = 0.42).
+
+Notice the three things: the direction and magnitude of the effect, the
+interval, and — optionally — a standardised effect size. Nothing else
+is needed for the reader to think for themselves.
+
+## Figures
+
+Two rules: **one figure, one idea**, and **no figure without a caption
+that could stand alone**. A caption tells the reader what the figure
+shows (*"Forest plot of odds ratios for each arm"*), what the units
+are, how many observations contribute, and — for anything inferential —
+what the error bars or bands represent (95% CI? SD? SE of the mean?).
+Use `theme_minimal()` with the site accent palette where colour is
+discretionary, and avoid colour-only encoding: pair colour with shape or
+linetype so colourblind readers can follow along.
+
+## Tables
+
+Tables are rarely the best way to communicate a result that a plot can
+show, but some results genuinely need them — baseline characteristics,
+multi-row regression tables, multiple-imputation pooling summaries. Use
+`gtsummary` for all three. The point of a table is the contrast between
+rows, so put the thing you want the reader to compare next to itself and
+round numbers to sensible precision (three significant figures is
+usually plenty; two for proportions).
+
+## Citing R and packages
+
+R and its packages are freely maintained by volunteers who deserve
+citations. At the foot of every report, include something like:
+
+> Analysis was performed in R 4.4.1 (R Core Team 2024) using the
+> `tidyverse` (Wickham et al. 2019), `lme4` (Bates et al. 2015), and
+> `rstanarm` (Goodrich et al. 2024) packages.
+
+You can get the correct citation for any package with
+`citation("pkgname")`. The bibliography it returns is already in BibTeX
+form.
+
+## Reporting guidelines
+
+Every substantive biomedical study has a reporting guideline. Use them;
+reviewers will use them whether you do or not.
+
+- **Randomised controlled trial:** [CONSORT](https://www.consort-statement.org/).
+- **Observational study:** [STROBE](https://www.strobe-statement.org/).
+- **Diagnostic-accuracy study:** [STARD](https://www.equator-network.org/reporting-guidelines/stard/).
+- **Prediction-model study:** [TRIPOD](https://www.tripod-statement.org/) and [TRIPOD-AI](https://www.equator-network.org/reporting-guidelines/tripod-ai/).
+- **Systematic review:** [PRISMA](http://prisma-statement.org/).
+- **Animal research:** [ARRIVE](https://arriveguidelines.org/).
+
+A checklist filled in as you write is much easier than one filled in at
+the end. Many journals now require a signed checklist as a supplementary
+file; bookmark the above now.
+
+## Reproducibility
+
+The document you submit should come from a single render of a single
+source. If the numbers in the text are not the numbers in the
+`sessionInfo()` block at the foot of the same file, the analysis is
+not reproducible. Quarto, `renv`, and a version-controlled repository
+are together enough to get this right; the `targets` package is the
+next step up for anything large enough to need a dependency graph.

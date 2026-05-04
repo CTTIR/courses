@@ -1,0 +1,187 @@
+---
+title: "Week 4, Session 2 — Enrichment analysis (GSEA / ORA)"
+subtitle: "Course 4 — Biostatistics Courses"
+format:
+  html:
+    toc: true
+    toc-depth: 3
+    code-fold: false
+    code-tools: true
+  revealjs:
+    output-file: "lab_week4_session2_slides.html"
+    theme: [default, ../../assets/slides.scss]
+    slide-number: c/t
+    progress: true
+    scrollable: true
+    transition: none
+    preview-links: auto
+execute:
+  warning: false
+  message: false
+---
+
+::: {.callout-note}
+**Workflow labs** use the variant template:
+Goal → Approach → Execution → Check → Report.
+:::
+
+## Learning objectives
+
+- Perform an over-representation analysis (ORA) by the hypergeometric
+  test on a simulated example.
+- Describe the GSEA running-sum statistic and when it is preferred
+  over ORA.
+- Recognise the hazards of gene-set overlap and of using different
+  background universes.
+
+## Prerequisites
+
+Multiple testing from Course 1; RNA-seq DE results from Session 1.
+
+## Background
+
+Pathway or gene-set enrichment analyses take a list of candidate genes
+— from a differential-expression analysis, say — and ask whether any
+annotated set contains more of them than expected by chance. Over-
+representation analysis (ORA) is the simplest version: given a universe
+of *N* genes, *k* of which are in a pathway, and a shortlist of *n*
+genes of which *m* are in that pathway, the hypergeometric distribution
+returns a *p*-value for the overlap.
+
+Gene-set enrichment analysis (GSEA) uses the full ranked list of
+genes and tests whether members of a pathway are concentrated at the
+top or bottom of the ranking via a running-sum statistic. Unlike ORA,
+it does not require a threshold, and it retains information from genes
+that fall just short of significance.
+
+::: {.content-visible when-format="html"}
+Both methods are sensitive to the background universe. If the universe
+is "all human genes" but the measurement technology only detects half
+of them, the *p*-values are wrong. The correct universe is the set of
+genes actually tested in the upstream analysis.
+:::
+
+## Setup
+
+```{r}
+#| label: setup
+library(tidyverse)
+set.seed(42)
+theme_set(theme_minimal(base_size = 12))
+```
+
+## 1. Goal
+
+Demonstrate a hypergeometric ORA by hand, then sketch the `fgsea`
+call pattern for a running-sum GSEA.
+
+## 2. Approach
+
+Simulate a universe of 5 000 genes; a pathway of 80 members is
+enriched for differentially expressed (DE) genes.
+
+```{r}
+N <- 5000
+pathway <- sample(seq_len(N), 80)
+true_de <- unique(c(sample(pathway, 40), sample(setdiff(seq_len(N), pathway), 60)))
+
+tibble(in_pathway = seq_len(N) %in% pathway,
+       de = seq_len(N) %in% true_de) |>
+  count(in_pathway, de) |>
+  ggplot(aes(in_pathway, n, fill = de)) +
+  geom_col(position = "dodge") +
+  labs(x = "gene in pathway?", y = "count")
+```
+
+## 3. Execution
+
+Hypergeometric test by hand.
+
+```{r}
+n_de <- length(true_de)
+k_in <- sum(true_de %in% pathway)
+p_hyper <- phyper(k_in - 1, 80, N - 80, n_de, lower.tail = FALSE)
+c(overlap = k_in, expected = n_de * 80 / N, p = p_hyper)
+```
+
+Make a ranked gene list (as if from DE) and sketch `fgsea`.
+
+```{r}
+stat <- rnorm(N)
+stat[pathway] <- stat[pathway] + 1.2    # shift pathway genes up
+names(stat) <- paste0("g", seq_len(N))
+stat <- sort(stat, decreasing = TRUE)
+
+# Running-sum demonstration by hand.
+in_set <- names(stat) %in% paste0("g", pathway)
+p_hit <- abs(stat) / sum(abs(stat[in_set]))
+p_miss <- 1 / sum(!in_set)
+run_sum <- cumsum(ifelse(in_set, p_hit, -p_miss))
+ES <- run_sum[which.max(abs(run_sum))]
+tibble(i = seq_along(run_sum), rs = run_sum) |>
+  ggplot(aes(i, rs)) + geom_line() +
+  geom_hline(yintercept = 0, colour = "grey50") +
+  labs(x = "rank", y = "running enrichment score")
+```
+
+`fgsea` sketch.
+
+```{r}
+#| eval: false
+library(fgsea)
+gene_sets <- list(pathway = paste0("g", pathway))
+fgsea_res <- fgsea(pathways = gene_sets, stats = stat,
+                   minSize = 15, maxSize = 500)
+```
+
+## 4. Check
+
+Compare the ORA result for different shortlist sizes.
+
+```{r}
+sweep_ora <- sapply(c(50, 100, 200, 500), function(top) {
+  short <- names(stat)[seq_len(top)]
+  k <- sum(short %in% paste0("g", pathway))
+  phyper(k - 1, 80, N - 80, top, lower.tail = FALSE)
+})
+tibble(top = c(50, 100, 200, 500), p = sweep_ora)
+```
+
+## 5. Report
+
+> In a simulated universe of 5 000 genes with a pathway of 80
+> members enriched for DE, the hypergeometric ORA for the full DE
+> shortlist gave *p* = `r signif(p_hyper, 2)`. A running-sum GSEA on
+> the full ranked list produced an enrichment score of
+> `r round(ES, 2)` with the running sum peaking near the top.
+
+ORA is a quick, interpretable first pass; GSEA is better when the
+effect is diffuse. The two answer different questions and sometimes
+disagree; both are worth showing when the result matters.
+
+::: {.notes}
+Emphasise the universe choice: gene-sets from MSigDB contain human
+gene symbols, but your measured genes may be a biased subset.
+:::
+
+## Common pitfalls
+
+- Using the full genome as the ORA universe when only a subset was
+  assayed.
+- Double-counting overlapping pathways as independent discoveries.
+- Reporting a GSEA *p*-value without the normalised enrichment score.
+
+## Further reading
+
+- Subramanian A et al. (2005), *Gene set enrichment analysis: A
+  knowledge-based approach for interpreting genome-wide expression
+  profiles*.
+- Huang DW, Sherman BT, Lempicki RA (2009), *Bioinformatics enrichment
+  tools: paths toward the comprehensive functional analysis of large
+  gene lists*.
+
+## Session info
+
+```{r}
+sessionInfo()
+```

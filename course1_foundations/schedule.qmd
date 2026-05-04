@@ -1,0 +1,38 @@
+---
+title: "Course 1 — Schedule"
+toc: true
+---
+
+::: {.hero}
+::: {.kicker}
+COURSE 1 · FOUNDATIONS
+:::
+# Schedule
+::: {.lead}
+Every lab, every deck, every R script — in the order they are meant to
+be read.
+:::
+:::
+
+| Week | # | Topic | Article | Slides | Script |
+|---|---|---|---|---|---|
+| 1 | 1 | Scientific process & research workflow | [lab](labs/lab_week1_session1.qmd) | [slides](labs/lab_week1_session1_slides.html) | [R](code/lab_week1_session1.R) |
+| 1 | 2 | R, RStudio, Quarto, renv toolchain | [lab](labs/lab_week1_session2.qmd) | [slides](labs/lab_week1_session2_slides.html) | [R](code/lab_week1_session2.R) |
+| 1 | 3 | Data types, tidy data, measurement quality | [lab](labs/lab_week1_session3.qmd) | [slides](labs/lab_week1_session3_slides.html) | [R](code/lab_week1_session3.R) |
+| 1 | 4 | Import, joins, missingness with dplyr | [lab](labs/lab_week1_session4.qmd) | [slides](labs/lab_week1_session4_slides.html) | [R](code/lab_week1_session4.R) |
+| 1 | 5 | ggplot2 grammar and multi-panel layouts | [lab](labs/lab_week1_session5.qmd) | [slides](labs/lab_week1_session5_slides.html) | [R](code/lab_week1_session5.R) |
+| 2 | 6 | Descriptives and Table 1 with gtsummary | [lab](labs/lab_week2_session1.qmd) | [slides](labs/lab_week2_session1_slides.html) | [R](code/lab_week2_session1.R) |
+| 2 | 7 | Probability and Bayes' theorem | [lab](labs/lab_week2_session2.qmd) | [slides](labs/lab_week2_session2_slides.html) | [R](code/lab_week2_session2.R) |
+| 2 | 8 | Diagnostic testing | [lab](labs/lab_week2_session3.qmd) | [slides](labs/lab_week2_session3_slides.html) | [R](code/lab_week2_session3.R) |
+| 2 | 9 | Discrete distributions | [lab](labs/lab_week2_session4.qmd) | [slides](labs/lab_week2_session4_slides.html) | [R](code/lab_week2_session4.R) |
+| 2 | 10 | Continuous distributions and Q-Q plots | [lab](labs/lab_week2_session5.qmd) | [slides](labs/lab_week2_session5_slides.html) | [R](code/lab_week2_session5.R) |
+| 3 | 11 | Populations, samples, CLT by simulation | [lab](labs/lab_week3_session1.qmd) | [slides](labs/lab_week3_session1_slides.html) | [R](code/lab_week3_session1.R) |
+| 3 | 12 | Bootstrap and permutation | [lab](labs/lab_week3_session2.qmd) | [slides](labs/lab_week3_session2_slides.html) | [R](code/lab_week3_session2.R) |
+| 3 | 13 | Maximum likelihood and standard errors | [lab](labs/lab_week3_session3.qmd) | [slides](labs/lab_week3_session3_slides.html) | [R](code/lab_week3_session3.R) |
+| 3 | 14 | One-sample t and one-proportion | [lab](labs/lab_week3_session4.qmd) | [slides](labs/lab_week3_session4_slides.html) | [R](code/lab_week3_session4.R) |
+| 3 | 15 | Hypothesis testing philosophy | [lab](labs/lab_week3_session5.qmd) | [slides](labs/lab_week3_session5_slides.html) | [R](code/lab_week3_session5.R) |
+| 4 | 16 | Two-sample and paired t; effect sizes | [lab](labs/lab_week4_session1.qmd) | [slides](labs/lab_week4_session1_slides.html) | [R](code/lab_week4_session1.R) |
+| 4 | 17 | Two proportions and goodness-of-fit | [lab](labs/lab_week4_session2.qmd) | [slides](labs/lab_week4_session2_slides.html) | [R](code/lab_week4_session2.R) |
+| 4 | 18 | Pearson and Spearman correlation | [lab](labs/lab_week4_session3.qmd) | [slides](labs/lab_week4_session3_slides.html) | [R](code/lab_week4_session3.R) |
+| 4 | 19 | Non-parametric tests | [lab](labs/lab_week4_session4.qmd) | [slides](labs/lab_week4_session4_slides.html) | [R](code/lab_week4_session4.R) |
+| 4 | 20 | Sample size, power, Quarto reporting | [lab](labs/lab_week4_session5.qmd) | [slides](labs/lab_week4_session5_slides.html) | [R](code/lab_week4_session5.R) |

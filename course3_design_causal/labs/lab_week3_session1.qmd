@@ -1,0 +1,194 @@
+---
+title: "Week 3, Session 1 — Time-varying covariates and immortal-time bias"
+subtitle: "Course 3 — Biostatistics Courses"
+format:
+  html:
+    toc: true
+    toc-depth: 3
+    code-fold: false
+    code-tools: true
+  revealjs:
+    output-file: "lab_week3_session1_slides.html"
+    theme: [default, ../../assets/slides.scss]
+    slide-number: c/t
+    progress: true
+    scrollable: true
+    transition: none
+    preview-links: auto
+execute:
+  warning: false
+  message: false
+---
+
+::: {.callout-note}
+**Inference lab** using the five-step template:
+Hypothesis → Visualise → Assumptions → Conduct → Conclude.
+:::
+
+## Learning objectives
+
+- Recognise immortal-time bias in a survival analysis.
+- Correct it using either a landmark analysis or a time-dependent
+  Cox model.
+- Describe time-varying covariates in counting-process notation.
+
+## Prerequisites
+
+Course 2 survival basics; `coxph` syntax.
+
+## Background
+
+Immortal-time bias arises when a period during which the outcome
+cannot occur (by definition of the exposure) is misclassified as
+follow-up for one of the exposure groups. A classic example: "users
+of drug X" are defined as anyone who ever received a prescription;
+these people must by definition have survived until their first
+prescription, and if you start their follow-up at baseline rather
+than at the prescription, you give them "immortal" time that biases
+the hazard ratio toward protection.
+
+Two standard fixes exist. Landmark analysis picks a time after
+baseline and classifies exposure based on what happened before that
+time; follow-up starts at the landmark and the bias disappears.
+Time-dependent Cox models treat exposure as a function of time and
+let patients change exposure group when they actually start the
+drug, using counting-process (start, stop, event) data.
+
+::: {.content-visible when-format="html"}
+Time-dependent covariates can be external (calendar time, drug
+availability) or internal (a lab value that evolves with the
+disease). Internal time-dependent covariates can introduce their
+own bias when conditioning on them — they may be mediators of the
+very effect you are studying.
+:::
+
+## Setup
+
+```{r}
+#| label: setup
+library(tidyverse)
+library(survival)
+library(ggsurvfit)
+set.seed(42)
+theme_set(theme_minimal(base_size = 12))
+```
+
+## 1. Hypothesis
+
+We simulate a cohort where every patient has the same true hazard.
+Some patients start a drug at a random later time. A naive analysis
+that counts drug users from baseline should produce a spurious
+protective effect.
+
+## 2. Visualise
+
+```{r}
+n <- 500
+dat <- tibble(
+  id = seq_len(n),
+  t_event = rexp(n, rate = 0.02),        # true event time
+  t_drug  = rexp(n, rate = 0.05),        # time of drug start
+  ever_drug = t_drug < t_event,          # did they start drug before event?
+  t_drug_obs = pmin(t_drug, t_event),
+  t_obs   = pmin(t_event, 100),          # admin censoring at 100
+  event   = as.integer(t_event <= 100)
+)
+
+dat |>
+  ggplot(aes(t_obs, fill = ever_drug)) +
+  geom_histogram(bins = 30, alpha = 0.6,
+                 position = "identity") +
+  labs(x = "Observed time", y = "Count", fill = "Ever drug?")
+```
+
+## 3. Assumptions
+
+Proportional hazards (for Cox), non-informative censoring, and
+independence of event times across patients. The "ever drug" split
+is deliberately biased by construction.
+
+## 4. Conduct
+
+```{r}
+# Naive (biased) analysis
+fit_naive <- coxph(Surv(t_obs, event) ~ ever_drug, data = dat)
+summary(fit_naive)
+```
+
+```{r}
+# Landmark at time 20: only include patients still at risk at 20,
+# classify by drug status as of 20.
+landmark <- 20
+dat_lm <- dat |>
+  filter(t_obs > landmark) |>
+  mutate(drug_lm = t_drug < landmark,
+         t_obs_lm = t_obs - landmark)
+
+fit_lm <- coxph(Surv(t_obs_lm, event) ~ drug_lm, data = dat_lm)
+summary(fit_lm)
+```
+
+```{r}
+# Time-dependent Cox: counting-process format
+td <- dat |>
+  transmute(
+    id,
+    tstart = 0,
+    tstop  = if_else(ever_drug, t_drug_obs, t_obs),
+    event  = if_else(ever_drug, 0L, event),
+    drug   = 0L
+  ) |>
+  bind_rows(
+    dat |>
+      filter(ever_drug) |>
+      transmute(id,
+                tstart = t_drug_obs,
+                tstop  = t_obs,
+                event  = event,
+                drug   = 1L)
+  ) |>
+  filter(tstop > tstart) |>
+  arrange(id, tstart)
+
+fit_td <- coxph(Surv(tstart, tstop, event) ~ drug, data = td)
+summary(fit_td)
+```
+
+## 5. Concluding statement
+
+> The naive Cox analysis produced a hazard ratio of
+> `r round(exp(coef(fit_naive)), 2)` for ever-drug — spuriously
+> protective, because immortal time was counted as exposed
+> follow-up. A landmark analysis at time 20 gave HR
+> `r round(exp(coef(fit_lm)), 2)`, and a time-dependent Cox model
+> gave HR `r round(exp(coef(fit_td)), 2)`, both close to the null
+> as expected from the simulated truth.
+
+::: {.notes}
+The giveaway for immortal time in a paper is a table where "mean
+follow-up" is suspiciously longer in the exposed group.
+:::
+
+## Common pitfalls
+
+- Defining exposure over the whole follow-up based on events that
+  occur during it.
+- Picking a landmark time after visually inspecting event curves.
+- Conditioning on a post-baseline mediator via a time-dependent
+  covariate and still calling it a total effect.
+- Forgetting to split the risk set at the exposure change time in
+  counting-process data.
+
+## Further reading
+
+- Suissa S (2008), *Immortal time bias in pharmaco-epidemiology*.
+- Therneau TM, Grambsch PM. *Modeling Survival Data: Extending the
+  Cox Model*.
+- Dafni U (2011), *Landmark analysis at the 25-year landmark
+  point*.
+
+## Session info
+
+```{r}
+sessionInfo()
+```

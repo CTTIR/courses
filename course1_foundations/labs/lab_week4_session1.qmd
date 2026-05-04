@@ -1,0 +1,221 @@
+---
+title: "Week 4, Session 1 — Two-sample and paired t-tests"
+subtitle: "Course 1 — Biostatistics Courses"
+format:
+  html:
+    toc: true
+    toc-depth: 3
+    code-fold: false
+    code-tools: true
+  revealjs:
+    output-file: "lab_week4_session1_slides.html"
+    theme: [default, ../../assets/slides.scss]
+    slide-number: c/t
+    progress: true
+    scrollable: true
+    transition: none
+    preview-links: auto
+execute:
+  warning: false
+  message: false
+---
+
+::: {.callout-note}
+**Inference labs** use the five-step template:
+Hypothesis → Visualise → Assumptions → Conduct → Conclude.
+:::
+
+## Learning objectives
+
+- Choose between Student's and Welch's *t*-test, and between paired
+  and independent-samples tests.
+- Compute Cohen's *d* and Hedges' *g* as effect sizes.
+- Report a two-sample comparison with point estimate, CI, and effect
+  size.
+
+## Prerequisites
+
+Lab 3.4.
+
+## Background
+
+The two-sample *t*-test compares the means of two independent groups.
+Student's version assumes equal variances across the groups; Welch's
+does not. In most applied settings Welch's is the safer default — it
+behaves nearly as well as Student's when variances are actually equal
+and much better when they are not. The `t.test()` default in R is
+Welch.
+
+When the same subjects are measured twice, the samples are paired and
+the two measurements are correlated. Ignoring the pairing inflates the
+standard error and lowers power. Pairing is handled by computing the
+within-subject difference and running a one-sample *t*-test on it.
+
+Effect sizes remove units from the comparison. Cohen's *d* is the
+standardised mean difference: the mean difference divided by the
+pooled standard deviation. Hedges' *g* applies a small-sample
+correction. Both are essential alongside a *p*-value — a large *d* at
+a small *n* will often produce a non-significant *p*, but the *d* is
+still a warning that a larger study might find a real effect.
+
+## Setup
+
+```{r}
+#| label: setup
+library(tidyverse)
+library(effectsize)
+set.seed(42)
+theme_set(theme_minimal(base_size = 12))
+```
+
+## 1. Hypothesis
+
+Scenario A (independent): mean systolic blood pressure in treatment
+vs placebo.
+
+- H0: μ_trt = μ_pla, H1: μ_trt ≠ μ_pla, α = 0.05.
+
+Scenario B (paired): SBP before and after a four-week intervention in
+the same 30 patients.
+
+- H0: mean within-subject change = 0, H1: ≠ 0.
+
+## 2. Visualise
+
+```{r}
+n <- 40
+trt <- rnorm(n, mean = 135, sd = 12)
+pla <- rnorm(n, mean = 142, sd = 12)
+df_ind <- tibble(
+  arm = rep(c("placebo", "treatment"), each = n),
+  sbp = c(pla, trt)
+)
+```
+
+```{r}
+#| fig-width: 6
+#| fig-height: 3.5
+df_ind |>
+  ggplot(aes(arm, sbp, fill = arm)) +
+  geom_boxplot(alpha = 0.6, colour = "grey30") +
+  labs(x = NULL, y = "SBP (mmHg)") +
+  theme(legend.position = "none")
+```
+
+```{r}
+n2 <- 30
+pre  <- rnorm(n2, 148, 10)
+post <- pre - rnorm(n2, 5, 7)  # true mean drop of 5
+df_pair <- tibble(id = seq_len(n2), pre = pre, post = post) |>
+  mutate(delta = post - pre)
+```
+
+```{r}
+#| fig-width: 6
+#| fig-height: 3.5
+df_pair |>
+  pivot_longer(c(pre, post), names_to = "time", values_to = "sbp") |>
+  mutate(time = factor(time, levels = c("pre", "post"))) |>
+  ggplot(aes(time, sbp, group = id)) +
+  geom_line(alpha = 0.4) +
+  geom_point(alpha = 0.6) +
+  labs(x = NULL, y = "SBP (mmHg)")
+```
+
+## 3. Assumptions
+
+Independent *t*: approximate normality of the sample means; Welch's
+does not require equal variances. Paired *t*: approximate normality
+of the within-subject differences.
+
+```{r}
+#| fig-width: 5
+#| fig-height: 3
+df_pair |>
+  ggplot(aes(sample = delta)) +
+  stat_qq() + stat_qq_line(colour = "firebrick") +
+  labs(x = "Theoretical", y = "Sample (pair differences)")
+```
+
+## 4. Conduct
+
+### Two-sample (Welch)
+
+```{r}
+tt_welch <- t.test(sbp ~ arm, data = df_ind, var.equal = FALSE)
+tt_welch
+```
+
+### Two-sample Student (for comparison)
+
+```{r}
+tt_student <- t.test(sbp ~ arm, data = df_ind, var.equal = TRUE)
+tt_student
+```
+
+### Paired
+
+```{r}
+tt_paired <- t.test(df_pair$post, df_pair$pre, paired = TRUE)
+tt_paired
+```
+
+### Effect size
+
+```{r}
+d_ind    <- cohens_d(sbp ~ arm, data = df_ind)
+g_ind    <- hedges_g(sbp ~ arm, data = df_ind)
+d_paired <- cohens_d(df_pair$post, df_pair$pre, paired = TRUE)
+list(d_ind = d_ind, g_ind = g_ind, d_paired = d_paired)
+```
+
+## 5. Concluding statement
+
+> **Independent comparison.** Mean SBP was
+> `r round(mean(trt), 1)` mmHg (SD `r round(sd(trt), 1)`) in the
+> treatment arm and `r round(mean(pla), 1)` (SD
+> `r round(sd(pla), 1)`) in placebo. A Welch's *t*-test gave
+> *t*(`r round(tt_welch$parameter, 1)`) =
+> `r round(tt_welch$statistic, 2)`, *p* =
+> `r signif(tt_welch$p.value, 2)`, mean difference
+> `r round(diff(rev(tt_welch$estimate)), 1)` mmHg (95% CI
+> `r round(-tt_welch$conf.int[2], 1)` to
+> `r round(-tt_welch$conf.int[1], 1)`). Cohen's *d* =
+> `r round(d_ind$Cohens_d, 2)` (Hedges' *g* =
+> `r round(g_ind$Hedges_g, 2)`), a small-to-medium effect.
+
+> **Paired comparison.** The within-subject change
+> (post − pre) had mean `r round(mean(df_pair$delta), 1)` mmHg (SD
+> `r round(sd(df_pair$delta), 1)`); paired *t*-test *t*(`r tt_paired$parameter`)
+> = `r round(tt_paired$statistic, 2)`, *p* =
+> `r signif(tt_paired$p.value, 2)`, 95% CI
+> `r round(tt_paired$conf.int[1], 1)` to
+> `r round(tt_paired$conf.int[2], 1)`.
+
+The effect size is the number that generalises. A *p*-value tells
+you whether to reject; *d* and its CI tell you how much.
+
+::: {.notes}
+Insist that students always look at the paired-difference Q-Q plot.
+The before/after line plot is pretty; the Q-Q plot is diagnostic.
+:::
+
+## Common pitfalls
+
+- Running an independent-samples *t* on paired data and losing power.
+- Reporting Student's *t* in the era of Welch; there is rarely a good
+  reason.
+- Reporting *p* without *d* (or an equivalent effect size).
+- Confusing effect size with statistical significance.
+
+## Further reading
+
+- Delacre M et al. (2017). *Why psychologists should by default use
+  Welch's t-test*.
+- Cohen J. *Statistical Power Analysis for the Behavioral Sciences*.
+
+## Session info
+
+```{r}
+sessionInfo()
+```

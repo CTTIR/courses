@@ -1,0 +1,724 @@
+---
+title: "Overview"
+pagetitle: "Overview & Label Network"
+toc: false
+format:
+  html:
+    page-layout: full
+    include-in-header:
+      - text: |
+          <link rel="stylesheet" href="https://unpkg.com/vis-network/styles/vis-network.min.css">
+          <script src="https://unpkg.com/vis-network/standalone/umd/vis-network.min.js"></script>
+---
+
+::: {.hero}
+::: {.kicker}
+EIGHTY LABS · LABEL FILTER · NETWORK GRAPH · RELATED READING
+:::
+# Browse the curriculum by label
+
+::: {.lead}
+Every lab in the curriculum, indexed by label. Filter the list with the chips,
+explore the label network to see how topics connect, and pick a lab to surface
+the three closest labs as further reading.
+:::
+:::
+
+<div id="ov-root">
+
+<section class="ov-section">
+<h2>Filter by label</h2>
+<p class="ov-help">Click chips to narrow the list. Multiple chips combine with <strong>AND</strong>. Click a chip again to remove it.</p>
+<div id="ov-chips"></div>
+<div class="ov-controls">
+  <input id="ov-search" type="search" placeholder="Search topics, labs, or labels…" />
+  <button id="ov-clear" type="button">Clear filters</button>
+  <span id="ov-count" class="ov-count"></span>
+</div>
+</section>
+
+<section class="ov-section">
+<h2>Label network</h2>
+<p class="ov-help">Nodes are labels; edges connect labels that co-occur in the same lab. Heavier edges = more shared labs. Click a node to filter the list by that label and centre it.</p>
+<div id="ov-graph" style="height: 560px; border:1px solid #e5e7eb; border-radius:8px; background:#fafafa;"></div>
+<div class="ov-controls">
+  <button id="ov-graph-reset" type="button">Reset view</button>
+  <button id="ov-graph-fit" type="button">Fit to screen</button>
+</div>
+</section>
+
+<section class="ov-section">
+<h2 id="ov-labs-heading">Labs</h2>
+<div id="ov-labs"></div>
+</section>
+
+<section class="ov-section" id="ov-related-section" style="display:none">
+<h2>Further reading</h2>
+<p class="ov-help">Three labs most closely related to <strong id="ov-selected-title"></strong>, ranked by shared labels.</p>
+<div id="ov-related"></div>
+<p><a href="#ov-graph-anchor" id="ov-back-to-graph">← Back to the label network</a></p>
+</section>
+
+<span id="ov-graph-anchor"></span>
+
+</div>
+
+```{=html}
+<style>
+/* Light-theme defaults — Quarto applies data-bs-theme="light" by default */
+#ov-root {
+  --ov-fg: #23272b;
+  --ov-muted: #555;
+  --ov-bg: #ffffff;
+  --ov-surface: #ffffff;
+  --ov-surface-2: #eef2f7;
+  --ov-border: #dde3ec;
+  --ov-border-strong: #c8d2e0;
+  --ov-accent: #1a73e8;
+  --ov-accent-fg: #ffffff;
+  --ov-accent-soft: #f6faff;
+  --ov-shadow: 26,115,232;
+  --ov-graph-bg: #fafafa;
+  --ov-graph-edge: #bcd0ee;
+  --ov-graph-node-font: #1d1d1d;
+  --ov-graph-node-stroke: rgba(255,255,255,.85);
+  font-size: 0.95rem;
+  color: var(--ov-fg);
+}
+/* Dark theme — Quarto/Bootstrap toggle sets data-bs-theme="dark" on <html> */
+:root[data-bs-theme="dark"] #ov-root,
+.quarto-dark #ov-root {
+  --ov-fg: #e6e9ec;
+  --ov-muted: #a4adb6;
+  --ov-bg: #1b1f24;
+  --ov-surface: #23272b;
+  --ov-surface-2: #2b3138;
+  --ov-border: #3a424b;
+  --ov-border-strong: #4a5360;
+  --ov-accent: #5aa1f5;
+  --ov-accent-fg: #0b1220;
+  --ov-accent-soft: #1c2a3d;
+  --ov-shadow: 90,161,245;
+  --ov-graph-bg: #1f2329;
+  --ov-graph-edge: #3a4a63;
+  --ov-graph-node-font: #f0f3f7;
+  --ov-graph-node-stroke: rgba(0,0,0,.75);
+}
+
+#ov-root .ov-section { margin: 1.75rem 0 2.25rem; }
+#ov-root h2 { margin-bottom: .35rem; color: var(--ov-fg); }
+#ov-root .ov-help { color: var(--ov-muted); margin: .15rem 0 .9rem; font-size: .9rem; }
+
+#ov-chips { display:flex; flex-direction:column; gap: 1.05rem; }
+.ov-chip-group { display:flex; flex-direction:column; gap:.4rem; }
+.ov-chip-heading {
+  font-size:.78rem; font-weight:600;
+  letter-spacing:.06em; text-transform:uppercase;
+  color: var(--ov-muted);
+  margin: 0; padding: 0 0 .15rem;
+  border-bottom: 1px solid var(--ov-border);
+  display:flex; align-items:baseline; gap:.5rem;
+}
+.ov-chip-heading-count {
+  font-weight:500; letter-spacing:0; text-transform:none;
+  color: var(--ov-muted); opacity:.75; font-size:.78rem;
+}
+.ov-chip-row { display:flex; flex-wrap:wrap; gap:.4rem .45rem; }
+.ov-chip {
+  display:inline-flex; align-items:center; gap:.4rem;
+  padding: .25rem .65rem; border-radius: 999px;
+  background: var(--ov-surface-2); color: var(--ov-fg);
+  border: 1px solid var(--ov-border);
+  font-size:.82rem; cursor:pointer; user-select:none;
+  transition: background .12s, color .12s, border-color .12s;
+}
+.ov-chip:hover { background: var(--ov-border); }
+.ov-chip.active {
+  background: var(--ov-accent); color: var(--ov-accent-fg);
+  border-color: var(--ov-accent);
+}
+.ov-chip .ov-chip-count { font-variant-numeric: tabular-nums; opacity:.7; font-size:.72rem; }
+.ov-chip.active .ov-chip-count { opacity:.95; }
+
+.ov-controls { display:flex; flex-wrap:wrap; gap:.5rem; align-items:center; margin-top:.75rem; }
+#ov-search {
+  flex:1 1 260px; max-width: 420px;
+  padding:.4rem .6rem;
+  border:1px solid var(--ov-border); border-radius:6px;
+  background: var(--ov-surface); color: var(--ov-fg);
+  font: inherit;
+}
+#ov-search::placeholder { color: var(--ov-muted); opacity:.85; }
+#ov-root button {
+  padding:.35rem .8rem;
+  border:1px solid var(--ov-border);
+  background: var(--ov-surface); color: var(--ov-fg);
+  border-radius:6px; cursor:pointer; font: inherit;
+}
+#ov-root button:hover {
+  background: var(--ov-surface-2);
+  border-color: var(--ov-border-strong);
+}
+
+.ov-count { color: var(--ov-muted); font-size:.85rem; }
+
+#ov-graph {
+  background: var(--ov-graph-bg) !important;
+  border-color: var(--ov-border) !important;
+}
+
+.ov-card-grid { display:grid; grid-template-columns: repeat(auto-fill, minmax(320px, 1fr)); gap:.85rem; margin-top:.5rem; }
+.ov-card {
+  border:1px solid var(--ov-border); border-radius:8px;
+  padding:.8rem .95rem;
+  background: var(--ov-surface); color: var(--ov-fg);
+  transition: box-shadow .12s, border-color .12s, transform .06s;
+  cursor:pointer; display:flex; flex-direction:column; gap:.4rem;
+}
+.ov-card:hover {
+  box-shadow: 0 2px 12px rgba(var(--ov-shadow), .18);
+  border-color: var(--ov-accent);
+}
+.ov-card.selected {
+  border-color: var(--ov-accent);
+  box-shadow: 0 2px 14px rgba(var(--ov-shadow), .25);
+}
+.ov-card .ov-card-meta {
+  font-size:.74rem; letter-spacing:.06em; text-transform:uppercase;
+  color: var(--ov-accent); font-weight:600;
+}
+.ov-card h3 { font-size:1rem; margin:0; line-height:1.3; color: var(--ov-fg); }
+.ov-card .ov-card-tags { display:flex; flex-wrap:wrap; gap:.25rem; margin-top:.15rem; }
+.ov-card .ov-tag {
+  font-size:.72rem; padding:.1rem .45rem;
+  background: var(--ov-surface-2);
+  color: var(--ov-fg);
+  border-radius:999px; border:1px solid var(--ov-border);
+}
+.ov-card .ov-tag.match {
+  background: var(--ov-accent); color: var(--ov-accent-fg);
+  border-color: var(--ov-accent);
+}
+.ov-card .ov-card-links { display:flex; gap:.55rem; font-size:.82rem; margin-top:.15rem; }
+.ov-card .ov-card-links a { color: var(--ov-accent); text-decoration:none; }
+.ov-card .ov-card-links a:hover { text-decoration:underline; }
+
+#ov-related .ov-card {
+  border-color: var(--ov-accent);
+  background: var(--ov-accent-soft);
+}
+</style>
+```
+
+```{=html}
+<script>
+(function () {
+  // --- DATA ----------------------------------------------------------------
+  // Every lab: id, course, week, session, title, paths, tags.
+  // Tags are short, lower-case, hyphenated topic labels.
+  const LABS = [
+    // Course 1
+    {c:1,w:1,s:1,t:"Scientific process & research workflow",tags:["workflow","reporting","research-design"]},
+    {c:1,w:1,s:2,t:"R, RStudio, Quarto, renv toolchain",tags:["r","quarto","reproducibility","workflow"]},
+    {c:1,w:1,s:3,t:"Data types, tidy data, measurement quality",tags:["tidy-data","data-hygiene","measurement"]},
+    {c:1,w:1,s:4,t:"Import, joins, missingness with dplyr",tags:["dplyr","tidy-data","missing-data"]},
+    {c:1,w:1,s:5,t:"ggplot2 grammar and multi-panel layouts",tags:["ggplot2","visualisation"]},
+    {c:1,w:2,s:1,t:"Descriptives and Table 1 with gtsummary",tags:["descriptives","reporting","gtsummary"]},
+    {c:1,w:2,s:2,t:"Probability and Bayes' theorem",tags:["probability","bayes"]},
+    {c:1,w:2,s:3,t:"Diagnostic testing: sensitivity, specificity, LR",tags:["diagnostics","probability","clinical"]},
+    {c:1,w:2,s:4,t:"Discrete distributions: Bernoulli, binomial, Poisson",tags:["distributions","probability","poisson"]},
+    {c:1,w:2,s:5,t:"Continuous distributions and Q-Q plots",tags:["distributions","visualisation","assumptions"]},
+    {c:1,w:3,s:1,t:"Populations, samples, CLT by simulation",tags:["sampling","simulation","clt"]},
+    {c:1,w:3,s:2,t:"Bootstrap and permutation",tags:["bootstrap","resampling","simulation"]},
+    {c:1,w:3,s:3,t:"Maximum likelihood and standard errors",tags:["likelihood","inference"]},
+    {c:1,w:3,s:4,t:"One-sample t and one-proportion",tags:["t-test","proportions","inference"]},
+    {c:1,w:3,s:5,t:"Hypothesis testing philosophy",tags:["hypothesis-testing","inference","reporting"]},
+    {c:1,w:4,s:1,t:"Two-sample and paired t; effect sizes",tags:["t-test","effect-size","inference"]},
+    {c:1,w:4,s:2,t:"Two proportions and goodness-of-fit",tags:["proportions","chi-square","inference"]},
+    {c:1,w:4,s:3,t:"Pearson and Spearman correlation",tags:["correlation","non-parametric"]},
+    {c:1,w:4,s:4,t:"Non-parametric tests",tags:["non-parametric","rank-tests","inference"]},
+    {c:1,w:4,s:5,t:"Sample size, power, Quarto reporting",tags:["power","sample-size","reporting","quarto"]},
+
+    // Course 2
+    {c:2,w:1,s:1,t:"Correlation vs regression; Model-I/II",tags:["correlation","regression"]},
+    {c:2,w:1,s:2,t:"Simple linear regression",tags:["regression","linear-model","inference"]},
+    {c:2,w:1,s:3,t:"Multiple regression: confounding & interaction",tags:["regression","confounding","interaction"]},
+    {c:2,w:1,s:4,t:"Diagnostics: residuals, leverage, Cook, VIF",tags:["regression","diagnostics","assumptions"]},
+    {c:2,w:1,s:5,t:"Robust and weighted regression; HC SEs",tags:["regression","robust","standard-errors"]},
+    {c:2,w:2,s:1,t:"One-way ANOVA and contrasts",tags:["anova","contrasts","linear-model"]},
+    {c:2,w:2,s:2,t:"Two-way / factorial ANOVA",tags:["anova","interaction","linear-model"]},
+    {c:2,w:2,s:3,t:"RCBD and repeated measures",tags:["anova","repeated-measures","mixed-models"]},
+    {c:2,w:2,s:4,t:"GAMs with mgcv",tags:["gam","regression","non-linear"]},
+    {c:2,w:2,s:5,t:"Non-linear regression with nls",tags:["non-linear","regression"]},
+    {c:2,w:3,s:1,t:"Logistic regression",tags:["glm","logistic","regression"]},
+    {c:2,w:3,s:2,t:"ANCOVA in RCTs",tags:["anova","rct","regression","clinical-trials"]},
+    {c:2,w:3,s:3,t:"Ordinal and multinomial regression",tags:["glm","ordinal","regression"]},
+    {c:2,w:3,s:4,t:"Poisson and negative-binomial regression",tags:["glm","poisson","count-data","regression"]},
+    {c:2,w:3,s:5,t:"Calibration, discrimination, ROC/AUC, Brier",tags:["calibration","discrimination","prediction","diagnostics"]},
+    {c:2,w:4,s:1,t:"Dichotomisation, change scores, RTM",tags:["measurement","pitfalls","regression"]},
+    {c:2,w:4,s:2,t:"Kappa, ICC, Bland-Altman",tags:["agreement","measurement","reliability"]},
+    {c:2,w:4,s:3,t:"Survival primer: KM, log-rank, Cox",tags:["survival","time-to-event","regression"]},
+    {c:2,w:4,s:4,t:"Decision curves, NRI/IDI",tags:["prediction","decision-analysis","clinical"]},
+    {c:2,w:4,s:5,t:"Explanation vs prediction; reporting guidelines",tags:["prediction","reporting","philosophy"]},
+
+    // Course 3
+    {c:3,w:1,s:1,t:"Observational designs and STROBE",tags:["observational","reporting","research-design"]},
+    {c:3,w:1,s:2,t:"Randomised controlled trials",tags:["rct","clinical-trials","research-design"]},
+    {c:3,w:1,s:3,t:"Adaptive, non-inferiority, equivalence trials",tags:["rct","clinical-trials","adaptive"]},
+    {c:3,w:1,s:4,t:"Bench and translational design",tags:["research-design","bench","translational"]},
+    {c:3,w:1,s:5,t:"Power: closed-form and simulation-based",tags:["power","sample-size","simulation"]},
+    {c:3,w:2,s:1,t:"MCAR, MAR, MNAR",tags:["missing-data","assumptions"]},
+    {c:3,w:2,s:2,t:"Multiple imputation with mice",tags:["missing-data","imputation"]},
+    {c:3,w:2,s:3,t:"Linear mixed models with lme4",tags:["mixed-models","longitudinal","regression"]},
+    {c:3,w:2,s:4,t:"GLMMs and GEE",tags:["mixed-models","glm","longitudinal"]},
+    {c:3,w:2,s:5,t:"Time series basics",tags:["time-series","longitudinal"]},
+    {c:3,w:3,s:1,t:"Time-varying covariates, landmark, immortal-time",tags:["survival","time-to-event","bias"]},
+    {c:3,w:3,s:2,t:"Competing risks and multistate models",tags:["survival","competing-risks","time-to-event"]},
+    {c:3,w:3,s:3,t:"DAGs with dagitty",tags:["causal-inference","dag","confounding"]},
+    {c:3,w:3,s:4,t:"Propensity scores and IPTW",tags:["causal-inference","propensity","observational"]},
+    {c:3,w:3,s:5,t:"G-methods, IV, DiD, RDD; HTE",tags:["causal-inference","g-methods","heterogeneous-effects"]},
+    {c:3,w:4,s:1,t:"Systematic reviews and PRISMA",tags:["meta-analysis","reporting","evidence-synthesis"]},
+    {c:3,w:4,s:2,t:"Meta-analysis basics",tags:["meta-analysis","evidence-synthesis"]},
+    {c:3,w:4,s:3,t:"Network meta-analysis",tags:["meta-analysis","networks","evidence-synthesis"]},
+    {c:3,w:4,s:4,t:"SIR / SEIR with deSolve",tags:["epidemiology","ode","simulation"]},
+    {c:3,w:4,s:5,t:"Pre-registration and SAPs",tags:["reproducibility","reporting","research-design"]},
+
+    // Course 4
+    {c:4,w:1,s:1,t:"Cross-validation, nested CV, bootstrap",tags:["cross-validation","resampling","ml"]},
+    {c:4,w:1,s:2,t:"Regularisation: ridge, lasso, elastic net",tags:["regularisation","regression","ml","high-dimensional"]},
+    {c:4,w:1,s:3,t:"PCA, FA, CCA, LDA",tags:["dimensionality-reduction","unsupervised","high-dimensional"]},
+    {c:4,w:1,s:4,t:"Clustering: k-means, hierarchical, model-based",tags:["clustering","unsupervised","ml"]},
+    {c:4,w:1,s:5,t:"UMAP and t-SNE",tags:["dimensionality-reduction","visualisation","unsupervised"]},
+    {c:4,w:2,s:1,t:"Trees, random forests, boosting",tags:["trees","ensembles","ml"]},
+    {c:4,w:2,s:2,t:"Interpretability and SHAP",tags:["interpretability","ml","explainability"]},
+    {c:4,w:2,s:3,t:"Tabular neural networks with torch",tags:["deep-learning","ml","torch"]},
+    {c:4,w:2,s:4,t:"Imaging and sequence models intro",tags:["deep-learning","imaging","sequence-models"]},
+    {c:4,w:2,s:5,t:"tidymodels pipelines",tags:["ml","workflow","tidymodels"]},
+    {c:4,w:3,s:1,t:"Bayesian thinking; α vs decision error",tags:["bayes","inference","decision-analysis"]},
+    {c:4,w:3,s:2,t:"brms / Stan, LOO, hierarchical",tags:["bayes","mcmc","hierarchical"]},
+    {c:4,w:3,s:3,t:"Biomarker statistics",tags:["biomarkers","diagnostics","clinical"]},
+    {c:4,w:3,s:4,t:"Survival ML",tags:["survival","ml","time-to-event"]},
+    {c:4,w:3,s:5,t:"Time-dependent Brier, IPA, external validation",tags:["calibration","prediction","validation","survival"]},
+    {c:4,w:4,s:1,t:"RNA-seq with DESeq2/edgeR",tags:["omics","rna-seq","high-dimensional"]},
+    {c:4,w:4,s:2,t:"Enrichment analysis",tags:["omics","enrichment","high-dimensional"]},
+    {c:4,w:4,s:3,t:"scRNA-seq with Seurat",tags:["omics","single-cell","high-dimensional"]},
+    {c:4,w:4,s:4,t:"FDR, knockoffs, replication crisis",tags:["multiple-testing","fdr","reproducibility"]},
+    {c:4,w:4,s:5,t:"TRIPOD-AI, fairness, reproducibility at scale",tags:["reporting","fairness","reproducibility","ml"]}
+  ];
+
+  const COURSE_DIRS = {
+    1: "course1_foundations",
+    2: "course2_regression",
+    3: "course3_design_causal",
+    4: "course4_ml_highdim"
+  };
+  const COURSE_NAMES = {
+    1: "Course 1 · Foundations",
+    2: "Course 2 · Regression",
+    3: "Course 3 · Design & Causal",
+    4: "Course 4 · ML & High-Dim"
+  };
+
+  // Mid-level theme tags — coarser groupings that span courses.
+  // Map: theme -> array of "course.week.session" keys it should be applied to.
+  const MID_LEVEL_THEMES = {
+    "inference-toolkit":            ["1.3.4","1.3.5","1.4.1","1.4.2","1.4.3","1.4.4","1.4.5"],
+    "experimental-design-toolkit":  ["2.2.1","2.2.2","2.2.3","2.3.2","3.1.2","3.1.3","3.1.4"],
+    "linear-models-family":         ["2.1.2","2.1.3","2.1.4","2.1.5","2.2.1","2.2.2","2.2.3","2.2.4","2.3.1","2.3.3","2.3.4"],
+    "resampling-methods":           ["1.3.1","1.3.2","4.1.1"],
+    "model-evaluation":             ["2.3.5","2.4.4","4.1.1","4.3.5"],
+    "predictive-modelling":         ["2.3.5","2.4.4","2.4.5","4.1.1","4.3.3","4.3.4","4.3.5"],
+    "bayesian-methods":             ["1.2.2","4.3.1","4.3.2"],
+    "survival-analysis":            ["2.4.3","3.3.1","3.3.2","4.3.4","4.3.5"],
+    "causal-toolkit":               ["3.3.3","3.3.4","3.3.5"],
+    "omics-pipeline":               ["4.4.1","4.4.2","4.4.3"],
+    "r-ecosystem":                  ["1.1.2","1.1.4","1.1.5","1.2.1","1.4.5","4.2.5"],
+    "regularisation-and-selection": ["4.1.2","4.4.4"],
+    "mixed-effects-longitudinal":   ["2.2.3","3.2.3","3.2.4","3.2.5"],
+    "evidence-synthesis":           ["3.4.1","3.4.2","3.4.3"],
+    "epidemiology-and-disease":     ["1.2.3","3.4.4"]
+  };
+
+  // Apply mid-level themes to the matching labs.
+  Object.entries(MID_LEVEL_THEMES).forEach(([theme, keys]) => {
+    const set = new Set(keys);
+    LABS.forEach(l => {
+      const k = `${l.c}.${l.w}.${l.s}`;
+      if (set.has(k) && !l.tags.includes(theme)) l.tags.push(theme);
+    });
+  });
+
+  // Enrich each lab with id + paths
+  LABS.forEach((l, i) => {
+    l.id = i;
+    const dir = COURSE_DIRS[l.c];
+    const base = `lab_week${l.w}_session${l.s}`;
+    l.article = `${dir}/labs/${base}.html`;
+    l.slides  = `${dir}/labs/${base}_slides.html`;
+    l.script  = `${dir}/code/${base}.R`;
+    l.course  = COURSE_NAMES[l.c];
+  });
+
+  // --- DERIVE LABEL UNIVERSE & CO-OCCURRENCE ------------------------------
+  const tagCount = new Map();
+  LABS.forEach(l => l.tags.forEach(t => tagCount.set(t, (tagCount.get(t) || 0) + 1)));
+  const ALL_TAGS = Array.from(tagCount.keys()).sort();
+
+  // Six top-level areas. First five are explicit; everything else falls into "Other".
+  const TAG_AREAS = [
+    {
+      name: "Cross-cutting themes",
+      tags: ["inference-toolkit","experimental-design-toolkit","linear-models-family",
+             "resampling-methods","model-evaluation","predictive-modelling",
+             "bayesian-methods","survival-analysis","causal-toolkit","omics-pipeline",
+             "r-ecosystem","regularisation-and-selection","mixed-effects-longitudinal",
+             "evidence-synthesis","epidemiology-and-disease"]
+    },
+    {
+      name: "Foundations & inference",
+      tags: ["probability","distributions","poisson","sampling","clt","simulation","bootstrap","resampling",
+             "likelihood","inference","hypothesis-testing","t-test","proportions","chi-square",
+             "non-parametric","rank-tests","correlation","effect-size","power","sample-size",
+             "bayes","count-data","assumptions","philosophy"]
+    },
+    {
+      name: "Regression & modelling",
+      tags: ["regression","linear-model","glm","logistic","ordinal","anova","contrasts",
+             "gam","non-linear","mixed-models","hierarchical","mcmc","repeated-measures",
+             "interaction","confounding","robust","standard-errors","regularisation"]
+    },
+    {
+      name: "Study design & causal inference",
+      tags: ["research-design","rct","clinical-trials","adaptive","bench","translational",
+             "observational","causal-inference","dag","propensity","g-methods",
+             "heterogeneous-effects","bias","epidemiology","ode",
+             "meta-analysis","evidence-synthesis","networks"]
+    },
+    {
+      name: "Data, workflow & reporting",
+      tags: ["workflow","r","quarto","reproducibility","tidy-data","data-hygiene","dplyr",
+             "missing-data","imputation","measurement","ggplot2","visualisation",
+             "descriptives","gtsummary","reporting","agreement","reliability"]
+    },
+    {
+      name: "Machine learning & high-dimensional",
+      tags: ["ml","cross-validation","validation","clustering","dimensionality-reduction",
+             "unsupervised","trees","ensembles","deep-learning","torch","imaging",
+             "sequence-models","tidymodels","interpretability","explainability",
+             "prediction","calibration","discrimination","high-dimensional",
+             "omics","rna-seq","enrichment","single-cell","biomarkers",
+             "multiple-testing","fdr","fairness"]
+    }
+  ];
+
+  // Build {area -> tags actually used in LABS}, then put leftovers in "Other".
+  const tagToArea = new Map();
+  const AREAS = TAG_AREAS.map(a => {
+    const present = a.tags.filter(t => tagCount.has(t)).sort();
+    present.forEach(t => tagToArea.set(t, a.name));
+    return { name: a.name, tags: present };
+  });
+  const otherTags = ALL_TAGS.filter(t => !tagToArea.has(t));
+  if (otherTags.length) AREAS.push({ name: "Other", tags: otherTags });
+
+  const cooc = new Map(); // "a||b" -> count
+  LABS.forEach(l => {
+    const ts = l.tags.slice().sort();
+    for (let i = 0; i < ts.length; i++) {
+      for (let j = i + 1; j < ts.length; j++) {
+        const k = ts[i] + "||" + ts[j];
+        cooc.set(k, (cooc.get(k) || 0) + 1);
+      }
+    }
+  });
+
+  // --- STATE ---------------------------------------------------------------
+  const state = {
+    activeTags: new Set(),
+    search: "",
+    selectedLabId: null
+  };
+
+  // --- RENDER: CHIPS -------------------------------------------------------
+  const chipsEl = document.getElementById("ov-chips");
+  function renderChips() {
+    chipsEl.innerHTML = "";
+    AREAS.forEach(area => {
+      if (!area.tags.length) return;
+      const group = document.createElement("div");
+      group.className = "ov-chip-group";
+      const heading = document.createElement("h3");
+      heading.className = "ov-chip-heading";
+      const activeInGroup = area.tags.filter(t => state.activeTags.has(t)).length;
+      heading.innerHTML = `${area.name} <span class="ov-chip-heading-count">${area.tags.length}${activeInGroup ? ` · ${activeInGroup} active` : ""}</span>`;
+      group.appendChild(heading);
+      const row = document.createElement("div");
+      row.className = "ov-chip-row";
+      area.tags.forEach(tag => {
+        const chip = document.createElement("span");
+        chip.className = "ov-chip" + (state.activeTags.has(tag) ? " active" : "");
+        chip.dataset.tag = tag;
+        chip.innerHTML = `${tag}<span class="ov-chip-count">${tagCount.get(tag)}</span>`;
+        chip.addEventListener("click", () => toggleTag(tag));
+        row.appendChild(chip);
+      });
+      group.appendChild(row);
+      chipsEl.appendChild(group);
+    });
+  }
+  function toggleTag(tag) {
+    if (state.activeTags.has(tag)) state.activeTags.delete(tag);
+    else state.activeTags.add(tag);
+    renderChips();
+    renderLabs();
+    applyGraphFilter();
+  }
+
+  // --- RENDER: LABS LIST ---------------------------------------------------
+  const labsEl = document.getElementById("ov-labs");
+  const countEl = document.getElementById("ov-count");
+
+  function filterLabs() {
+    const q = state.search.trim().toLowerCase();
+    return LABS.filter(l => {
+      for (const t of state.activeTags) if (!l.tags.includes(t)) return false;
+      if (q) {
+        const hay = (l.t + " " + l.tags.join(" ") + " " + l.course).toLowerCase();
+        if (!hay.includes(q)) return false;
+      }
+      return true;
+    });
+  }
+
+  function renderLabs() {
+    const list = filterLabs();
+    countEl.textContent = `${list.length} of ${LABS.length} labs`;
+    if (!list.length) {
+      labsEl.innerHTML = `<p style="color:#666">No labs match the current filters.</p>`;
+      return;
+    }
+    const grid = document.createElement("div");
+    grid.className = "ov-card-grid";
+    list.forEach(l => grid.appendChild(buildCard(l)));
+    labsEl.innerHTML = "";
+    labsEl.appendChild(grid);
+  }
+
+  function buildCard(l, opts) {
+    opts = opts || {};
+    const card = document.createElement("article");
+    card.className = "ov-card" + (state.selectedLabId === l.id ? " selected" : "");
+    card.dataset.labId = l.id;
+
+    const meta = document.createElement("div");
+    meta.className = "ov-card-meta";
+    meta.textContent = `${l.course} · Week ${l.w} · Session ${l.s}`;
+    card.appendChild(meta);
+
+    const h = document.createElement("h3");
+    h.textContent = l.t;
+    card.appendChild(h);
+
+    const tagsEl = document.createElement("div");
+    tagsEl.className = "ov-card-tags";
+    l.tags.forEach(t => {
+      const ts = document.createElement("span");
+      ts.className = "ov-tag" + (state.activeTags.has(t) ? " match" : "");
+      ts.textContent = t;
+      ts.addEventListener("click", (e) => { e.stopPropagation(); toggleTag(t); });
+      tagsEl.appendChild(ts);
+    });
+    card.appendChild(tagsEl);
+
+    const links = document.createElement("div");
+    links.className = "ov-card-links";
+    links.innerHTML =
+      `<a href="${l.article}">Article</a>` +
+      `<a href="${l.slides}">Slides</a>` +
+      `<a href="${l.script}">R script</a>`;
+    links.querySelectorAll("a").forEach(a => a.addEventListener("click", e => e.stopPropagation()));
+    card.appendChild(links);
+
+    card.addEventListener("click", () => selectLab(l.id));
+    return card;
+  }
+
+  // --- RELATED LABS --------------------------------------------------------
+  function relatedLabs(labId, k) {
+    const target = LABS[labId];
+    const tt = new Set(target.tags);
+    const scored = LABS
+      .filter(l => l.id !== labId)
+      .map(l => {
+        const shared = l.tags.filter(t => tt.has(t));
+        const denom = (target.tags.length + l.tags.length - shared.length) || 1; // Jaccard
+        return { lab: l, shared, score: shared.length / denom };
+      })
+      .filter(r => r.shared.length > 0)
+      .sort((a, b) => b.score - a.score || b.shared.length - a.shared.length);
+    return scored.slice(0, k);
+  }
+
+  function selectLab(labId) {
+    state.selectedLabId = labId;
+    const lab = LABS[labId];
+    document.getElementById("ov-selected-title").textContent = lab.t;
+    const rel = relatedLabs(labId, 3);
+    const wrap = document.getElementById("ov-related");
+    wrap.innerHTML = "";
+    if (!rel.length) {
+      wrap.innerHTML = `<p>No related labs found.</p>`;
+    } else {
+      const grid = document.createElement("div");
+      grid.className = "ov-card-grid";
+      rel.forEach(r => grid.appendChild(buildCard(r.lab)));
+      wrap.appendChild(grid);
+    }
+    document.getElementById("ov-related-section").style.display = "";
+    renderLabs(); // restyle selection
+    document.getElementById("ov-related-section").scrollIntoView({behavior:"smooth", block:"start"});
+  }
+
+  // --- GRAPH ---------------------------------------------------------------
+  let network = null;
+  let graphData = null;
+  const PALETTE = ["#1a73e8","#e8711a","#1aa7e8","#7d1ae8","#1ae89c","#e8b81a","#e81a4e","#1ae84e","#5a1ae8","#1ae8d1"];
+
+  function isDarkTheme() {
+    const html = document.documentElement;
+    if (html.getAttribute("data-bs-theme") === "dark") return true;
+    if (html.classList.contains("quarto-dark")) return true;
+    if (document.body && document.body.classList.contains("quarto-dark")) return true;
+    return false;
+  }
+
+  function themeColors() {
+    const root = document.getElementById("ov-root");
+    const styles = getComputedStyle(root);
+    return {
+      fontColor: styles.getPropertyValue("--ov-graph-node-font").trim() || "#1d1d1d",
+      fontStroke: styles.getPropertyValue("--ov-graph-node-stroke").trim() || "rgba(255,255,255,.85)",
+      edgeColor: styles.getPropertyValue("--ov-graph-edge").trim() || "#bcd0ee",
+      accent: styles.getPropertyValue("--ov-accent").trim() || "#1a73e8"
+    };
+  }
+
+  function buildGraph() {
+    const c = themeColors();
+    const nodes = ALL_TAGS.map((tag, i) => ({
+      id: tag,
+      label: tag,
+      value: tagCount.get(tag),
+      color: PALETTE[i % PALETTE.length],
+      font: { size: 14, color: c.fontColor, strokeColor: c.fontStroke, strokeWidth: 3 }
+    }));
+    const edges = [];
+    cooc.forEach((w, k) => {
+      const [a, b] = k.split("||");
+      edges.push({ from: a, to: b, value: w, title: `${a} ↔ ${b}: ${w} shared lab${w===1?"":"s"}` });
+    });
+    const container = document.getElementById("ov-graph");
+    graphData = { nodes: new vis.DataSet(nodes), edges: new vis.DataSet(edges) };
+    const options = {
+      nodes: { shape: "dot", scaling: { min: 8, max: 32 }, borderWidth: 1 },
+      edges: { color: { color: c.edgeColor, highlight: c.accent }, smooth: false, scaling: { min: 0.5, max: 6 } },
+      physics: { solver: "forceAtlas2Based", forceAtlas2Based: { gravitationalConstant: -45, springLength: 110, avoidOverlap: 0.4 }, stabilization: { iterations: 250 } },
+      interaction: { hover: true, tooltipDelay: 120 }
+    };
+    network = new vis.Network(container, graphData, options);
+    network.on("click", params => {
+      if (params.nodes && params.nodes.length) {
+        const tag = params.nodes[0];
+        if (!state.activeTags.has(tag)) state.activeTags.add(tag);
+        renderChips();
+        renderLabs();
+        network.focus(tag, { scale: 1.2, animation: { duration: 500, easingFunction: "easeInOutQuad" } });
+        document.getElementById("ov-labs-heading").scrollIntoView({behavior:"smooth"});
+      }
+    });
+  }
+
+  function applyGraphTheme() {
+    if (!network || !graphData) return;
+    const c = themeColors();
+    network.setOptions({
+      edges: { color: { color: c.edgeColor, highlight: c.accent } }
+    });
+    const updates = graphData.nodes.get().map(n => ({
+      id: n.id,
+      font: { size: 14, color: c.fontColor, strokeColor: c.fontStroke, strokeWidth: 3 }
+    }));
+    graphData.nodes.update(updates);
+  }
+
+  // Build a tag -> Set(neighbour-tags) adjacency map once.
+  const adjacency = new Map();
+  ALL_TAGS.forEach(t => adjacency.set(t, new Set()));
+  cooc.forEach((_, k) => {
+    const [a, b] = k.split("||");
+    adjacency.get(a).add(b);
+    adjacency.get(b).add(a);
+  });
+
+  // When chips are active, restrict the graph to (active tags ∪ direct neighbours).
+  // Other nodes and any edges not connecting two visible nodes are hidden.
+  function applyGraphFilter() {
+    if (!network || !graphData) return;
+    const active = state.activeTags;
+    let visible;
+    if (active.size === 0) {
+      visible = new Set(ALL_TAGS);
+    } else {
+      visible = new Set();
+      active.forEach(t => {
+        visible.add(t);
+        const adj = adjacency.get(t);
+        if (adj) adj.forEach(n => visible.add(n));
+      });
+    }
+    const nodeUpdates = graphData.nodes.get().map(n => ({ id: n.id, hidden: !visible.has(n.id) }));
+    graphData.nodes.update(nodeUpdates);
+    const edgeUpdates = graphData.edges.get().map(e => ({
+      id: e.id,
+      hidden: !(visible.has(e.from) && visible.has(e.to))
+    }));
+    graphData.edges.update(edgeUpdates);
+  }
+
+  // React to Quarto's theme toggle (it flips data-bs-theme on <html> and a class on body)
+  const themeObserver = new MutationObserver(() => applyGraphTheme());
+  themeObserver.observe(document.documentElement, { attributes: true, attributeFilter: ["data-bs-theme", "class"] });
+  if (document.body) themeObserver.observe(document.body, { attributes: true, attributeFilter: ["class"] });
+
+  // --- WIRE-UP -------------------------------------------------------------
+  document.getElementById("ov-search").addEventListener("input", e => {
+    state.search = e.target.value;
+    renderLabs();
+  });
+  document.getElementById("ov-clear").addEventListener("click", () => {
+    state.activeTags.clear();
+    state.search = "";
+    document.getElementById("ov-search").value = "";
+    renderChips();
+    renderLabs();
+    applyGraphFilter();
+  });
+  document.getElementById("ov-graph-reset").addEventListener("click", () => {
+    if (network) network.fit({ animation: { duration: 500, easingFunction: "easeInOutQuad" } });
+  });
+  document.getElementById("ov-graph-fit").addEventListener("click", () => {
+    if (network) network.fit({ animation: { duration: 500, easingFunction: "easeInOutQuad" } });
+  });
+  document.getElementById("ov-back-to-graph").addEventListener("click", e => {
+    e.preventDefault();
+    document.getElementById("ov-graph").scrollIntoView({behavior:"smooth", block:"start"});
+  });
+
+  // Init
+  renderChips();
+  renderLabs();
+  if (window.vis && window.vis.Network) buildGraph();
+  else window.addEventListener("load", () => { if (window.vis && window.vis.Network) buildGraph(); });
+})();
+</script>
+```

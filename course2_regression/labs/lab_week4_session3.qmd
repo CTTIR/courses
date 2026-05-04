@@ -1,0 +1,156 @@
+---
+title: "Week 4, Session 3 — Survival primer: KM, log-rank, Cox PH"
+subtitle: "Course 2 — Biostatistics Courses"
+format:
+  html:
+    toc: true
+    toc-depth: 3
+    code-fold: false
+    code-tools: true
+  revealjs:
+    output-file: "lab_week4_session3_slides.html"
+    theme: [default, ../../assets/slides.scss]
+    slide-number: c/t
+    progress: true
+    scrollable: true
+    transition: none
+    preview-links: auto
+execute:
+  warning: false
+  message: false
+---
+
+::: {.callout-note}
+**Inference lab:** Hypothesis → Visualise → Assumptions → Conduct → Conclude.
+:::
+
+## Learning objectives
+
+- Estimate and plot a Kaplan-Meier survival curve for a two-group
+  comparison.
+- Run and interpret a log-rank test.
+- Fit a Cox proportional-hazards model, check the PH assumption, and
+  read a hazard ratio honestly.
+
+## Prerequisites
+
+Comfort with GLMs and with reading a regression table.
+
+## Background
+
+Survival analysis handles outcomes that are times to an event, where
+some subjects have not yet had the event when observation ends — the
+familiar right-censoring problem. Ignoring censoring by throwing out the
+censored observations biases the estimator; pretending the censored
+observations are event-free biases it the other way. The survival
+machinery handles censoring correctly by reasoning at each event time
+about who is still at risk.
+
+::: {.content-visible when-format="html"}
+Three tools cover most clinical applications: the Kaplan-Meier
+estimator for a non-parametric survival curve, the log-rank test for a
+two-group comparison, and Cox proportional-hazards regression for
+adjustment and multivariable modelling. The PH assumption — that the
+hazard ratio is constant over time — deserves explicit checking; when
+it fails, a time-varying coefficient or a stratified model is usually
+the right fix.
+:::
+
+## Setup
+
+```{r}
+#| label: setup
+library(tidyverse)
+library(survival)
+library(ggsurvfit)
+library(broom)
+set.seed(42)
+theme_set(theme_minimal(base_size = 12))
+```
+
+## 1. Hypothesis
+
+Using `survival::lung`, compare survival between male and female
+patients. H₀: hazard ratio = 1. H₁: hazard ratio ≠ 1. α = 0.05.
+
+## 2. Visualise
+
+```{r}
+#| fig-width: 6.5
+#| fig-height: 4
+lung2 <- lung |>
+  mutate(sex = factor(sex, levels = 1:2, labels = c("male", "female")))
+
+km <- survfit2(Surv(time, status) ~ sex, data = lung2)
+
+km |>
+  ggsurvfit() +
+  add_confidence_interval() +
+  add_risktable() +
+  labs(x = "Days", y = "Survival probability")
+```
+
+## 3. Assumptions
+
+Two assumptions are worth checking: non-informative censoring (patients
+censored at a given time are representative of those still at risk) and
+proportional hazards.
+
+```{r}
+cox_fit <- coxph(Surv(time, status) ~ sex + age, data = lung2)
+cox.zph(cox_fit)
+```
+
+A large *p*-value on each row and a non-systematic Schoenfeld residual
+plot support the PH assumption; a small *p* calls for a time-varying
+coefficient or stratification.
+
+## 4. Conduct
+
+```{r}
+lr <- survdiff(Surv(time, status) ~ sex, data = lung2)
+lr
+
+tidy(cox_fit, exponentiate = TRUE, conf.int = TRUE)
+```
+
+## 5. Concluding statement
+
+```{r}
+#| echo: false
+hr_row <- tidy(cox_fit, exponentiate = TRUE, conf.int = TRUE) |>
+  filter(term == "sexfemale")
+```
+
+> Female sex was associated with a lower risk of death relative to male
+> sex (HR `r round(hr_row$estimate, 2)`; 95% CI
+> `r round(hr_row$conf.low, 2)` to `r round(hr_row$conf.high, 2)`;
+> *p* = `r signif(hr_row$p.value, 2)`), adjusted for age. The
+> proportional-hazards assumption was not clearly violated
+> (Schoenfeld test, all *p* > 0.05).
+
+::: {.notes}
+Emphasise the difference between a median survival comparison (which
+requires enough events) and a Cox model (which uses every event time).
+:::
+
+## Common pitfalls
+
+- Reporting a median survival that is not reached and calling it
+  "undefined" in the results. Say so explicitly.
+- Ignoring the PH check because the output looks clean.
+- Comparing Kaplan-Meier curves by eye alone — add the log-rank test
+  and the risk table.
+- Collapsing a competing event (e.g. death from another cause) into
+  censoring without justification.
+
+## Further reading
+
+- Harrell FE. *Regression Modeling Strategies*, ch. 20.
+- Therneau TM & Grambsch PM. *Modeling Survival Data.*
+
+## Session info
+
+```{r}
+sessionInfo()
+```
