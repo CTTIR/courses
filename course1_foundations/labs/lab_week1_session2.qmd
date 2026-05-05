@@ -205,3 +205,15 @@ Walk through a cold `renv::restore()` on a fresh clone.
 ```{r}
 sessionInfo()
 ```
+
+::: {.vgwort-pixel}
+```{=html}
+<!-- VG Wort Zählmarke — public ID: 0f852e6499cc4907b0e147f101672b46 -->
+<img src="https://vg09.met.vgwort.de/na/0f852e6499cc4907b0e147f101672b46"
+     width="1" height="1" alt=""
+     loading="eager"
+     fetchpriority="high"
+     decoding="async"
+     style="position:absolute;visibility:hidden;" />
+```
+:::

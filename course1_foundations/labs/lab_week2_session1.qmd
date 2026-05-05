@@ -192,3 +192,15 @@ inference. The audience will carry the habit into their own writing.
 ```{r}
 sessionInfo()
 ```
+
+::: {.vgwort-pixel}
+```{=html}
+<!-- VG Wort Zählmarke — public ID: 0fadccb59bb14950afcee8ac66f4dec7 -->
+<img src="https://vg09.met.vgwort.de/na/0fadccb59bb14950afcee8ac66f4dec7"
+     width="1" height="1" alt=""
+     loading="eager"
+     fetchpriority="high"
+     decoding="async"
+     style="position:absolute;visibility:hidden;" />
+```
+:::

@@ -170,3 +170,15 @@ you want to merge.
 
 *Fix:* add your key via Settings → SSH and GPG keys, or switch the
 remote to HTTPS: `git remote set-url origin https://github.com/...`.
+
+::: {.vgwort-pixel}
+```{=html}
+<!-- VG Wort Zählmarke — public ID: 0ef69660fbaa44059d6d3df6228ede70 -->
+<img src="https://vg09.met.vgwort.de/na/0ef69660fbaa44059d6d3df6228ede70"
+     width="1" height="1" alt=""
+     loading="eager"
+     fetchpriority="high"
+     decoding="async"
+     style="position:absolute;visibility:hidden;" />
+```
+:::

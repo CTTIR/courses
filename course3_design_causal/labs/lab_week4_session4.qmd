@@ -156,3 +156,15 @@ case counts, and the uncertainty in R₀ propagates from that inference.
 ```{r}
 sessionInfo()
 ```
+
+::: {.vgwort-pixel}
+```{=html}
+<!-- VG Wort Zählmarke — public ID: 112d4763e12e493b973771392b7e4aea -->
+<img src="https://vg09.met.vgwort.de/na/112d4763e12e493b973771392b7e4aea"
+     width="1" height="1" alt=""
+     loading="eager"
+     fetchpriority="high"
+     decoding="async"
+     style="position:absolute;visibility:hidden;" />
+```
+:::

@@ -171,3 +171,15 @@ on a talk.
   setup and render problems.
 - Open a GitHub issue for anything we have not covered; include your OS,
   your R version, your Quarto version, and the exact command you ran.
+
+::: {.vgwort-pixel}
+```{=html}
+<!-- VG Wort Zählmarke — public ID: 11ed9e840d9a4729af7e9fbe1d734408 -->
+<img src="https://vg09.met.vgwort.de/na/11ed9e840d9a4729af7e9fbe1d734408"
+     width="1" height="1" alt=""
+     loading="eager"
+     fetchpriority="high"
+     decoding="async"
+     style="position:absolute;visibility:hidden;" />
+```
+:::

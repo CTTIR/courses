@@ -204,3 +204,15 @@ They do not compete.
 ```{r}
 sessionInfo()
 ```
+
+::: {.vgwort-pixel}
+```{=html}
+<!-- VG Wort Zählmarke — public ID: 0fc856f7efe144e2a027a81ce57f4c58 -->
+<img src="https://vg09.met.vgwort.de/na/0fc856f7efe144e2a027a81ce57f4c58"
+     width="1" height="1" alt=""
+     loading="eager"
+     fetchpriority="high"
+     decoding="async"
+     style="position:absolute;visibility:hidden;" />
+```
+:::

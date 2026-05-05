@@ -177,3 +177,15 @@ errors are robust.
 ```{r}
 sessionInfo()
 ```
+
+::: {.vgwort-pixel}
+```{=html}
+<!-- VG Wort Zählmarke — public ID: 10eb012ff4bf46e0975a65e5e138c6f8 -->
+<img src="https://vg09.met.vgwort.de/na/10eb012ff4bf46e0975a65e5e138c6f8"
+     width="1" height="1" alt=""
+     loading="eager"
+     fetchpriority="high"
+     decoding="async"
+     style="position:absolute;visibility:hidden;" />
+```
+:::

@@ -152,3 +152,15 @@ implausibly close to 1.
 ```{r}
 sessionInfo()
 ```
+
+::: {.vgwort-pixel}
+```{=html}
+<!-- VG Wort Zählmarke — public ID: 10683d5942884ba6b0660c0367bb8569 -->
+<img src="https://vg09.met.vgwort.de/na/10683d5942884ba6b0660c0367bb8569"
+     width="1" height="1" alt=""
+     loading="eager"
+     fetchpriority="high"
+     decoding="async"
+     style="position:absolute;visibility:hidden;" />
+```
+:::

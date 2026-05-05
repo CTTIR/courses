@@ -197,3 +197,15 @@ visual impact makes the point that no verbal argument can.
 ```{r}
 sessionInfo()
 ```
+
+::: {.vgwort-pixel}
+```{=html}
+<!-- VG Wort Zählmarke — public ID: 0ff85ff8c92946258b61f02a17528e85 -->
+<img src="https://vg09.met.vgwort.de/na/0ff85ff8c92946258b61f02a17528e85"
+     width="1" height="1" alt=""
+     loading="eager"
+     fetchpriority="high"
+     decoding="async"
+     style="position:absolute;visibility:hidden;" />
+```
+:::

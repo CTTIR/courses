@@ -186,3 +186,15 @@ riff on it; the rigidity at this stage is the anchor.
 ```{r}
 sessionInfo()
 ```
+
+::: {.vgwort-pixel}
+```{=html}
+<!-- VG Wort Zählmarke — public ID: 0fd9318af31a49009e5350dc563f6373 -->
+<img src="https://vg09.met.vgwort.de/na/0fd9318af31a49009e5350dc563f6373"
+     width="1" height="1" alt=""
+     loading="eager"
+     fetchpriority="high"
+     decoding="async"
+     style="position:absolute;visibility:hidden;" />
+```
+:::

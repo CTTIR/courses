@@ -176,3 +176,15 @@ variability. The example is pedagogical, not a benchmark.
 ```{r}
 sessionInfo()
 ```
+
+::: {.vgwort-pixel}
+```{=html}
+<!-- VG Wort Zählmarke — public ID: 1190e85e88dd4860b037e884f56413c6 -->
+<img src="https://vg09.met.vgwort.de/na/1190e85e88dd4860b037e884f56413c6"
+     width="1" height="1" alt=""
+     loading="eager"
+     fetchpriority="high"
+     decoding="async"
+     style="position:absolute;visibility:hidden;" />
+```
+:::

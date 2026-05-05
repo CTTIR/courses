@@ -200,3 +200,15 @@ retraining the whole model.
 ```{r}
 sessionInfo()
 ```
+
+::: {.vgwort-pixel}
+```{=html}
+<!-- VG Wort Zählmarke — public ID: 11cd4c5a1a194eaab8dd00840631e3d6 -->
+<img src="https://vg09.met.vgwort.de/na/11cd4c5a1a194eaab8dd00840631e3d6"
+     width="1" height="1" alt=""
+     loading="eager"
+     fetchpriority="high"
+     decoding="async"
+     style="position:absolute;visibility:hidden;" />
+```
+:::

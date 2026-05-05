@@ -171,3 +171,15 @@ reuse any analysis here, cite the package authors alongside this site.
 We are grateful to all the educators above for making their work openly
 available. The entire point of a site like this one is that the next
 version of it, wherever and by whomever it is written, will be better.
+
+::: {.vgwort-pixel}
+```{=html}
+<!-- VG Wort Zählmarke — public ID: 11f7de9311a74739a84c2defa3e83dff -->
+<img src="https://vg09.met.vgwort.de/na/11f7de9311a74739a84c2defa3e83dff"
+     width="1" height="1" alt=""
+     loading="eager"
+     fetchpriority="high"
+     decoding="async"
+     style="position:absolute;visibility:hidden;" />
+```
+:::

@@ -161,3 +161,15 @@ change, it requires disclosure of change.
 ```{r}
 sessionInfo()
 ```
+
+::: {.vgwort-pixel}
+```{=html}
+<!-- VG Wort Zählmarke — public ID: 112fbd66a8844f10bfd6ec4d663cee50 -->
+<img src="https://vg09.met.vgwort.de/na/112fbd66a8844f10bfd6ec4d663cee50"
+     width="1" height="1" alt=""
+     loading="eager"
+     fetchpriority="high"
+     decoding="async"
+     style="position:absolute;visibility:hidden;" />
+```
+:::

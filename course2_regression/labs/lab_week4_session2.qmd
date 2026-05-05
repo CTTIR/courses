@@ -172,3 +172,15 @@ agreement, and neither kappa nor a single correlation captures both.
 ```{r}
 sessionInfo()
 ```
+
+::: {.vgwort-pixel}
+```{=html}
+<!-- VG Wort Zählmarke — public ID: 109890e859a44e2a9acd2cf11ffaa252 -->
+<img src="https://vg09.met.vgwort.de/na/109890e859a44e2a9acd2cf11ffaa252"
+     width="1" height="1" alt=""
+     loading="eager"
+     fetchpriority="high"
+     decoding="async"
+     style="position:absolute;visibility:hidden;" />
+```
+:::

@@ -144,3 +144,15 @@ is only a summary, not the headline.
 ```{r}
 sessionInfo()
 ```
+
+::: {.vgwort-pixel}
+```{=html}
+<!-- VG Wort Zählmarke — public ID: 1049c4d22146446b8f338379bc8d9d1d -->
+<img src="https://vg09.met.vgwort.de/na/1049c4d22146446b8f338379bc8d9d1d"
+     width="1" height="1" alt=""
+     loading="eager"
+     fetchpriority="high"
+     decoding="async"
+     style="position:absolute;visibility:hidden;" />
+```
+:::

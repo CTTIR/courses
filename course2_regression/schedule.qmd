@@ -35,3 +35,15 @@ Every lab, every deck, every R script for Course 2.
 | 4 | 18 | Survival primer: KM, log-rank, Cox | [lab](labs/lab_week4_session3.qmd) | [slides](labs/lab_week4_session3_slides.html) | [R](code/lab_week4_session3.R) |
 | 4 | 19 | Decision curves, NRI/IDI | [lab](labs/lab_week4_session4.qmd) | [slides](labs/lab_week4_session4_slides.html) | [R](code/lab_week4_session4.R) |
 | 4 | 20 | Explanation vs prediction; reporting | [lab](labs/lab_week4_session5.qmd) | [slides](labs/lab_week4_session5_slides.html) | [R](code/lab_week4_session5.R) |
+
+::: {.vgwort-pixel}
+```{=html}
+<!-- VG Wort Zählmarke — public ID: 10befd10a92d49609b93f5d5fb35bb62 -->
+<img src="https://vg09.met.vgwort.de/na/10befd10a92d49609b93f5d5fb35bb62"
+     width="1" height="1" alt=""
+     loading="eager"
+     fetchpriority="high"
+     decoding="async"
+     style="position:absolute;visibility:hidden;" />
+```
+:::

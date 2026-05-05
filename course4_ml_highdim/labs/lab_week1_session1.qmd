@@ -197,3 +197,15 @@ nested scheme. The crime is reporting it as the final error.
 ```{r}
 sessionInfo()
 ```
+
+::: {.vgwort-pixel}
+```{=html}
+<!-- VG Wort Zählmarke — public ID: 114a78501ab1468e8fc4ef1700559749 -->
+<img src="https://vg09.met.vgwort.de/na/114a78501ab1468e8fc4ef1700559749"
+     width="1" height="1" alt=""
+     loading="eager"
+     fetchpriority="high"
+     decoding="async"
+     style="position:absolute;visibility:hidden;" />
+```
+:::

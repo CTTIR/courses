@@ -207,3 +207,15 @@ This is the single most-quoted basic epidemiology point in Course 2.
 ```{r}
 sessionInfo()
 ```
+
+::: {.vgwort-pixel}
+```{=html}
+<!-- VG Wort Zählmarke — public ID: 0fea08f8f79441ca91d498826b95ca73 -->
+<img src="https://vg09.met.vgwort.de/na/0fea08f8f79441ca91d498826b95ca73"
+     width="1" height="1" alt=""
+     loading="eager"
+     fetchpriority="high"
+     decoding="async"
+     style="position:absolute;visibility:hidden;" />
+```
+:::

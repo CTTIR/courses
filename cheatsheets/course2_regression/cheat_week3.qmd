@@ -88,3 +88,15 @@ plot(roc_obj)
 
 - Harrell, *RMS*, ch. 10–12.
 - Steyerberg, *Clinical Prediction Models*.
+
+::: {.vgwort-pixel}
+```{=html}
+<!-- VG Wort Zählmarke — public ID: 0f3c9d9556d44c13a7d5207c4988a871 -->
+<img src="https://vg09.met.vgwort.de/na/0f3c9d9556d44c13a7d5207c4988a871"
+     width="1" height="1" alt=""
+     loading="eager"
+     fetchpriority="high"
+     decoding="async"
+     style="position:absolute;visibility:hidden;" />
+```
+:::

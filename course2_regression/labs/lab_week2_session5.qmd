@@ -150,3 +150,15 @@ scratch, which distracts from the concept.
 ```{r}
 sessionInfo()
 ```
+
+::: {.vgwort-pixel}
+```{=html}
+<!-- VG Wort Zählmarke — public ID: 10651d8361ed424b8cc0e16a3760778f -->
+<img src="https://vg09.met.vgwort.de/na/10651d8361ed424b8cc0e16a3760778f"
+     width="1" height="1" alt=""
+     loading="eager"
+     fetchpriority="high"
+     decoding="async"
+     style="position:absolute;visibility:hidden;" />
+```
+:::

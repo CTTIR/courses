@@ -182,3 +182,15 @@ preferring for correlated predictors.
 ```{r}
 sessionInfo()
 ```
+
+::: {.vgwort-pixel}
+```{=html}
+<!-- VG Wort Zählmarke — public ID: 11b9d1ecccdd43fa82b36029deb72696 -->
+<img src="https://vg09.met.vgwort.de/na/11b9d1ecccdd43fa82b36029deb72696"
+     width="1" height="1" alt=""
+     loading="eager"
+     fetchpriority="high"
+     decoding="async"
+     style="position:absolute;visibility:hidden;" />
+```
+:::

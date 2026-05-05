@@ -208,3 +208,15 @@ locally:
 quarto render cheatsheets/course1_foundations/cheat_week1.qmd
 # produces both .html and .pdf in _site / docs
 ```
+
+::: {.vgwort-pixel}
+```{=html}
+<!-- VG Wort Zählmarke — public ID: 0f81e19303c04d48927176aad58420f7 -->
+<img src="https://vg09.met.vgwort.de/na/0f81e19303c04d48927176aad58420f7"
+     width="1" height="1" alt=""
+     loading="eager"
+     fetchpriority="high"
+     decoding="async"
+     style="position:absolute;visibility:hidden;" />
+```
+:::

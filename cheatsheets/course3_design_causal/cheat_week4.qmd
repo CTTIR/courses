@@ -102,3 +102,15 @@ OSF and ClinicalTrials.gov are the two common registries.
 - Higgins et al., *Cochrane Handbook for Systematic Reviews*.
 - Keeling & Rohani, *Modeling Infectious Diseases in Humans and Animals*.
 - Nosek et al. (2018), *The preregistration revolution*.
+
+::: {.vgwort-pixel}
+```{=html}
+<!-- VG Wort Zählmarke — public ID: 0f546d1205084754884a34cdee85c989 -->
+<img src="https://vg09.met.vgwort.de/na/0f546d1205084754884a34cdee85c989"
+     width="1" height="1" alt=""
+     loading="eager"
+     fetchpriority="high"
+     decoding="async"
+     style="position:absolute;visibility:hidden;" />
+```
+:::
