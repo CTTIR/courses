@@ -1,6 +1,5 @@
 ---
 title: "Interactive apps"
-title-block-style: none
 toc: true
 ---
 

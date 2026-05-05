@@ -1,6 +1,5 @@
 ---
 title: "Acknowledgements"
-title-block-style: none
 toc: true
 ---
 

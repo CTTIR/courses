@@ -4,7 +4,7 @@
     "href": "shiny.html",
     "title": "Interactive apps",
     "section": "",
-    "text": "The apps complement the labs. Each lab teaches you the mechanics of a method on a fixed dataset; the corresponding app lets you wiggle every parameter and watch the answer change. Build intuition first, then read the lab — or read the lab first and use the app to stress-test your understanding.\nThe links below point at the deployed apps on the curriculum’s Shiny host. Replace https://shiny.example.org in _quarto.yml (or in this file) with your own host once the server is up."
+    "text": "SHINY · INTERACTIVE COMPANIONS\n\n\n\n\nApps that let you turn the dials on the most important ideas in the curriculum and watch the consequences live.\nThe apps complement the labs. Each lab teaches you the mechanics of a method on a fixed dataset; the corresponding app lets you wiggle every parameter and watch the answer change. Build intuition first, then read the lab — or read the lab first and use the app to stress-test your understanding.\nThe links below point at the deployed apps on the curriculum’s Shiny host. Replace https://shiny.example.org in _quarto.yml (or in this file) with your own host once the server is up."
   },
   {
     "objectID": "shiny.html#course-1-foundations",
@@ -53,7 +53,7 @@
     "href": "references.html",
     "title": "References",
     "section": "",
-    "text": "The list below is not exhaustive — nothing that tries to cover an entire field ever is — but it names the sources we leaned on hardest and the teachers whose own openly available material shaped the pedagogy. Every entry links to something you can read for free today. Where a book is not open-access we have flagged it, and where a web resource exists in parallel we have linked to that instead."
+    "text": "ACKNOWLEDGEMENTS · SOURCES · TEACHING ECOSYSTEMS\n\n\n\n\nThis curriculum did not grow in a vacuum. Everything worth keeping in it came from somewhere else first.\nThe list below is not exhaustive — nothing that tries to cover an entire field ever is — but it names the sources we leaned on hardest and the teachers whose own openly available material shaped the pedagogy. Every entry links to something you can read for free today. Where a book is not open-access we have flagged it, and where a web resource exists in parallel we have linked to that instead."
   },
   {
     "objectID": "references.html#direct-inspiration",
@@ -98,6 +98,13 @@
     "text": "Closing note\nWe are grateful to all the educators above for making their work openly available. The entire point of a site like this one is that the next version of it, wherever and by whomever it is written, will be better."
   },
   {
+    "objectID": "index.html",
+    "href": "index.html",
+    "title": "Biostatistics Courses",
+    "section": "",
+    "text": "OPEN CURRICULUM · R · QUARTO · MIT\n\n\n\n\nA four-course ladder from first principles to modern statistical learning, built for biomedical researchers who want to stop guessing about statistics."
+  },
+  {
     "objectID": "index.html#what-this-is",
     "href": "index.html#what-this-is",
     "title": "Biostatistics Courses",
@@ -138,6 +145,13 @@
     "title": "Biostatistics Courses",
     "section": "Further along",
     "text": "Further along\n\nGet Started — install, clone, and render the site locally.\nSchedule — a linked index of every lab, every deck, every script.\nCheatsheets — sixteen dense one-pagers, one per week, HTML + PDF.\nInteractive apps — Shiny companions to the labs.\nResearch workflow, Decision tree, Glossary, Common errors, Writing a report.\nReferences — the sources and teaching ecosystems we drew on.\nAcknowledgements — the full list of people whose work made this curriculum possible."
+  },
+  {
+    "objectID": "get_started.html",
+    "href": "get_started.html",
+    "title": "Get started",
+    "section": "",
+    "text": "SETUP · CLONE · RENDER\n\n\n\n\nFrom a fresh laptop to a locally rendered version of this site in about twenty minutes."
   },
   {
     "objectID": "get_started.html#before-you-start",
@@ -1953,44 +1967,51 @@
     "text": "Session info\n\nsessionInfo()\n\nR version 4.5.2 (2025-10-31 ucrt)\nPlatform: x86_64-w64-mingw32/x64\nRunning under: Windows 11 x64 (build 26200)\n\nMatrix products: default\n  LAPACK version 3.12.1\n\nlocale:\n[1] LC_COLLATE=English_Germany.utf8  LC_CTYPE=English_Germany.utf8   \n[3] LC_MONETARY=English_Germany.utf8 LC_NUMERIC=C                    \n[5] LC_TIME=English_Germany.utf8    \n\ntime zone: Europe/Berlin\ntzcode source: internal\n\nattached base packages:\n[1] stats     graphics  grDevices utils     datasets  methods   base     \n\nother attached packages:\n [1] glmnet_5.0      Matrix_1.7-5    lubridate_1.9.5 forcats_1.0.1  \n [5] stringr_1.6.0   dplyr_1.2.0     purrr_1.2.2     readr_2.2.0    \n [9] tidyr_1.3.2     tibble_3.3.1    ggplot2_4.0.3   tidyverse_2.0.0\n\nloaded via a namespace (and not attached):\n [1] utf8_1.2.6         generics_0.1.4     shape_1.4.6.1      stringi_1.8.7     \n [5] lattice_0.22-9     hms_1.1.4          digest_0.6.39      magrittr_2.0.4    \n [9] evaluate_1.0.5     grid_4.5.2         timechange_0.4.0   RColorBrewer_1.1-3\n[13] iterators_1.0.14   fastmap_1.2.0      foreach_1.5.2      jsonlite_2.0.0    \n[17] survival_3.8-6     scales_1.4.0       codetools_0.2-20   cli_3.6.6         \n[21] rlang_1.2.0        splines_4.5.2      withr_3.0.2        yaml_2.3.12       \n[25] otel_0.2.0         tools_4.5.2        tzdb_0.5.0         vctrs_0.7.3       \n[29] R6_2.6.1           lifecycle_1.0.5    htmlwidgets_1.6.4  pkgconfig_2.0.3   \n[33] pillar_1.11.1      gtable_0.3.6       glue_1.8.0         Rcpp_1.1.1-1.1    \n[37] xfun_0.57          tidyselect_1.2.1   knitr_1.51         farver_2.1.2      \n[41] htmltools_0.5.9    rmarkdown_2.31     labeling_0.4.3     compiler_4.5.2    \n[45] S7_0.2.2"
   },
   {
+    "objectID": "course4_ml_highdim/index.html",
+    "href": "course4_ml_highdim/index.html",
+    "title": "Course 4",
+    "section": "",
+    "text": "SPECIALIST · 4 WEEKS · 20 LABS\n\n\n\n\nRegularisation, tree ensembles, Bayesian modelling, omics, and the discipline that keeps modern methods from becoming modern folklore."
+  },
+  {
     "objectID": "course4_ml_highdim/index.html#what-youll-be-able-to-do-by-the-end",
     "href": "course4_ml_highdim/index.html#what-youll-be-able-to-do-by-the-end",
-    "title": "Course 4 — Modern Statistical Learning & High-Dimensional Biomedicine",
+    "title": "Course 4",
     "section": "What you’ll be able to do by the end",
     "text": "What you’ll be able to do by the end\n\nUse cross-validation — including nested CV — to estimate generalisation error honestly, and explain why a bare bootstrap or a single split usually does not.\nFit and tune regularised regressions, tree ensembles, and tabular neural networks with tidymodels and torch.\nPerform a basic Bayesian analysis with brms, and interpret the posterior in a form a reviewer will accept.\nDifferentiate, cluster, and embed omics-scale data — bulk RNA-seq with DESeq2, single-cell with Seurat, and general high-dimensional data with PCA, UMAP, and t-SNE.\nApply FDR, knockoffs, and the logic of the replication crisis to your own work, and produce a TRIPOD-AI-compliant report for a predictive model."
   },
   {
     "objectID": "course4_ml_highdim/index.html#who-should-take-this-course",
     "href": "course4_ml_highdim/index.html#who-should-take-this-course",
-    "title": "Course 4 — Modern Statistical Learning & High-Dimensional Biomedicine",
+    "title": "Course 4",
     "section": "Who should take this course",
     "text": "Who should take this course\nCourse 4 assumes Courses 1–3, or at minimum the ability to fit a regularised linear model and read a confusion matrix without flinching. If you are a computational biologist moving into ML, a statistician taking on omics data, or an ML engineer trying to understand what makes biomedical datasets different, this is the course written for you."
   },
   {
     "objectID": "course4_ml_highdim/index.html#the-shape-of-the-four-weeks",
     "href": "course4_ml_highdim/index.html#the-shape-of-the-four-weeks",
-    "title": "Course 4 — Modern Statistical Learning & High-Dimensional Biomedicine",
+    "title": "Course 4",
     "section": "The shape of the four weeks",
     "text": "The shape of the four weeks\n\n\n\nWeek 1\n\n\nValidation, regularisation, multivariate\nCV and nested CV; ridge, lasso, elastic net; PCA/FA/CCA/LDA; clustering; UMAP and t-SNE.\n\n\n\n\nWeek 2\n\n\nML done honestly\nTrees, random forests, boosting; interpretability and SHAP; tabular neural nets with torch; imaging/sequence intro; tidymodels pipelines.\n\n\n\n\nWeek 3\n\n\nBayesian, biomarkers, survival ML\nBayesian thinking; brms and Stan; biomarker statistics; survival ML; time-dependent Brier, IPA, external validation.\n\n\n\n\nWeek 4\n\n\nOmics, fairness, reproducibility\nBulk RNA-seq with DESeq2/edgeR; enrichment; scRNA-seq with Seurat; FDR and knockoffs; TRIPOD-AI, fairness, reporting at scale."
   },
   {
     "objectID": "course4_ml_highdim/index.html#weekly-summaries",
     "href": "course4_ml_highdim/index.html#weekly-summaries",
-    "title": "Course 4 — Modern Statistical Learning & High-Dimensional Biomedicine",
+    "title": "Course 4",
     "section": "Weekly summaries",
     "text": "Weekly summaries\nWeek 1 — validation, regularisation, multivariate. Resampling is the conscience of modern ML. The first lab pins down k-fold and nested CV with a simulation that reveals how an honest-looking analysis can still overfit. Regularisation (glmnet) follows, with ridge, lasso, and elastic-net contrasted on a high-p-low-n problem. PCA, factor analysis, canonical correlation, and linear discriminant analysis occupy a single dense lab on dimension reduction. Clustering (mclust, hierarchical, k-means) and non-linear embeddings (uwot, Rtsne) close the week. Key packages: glmnet, caret/tidymodels, FactoMineR, factoextra, mclust, uwot.\nWeek 2 — ML done honestly. Tree models open the week: CART, random forests (ranger), gradient boosting (xgboost, lightgbm). The interpretability lab uses DALEX, iml, and SHAP values to inspect them. A tabular neural-network lab with torch gives a controlled introduction to deep learning; an imaging / sequence lab sketches the conceptual extensions without asking the reader to train on a million samples. The week closes with tidymodels, the pipeline framework that ties everything together. Key packages: ranger, xgboost, lightgbm, DALEX, iml, torch, tidymodels.\nWeek 3 — Bayesian, biomarkers, survival ML. The Bayesian-thinking lab introduces posteriors, priors, and the distinction between α-level error control and decision error. brms (built on Stan) gets a full lab, with LOO model comparison and a hierarchical example. The biomarker lab covers Youden’s index, NRI, and decision-curve analysis in the biomarker context. Survival ML (random-survival-forest, DeepSurv conceptually) is followed by a lab on time-dependent Brier, the index-of-prediction-accuracy (IPA), and external validation of risk models. Key packages: brms, rstanarm, randomForestSRC, survival, timeROC, riskRegression.\nWeek 4 — omics, fairness, reproducibility. Bulk RNA-seq with DESeq2 or edgeR opens the week, with an emphasis on design matrices, dispersion estimation, and multiple testing. Enrichment analysis (GSEA, over-representation, camera) follows. Single-cell RNA-seq with Seurat demonstrates the full cycle of QC, normalisation, integration, and cluster annotation. The FDR/knockoffs lab reframes multiple testing in a way that works for genome-scale problems, and ties the replication crisis to analytic choices researchers routinely make. The capstone lab walks through TRIPOD-AI reporting, fairness auditing of a predictive model, and reproducibility at scale with targets. Key packages: DESeq2, edgeR, limma, fgsea, Seurat, knockoff, targets."
   },
   {
     "objectID": "course4_ml_highdim/index.html#how-to-work-through-it",
     "href": "course4_ml_highdim/index.html#how-to-work-through-it",
-    "title": "Course 4 — Modern Statistical Learning & High-Dimensional Biomedicine",
+    "title": "Course 4",
     "section": "How to work through it",
     "text": "How to work through it\nCourse 4 is breadth-first: each lab introduces a family of tools rather than drilling one to the bottom. Read it through once to know what exists, then return to the labs that match your current problem. The omics labs (W4 S1–S3) depend on Bioconductor packages whose install time is measured in minutes; they are well worth the wait. The capstone lab (W4 S5) is the one to present at a group meeting."
   },
   {
     "objectID": "course4_ml_highdim/index.html#further-along",
     "href": "course4_ml_highdim/index.html#further-along",
-    "title": "Course 4 — Modern Statistical Learning & High-Dimensional Biomedicine",
+    "title": "Course 4",
     "section": "Further along",
     "text": "Further along\n\nCourse 4 schedule — linked index of every lab, deck, and R script.\nUnified references."
   },
@@ -3745,44 +3766,51 @@
     "text": "Session info\n\nsessionInfo()\n\nR version 4.5.2 (2025-10-31 ucrt)\nPlatform: x86_64-w64-mingw32/x64\nRunning under: Windows 11 x64 (build 26200)\n\nMatrix products: default\n  LAPACK version 3.12.1\n\nlocale:\n[1] LC_COLLATE=English_Germany.utf8  LC_CTYPE=English_Germany.utf8   \n[3] LC_MONETARY=English_Germany.utf8 LC_NUMERIC=C                    \n[5] LC_TIME=English_Germany.utf8    \n\ntime zone: Europe/Berlin\ntzcode source: internal\n\nattached base packages:\n[1] stats     graphics  grDevices utils     datasets  methods   base     \n\nother attached packages:\n [1] lubridate_1.9.5 forcats_1.0.1   stringr_1.6.0   dplyr_1.2.0    \n [5] purrr_1.2.2     readr_2.2.0     tidyr_1.3.2     tibble_3.3.1   \n [9] ggplot2_4.0.3   tidyverse_2.0.0\n\nloaded via a namespace (and not attached):\n [1] gtable_0.3.6       jsonlite_2.0.0     compiler_4.5.2     tidyselect_1.2.1  \n [5] scales_1.4.0       yaml_2.3.12        fastmap_1.2.0      R6_2.6.1          \n [9] labeling_0.4.3     generics_0.1.4     knitr_1.51         htmlwidgets_1.6.4 \n[13] pillar_1.11.1      RColorBrewer_1.1-3 tzdb_0.5.0         rlang_1.2.0       \n[17] utf8_1.2.6         stringi_1.8.7      xfun_0.57          S7_0.2.2          \n[21] otel_0.2.0         timechange_0.4.0   cli_3.6.6          withr_3.0.2       \n[25] magrittr_2.0.4     digest_0.6.39      grid_4.5.2         hms_1.1.4         \n[29] lifecycle_1.0.5    vctrs_0.7.3        evaluate_1.0.5     glue_1.8.0        \n[33] farver_2.1.2       rmarkdown_2.31     tools_4.5.2        pkgconfig_2.0.3   \n[37] htmltools_0.5.9"
   },
   {
+    "objectID": "course3_design_causal/index.html",
+    "href": "course3_design_causal/index.html",
+    "title": "Course 3",
+    "section": "",
+    "text": "ADVANCED · 4 WEEKS · 20 LABS\n\n\n\n\nDesigning studies; handling missing, clustered, and time-to-event data; and making causal claims with the care they deserve."
+  },
+  {
     "objectID": "course3_design_causal/index.html#what-youll-be-able-to-do-by-the-end",
     "href": "course3_design_causal/index.html#what-youll-be-able-to-do-by-the-end",
-    "title": "Course 3 — Study Design, Longitudinal Data & Causal Inference",
+    "title": "Course 3",
     "section": "What you’ll be able to do by the end",
     "text": "What you’ll be able to do by the end\n\nPick a study design that actually answers your research question, and defend the choice in a pre-registration.\nDistinguish MCAR, MAR, and MNAR missingness in a dataset you have, and apply multiple imputation correctly.\nFit linear and generalised linear mixed models to repeated-measures and clustered data, and interpret random-effect variances honestly.\nDraw a DAG, derive the adjustment set from it, and recognise which causal claims a given design can support.\nApply propensity-score, IPTW, and g-methods analyses; know the difference between an average treatment effect, an ATT, and a heterogeneous treatment effect.\nPerform meta-analysis of a small handful of studies, including network meta-analysis when several treatments are compared."
   },
   {
     "objectID": "course3_design_causal/index.html#who-should-take-this-course",
     "href": "course3_design_causal/index.html#who-should-take-this-course",
-    "title": "Course 3 — Study Design, Longitudinal Data & Causal Inference",
+    "title": "Course 3",
     "section": "Who should take this course",
     "text": "Who should take this course\nCourse 3 is aimed at researchers who are past the “is there an effect?” stage and into the “is the effect I estimated actually the effect I wanted?” stage. It assumes Courses 1 and 2, or equivalent comfort with regression, GLMs, and reading a residual plot. Clinicians running trials, epidemiologists with observational data, and bench scientists whose experiments are now clustered by batch or animal will all find this the most directly useful course on the site."
   },
   {
     "objectID": "course3_design_causal/index.html#the-shape-of-the-four-weeks",
     "href": "course3_design_causal/index.html#the-shape-of-the-four-weeks",
-    "title": "Course 3 — Study Design, Longitudinal Data & Causal Inference",
+    "title": "Course 3",
     "section": "The shape of the four weeks",
     "text": "The shape of the four weeks\n\n\n\nWeek 1\n\n\nDesigning studies\nObservational designs; RCTs; adaptive and non-inferiority trials; bench design; power by closed form and simulation.\n\n\n\n\nWeek 2\n\n\nMissing data, longitudinal, time series\nMCAR/MAR/MNAR; multiple imputation with mice; LMMs with lme4; GLMMs and GEE; time series basics.\n\n\n\n\nWeek 3\n\n\nSurvival II, causal inference, HTE\nTime-varying covariates and landmarking; competing risks and multistate; DAGs; propensity scores and IPTW; g-methods and HTE.\n\n\n\n\nWeek 4\n\n\nEvidence synthesis, ID, pre-registration\nSystematic reviews, PRISMA; meta-analysis; network meta-analysis; SIR/SEIR with deSolve; pre-registration and SAPs."
   },
   {
     "objectID": "course3_design_causal/index.html#weekly-summaries",
     "href": "course3_design_causal/index.html#weekly-summaries",
-    "title": "Course 3 — Study Design, Longitudinal Data & Causal Inference",
+    "title": "Course 3",
     "section": "Weekly summaries",
     "text": "Weekly summaries\nWeek 1 — designing studies. The first lab covers observational designs (cohort, case-control, cross-sectional, case-crossover) and STROBE. The RCT lab moves through parallel-group, crossover, cluster, and factorial trials; the adaptive lab adds non-inferiority and equivalence testing. Bench-science design (blocking, factorial, split-plot, pseudoreplication) gets its own lab because the typical omics lab ignores most of it. The week closes with a power lab that does closed-form calculations with pwr and WebPower and then redoes them by simulation with simr so you can handle any design analytically or otherwise. Key packages: pwr, WebPower, simr.\nWeek 2 — missing data, longitudinal, time series. The MCAR/MAR/MNAR lab clarifies what the acronyms mean using a small simulated study; the mice lab walks through multiple imputation, pooling, and convergence diagnostics. Linear mixed models with lme4 and lmerTest follow, then GLMMs and GEE for binary and count responses with lme4, glmmTMB, and geepack. A time-series primer on decomposition, ARIMA, and change-point detection closes the week. Key packages: mice, lme4, glmmTMB, geepack, forecast, changepoint.\nWeek 3 — survival II, causal inference, and heterogeneous effects. Time-varying covariates, landmarking, and the immortal-time bias open the week and set up the competing-risks and multistate-model lab that follows. The DAG lab introduces dagitty and ggdag and formalises adjustment-set selection. Propensity-score matching and IPTW follow, with balance diagnostics via cobalt. The final lab covers g-methods, instrumental variables, difference-in-differences, regression discontinuity, and heterogeneity of treatment effect. Key packages: survival, tidycmprsk, mstate, dagitty, ggdag, MatchIt, cobalt.\nWeek 4 — evidence synthesis, infectious disease, pre-registration. Systematic reviews and PRISMA open the week; meta-analysis with metafor follows; network meta-analysis with netmeta takes a full lab because graphical comparison methods are worth the investment. The penultimate lab uses deSolve to build SIR and SEIR compartmental models and to fit them to simulated epidemic data — an unusual but important skill in an era of recurrent outbreaks. The course closes with a lab on pre-registration and statistical analysis plans, including a reusable template. Key packages: metafor, netmeta, deSolve."
   },
   {
     "objectID": "course3_design_causal/index.html#how-to-work-through-it",
     "href": "course3_design_causal/index.html#how-to-work-through-it",
-    "title": "Course 3 — Study Design, Longitudinal Data & Causal Inference",
+    "title": "Course 3",
     "section": "How to work through it",
     "text": "How to work through it\nCourse 3 is the densest on the site. A sustainable pace is one week of labs per fortnight. The DAG, propensity-score, and g-methods labs (W3 S3–S5) are the intellectual core of the course and repay a slow reading. The time-series lab (W2 S5) and the infectious-disease lab (W4 S4) are beautiful but skippable if your research domain has no use for them."
   },
   {
     "objectID": "course3_design_causal/index.html#further-along",
     "href": "course3_design_causal/index.html#further-along",
-    "title": "Course 3 — Study Design, Longitudinal Data & Causal Inference",
+    "title": "Course 3",
     "section": "Further along",
     "text": "Further along\n\nCourse 3 schedule — linked index of every lab, deck, and R script.\nUnified references."
   },
@@ -5537,44 +5565,51 @@
     "text": "Session info\n\nsessionInfo()\n\nR version 4.5.2 (2025-10-31 ucrt)\nPlatform: x86_64-w64-mingw32/x64\nRunning under: Windows 11 x64 (build 26200)\n\nMatrix products: default\n  LAPACK version 3.12.1\n\nlocale:\n[1] LC_COLLATE=English_Germany.utf8  LC_CTYPE=English_Germany.utf8   \n[3] LC_MONETARY=English_Germany.utf8 LC_NUMERIC=C                    \n[5] LC_TIME=English_Germany.utf8    \n\ntime zone: Europe/Berlin\ntzcode source: internal\n\nattached base packages:\n[1] stats     graphics  grDevices utils     datasets  methods   base     \n\nother attached packages:\n [1] palmerpenguins_0.1.1 broom_1.0.12         lubridate_1.9.5     \n [4] forcats_1.0.1        stringr_1.6.0        dplyr_1.2.0         \n [7] purrr_1.2.2          readr_2.2.0          tidyr_1.3.2         \n[10] tibble_3.3.1         ggplot2_4.0.3        tidyverse_2.0.0     \n\nloaded via a namespace (and not attached):\n [1] Matrix_1.7-5       gtable_0.3.6       jsonlite_2.0.0     compiler_4.5.2    \n [5] tidyselect_1.2.1   splines_4.5.2      scales_1.4.0       yaml_2.3.12       \n [9] fastmap_1.2.0      lattice_0.22-9     R6_2.6.1           labeling_0.4.3    \n[13] generics_0.1.4     knitr_1.51         backports_1.5.1    htmlwidgets_1.6.4 \n[17] pillar_1.11.1      RColorBrewer_1.1-3 tzdb_0.5.0         rlang_1.2.0       \n[21] utf8_1.2.6         stringi_1.8.7      xfun_0.57          S7_0.2.2          \n[25] otel_0.2.0         timechange_0.4.0   cli_3.6.6          mgcv_1.9-4        \n[29] withr_3.0.2        magrittr_2.0.4     digest_0.6.39      grid_4.5.2        \n[33] hms_1.1.4          nlme_3.1-169       lifecycle_1.0.5    vctrs_0.7.3       \n[37] evaluate_1.0.5     glue_1.8.0         farver_2.1.2       rmarkdown_2.31    \n[41] tools_4.5.2        pkgconfig_2.0.3    htmltools_0.5.9"
   },
   {
+    "objectID": "course2_regression/index.html",
+    "href": "course2_regression/index.html",
+    "title": "Course 2",
+    "section": "",
+    "text": "INTERMEDIATE · 4 WEEKS · 20 LABS\n\n\n\n\nLinear models, ANOVA, GLMs, calibration, and the diagnostic discipline that separates an analysis from a guess."
+  },
+  {
     "objectID": "course2_regression/index.html#what-youll-be-able-to-do-by-the-end",
     "href": "course2_regression/index.html#what-youll-be-able-to-do-by-the-end",
-    "title": "Course 2 — Regression, ANOVA & Model Diagnostics",
+    "title": "Course 2",
     "section": "What you’ll be able to do by the end",
     "text": "What you’ll be able to do by the end\n\nSpecify, fit, and diagnose linear and generalised linear models for the most common biomedical outcomes — continuous, binary, ordinal, and count.\nDistinguish confounding from interaction, and design model formulae that answer the scientific question being asked rather than the convenient one.\nRead a residual plot, a QQ plot, a Cook’s distance plot, and a calibration plot, and know what to do when each of them misbehaves.\nQuantify a model’s discrimination and calibration with ROC/AUC and Brier score, and decide which of them matters for your decision.\nWrite up a regression analysis honestly, with effect sizes, confidence intervals, and an explicit statement of what the model is and is not for."
   },
   {
     "objectID": "course2_regression/index.html#who-should-take-this-course",
     "href": "course2_regression/index.html#who-should-take-this-course",
-    "title": "Course 2 — Regression, ANOVA & Model Diagnostics",
+    "title": "Course 2",
     "section": "Who should take this course",
     "text": "Who should take this course\nCourse 2 assumes Course 1, or the equivalent: comfort with R, with hypothesis testing, and with the basic distributions. It does not assume any matrix algebra. If you have fit lm() once or twice but have never checked whether it was a sensible thing to do, this is the right course for you."
   },
   {
     "objectID": "course2_regression/index.html#the-shape-of-the-four-weeks",
     "href": "course2_regression/index.html#the-shape-of-the-four-weeks",
-    "title": "Course 2 — Regression, ANOVA & Model Diagnostics",
+    "title": "Course 2",
     "section": "The shape of the four weeks",
     "text": "The shape of the four weeks\n\n\n\nWeek 1\n\n\nLinear models end-to-end\nCorrelation vs regression; simple and multiple LR; diagnostics; robust and weighted regression.\n\n\n\n\nWeek 2\n\n\nANOVA and non-linear extensions\nOne-way and factorial ANOVA; RCBD; repeated measures; GAMs; non-linear regression with nls.\n\n\n\n\nWeek 3\n\n\nGLMs, ANCOVA, evaluation\nLogistic, ordinal, multinomial, Poisson, negative binomial; ANCOVA; calibration, discrimination, ROC/AUC, Brier.\n\n\n\n\nWeek 4\n\n\nMeasurement, change, survival, reporting\nDichotomisation, change scores, RTM; agreement and reliability; survival primer; decision curves and NRI/IDI; explanation vs prediction."
   },
   {
     "objectID": "course2_regression/index.html#weekly-summaries",
     "href": "course2_regression/index.html#weekly-summaries",
-    "title": "Course 2 — Regression, ANOVA & Model Diagnostics",
+    "title": "Course 2",
     "section": "Weekly summaries",
     "text": "Weekly summaries\nWeek 1 — linear models end-to-end. We open with the distinction between correlation and regression and the two kinds of regression line (Model I and Model II). Simple linear regression is introduced with emphasis on the geometry of least squares; multiple regression brings in confounding, interaction, centring, and the semantics of adjustment. Diagnostics — residuals vs fitted, QQ, leverage, Cook’s distance, and VIF — occupy a full lab. The week closes with robust regression, weighted least squares, and heteroscedasticity-consistent standard errors, tools that let you keep using linear models when the assumptions quietly fail. Key packages: stats, car, broom, performance, sandwich, MASS.\nWeek 2 — ANOVA and non-linear extensions. One-way ANOVA is reframed as a linear model with a categorical predictor, and custom contrasts with emmeans are introduced as the mature alternative to post-hoc soup. Factorial ANOVA adds interaction; RCBD adds blocking; repeated measures naturally lift us into mixed models. We then cross into the non-linear world with generalised additive models (mgcv, gratia) and non-linear least squares (nls), two tools that handle most curves a biomedical scientist will ever meet. Key packages: stats, emmeans, car, mgcv, gratia, lme4.\nWeek 3 — GLMs, ANCOVA, evaluation. Logistic regression opens the week and introduces link functions, odds ratios, and deviance. ANCOVA in RCTs is covered next because so many trial analyses get it wrong. Ordinal and multinomial models follow, then Poisson and negative-binomial regression with offsets and overdispersion. The week closes with a lab on evaluating prediction models: calibration by binning and smoothing, discrimination by ROC/AUC, overall performance by the Brier score, and the decision-curve framework that connects all three to clinical utility. Key packages: stats, MASS, VGAM, nnet, pROC, rms, performance, DHARMa.\nWeek 4 — measurement, change, survival, reporting. We begin with information loss from dichotomisation and the regression-to-the-mean traps that plague change-score analyses. Agreement and reliability follow — κ, ICC, and Bland-Altman — with the distinctions that reviewers care about. A survival primer (Kaplan-Meier, log-rank, Cox PH) sets up Course 3, Week 3. The decision-curve, NRI, and IDI lab tackles “does my new model add anything clinically useful?” The final lab reprises Breiman’s two cultures and Shmueli’s explanation-vs-prediction distinction, and pins down the reporting guidelines (STROBE, TRIPOD, STARD, CONSORT) you will want bookmarked for the rest of your career."
   },
   {
     "objectID": "course2_regression/index.html#how-to-work-through-it",
     "href": "course2_regression/index.html#how-to-work-through-it",
-    "title": "Course 2 — Regression, ANOVA & Model Diagnostics",
+    "title": "Course 2",
     "section": "How to work through it",
     "text": "How to work through it\nIf you are pressed for time, prioritise Weeks 1 and 3 — these cover the tools that appear most often in biomedical papers. Weeks 2 and 4 are essential for anyone doing their own modelling but can be revisited later if the schedule is tight. The GAM lab (W2 S4) and the non-linear regression lab (W2 S5) are comfortable to skip on a faster pass; every other lab is referenced by at least one later course."
   },
   {
     "objectID": "course2_regression/index.html#further-along",
     "href": "course2_regression/index.html#further-along",
-    "title": "Course 2 — Regression, ANOVA & Model Diagnostics",
+    "title": "Course 2",
     "section": "Further along",
     "text": "Further along\n\nCourse 2 schedule — linked index of every lab, deck, and R script.\nUnified references."
   },
@@ -7329,44 +7364,51 @@
     "text": "Session info\n\nsessionInfo()\n\nR version 4.5.2 (2025-10-31 ucrt)\nPlatform: x86_64-w64-mingw32/x64\nRunning under: Windows 11 x64 (build 26200)\n\nMatrix products: default\n  LAPACK version 3.12.1\n\nlocale:\n[1] LC_COLLATE=English_Germany.utf8  LC_CTYPE=English_Germany.utf8   \n[3] LC_MONETARY=English_Germany.utf8 LC_NUMERIC=C                    \n[5] LC_TIME=English_Germany.utf8    \n\ntime zone: Europe/Berlin\ntzcode source: internal\n\nattached base packages:\n[1] stats     graphics  grDevices utils     datasets  methods   base     \n\nother attached packages:\n [1] lubridate_1.9.5 forcats_1.0.1   stringr_1.6.0   dplyr_1.2.0    \n [5] purrr_1.2.2     readr_2.2.0     tidyr_1.3.2     tibble_3.3.1   \n [9] ggplot2_4.0.3   tidyverse_2.0.0\n\nloaded via a namespace (and not attached):\n [1] gtable_0.3.6       jsonlite_2.0.0     compiler_4.5.2     tidyselect_1.2.1  \n [5] scales_1.4.0       yaml_2.3.12        fastmap_1.2.0      R6_2.6.1          \n [9] labeling_0.4.3     generics_0.1.4     knitr_1.51         htmlwidgets_1.6.4 \n[13] pillar_1.11.1      RColorBrewer_1.1-3 tzdb_0.5.0         rlang_1.2.0       \n[17] utf8_1.2.6         stringi_1.8.7      xfun_0.57          S7_0.2.2          \n[21] otel_0.2.0         timechange_0.4.0   cli_3.6.6          withr_3.0.2       \n[25] magrittr_2.0.4     digest_0.6.39      grid_4.5.2         hms_1.1.4         \n[29] lifecycle_1.0.5    vctrs_0.7.3        evaluate_1.0.5     glue_1.8.0        \n[33] farver_2.1.2       rmarkdown_2.31     tools_4.5.2        pkgconfig_2.0.3   \n[37] htmltools_0.5.9"
   },
   {
+    "objectID": "course1_foundations/index.html",
+    "href": "course1_foundations/index.html",
+    "title": "Course 1",
+    "section": "",
+    "text": "INTRODUCTORY · 4 WEEKS · 20 LABS\n\n\n\n\nThe scientific process, the R toolchain, and the core statistical ideas that every later course assumes. Everything begins here."
+  },
+  {
     "objectID": "course1_foundations/index.html#what-youll-be-able-to-do-by-the-end",
     "href": "course1_foundations/index.html#what-youll-be-able-to-do-by-the-end",
-    "title": "Course 1 — Foundations of Biostatistics with R",
+    "title": "Course 1",
     "section": "What you’ll be able to do by the end",
     "text": "What you’ll be able to do by the end\n\nState a scientific question, choose appropriate measurements, and map both onto a defensible analysis plan before any data are collected.\nTidy, join, and describe a biomedical dataset in R without needing a spreadsheet.\nProduce publication-quality graphics with ggplot2 and tables with gtsummary.\nDerive confidence intervals by two routes — the bootstrap and the classical formula — and recognise when one is trustworthy and the other is not.\nRun and correctly interpret the workhorse tests: one- and two-sample t-tests, chi-square, Fisher’s exact, Wilcoxon, Kruskal-Wallis, and Pearson and Spearman correlation.\nProduce a Quarto manuscript whose numbers, tables, and figures all regenerate from a single render."
   },
   {
     "objectID": "course1_foundations/index.html#who-should-take-this-course",
     "href": "course1_foundations/index.html#who-should-take-this-course",
-    "title": "Course 1 — Foundations of Biostatistics with R",
+    "title": "Course 1",
     "section": "Who should take this course",
     "text": "Who should take this course\nCourse 1 is the foundation for everything else on the site. It assumes basic R fluency — you have read a CSV, written a function with an if statement, and survived your first ggplot2 plot — but it does not assume any formal statistics beyond high-school algebra. PhD students, clinicians returning to research, and practising scientists who never had a rigorous course in frequentist inference will all find this the right place to start."
   },
   {
     "objectID": "course1_foundations/index.html#the-shape-of-the-four-weeks",
     "href": "course1_foundations/index.html#the-shape-of-the-four-weeks",
-    "title": "Course 1 — Foundations of Biostatistics with R",
+    "title": "Course 1",
     "section": "The shape of the four weeks",
     "text": "The shape of the four weeks\n\n\n\nWeek 1\n\n\nScientific process, toolchain, data hygiene\nResearch workflow; R/RStudio/Quarto/renv; data types and quality; dplyr basics; the grammar of graphics.\n\n\n\n\nWeek 2\n\n\nDescribing data, probability, distributions\nDescriptives and Table 1; Bayes’ theorem; diagnostic testing; discrete and continuous distributions.\n\n\n\n\nWeek 3\n\n\nSampling, estimation, one-sample inference\nSampling and the CLT; bootstrap and permutation; MLE; one-sample tests; hypothesis-testing philosophy.\n\n\n\n\nWeek 4\n\n\nTwo-group comparisons, associations, reporting\nTwo-sample and paired t; two proportions; correlation; non-parametric tests; power and reporting."
   },
   {
     "objectID": "course1_foundations/index.html#weekly-summaries",
     "href": "course1_foundations/index.html#weekly-summaries",
-    "title": "Course 1 — Foundations of Biostatistics with R",
+    "title": "Course 1",
     "section": "Weekly summaries",
     "text": "Weekly summaries\nWeek 1 — toolchain and data hygiene. We begin with the shape of a research project: the arc from question to validated knowledge, and the distinction between biological and statistical significance. The next three labs set up the tooling — R, RStudio, Quarto, and renv — and walk through tidy data, import, joining, and the small daily habits that make later statistics possible. Week 1 closes with a grammar-of- graphics tour in ggplot2: facets, scales, and the handful of plot families you will reuse throughout the curriculum.\nWeek 2 — describing data and naming uncertainty. Before any modelling we need vocabulary. We build up descriptive statistics, contingency tables, and a publication-ready Table 1 with gtsummary; we introduce probability through simulation and Bayes’ theorem through diagnostic testing, where its relevance is visible to any clinician; and we close with the distributions — Bernoulli, binomial, Poisson, normal, t, chi-square, F, exponential — that every later lab will take for granted.\nWeek 3 — from samples to inference. This is the theoretical heart of Course 1. We simulate the central limit theorem before we quote it, derive confidence intervals by bootstrap before we write a formula, introduce maximum likelihood as a generalisation of least squares, and end with one-sample tests cast in the five-step template that organises every inference lab in this curriculum. The week closes with a sober account of hypothesis testing, p-values, and the two error rates — the pieces most scientists use badly because nobody taught them well.\nWeek 4 — comparisons, associations, reporting. With the scaffolding in place we can run the workhorse tests: two-sample and paired t, chi- square and Fisher for two proportions, Pearson and Spearman correlation, and the Wilcoxon/Mann-Whitney/Kruskal-Wallis trio for data that refuses to be normal. The final lab covers sample size and power for all of the above and closes with a Quarto-driven reporting workflow that wires gtsummary, CONSORT diagrams, and reproducible figures into a single render."
   },
   {
     "objectID": "course1_foundations/index.html#how-to-work-through-it",
     "href": "course1_foundations/index.html#how-to-work-through-it",
-    "title": "Course 1 — Foundations of Biostatistics with R",
+    "title": "Course 1",
     "section": "How to work through it",
     "text": "How to work through it\nTwenty labs over four weeks suggests roughly one lab per weekday. If that is too fast, a sustainable pace is two labs per week with time for the exercises; if you already know the tooling, the first week can be compressed into a single afternoon. Labs that are comfortable to skip on a faster pass are Week 1 Session 2 (environment setup), Week 2 Session 3 (diagnostic testing — lovely but mathematically light), and Week 3 Session 5 (p-value philosophy, already covered implicitly by the other labs in that week). Every other lab is load-bearing for Course 2."
   },
   {
     "objectID": "course1_foundations/index.html#further-along",
     "href": "course1_foundations/index.html#further-along",
-    "title": "Course 1 — Foundations of Biostatistics with R",
+    "title": "Course 1",
     "section": "Further along",
     "text": "Further along\n\nCourse 1 schedule — linked index of every lab, deck, and R script.\nUnified references — the sources behind this course (and every course on the site)."
   },
@@ -7917,6 +7959,13 @@
     "text": "Further reading\n\nWickham, R for Data Science (2e).\nPosit ggplot2 and dplyr cheatsheets."
   },
   {
+    "objectID": "appendices/writing_a_report.html",
+    "href": "appendices/writing_a_report.html",
+    "title": "Writing a report",
+    "section": "",
+    "text": "APPENDIX · WRITING A REPORT\n\n\n\n\nHow to turn an analysis into a document a reviewer, a PI, or a future version of yourself will trust."
+  },
+  {
     "objectID": "appendices/writing_a_report.html#imrad",
     "href": "appendices/writing_a_report.html#imrad",
     "title": "Writing a report",
@@ -7970,7 +8019,7 @@
     "href": "appendices/glossary.html",
     "title": "Glossary",
     "section": "",
-    "text": "Each entry links to the first lab in which the term appears."
+    "text": "APPENDIX · GLOSSARY\n\n\n\n\nPlain-English definitions of the terms this curriculum uses the most.\nEach entry links to the first lab in which the term appears."
   },
   {
     "objectID": "appendices/glossary.html#a",
@@ -8117,7 +8166,7 @@
     "href": "appendices/common_errors.html",
     "title": "Common errors",
     "section": "",
-    "text": "Each entry lists the error message, the usual cause, and the fix that works most of the time."
+    "text": "APPENDIX · COMMON ERRORS\n\n\n\n\nA field guide to the R, Quarto, and renv errors that will bite you first.\nEach entry lists the error message, the usual cause, and the fix that works most of the time."
   },
   {
     "objectID": "appendices/common_errors.html#r",
@@ -8155,6 +8204,13 @@
     "text": "Git\nError: fatal: refusing to merge unrelated histories\nCause: you cloned one repo and then tried to pull from a different initialisation.\nFix: only run git pull --allow-unrelated-histories if you are sure you want to merge.\nError: Permission denied (publickey)\nCause: your SSH key is not registered with GitHub.\nFix: add your key via Settings → SSH and GPG keys, or switch the remote to HTTPS: git remote set-url origin https://github.com/...."
   },
   {
+    "objectID": "about.html",
+    "href": "about.html",
+    "title": "About",
+    "section": "",
+    "text": "ABOUT THIS CURRICULUM\n\n\n\n\nA standalone, open curriculum for people who would rather understand statistics than memorise recipes."
+  },
+  {
     "objectID": "about.html#purpose",
     "href": "about.html#purpose",
     "title": "About",
@@ -8188,6 +8244,13 @@
     "title": "About",
     "section": "Acknowledgements",
     "text": "Acknowledgements\nNothing on this site grew in isolation. See the dedicated Acknowledgements page for the full list of didactic sources, content references, tooling, and structural inspiration that made this curriculum possible."
+  },
+  {
+    "objectID": "acknowledgements.html",
+    "href": "acknowledgements.html",
+    "title": "Acknowledgements",
+    "section": "",
+    "text": "DIDACTICS · CONTENT · TOOLING · INSPIRATION\n\n\n\n\nNothing on this site is original in isolation. Every choice — how the labs are paced, how the prose is written, which methods got a full lab and which got a paragraph — comes from somewhere, and that somewhere deserves to be named."
   },
   {
     "objectID": "acknowledgements.html#didactics-and-pedagogy",
@@ -8229,7 +8292,7 @@
     "href": "appendices/decision_tree.html",
     "title": "Decision tree: which method?",
     "section": "",
-    "text": "The tree below is not a substitute for thinking; it is a scaffold for thinking. Start from your scientific question, follow the branches, and land on a lab. Every leaf links into the curriculum.\nflowchart TD\n  Start{What is the question?}\n  Start --&gt; Q1[Compare two or more groups]\n  Start --&gt; Q2[Quantify an association]\n  Start --&gt; Q3[Model an outcome from predictors]\n  Start --&gt; Q4[Handle clustered or repeated data]\n  Start --&gt; Q5[Deal with high-dimensional data]\n  Start --&gt; Q6[Estimate a causal effect]\n\n  Q1 --&gt; G1[Continuous outcome]\n  G1 --&gt; G1a[Two groups → t-test / Wilcoxon]\n  G1 --&gt; G1b[Many groups → ANOVA / Kruskal-Wallis]\n\n  Q1 --&gt; G2[Binary outcome]\n  G2 --&gt; G2a[Two proportions → chi-square / Fisher]\n  G2 --&gt; G2b[Risk or odds ratio]\n\n  Q2 --&gt; A1[Two continuous → Pearson / Spearman]\n  Q2 --&gt; A2[Continuous & categorical → ANOVA]\n  Q2 --&gt; A3[Categorical & categorical → chi-square]\n\n  Q3 --&gt; M1[Continuous outcome → linear regression]\n  Q3 --&gt; M2[Binary → logistic]\n  Q3 --&gt; M3[Count → Poisson / NB]\n  Q3 --&gt; M4[Ordinal → ordinal logit]\n  Q3 --&gt; M5[Time-to-event → Cox / KM]\n\n  Q4 --&gt; C1[Linear mixed model]\n  Q4 --&gt; C2[GLMM or GEE]\n  Q4 --&gt; C3[Repeated measures ANOVA]\n\n  Q5 --&gt; H1[Regularisation → lasso / ridge]\n  Q5 --&gt; H2[Dimension reduction → PCA / UMAP]\n  Q5 --&gt; H3[Tree ensemble → RF / xgboost]\n\n  Q6 --&gt; CA1[Randomised → ITT analysis]\n  Q6 --&gt; CA2[Observational → DAG → adjustment set]\n  Q6 --&gt; CA3[Non-randomised → IPTW / matching]\n  Q6 --&gt; CA4[Strong instrument → IV]"
+    "text": "APPENDIX · DECISION TREE\n\n\n\n\nA branching guide from what you are asking to the lab that shows you how to answer it.\nThe tree below is not a substitute for thinking; it is a scaffold for thinking. Start from your scientific question, follow the branches, and land on a lab. Every leaf links into the curriculum.\nflowchart TD\n  Start{What is the question?}\n  Start --&gt; Q1[Compare two or more groups]\n  Start --&gt; Q2[Quantify an association]\n  Start --&gt; Q3[Model an outcome from predictors]\n  Start --&gt; Q4[Handle clustered or repeated data]\n  Start --&gt; Q5[Deal with high-dimensional data]\n  Start --&gt; Q6[Estimate a causal effect]\n\n  Q1 --&gt; G1[Continuous outcome]\n  G1 --&gt; G1a[Two groups → t-test / Wilcoxon]\n  G1 --&gt; G1b[Many groups → ANOVA / Kruskal-Wallis]\n\n  Q1 --&gt; G2[Binary outcome]\n  G2 --&gt; G2a[Two proportions → chi-square / Fisher]\n  G2 --&gt; G2b[Risk or odds ratio]\n\n  Q2 --&gt; A1[Two continuous → Pearson / Spearman]\n  Q2 --&gt; A2[Continuous & categorical → ANOVA]\n  Q2 --&gt; A3[Categorical & categorical → chi-square]\n\n  Q3 --&gt; M1[Continuous outcome → linear regression]\n  Q3 --&gt; M2[Binary → logistic]\n  Q3 --&gt; M3[Count → Poisson / NB]\n  Q3 --&gt; M4[Ordinal → ordinal logit]\n  Q3 --&gt; M5[Time-to-event → Cox / KM]\n\n  Q4 --&gt; C1[Linear mixed model]\n  Q4 --&gt; C2[GLMM or GEE]\n  Q4 --&gt; C3[Repeated measures ANOVA]\n\n  Q5 --&gt; H1[Regularisation → lasso / ridge]\n  Q5 --&gt; H2[Dimension reduction → PCA / UMAP]\n  Q5 --&gt; H3[Tree ensemble → RF / xgboost]\n\n  Q6 --&gt; CA1[Randomised → ITT analysis]\n  Q6 --&gt; CA2[Observational → DAG → adjustment set]\n  Q6 --&gt; CA3[Non-randomised → IPTW / matching]\n  Q6 --&gt; CA4[Strong instrument → IV]"
   },
   {
     "objectID": "appendices/decision_tree.html#using-the-tree",
@@ -8285,7 +8348,7 @@
     "href": "appendices/research_workflow.html",
     "title": "The research workflow",
     "section": "",
-    "text": "Statistics is a thread running through a much longer process. The diagram below names the stages of that process and links each to the parts of the curriculum that cover it in detail. No stage is optional; errors made at one are paid for at the next.\nflowchart TD\n  Q[1. Question] --&gt; M[2. Measurements]\n  M --&gt; D[3. Design]\n  D --&gt; A[4. Acquisition]\n  A --&gt; Desc[5. Description]\n  Desc --&gt; An[6. Analysis]\n  An --&gt; I[7. Interpretation / Prediction]\n  I --&gt; V[8. Validation]\n  V --&gt; K[9. Knowledge / Decisions]"
+    "text": "APPENDIX · RESEARCH WORKFLOW\n\n\n\n\nNine stages from a research question to knowledge that survives replication.\nStatistics is a thread running through a much longer process. The diagram below names the stages of that process and links each to the parts of the curriculum that cover it in detail. No stage is optional; errors made at one are paid for at the next.\nflowchart TD\n  Q[1. Question] --&gt; M[2. Measurements]\n  M --&gt; D[3. Design]\n  D --&gt; A[4. Acquisition]\n  A --&gt; Desc[5. Description]\n  Desc --&gt; An[6. Analysis]\n  An --&gt; I[7. Interpretation / Prediction]\n  I --&gt; V[8. Validation]\n  V --&gt; K[9. Knowledge / Decisions]"
   },
   {
     "objectID": "appendices/research_workflow.html#question",
@@ -8355,7 +8418,7 @@
     "href": "cheatsheets.html",
     "title": "Cheatsheets",
     "section": "",
-    "text": "Each cheatsheet condenses a week’s five sessions into: the key decisions, the R functions, the effect sizes or diagnostics to report, and a short list of pitfalls. They are not a substitute for the labs — but they are what you want next to you when you are analysing real data at 6 pm and cannot remember which glm family you want."
+    "text": "ONE PAGE PER WEEK · HTML + PDF\n\n\n\n\nSixteen dense one-pagers — one per week, across the four courses. View in the browser or download the PDF for printing.\nEach cheatsheet condenses a week’s five sessions into: the key decisions, the R functions, the effect sizes or diagnostics to report, and a short list of pitfalls. They are not a substitute for the labs — but they are what you want next to you when you are analysing real data at 6 pm and cannot remember which glm family you want."
   },
   {
     "objectID": "cheatsheets.html#course-1-foundations",
@@ -10698,7 +10761,7 @@
   {
     "objectID": "course1_foundations/schedule.html",
     "href": "course1_foundations/schedule.html",
-    "title": "Course 1 — Schedule",
+    "title": "Course 1",
     "section": "",
     "text": "COURSE 1 · FOUNDATIONS\n\n\nSchedule\n\nEvery lab, every deck, every R script — in the order they are meant to be read.\n\n\n\n\n\n\nWeek\n#\nTopic\nArticle\nSlides\nScript\n\n\n\n\n1\n1\nScientific process & research workflow\nlab\nslides\nR\n\n\n1\n2\nR, RStudio, Quarto, renv toolchain\nlab\nslides\nR\n\n\n1\n3\nData types, tidy data, measurement quality\nlab\nslides\nR\n\n\n1\n4\nImport, joins, missingness with dplyr\nlab\nslides\nR\n\n\n1\n5\nggplot2 grammar and multi-panel layouts\nlab\nslides\nR\n\n\n2\n6\nDescriptives and Table 1 with gtsummary\nlab\nslides\nR\n\n\n2\n7\nProbability and Bayes’ theorem\nlab\nslides\nR\n\n\n2\n8\nDiagnostic testing\nlab\nslides\nR\n\n\n2\n9\nDiscrete distributions\nlab\nslides\nR\n\n\n2\n10\nContinuous distributions and Q-Q plots\nlab\nslides\nR\n\n\n3\n11\nPopulations, samples, CLT by simulation\nlab\nslides\nR\n\n\n3\n12\nBootstrap and permutation\nlab\nslides\nR\n\n\n3\n13\nMaximum likelihood and standard errors\nlab\nslides\nR\n\n\n3\n14\nOne-sample t and one-proportion\nlab\nslides\nR\n\n\n3\n15\nHypothesis testing philosophy\nlab\nslides\nR\n\n\n4\n16\nTwo-sample and paired t; effect sizes\nlab\nslides\nR\n\n\n4\n17\nTwo proportions and goodness-of-fit\nlab\nslides\nR\n\n\n4\n18\nPearson and Spearman correlation\nlab\nslides\nR\n\n\n4\n19\nNon-parametric tests\nlab\nslides\nR\n\n\n4\n20\nSample size, power, Quarto reporting\nlab\nslides\nR"
   },
@@ -12455,7 +12518,7 @@
   {
     "objectID": "course2_regression/schedule.html",
     "href": "course2_regression/schedule.html",
-    "title": "Course 2 — Schedule",
+    "title": "Course 2",
     "section": "",
     "text": "COURSE 2 · REGRESSION\n\n\nSchedule\n\nEvery lab, every deck, every R script for Course 2.\n\n\n\n\n\n\nWeek\n#\nTopic\nArticle\nSlides\nScript\n\n\n\n\n1\n1\nCorrelation vs regression; Model-I/II\nlab\nslides\nR\n\n\n1\n2\nSimple linear regression\nlab\nslides\nR\n\n\n1\n3\nMultiple regression: confounding & interaction\nlab\nslides\nR\n\n\n1\n4\nDiagnostics: residuals, leverage, Cook, VIF\nlab\nslides\nR\n\n\n1\n5\nRobust and weighted regression; HC SEs\nlab\nslides\nR\n\n\n2\n6\nOne-way ANOVA and contrasts\nlab\nslides\nR\n\n\n2\n7\nTwo-way / factorial ANOVA\nlab\nslides\nR\n\n\n2\n8\nRCBD and repeated measures\nlab\nslides\nR\n\n\n2\n9\nGAMs with mgcv\nlab\nslides\nR\n\n\n2\n10\nNon-linear regression with nls\nlab\nslides\nR\n\n\n3\n11\nLogistic regression\nlab\nslides\nR\n\n\n3\n12\nANCOVA in RCTs\nlab\nslides\nR\n\n\n3\n13\nOrdinal and multinomial regression\nlab\nslides\nR\n\n\n3\n14\nPoisson and negative-binomial regression\nlab\nslides\nR\n\n\n3\n15\nCalibration, discrimination, ROC/AUC, Brier\nlab\nslides\nR\n\n\n4\n16\nDichotomisation, change scores, RTM\nlab\nslides\nR\n\n\n4\n17\nKappa, ICC, Bland-Altman\nlab\nslides\nR\n\n\n4\n18\nSurvival primer: KM, log-rank, Cox\nlab\nslides\nR\n\n\n4\n19\nDecision curves, NRI/IDI\nlab\nslides\nR\n\n\n4\n20\nExplanation vs prediction; reporting\nlab\nslides\nR"
   },
@@ -14212,7 +14275,7 @@
   {
     "objectID": "course3_design_causal/schedule.html",
     "href": "course3_design_causal/schedule.html",
-    "title": "Course 3 — Schedule",
+    "title": "Course 3",
     "section": "",
     "text": "COURSE 3 · DESIGN & CAUSAL\n\n\nSchedule\n\nEvery lab, every deck, every R script for Course 3.\n\n\n\n\n\n\nWeek\n#\nTopic\nArticle\nSlides\nScript\n\n\n\n\n1\n1\nObservational designs and STROBE\nlab\nslides\nR\n\n\n1\n2\nRandomised controlled trials\nlab\nslides\nR\n\n\n1\n3\nAdaptive, non-inferiority, equivalence\nlab\nslides\nR\n\n\n1\n4\nBench and translational design\nlab\nslides\nR\n\n\n1\n5\nPower by closed form and simulation\nlab\nslides\nR\n\n\n2\n6\nMCAR, MAR, MNAR\nlab\nslides\nR\n\n\n2\n7\nMultiple imputation with mice\nlab\nslides\nR\n\n\n2\n8\nLinear mixed models with lme4\nlab\nslides\nR\n\n\n2\n9\nGLMMs and GEE\nlab\nslides\nR\n\n\n2\n10\nTime series basics\nlab\nslides\nR\n\n\n3\n11\nTime-varying, landmark, immortal-time\nlab\nslides\nR\n\n\n3\n12\nCompeting risks and multistate\nlab\nslides\nR\n\n\n3\n13\nDAGs with dagitty\nlab\nslides\nR\n\n\n3\n14\nPropensity scores and IPTW\nlab\nslides\nR\n\n\n3\n15\nG-methods, IV, DiD, RDD; HTE\nlab\nslides\nR\n\n\n4\n16\nSystematic reviews and PRISMA\nlab\nslides\nR\n\n\n4\n17\nMeta-analysis basics\nlab\nslides\nR\n\n\n4\n18\nNetwork meta-analysis\nlab\nslides\nR\n\n\n4\n19\nSIR / SEIR with deSolve\nlab\nslides\nR\n\n\n4\n20\nPre-registration and SAPs\nlab\nslides\nR"
   },
@@ -15969,7 +16032,7 @@
   {
     "objectID": "course4_ml_highdim/schedule.html",
     "href": "course4_ml_highdim/schedule.html",
-    "title": "Course 4 — Schedule",
+    "title": "Course 4",
     "section": "",
     "text": "COURSE 4 · ML & HIGH-DIM\n\n\nSchedule\n\nEvery lab, every deck, every R script for Course 4.\n\n\n\n\n\n\nWeek\n#\nTopic\nArticle\nSlides\nScript\n\n\n\n\n1\n1\nCross-validation, nested CV, bootstrap\nlab\nslides\nR\n\n\n1\n2\nRegularisation: ridge, lasso, elastic net\nlab\nslides\nR\n\n\n1\n3\nPCA, FA, CCA, LDA\nlab\nslides\nR\n\n\n1\n4\nClustering: k-means, hierarchical, model-based\nlab\nslides\nR\n\n\n1\n5\nUMAP and t-SNE\nlab\nslides\nR\n\n\n2\n6\nTrees, random forests, boosting\nlab\nslides\nR\n\n\n2\n7\nInterpretability and SHAP\nlab\nslides\nR\n\n\n2\n8\nTabular neural networks with torch\nlab\nslides\nR\n\n\n2\n9\nImaging and sequence models intro\nlab\nslides\nR\n\n\n2\n10\ntidymodels pipelines\nlab\nslides\nR\n\n\n3\n11\nBayesian thinking; α vs decision error\nlab\nslides\nR\n\n\n3\n12\nbrms / Stan, LOO, hierarchical\nlab\nslides\nR\n\n\n3\n13\nBiomarker statistics\nlab\nslides\nR\n\n\n3\n14\nSurvival ML\nlab\nslides\nR\n\n\n3\n15\nTime-dependent Brier, IPA, external validation\nlab\nslides\nR\n\n\n4\n16\nRNA-seq with DESeq2/edgeR\nlab\nslides\nR\n\n\n4\n17\nEnrichment analysis\nlab\nslides\nR\n\n\n4\n18\nscRNA-seq with Seurat\nlab\nslides\nR\n\n\n4\n19\nFDR, knockoffs, replication crisis\nlab\nslides\nR\n\n\n4\n20\nTRIPOD-AI, fairness, reproducibility at scale\nlab\nslides\nR"
   },
@@ -16009,67 +16072,18 @@
     "text": "EU-Streitschlichtung\nDie Europäische Kommission stellt eine Plattform zur Online-Streitbeilegung (OS) bereit: https://ec.europa.eu/consumers/odr/.\nIch bin nicht verpflichtet und nicht bereit, an einem Streitbeilegungsverfahren vor einer Verbraucherschlichtungsstelle teilzunehmen."
   },
   {
-    "objectID": "impressum.html#verantwortlicher",
-    "href": "impressum.html#verantwortlicher",
+    "objectID": "impressum.html#datenschutz",
+    "href": "impressum.html#datenschutz",
     "title": "Impressum",
-    "section": "1. Verantwortlicher",
-    "text": "1. Verantwortlicher\nVerantwortliche Stelle im Sinne der Datenschutz-Grundverordnung (DSGVO) ist:\nR. Heller\nAlbert-Einstein-Straße 47\n02977 Hoyerswerda\nDeutschland\nE-Mail: 58561665+r-heller@users.noreply.github.com\nEine gesetzliche Pflicht zur Bestellung eines/einer Datenschutzbeauftragten besteht nicht; entsprechend ist keine solche Person bestellt."
+    "section": "Datenschutzerklärung",
+    "text": "Datenschutzerklärung\n\nVerantwortlicher\nVerantwortliche Stelle im Sinne der Datenschutz-Grundverordnung (DSGVO) ist:\nR. Heller\nAlbert-Einstein-Straße 47\n02977 Hoyerswerda\nDeutschland\nE-Mail: 58561665+r-heller@users.noreply.github.com\nEine gesetzliche Pflicht zur Bestellung eines/einer Datenschutzbeauftragten besteht nicht; entsprechend ist keine solche Person bestellt.\n\n\nAllgemeine Hinweise und Pflichtinformationen\n\nDatenschutz auf einen Blick\nDiese Website ist ein nicht-kommerzielles, didaktisch motiviertes Angebot. Es werden so wenige personenbezogene Daten verarbeitet wie technisch möglich. Es kommen keine Tracking-Cookies, keine Werbenetzwerke und keine personalisierten Profile zum Einsatz.\n\n\nSpeicherdauer\nSofern in dieser Erklärung keine speziellere Speicherdauer genannt ist, verbleiben personenbezogene Daten so lange beim Verantwortlichen, bis der Zweck für die Datenverarbeitung entfällt.\n\n\nRechtsgrundlagen der Datenverarbeitung\n\nArt. 6 Abs. 1 lit. a DSGVO — Einwilligung,\nArt. 6 Abs. 1 lit. b DSGVO — Vertrag bzw. vorvertragliche Maßnahmen,\nArt. 6 Abs. 1 lit. f DSGVO — berechtigte Interessen (stabiler Betrieb, Sicherheit, statistische Reichweitenmessung, urheberrechtliche Vergütungsansprüche).\n\n\n\nEmpfänger und Übermittlung in Drittländer\nHosting der Website-Auslieferung erfolgt durch GitHub, Inc.; damit ist eine Verarbeitung personenbezogener Daten in den USA möglich. Schriftarten werden über Google Fonts (Google Ireland Limited) ausgeliefert. Beide Übermittlungen erfolgen auf Grundlage des EU-US Data Privacy Framework bzw. Standardvertragsklauseln. Eine darüber hinausgehende Übermittlung in Drittländer findet nicht statt. Die Reichweitenmessung mittels Plausible Analytics erfolgt auf einer selbst gehosteten Instanz auf einem Server in Deutschland.\n\n\nWiderruf, Widerspruch, Beschwerde\nEine erteilte Einwilligung kann jederzeit mit Wirkung für die Zukunft widerrufen werden (Art. 7 Abs. 3 DSGVO). Gegen eine Verarbeitung auf Grundlage von Art. 6 Abs. 1 lit. e oder f DSGVO können Sie aus Gründen Ihrer besonderen Situation Widerspruch einlegen (Art. 21).\n\n\nBeschwerderecht bei der zuständigen Aufsichtsbehörde\nSächsischer Datenschutz- und Transparenzbeauftragter\nDevrientstraße 1\n01067 Dresden\nhttps://www.saechsdsb.de/\n\n\nAuskunft, Berichtigung, Löschung, Datenübertragbarkeit\nAuskunft (Art. 15), Berichtigung (16), Löschung (17), Einschränkung (18), Datenübertragbarkeit (20).\n\n\nSSL- bzw. TLS-Verschlüsselung\nDiese Seite nutzt aus Sicherheitsgründen eine TLS- Verschlüsselung.\n\n\n\nDatenerfassung auf dieser Website\n\nServer-Log-Dateien\nDer Provider der Seiten (GitHub Pages, GitHub, Inc., 88 Colin P Kelly Jr St, San Francisco, CA 94107, USA) erhebt automatisch Server-Log-Dateien (Browsertyp, Betriebssystem, Referrer-URL, Hostname, Uhrzeit, IP-Adresse). Eine Zusammenführung mit anderen Datenquellen durch den Verantwortlichen findet nicht statt. Rechtsgrundlage: Art. 6 Abs. 1 lit. f DSGVO. GitHub Privacy Statement.\n\n\nCookies\nDiese Website setzt keine eigenen Tracking-Cookies. Technisch notwendige Cookies (z. B. Theme-Präferenz) sind durch § 25 Abs. 2 Nr. 2 TDDDG gedeckt.\n\n\nKontaktaufnahme per E-Mail\nBei Kontakt per E-Mail werden die mitgeteilten Daten zur Bearbeitung gespeichert. Rechtsgrundlage: Art. 6 Abs. 1 lit. b bzw. f DSGVO.\n\n\n\nAnalyse-Tools und Tools von Drittanbietern\n\nPlausible Analytics (selbst gehostet)\nDiese Website verwendet Plausible Analytics zur statistischen Reichweitenmessung. Plausible wird als selbst gehostete Instanz unter analytics.hellebo.de betrieben; der Server steht in Deutschland. Eine Übermittlung an Plausible Insights OÜ oder andere Drittanbieter findet nicht statt.\nPlausible ist cookielos und erhebt keine personenbezogenen Daten im engeren Sinn. IP-Adressen werden nicht gespeichert; zur Sitzungserkennung wird täglich rotierend ein gesalzener Hash gebildet.\nRechtsgrundlage: Art. 6 Abs. 1 lit. f DSGVO. Eine Einwilligung nach § 25 TDDDG ist nicht erforderlich.\nWeitere Informationen: https://plausible.io/data-policy\n\n\nVG Wort Zählpixel (Standard)\nAuf einzelnen, kennzeichenpflichtig angemeldeten Kursseiten wird ein Zählpixel der Verwertungsgesellschaft WORT eingebunden:\nVerwertungsgesellschaft WORT (VG WORT)\nUntere Weidenstraße 5\n81543 München\nDeutschland\nhttps://www.vgwort.de/\nZweck: Erfassung statistischer Kennzahlen zur Berechnung von Vergütungsansprüchen gemäß § 53 UrhG / METIS-Programm. Keine Cookies. Die IP-Adresse wird durch VG Wort SHA-256-gehasht und gekürzt. Verarbeitung auf Servern in Deutschland. Rechtsgrundlage: Art. 6 Abs. 1 lit. f DSGVO.\nWeitere Informationen: https://www.vgwort.de/datenschutz.html\n\n\nGitHub Pages\nAnbieterin: GitHub, Inc., 88 Colin P Kelly Jr St, San Francisco, CA 94107, USA. GitHub Privacy Statement.\n\n\n\nEingebettete Inhalte und Schriftarten\n\nGoogle Fonts (CDN)\nDiese Website bindet die Schriften Source Sans 3 und JetBrains Mono über die Google-Fonts-CDN ein. Beim Aufruf überträgt Ihr Browser dabei Verbindungsdaten (insbesondere die IP-Adresse) an Google. Anbieter: Google Ireland Limited, Gordon House, Barrow Street, Dublin 4, Irland. Rechtsgrundlage: Art. 6 Abs. 1 lit. f DSGVO. https://policies.google.com/privacy.\n\n\nExterne Verlinkungen\nDie Kursseiten verweisen auf externe Quellen (CRAN, Bioconductor, Wikipedia, GitHub, Verlage, Repositorien u. a.). Beim Klick auf solche Links verlassen Sie diese Seite; die jeweilige Datenschutzpolitik des verlinkten Angebots gilt.\n\n\n\nIhre Rechte als betroffene Person\nAuskunft (Art. 15), Berichtigung (16), Löschung (17), Einschränkung (18), Datenübertragbarkeit (20), Widerspruch (21), Widerruf (Art. 7 Abs. 3), Beschwerde (Art. 77).\nStand: 2026-05-05."
   },
   {
-    "objectID": "impressum.html#allgemeine-hinweise-und-pflichtinformationen",
-    "href": "impressum.html#allgemeine-hinweise-und-pflichtinformationen",
+    "objectID": "impressum.html#haftungsausschluss",
+    "href": "impressum.html#haftungsausschluss",
     "title": "Impressum",
-    "section": "2. Allgemeine Hinweise und Pflichtinformationen",
-    "text": "2. Allgemeine Hinweise und Pflichtinformationen\n\nDatenschutz auf einen Blick\nDiese Website ist ein nicht-kommerzielles, didaktisch motiviertes Angebot. Es werden so wenige personenbezogene Daten verarbeitet wie technisch möglich. Es kommen keine Tracking-Cookies, keine Werbenetzwerke und keine personalisierten Profile zum Einsatz.\n\n\nSpeicherdauer\nSofern in dieser Erklärung keine speziellere Speicherdauer genannt ist, verbleiben personenbezogene Daten so lange beim Verantwortlichen, bis der Zweck für die Datenverarbeitung entfällt.\n\n\nRechtsgrundlagen der Datenverarbeitung\n\nArt. 6 Abs. 1 lit. a DSGVO — Einwilligung,\nArt. 6 Abs. 1 lit. b DSGVO — Vertrag bzw. vorvertragliche Maßnahmen,\nArt. 6 Abs. 1 lit. f DSGVO — berechtigte Interessen (stabiler Betrieb, Sicherheit, statistische Reichweitenmessung, urheberrechtliche Vergütungsansprüche).\n\n\n\nEmpfänger und Übermittlung in Drittländer\nHosting der Website-Auslieferung erfolgt durch GitHub, Inc.; damit ist eine Verarbeitung personenbezogener Daten in den USA möglich. Schriftarten werden über Google Fonts (Google Ireland Limited) ausgeliefert. Beide Übermittlungen erfolgen auf Grundlage des EU-US Data Privacy Framework bzw. Standardvertragsklauseln. Eine darüber hinausgehende Übermittlung in Drittländer findet nicht statt. Die Reichweitenmessung mittels Plausible Analytics erfolgt auf einer selbst gehosteten Instanz auf einem Server in Deutschland.\n\n\nWiderruf, Widerspruch, Beschwerde\nEine erteilte Einwilligung kann jederzeit mit Wirkung für die Zukunft widerrufen werden (Art. 7 Abs. 3 DSGVO). Gegen eine Verarbeitung auf Grundlage von Art. 6 Abs. 1 lit. e oder f DSGVO können Sie aus Gründen Ihrer besonderen Situation Widerspruch einlegen (Art. 21).\n\n\nBeschwerderecht bei der zuständigen Aufsichtsbehörde\nSächsischer Datenschutz- und Transparenzbeauftragter\nDevrientstraße 1\n01067 Dresden\nhttps://www.saechsdsb.de/\n\n\nAuskunft, Berichtigung, Löschung, Datenübertragbarkeit\nAuskunft (Art. 15), Berichtigung (16), Löschung (17), Einschränkung (18), Datenübertragbarkeit (20).\n\n\nSSL- bzw. TLS-Verschlüsselung\nDiese Seite nutzt aus Sicherheitsgründen eine TLS- Verschlüsselung."
-  },
-  {
-    "objectID": "impressum.html#datenerfassung-auf-dieser-website",
-    "href": "impressum.html#datenerfassung-auf-dieser-website",
-    "title": "Impressum",
-    "section": "3. Datenerfassung auf dieser Website",
-    "text": "3. Datenerfassung auf dieser Website\n\nServer-Log-Dateien\nDer Provider der Seiten (GitHub Pages, GitHub, Inc., 88 Colin P Kelly Jr St, San Francisco, CA 94107, USA) erhebt automatisch Server-Log-Dateien (Browsertyp, Betriebssystem, Referrer-URL, Hostname, Uhrzeit, IP-Adresse). Eine Zusammenführung mit anderen Datenquellen durch den Verantwortlichen findet nicht statt. Rechtsgrundlage: Art. 6 Abs. 1 lit. f DSGVO. GitHub Privacy Statement.\n\n\nCookies\nDiese Website setzt keine eigenen Tracking-Cookies. Technisch notwendige Cookies (z. B. Theme-Präferenz) sind durch § 25 Abs. 2 Nr. 2 TDDDG gedeckt.\n\n\nKontaktaufnahme per E-Mail\nBei Kontakt per E-Mail werden die mitgeteilten Daten zur Bearbeitung gespeichert. Rechtsgrundlage: Art. 6 Abs. 1 lit. b bzw. f DSGVO."
-  },
-  {
-    "objectID": "impressum.html#analyse-tools-und-tools-von-drittanbietern",
-    "href": "impressum.html#analyse-tools-und-tools-von-drittanbietern",
-    "title": "Impressum",
-    "section": "4. Analyse-Tools und Tools von Drittanbietern",
-    "text": "4. Analyse-Tools und Tools von Drittanbietern\n\nPlausible Analytics (selbst gehostet)\nDiese Website verwendet Plausible Analytics zur statistischen Reichweitenmessung. Plausible wird als selbst gehostete Instanz unter analytics.hellebo.de betrieben; der Server steht in Deutschland. Eine Übermittlung an Plausible Insights OÜ oder andere Drittanbieter findet nicht statt.\nPlausible ist cookielos und erhebt keine personenbezogenen Daten im engeren Sinn. IP-Adressen werden nicht gespeichert; zur Sitzungserkennung wird täglich rotierend ein gesalzener Hash gebildet.\nRechtsgrundlage: Art. 6 Abs. 1 lit. f DSGVO. Eine Einwilligung nach § 25 TDDDG ist nicht erforderlich.\nWeitere Informationen: https://plausible.io/data-policy\n\n\nVG Wort Zählpixel (Standard)\nAuf einzelnen, kennzeichenpflichtig angemeldeten Kursseiten wird ein Zählpixel der Verwertungsgesellschaft WORT eingebunden:\nVerwertungsgesellschaft WORT (VG WORT)\nUntere Weidenstraße 5\n81543 München\nDeutschland\nhttps://www.vgwort.de/\nZweck: Erfassung statistischer Kennzahlen zur Berechnung von Vergütungsansprüchen gemäß § 53 UrhG / METIS-Programm. Keine Cookies. Die IP-Adresse wird durch VG Wort SHA-256-gehasht und gekürzt. Verarbeitung auf Servern in Deutschland. Rechtsgrundlage: Art. 6 Abs. 1 lit. f DSGVO.\nWeitere Informationen: https://www.vgwort.de/datenschutz.html\n\n\nGitHub Pages\nAnbieterin: GitHub, Inc., 88 Colin P Kelly Jr St, San Francisco, CA 94107, USA. GitHub Privacy Statement."
-  },
-  {
-    "objectID": "impressum.html#eingebettete-inhalte-und-schriftarten",
-    "href": "impressum.html#eingebettete-inhalte-und-schriftarten",
-    "title": "Impressum",
-    "section": "5. Eingebettete Inhalte und Schriftarten",
-    "text": "5. Eingebettete Inhalte und Schriftarten\n\nGoogle Fonts (CDN)\nDiese Website bindet die Schriften Source Sans 3 und JetBrains Mono über die Google-Fonts-CDN ein. Beim Aufruf überträgt Ihr Browser dabei Verbindungsdaten (insbesondere die IP-Adresse) an Google. Anbieter: Google Ireland Limited, Gordon House, Barrow Street, Dublin 4, Irland. Rechtsgrundlage: Art. 6 Abs. 1 lit. f DSGVO. https://policies.google.com/privacy.\n\n\nExterne Verlinkungen\nDie Kursseiten verweisen auf externe Quellen (CRAN, Bioconductor, Wikipedia, GitHub, Verlage, Repositorien u. a.). Beim Klick auf solche Links verlassen Sie diese Seite; die jeweilige Datenschutzpolitik des verlinkten Angebots gilt."
-  },
-  {
-    "objectID": "impressum.html#ihre-rechte-als-betroffene-person",
-    "href": "impressum.html#ihre-rechte-als-betroffene-person",
-    "title": "Impressum",
-    "section": "6. Ihre Rechte als betroffene Person",
-    "text": "6. Ihre Rechte als betroffene Person\nAuskunft (Art. 15), Berichtigung (16), Löschung (17), Einschränkung (18), Datenübertragbarkeit (20), Widerspruch (21), Widerruf (Art. 7 Abs. 3), Beschwerde (Art. 77).\nStand: 2026-05-05."
-  },
-  {
-    "objectID": "impressum.html#haftung-für-inhalte",
-    "href": "impressum.html#haftung-für-inhalte",
-    "title": "Impressum",
-    "section": "Haftung für Inhalte",
-    "text": "Haftung für Inhalte\nAls Diensteanbieter bin ich gemäß § 7 Abs. 1 DDG für eigene Inhalte auf diesen Seiten nach den allgemeinen Gesetzen verantwortlich. Nach §§ 8 bis 10 DDG bin ich als Diensteanbieter jedoch nicht verpflichtet, übermittelte oder gespeicherte fremde Informationen zu überwachen oder nach Umständen zu forschen, die auf eine rechtswidrige Tätigkeit hinweisen.\nVerpflichtungen zur Entfernung oder Sperrung der Nutzung von Informationen nach den allgemeinen Gesetzen bleiben hiervon unberührt. Eine diesbezügliche Haftung ist jedoch erst ab dem Zeitpunkt der Kenntnis einer konkreten Rechtsverletzung möglich. Bei Bekanntwerden von entsprechenden Rechtsverletzungen werde ich diese Inhalte umgehend entfernen.\nDie bereitgestellten Code-Beispiele und Modellanalysen dienen ausschließlich Lehr- und Demonstrationszwecken und sind keine Anleitung für produktive Datenanalysen ohne fachliche Prüfung."
-  },
-  {
-    "objectID": "impressum.html#haftung-für-links",
-    "href": "impressum.html#haftung-für-links",
-    "title": "Impressum",
-    "section": "Haftung für Links",
-    "text": "Haftung für Links\nDiese Website enthält Links zu externen Websites Dritter, auf deren Inhalte ich keinen Einfluss habe. Deshalb kann ich für diese fremden Inhalte auch keine Gewähr übernehmen. Für die Inhalte der verlinkten Seiten ist stets der jeweilige Anbieter oder Betreiber der Seiten verantwortlich. Die verlinkten Seiten wurden zum Zeitpunkt der Verlinkung auf mögliche Rechtsverstöße überprüft; rechtswidrige Inhalte waren zum Zeitpunkt der Verlinkung nicht erkennbar.\nEine permanente inhaltliche Kontrolle der verlinkten Seiten ist ohne konkrete Anhaltspunkte einer Rechtsverletzung nicht zumutbar. Bei Bekanntwerden von Rechtsverletzungen werde ich derartige Links umgehend entfernen."
-  },
-  {
-    "objectID": "impressum.html#urheberrecht",
-    "href": "impressum.html#urheberrecht",
-    "title": "Impressum",
-    "section": "Urheberrecht",
-    "text": "Urheberrecht\nDie durch den Seitenbetreiber erstellten Inhalte und Werke auf diesen Seiten unterliegen dem deutschen Urheberrecht. Die Vervielfältigung, Bearbeitung, Verbreitung und jede Art der Verwertung außerhalb der Grenzen des Urheberrechts bedürfen der schriftlichen Zustimmung des Autors. Downloads und Kopien dieser Seite sind nur für den privaten, nicht kommerziellen Gebrauch gestattet.\nKursunterlagen und Quellcode-Beispiele werden zusätzlich unter der MIT-Lizenz veröffentlicht; siehe LICENSE im Repository. Beiträge Dritter sind als solche gekennzeichnet und unterliegen den Lizenzen der jeweiligen Rechteinhaber.\nSollten Sie auf eine Urheberrechtsverletzung aufmerksam werden, bitte ich um einen entsprechenden Hinweis."
+    "section": "Haftungsausschluss",
+    "text": "Haftungsausschluss\n\nHaftung für Inhalte\nAls Diensteanbieter bin ich gemäß § 7 Abs. 1 DDG für eigene Inhalte auf diesen Seiten nach den allgemeinen Gesetzen verantwortlich. Nach §§ 8 bis 10 DDG bin ich als Diensteanbieter jedoch nicht verpflichtet, übermittelte oder gespeicherte fremde Informationen zu überwachen oder nach Umständen zu forschen, die auf eine rechtswidrige Tätigkeit hinweisen.\nVerpflichtungen zur Entfernung oder Sperrung der Nutzung von Informationen nach den allgemeinen Gesetzen bleiben hiervon unberührt. Eine diesbezügliche Haftung ist jedoch erst ab dem Zeitpunkt der Kenntnis einer konkreten Rechtsverletzung möglich. Bei Bekanntwerden von entsprechenden Rechtsverletzungen werde ich diese Inhalte umgehend entfernen.\nDie bereitgestellten Code-Beispiele und Modellanalysen dienen ausschließlich Lehr- und Demonstrationszwecken und sind keine Anleitung für produktive Datenanalysen ohne fachliche Prüfung.\n\n\nHaftung für Links\nDiese Website enthält Links zu externen Websites Dritter, auf deren Inhalte ich keinen Einfluss habe. Deshalb kann ich für diese fremden Inhalte auch keine Gewähr übernehmen. Für die Inhalte der verlinkten Seiten ist stets der jeweilige Anbieter oder Betreiber der Seiten verantwortlich. Die verlinkten Seiten wurden zum Zeitpunkt der Verlinkung auf mögliche Rechtsverstöße überprüft; rechtswidrige Inhalte waren zum Zeitpunkt der Verlinkung nicht erkennbar.\nEine permanente inhaltliche Kontrolle der verlinkten Seiten ist ohne konkrete Anhaltspunkte einer Rechtsverletzung nicht zumutbar. Bei Bekanntwerden von Rechtsverletzungen werde ich derartige Links umgehend entfernen.\n\n\nUrheberrecht\nDie durch den Seitenbetreiber erstellten Inhalte und Werke auf diesen Seiten unterliegen dem deutschen Urheberrecht. Die Vervielfältigung, Bearbeitung, Verbreitung und jede Art der Verwertung außerhalb der Grenzen des Urheberrechts bedürfen der schriftlichen Zustimmung des Autors. Downloads und Kopien dieser Seite sind nur für den privaten, nicht kommerziellen Gebrauch gestattet.\nKursunterlagen und Quellcode-Beispiele werden zusätzlich unter der MIT-Lizenz veröffentlicht; siehe LICENSE im Repository. Beiträge Dritter sind als solche gekennzeichnet und unterliegen den Lizenzen der jeweiligen Rechteinhaber.\nSollten Sie auf eine Urheberrechtsverletzung aufmerksam werden, bitte ich um einen entsprechenden Hinweis."
   },
   {
     "objectID": "overview.html",
@@ -16083,7 +16097,7 @@
     "href": "schedule.html",
     "title": "Schedule",
     "section": "",
-    "text": "The schedule below is a dependency graph, not a rigid calendar. Dates and pacing are deliberately left blank: work through it at the speed your week allows, skip labs whose topic you already know, and revisit the ones that sting. Each row links to three artefacts — the HTML article for reading, the Reveal.js deck for presenting, and the plain R script for experimenting."
+    "text": "FOUR COURSES · SIXTEEN WEEKS · EIGHTY LABS\n\n\n\n\nA linked index of every lab, every slide deck, and every R script.\nThe schedule below is a dependency graph, not a rigid calendar. Dates and pacing are deliberately left blank: work through it at the speed your week allows, skip labs whose topic you already know, and revisit the ones that sting. Each row links to three artefacts — the HTML article for reading, the Reveal.js deck for presenting, and the plain R script for experimenting."
   },
   {
     "objectID": "schedule.html#course-1-foundations-of-biostatistics-with-r",

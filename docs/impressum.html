@@ -80,6 +80,19 @@ ul.task-list li input[type="checkbox"] {
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin="">
 <link href="https://fonts.googleapis.com/css2?family=Source+Sans+3:wght@300;400;500;600;700&amp;family=JetBrains+Mono:wght@400;500&amp;display=swap" rel="stylesheet">
+<script>
+  (function () {
+    try {
+      if (!localStorage.getItem('quarto-color-scheme')) {
+        localStorage.setItem('quarto-color-scheme', 'dark');
+      }
+      if (localStorage.getItem('quarto-color-scheme') === 'dark') {
+        document.documentElement.classList.add('quarto-dark');
+        document.documentElement.classList.remove('quarto-light');
+      }
+    } catch (e) {}
+  })();
+</script>
 
 
 </head>
@@ -326,36 +339,12 @@ ul.task-list li input[type="checkbox"] {
   <li><a href="#eu-streitschlichtung" id="toc-eu-streitschlichtung" class="nav-link" data-scroll-target="#eu-streitschlichtung">EU-Streitschlichtung</a></li>
   <li><a href="#datenschutz" id="toc-datenschutz" class="nav-link" data-scroll-target="#datenschutz">Datenschutzerklärung</a>
   <ul class="collapse">
-  <li><a href="#verantwortlicher" id="toc-verantwortlicher" class="nav-link" data-scroll-target="#verantwortlicher">1. Verantwortlicher</a></li>
-  <li><a href="#allgemeine-hinweise-und-pflichtinformationen" id="toc-allgemeine-hinweise-und-pflichtinformationen" class="nav-link" data-scroll-target="#allgemeine-hinweise-und-pflichtinformationen">2. Allgemeine Hinweise und Pflichtinformationen</a>
-  <ul class="collapse">
-  <li><a href="#datenschutz-auf-einen-blick" id="toc-datenschutz-auf-einen-blick" class="nav-link" data-scroll-target="#datenschutz-auf-einen-blick">Datenschutz auf einen Blick</a></li>
-  <li><a href="#speicherdauer" id="toc-speicherdauer" class="nav-link" data-scroll-target="#speicherdauer">Speicherdauer</a></li>
-  <li><a href="#rechtsgrundlagen-der-datenverarbeitung" id="toc-rechtsgrundlagen-der-datenverarbeitung" class="nav-link" data-scroll-target="#rechtsgrundlagen-der-datenverarbeitung">Rechtsgrundlagen der Datenverarbeitung</a></li>
-  <li><a href="#empfänger-und-übermittlung-in-drittländer" id="toc-empfänger-und-übermittlung-in-drittländer" class="nav-link" data-scroll-target="#empfänger-und-übermittlung-in-drittländer">Empfänger und Übermittlung in Drittländer</a></li>
-  <li><a href="#widerruf-widerspruch-beschwerde" id="toc-widerruf-widerspruch-beschwerde" class="nav-link" data-scroll-target="#widerruf-widerspruch-beschwerde">Widerruf, Widerspruch, Beschwerde</a></li>
-  <li><a href="#beschwerderecht-bei-der-zuständigen-aufsichtsbehörde" id="toc-beschwerderecht-bei-der-zuständigen-aufsichtsbehörde" class="nav-link" data-scroll-target="#beschwerderecht-bei-der-zuständigen-aufsichtsbehörde">Beschwerderecht bei der zuständigen Aufsichtsbehörde</a></li>
-  <li><a href="#auskunft-berichtigung-löschung-datenübertragbarkeit" id="toc-auskunft-berichtigung-löschung-datenübertragbarkeit" class="nav-link" data-scroll-target="#auskunft-berichtigung-löschung-datenübertragbarkeit">Auskunft, Berichtigung, Löschung, Datenübertragbarkeit</a></li>
-  <li><a href="#ssl--bzw.-tls-verschlüsselung" id="toc-ssl--bzw.-tls-verschlüsselung" class="nav-link" data-scroll-target="#ssl--bzw.-tls-verschlüsselung">SSL- bzw. TLS-Verschlüsselung</a></li>
-  </ul></li>
-  <li><a href="#datenerfassung-auf-dieser-website" id="toc-datenerfassung-auf-dieser-website" class="nav-link" data-scroll-target="#datenerfassung-auf-dieser-website">3. Datenerfassung auf dieser Website</a>
-  <ul class="collapse">
-  <li><a href="#server-log-dateien" id="toc-server-log-dateien" class="nav-link" data-scroll-target="#server-log-dateien">Server-Log-Dateien</a></li>
-  <li><a href="#cookies" id="toc-cookies" class="nav-link" data-scroll-target="#cookies">Cookies</a></li>
-  <li><a href="#kontaktaufnahme-per-e-mail" id="toc-kontaktaufnahme-per-e-mail" class="nav-link" data-scroll-target="#kontaktaufnahme-per-e-mail">Kontaktaufnahme per E-Mail</a></li>
-  </ul></li>
-  <li><a href="#analyse-tools-und-tools-von-drittanbietern" id="toc-analyse-tools-und-tools-von-drittanbietern" class="nav-link" data-scroll-target="#analyse-tools-und-tools-von-drittanbietern">4. Analyse-Tools und Tools von Drittanbietern</a>
-  <ul class="collapse">
-  <li><a href="#plausible-analytics-selbst-gehostet" id="toc-plausible-analytics-selbst-gehostet" class="nav-link" data-scroll-target="#plausible-analytics-selbst-gehostet">Plausible Analytics (selbst gehostet)</a></li>
-  <li><a href="#vg-wort-zählpixel-standard" id="toc-vg-wort-zählpixel-standard" class="nav-link" data-scroll-target="#vg-wort-zählpixel-standard">VG Wort Zählpixel (Standard)</a></li>
-  <li><a href="#github-pages" id="toc-github-pages" class="nav-link" data-scroll-target="#github-pages">GitHub Pages</a></li>
-  </ul></li>
-  <li><a href="#eingebettete-inhalte-und-schriftarten" id="toc-eingebettete-inhalte-und-schriftarten" class="nav-link" data-scroll-target="#eingebettete-inhalte-und-schriftarten">5. Eingebettete Inhalte und Schriftarten</a>
-  <ul class="collapse">
-  <li><a href="#google-fonts-cdn" id="toc-google-fonts-cdn" class="nav-link" data-scroll-target="#google-fonts-cdn">Google Fonts (CDN)</a></li>
-  <li><a href="#externe-verlinkungen" id="toc-externe-verlinkungen" class="nav-link" data-scroll-target="#externe-verlinkungen">Externe Verlinkungen</a></li>
-  </ul></li>
-  <li><a href="#ihre-rechte-als-betroffene-person" id="toc-ihre-rechte-als-betroffene-person" class="nav-link" data-scroll-target="#ihre-rechte-als-betroffene-person">6. Ihre Rechte als betroffene Person</a></li>
+  <li><a href="#verantwortlicher" id="toc-verantwortlicher" class="nav-link" data-scroll-target="#verantwortlicher">Verantwortlicher</a></li>
+  <li><a href="#allgemeine-hinweise-und-pflichtinformationen" id="toc-allgemeine-hinweise-und-pflichtinformationen" class="nav-link" data-scroll-target="#allgemeine-hinweise-und-pflichtinformationen">Allgemeine Hinweise und Pflichtinformationen</a></li>
+  <li><a href="#datenerfassung-auf-dieser-website" id="toc-datenerfassung-auf-dieser-website" class="nav-link" data-scroll-target="#datenerfassung-auf-dieser-website">Datenerfassung auf dieser Website</a></li>
+  <li><a href="#analyse-tools-und-tools-von-drittanbietern" id="toc-analyse-tools-und-tools-von-drittanbietern" class="nav-link" data-scroll-target="#analyse-tools-und-tools-von-drittanbietern">Analyse-Tools und Tools von Drittanbietern</a></li>
+  <li><a href="#eingebettete-inhalte-und-schriftarten" id="toc-eingebettete-inhalte-und-schriftarten" class="nav-link" data-scroll-target="#eingebettete-inhalte-und-schriftarten">Eingebettete Inhalte und Schriftarten</a></li>
+  <li><a href="#ihre-rechte-als-betroffene-person" id="toc-ihre-rechte-als-betroffene-person" class="nav-link" data-scroll-target="#ihre-rechte-als-betroffene-person">Ihre Rechte als betroffene Person</a></li>
   </ul></li>
   <li><a href="#haftungsausschluss" id="toc-haftungsausschluss" class="nav-link" data-scroll-target="#haftungsausschluss">Haftungsausschluss</a>
   <ul class="collapse">
@@ -420,10 +409,10 @@ Deutschland</p>
 <p>Ich bin nicht verpflichtet und nicht bereit, an einem Streitbeilegungsverfahren vor einer Verbraucherschlichtungsstelle teilzunehmen.</p>
 <hr>
 </section>
-<section id="datenschutz" class="level1">
-<h1>Datenschutzerklärung</h1>
-<section id="verantwortlicher" class="level2">
-<h2 class="anchored" data-anchor-id="verantwortlicher">1. Verantwortlicher</h2>
+<section id="datenschutz" class="level2">
+<h2 class="anchored" data-anchor-id="datenschutz">Datenschutzerklärung</h2>
+<section id="verantwortlicher" class="level3">
+<h3 class="anchored" data-anchor-id="verantwortlicher">Verantwortlicher</h3>
 <p>Verantwortliche Stelle im Sinne der Datenschutz-Grundverordnung (DSGVO) ist:</p>
 <p>R. Heller<br>
 Albert-Einstein-Straße 47<br>
@@ -432,74 +421,74 @@ Deutschland</p>
 <p>E-Mail: <a href="mailto:58561665+r-heller@users.noreply.github.com">58561665+r-heller@users.noreply.github.com</a></p>
 <p>Eine gesetzliche Pflicht zur Bestellung eines/einer Datenschutzbeauftragten besteht nicht; entsprechend ist keine solche Person bestellt.</p>
 </section>
-<section id="allgemeine-hinweise-und-pflichtinformationen" class="level2">
-<h2 class="anchored" data-anchor-id="allgemeine-hinweise-und-pflichtinformationen">2. Allgemeine Hinweise und Pflichtinformationen</h2>
-<section id="datenschutz-auf-einen-blick" class="level3">
-<h3 class="anchored" data-anchor-id="datenschutz-auf-einen-blick">Datenschutz auf einen Blick</h3>
+<section id="allgemeine-hinweise-und-pflichtinformationen" class="level3">
+<h3 class="anchored" data-anchor-id="allgemeine-hinweise-und-pflichtinformationen">Allgemeine Hinweise und Pflichtinformationen</h3>
+<section id="datenschutz-auf-einen-blick" class="level4">
+<h4 class="anchored" data-anchor-id="datenschutz-auf-einen-blick">Datenschutz auf einen Blick</h4>
 <p>Diese Website ist ein nicht-kommerzielles, didaktisch motiviertes Angebot. Es werden so wenige personenbezogene Daten verarbeitet wie technisch möglich. Es kommen keine Tracking-Cookies, keine Werbenetzwerke und keine personalisierten Profile zum Einsatz.</p>
 </section>
-<section id="speicherdauer" class="level3">
-<h3 class="anchored" data-anchor-id="speicherdauer">Speicherdauer</h3>
+<section id="speicherdauer" class="level4">
+<h4 class="anchored" data-anchor-id="speicherdauer">Speicherdauer</h4>
 <p>Sofern in dieser Erklärung keine speziellere Speicherdauer genannt ist, verbleiben personenbezogene Daten so lange beim Verantwortlichen, bis der Zweck für die Datenverarbeitung entfällt.</p>
 </section>
-<section id="rechtsgrundlagen-der-datenverarbeitung" class="level3">
-<h3 class="anchored" data-anchor-id="rechtsgrundlagen-der-datenverarbeitung">Rechtsgrundlagen der Datenverarbeitung</h3>
+<section id="rechtsgrundlagen-der-datenverarbeitung" class="level4">
+<h4 class="anchored" data-anchor-id="rechtsgrundlagen-der-datenverarbeitung">Rechtsgrundlagen der Datenverarbeitung</h4>
 <ul>
 <li><strong>Art. 6 Abs. 1 lit. a DSGVO</strong> — Einwilligung,</li>
 <li><strong>Art. 6 Abs. 1 lit. b DSGVO</strong> — Vertrag bzw. vorvertragliche Maßnahmen,</li>
 <li><strong>Art. 6 Abs. 1 lit. f DSGVO</strong> — berechtigte Interessen (stabiler Betrieb, Sicherheit, statistische Reichweitenmessung, urheberrechtliche Vergütungsansprüche).</li>
 </ul>
 </section>
-<section id="empfänger-und-übermittlung-in-drittländer" class="level3">
-<h3 class="anchored" data-anchor-id="empfänger-und-übermittlung-in-drittländer">Empfänger und Übermittlung in Drittländer</h3>
+<section id="empfänger-und-übermittlung-in-drittländer" class="level4">
+<h4 class="anchored" data-anchor-id="empfänger-und-übermittlung-in-drittländer">Empfänger und Übermittlung in Drittländer</h4>
 <p>Hosting der Website-Auslieferung erfolgt durch GitHub, Inc.; damit ist eine Verarbeitung personenbezogener Daten in den USA möglich. Schriftarten werden über Google Fonts (Google Ireland Limited) ausgeliefert. Beide Übermittlungen erfolgen auf Grundlage des EU-US Data Privacy Framework bzw. Standardvertragsklauseln. Eine darüber hinausgehende Übermittlung in Drittländer findet <strong>nicht</strong> statt. Die Reichweitenmessung mittels Plausible Analytics erfolgt auf einer <strong>selbst gehosteten Instanz auf einem Server in Deutschland</strong>.</p>
 </section>
-<section id="widerruf-widerspruch-beschwerde" class="level3">
-<h3 class="anchored" data-anchor-id="widerruf-widerspruch-beschwerde">Widerruf, Widerspruch, Beschwerde</h3>
+<section id="widerruf-widerspruch-beschwerde" class="level4">
+<h4 class="anchored" data-anchor-id="widerruf-widerspruch-beschwerde">Widerruf, Widerspruch, Beschwerde</h4>
 <p>Eine erteilte Einwilligung kann jederzeit mit Wirkung für die Zukunft widerrufen werden (Art. 7 Abs. 3 DSGVO). Gegen eine Verarbeitung auf Grundlage von Art. 6 Abs. 1 lit. e oder f DSGVO können Sie aus Gründen Ihrer besonderen Situation Widerspruch einlegen (Art. 21).</p>
 </section>
-<section id="beschwerderecht-bei-der-zuständigen-aufsichtsbehörde" class="level3">
-<h3 class="anchored" data-anchor-id="beschwerderecht-bei-der-zuständigen-aufsichtsbehörde">Beschwerderecht bei der zuständigen Aufsichtsbehörde</h3>
+<section id="beschwerderecht-bei-der-zuständigen-aufsichtsbehörde" class="level4">
+<h4 class="anchored" data-anchor-id="beschwerderecht-bei-der-zuständigen-aufsichtsbehörde">Beschwerderecht bei der zuständigen Aufsichtsbehörde</h4>
 <p><strong>Sächsischer Datenschutz- und Transparenzbeauftragter</strong><br>
 Devrientstraße 1<br>
 01067 Dresden<br>
 <a href="https://www.saechsdsb.de/" class="uri">https://www.saechsdsb.de/</a></p>
 </section>
-<section id="auskunft-berichtigung-löschung-datenübertragbarkeit" class="level3">
-<h3 class="anchored" data-anchor-id="auskunft-berichtigung-löschung-datenübertragbarkeit">Auskunft, Berichtigung, Löschung, Datenübertragbarkeit</h3>
+<section id="auskunft-berichtigung-löschung-datenübertragbarkeit" class="level4">
+<h4 class="anchored" data-anchor-id="auskunft-berichtigung-löschung-datenübertragbarkeit">Auskunft, Berichtigung, Löschung, Datenübertragbarkeit</h4>
 <p>Auskunft (Art. 15), Berichtigung (16), Löschung (17), Einschränkung (18), Datenübertragbarkeit (20).</p>
 </section>
-<section id="ssl--bzw.-tls-verschlüsselung" class="level3">
-<h3 class="anchored" data-anchor-id="ssl--bzw.-tls-verschlüsselung">SSL- bzw. TLS-Verschlüsselung</h3>
+<section id="ssl--bzw.-tls-verschlüsselung" class="level4">
+<h4 class="anchored" data-anchor-id="ssl--bzw.-tls-verschlüsselung">SSL- bzw. TLS-Verschlüsselung</h4>
 <p>Diese Seite nutzt aus Sicherheitsgründen eine TLS- Verschlüsselung.</p>
 </section>
 </section>
-<section id="datenerfassung-auf-dieser-website" class="level2">
-<h2 class="anchored" data-anchor-id="datenerfassung-auf-dieser-website">3. Datenerfassung auf dieser Website</h2>
-<section id="server-log-dateien" class="level3">
-<h3 class="anchored" data-anchor-id="server-log-dateien">Server-Log-Dateien</h3>
+<section id="datenerfassung-auf-dieser-website" class="level3">
+<h3 class="anchored" data-anchor-id="datenerfassung-auf-dieser-website">Datenerfassung auf dieser Website</h3>
+<section id="server-log-dateien" class="level4">
+<h4 class="anchored" data-anchor-id="server-log-dateien">Server-Log-Dateien</h4>
 <p>Der Provider der Seiten (GitHub Pages, GitHub, Inc., 88 Colin P Kelly Jr St, San Francisco, CA 94107, USA) erhebt automatisch Server-Log-Dateien (Browsertyp, Betriebssystem, Referrer-URL, Hostname, Uhrzeit, IP-Adresse). Eine Zusammenführung mit anderen Datenquellen durch den Verantwortlichen findet <strong>nicht</strong> statt. Rechtsgrundlage: Art. 6 Abs. 1 lit. f DSGVO. <a href="https://docs.github.com/en/site-policy/privacy-policies/github-privacy-statement">GitHub Privacy Statement</a>.</p>
 </section>
-<section id="cookies" class="level3">
-<h3 class="anchored" data-anchor-id="cookies">Cookies</h3>
+<section id="cookies" class="level4">
+<h4 class="anchored" data-anchor-id="cookies">Cookies</h4>
 <p>Diese Website setzt <strong>keine eigenen Tracking-Cookies</strong>. Technisch notwendige Cookies (z. B. Theme-Präferenz) sind durch <strong>§ 25 Abs. 2 Nr. 2 TDDDG</strong> gedeckt.</p>
 </section>
-<section id="kontaktaufnahme-per-e-mail" class="level3">
-<h3 class="anchored" data-anchor-id="kontaktaufnahme-per-e-mail">Kontaktaufnahme per E-Mail</h3>
+<section id="kontaktaufnahme-per-e-mail" class="level4">
+<h4 class="anchored" data-anchor-id="kontaktaufnahme-per-e-mail">Kontaktaufnahme per E-Mail</h4>
 <p>Bei Kontakt per E-Mail werden die mitgeteilten Daten zur Bearbeitung gespeichert. Rechtsgrundlage: Art. 6 Abs. 1 lit. b bzw. f DSGVO.</p>
 </section>
 </section>
-<section id="analyse-tools-und-tools-von-drittanbietern" class="level2">
-<h2 class="anchored" data-anchor-id="analyse-tools-und-tools-von-drittanbietern">4. Analyse-Tools und Tools von Drittanbietern</h2>
-<section id="plausible-analytics-selbst-gehostet" class="level3">
-<h3 class="anchored" data-anchor-id="plausible-analytics-selbst-gehostet">Plausible Analytics (selbst gehostet)</h3>
+<section id="analyse-tools-und-tools-von-drittanbietern" class="level3">
+<h3 class="anchored" data-anchor-id="analyse-tools-und-tools-von-drittanbietern">Analyse-Tools und Tools von Drittanbietern</h3>
+<section id="plausible-analytics-selbst-gehostet" class="level4">
+<h4 class="anchored" data-anchor-id="plausible-analytics-selbst-gehostet">Plausible Analytics (selbst gehostet)</h4>
 <p>Diese Website verwendet <strong>Plausible Analytics</strong> zur statistischen Reichweitenmessung. Plausible wird als <strong>selbst gehostete Instanz</strong> unter <code>analytics.hellebo.de</code> betrieben; der Server steht in <strong>Deutschland</strong>. Eine Übermittlung an Plausible Insights OÜ oder andere Drittanbieter findet <strong>nicht</strong> statt.</p>
 <p>Plausible ist <strong>cookielos</strong> und erhebt <strong>keine personenbezogenen Daten</strong> im engeren Sinn. IP-Adressen werden nicht gespeichert; zur Sitzungserkennung wird täglich rotierend ein gesalzener Hash gebildet.</p>
 <p>Rechtsgrundlage: Art. 6 Abs. 1 lit. f DSGVO. Eine Einwilligung nach § 25 TDDDG ist nicht erforderlich.</p>
 <p>Weitere Informationen: <a href="https://plausible.io/data-policy" class="uri">https://plausible.io/data-policy</a></p>
 </section>
-<section id="vg-wort-zählpixel-standard" class="level3">
-<h3 class="anchored" data-anchor-id="vg-wort-zählpixel-standard">VG Wort Zählpixel (Standard)</h3>
+<section id="vg-wort-zählpixel-standard" class="level4">
+<h4 class="anchored" data-anchor-id="vg-wort-zählpixel-standard">VG Wort Zählpixel (Standard)</h4>
 <p>Auf einzelnen, kennzeichenpflichtig angemeldeten Kursseiten wird ein <strong>Zählpixel</strong> der Verwertungsgesellschaft WORT eingebunden:</p>
 <p><strong>Verwertungsgesellschaft WORT (VG WORT)</strong><br>
 Untere Weidenstraße 5<br>
@@ -509,44 +498,44 @@ Deutschland<br>
 <p>Zweck: Erfassung statistischer Kennzahlen zur Berechnung von Vergütungsansprüchen gemäß § 53 UrhG / METIS-Programm. <strong>Keine Cookies.</strong> Die IP-Adresse wird durch VG Wort SHA-256-gehasht und gekürzt. Verarbeitung auf Servern in Deutschland. Rechtsgrundlage: Art. 6 Abs. 1 lit. f DSGVO.</p>
 <p>Weitere Informationen: <a href="https://www.vgwort.de/datenschutz.html" class="uri">https://www.vgwort.de/datenschutz.html</a></p>
 </section>
-<section id="github-pages" class="level3">
-<h3 class="anchored" data-anchor-id="github-pages">GitHub Pages</h3>
+<section id="github-pages" class="level4">
+<h4 class="anchored" data-anchor-id="github-pages">GitHub Pages</h4>
 <p>Anbieterin: GitHub, Inc., 88 Colin P Kelly Jr St, San Francisco, CA 94107, USA. <a href="https://docs.github.com/en/site-policy/privacy-policies/github-privacy-statement">GitHub Privacy Statement</a>.</p>
 </section>
 </section>
-<section id="eingebettete-inhalte-und-schriftarten" class="level2">
-<h2 class="anchored" data-anchor-id="eingebettete-inhalte-und-schriftarten">5. Eingebettete Inhalte und Schriftarten</h2>
-<section id="google-fonts-cdn" class="level3">
-<h3 class="anchored" data-anchor-id="google-fonts-cdn">Google Fonts (CDN)</h3>
+<section id="eingebettete-inhalte-und-schriftarten" class="level3">
+<h3 class="anchored" data-anchor-id="eingebettete-inhalte-und-schriftarten">Eingebettete Inhalte und Schriftarten</h3>
+<section id="google-fonts-cdn" class="level4">
+<h4 class="anchored" data-anchor-id="google-fonts-cdn">Google Fonts (CDN)</h4>
 <p>Diese Website bindet die Schriften <strong>Source Sans 3</strong> und <strong>JetBrains Mono</strong> über die Google-Fonts-CDN ein. Beim Aufruf überträgt Ihr Browser dabei Verbindungsdaten (insbesondere die IP-Adresse) an Google. Anbieter: Google Ireland Limited, Gordon House, Barrow Street, Dublin 4, Irland. Rechtsgrundlage: Art. 6 Abs. 1 lit. f DSGVO. <a href="https://policies.google.com/privacy" class="uri">https://policies.google.com/privacy</a>.</p>
 </section>
-<section id="externe-verlinkungen" class="level3">
-<h3 class="anchored" data-anchor-id="externe-verlinkungen">Externe Verlinkungen</h3>
+<section id="externe-verlinkungen" class="level4">
+<h4 class="anchored" data-anchor-id="externe-verlinkungen">Externe Verlinkungen</h4>
 <p>Die Kursseiten verweisen auf externe Quellen (CRAN, Bioconductor, Wikipedia, GitHub, Verlage, Repositorien u. a.). Beim Klick auf solche Links verlassen Sie diese Seite; die jeweilige Datenschutzpolitik des verlinkten Angebots gilt.</p>
 </section>
 </section>
-<section id="ihre-rechte-als-betroffene-person" class="level2">
-<h2 class="anchored" data-anchor-id="ihre-rechte-als-betroffene-person">6. Ihre Rechte als betroffene Person</h2>
+<section id="ihre-rechte-als-betroffene-person" class="level3">
+<h3 class="anchored" data-anchor-id="ihre-rechte-als-betroffene-person">Ihre Rechte als betroffene Person</h3>
 <p>Auskunft (Art. 15), Berichtigung (16), Löschung (17), Einschränkung (18), Datenübertragbarkeit (20), Widerspruch (21), Widerruf (Art. 7 Abs. 3), Beschwerde (Art. 77).</p>
 <p><em>Stand: 2026-05-05.</em></p>
 <hr>
 </section>
 </section>
-<section id="haftungsausschluss" class="level1">
-<h1>Haftungsausschluss</h1>
-<section id="haftung-für-inhalte" class="level2">
-<h2 class="anchored" data-anchor-id="haftung-für-inhalte">Haftung für Inhalte</h2>
+<section id="haftungsausschluss" class="level2">
+<h2 class="anchored" data-anchor-id="haftungsausschluss">Haftungsausschluss</h2>
+<section id="haftung-für-inhalte" class="level3">
+<h3 class="anchored" data-anchor-id="haftung-für-inhalte">Haftung für Inhalte</h3>
 <p>Als Diensteanbieter bin ich gemäß § 7 Abs. 1 DDG für eigene Inhalte auf diesen Seiten nach den allgemeinen Gesetzen verantwortlich. Nach §§ 8 bis 10 DDG bin ich als Diensteanbieter jedoch nicht verpflichtet, übermittelte oder gespeicherte fremde Informationen zu überwachen oder nach Umständen zu forschen, die auf eine rechtswidrige Tätigkeit hinweisen.</p>
 <p>Verpflichtungen zur Entfernung oder Sperrung der Nutzung von Informationen nach den allgemeinen Gesetzen bleiben hiervon unberührt. Eine diesbezügliche Haftung ist jedoch erst ab dem Zeitpunkt der Kenntnis einer konkreten Rechtsverletzung möglich. Bei Bekanntwerden von entsprechenden Rechtsverletzungen werde ich diese Inhalte umgehend entfernen.</p>
 <p>Die bereitgestellten Code-Beispiele und Modellanalysen dienen ausschließlich Lehr- und Demonstrationszwecken und sind keine Anleitung für produktive Datenanalysen ohne fachliche Prüfung.</p>
 </section>
-<section id="haftung-für-links" class="level2">
-<h2 class="anchored" data-anchor-id="haftung-für-links">Haftung für Links</h2>
+<section id="haftung-für-links" class="level3">
+<h3 class="anchored" data-anchor-id="haftung-für-links">Haftung für Links</h3>
 <p>Diese Website enthält Links zu externen Websites Dritter, auf deren Inhalte ich keinen Einfluss habe. Deshalb kann ich für diese fremden Inhalte auch keine Gewähr übernehmen. Für die Inhalte der verlinkten Seiten ist stets der jeweilige Anbieter oder Betreiber der Seiten verantwortlich. Die verlinkten Seiten wurden zum Zeitpunkt der Verlinkung auf mögliche Rechtsverstöße überprüft; rechtswidrige Inhalte waren zum Zeitpunkt der Verlinkung nicht erkennbar.</p>
 <p>Eine permanente inhaltliche Kontrolle der verlinkten Seiten ist ohne konkrete Anhaltspunkte einer Rechtsverletzung nicht zumutbar. Bei Bekanntwerden von Rechtsverletzungen werde ich derartige Links umgehend entfernen.</p>
 </section>
-<section id="urheberrecht" class="level2">
-<h2 class="anchored" data-anchor-id="urheberrecht">Urheberrecht</h2>
+<section id="urheberrecht" class="level3">
+<h3 class="anchored" data-anchor-id="urheberrecht">Urheberrecht</h3>
 <p>Die durch den Seitenbetreiber erstellten Inhalte und Werke auf diesen Seiten unterliegen dem deutschen Urheberrecht. Die Vervielfältigung, Bearbeitung, Verbreitung und jede Art der Verwertung außerhalb der Grenzen des Urheberrechts bedürfen der schriftlichen Zustimmung des Autors. Downloads und Kopien dieser Seite sind nur für den privaten, nicht kommerziellen Gebrauch gestattet.</p>
 <p>Kursunterlagen und Quellcode-Beispiele werden zusätzlich unter der <strong>MIT-Lizenz</strong> veröffentlicht; siehe <code>LICENSE</code> im Repository. Beiträge Dritter sind als solche gekennzeichnet und unterliegen den Lizenzen der jeweiligen Rechteinhaber.</p>
 <p>Sollten Sie auf eine Urheberrechtsverletzung aufmerksam werden, bitte ich um einen entsprechenden Hinweis.</p>

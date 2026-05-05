@@ -51,9 +51,9 @@ teilzunehmen.
 
 ---
 
-# Datenschutzerklärung {#datenschutz}
+## Datenschutzerklärung {#datenschutz}
 
-## 1. Verantwortlicher
+### Verantwortlicher
 
 Verantwortliche Stelle im Sinne der Datenschutz-Grundverordnung
 (DSGVO) ist:
@@ -69,23 +69,23 @@ Eine gesetzliche Pflicht zur Bestellung eines/einer
 Datenschutzbeauftragten besteht nicht; entsprechend ist keine
 solche Person bestellt.
 
-## 2. Allgemeine Hinweise und Pflichtinformationen
+### Allgemeine Hinweise und Pflichtinformationen
 
-### Datenschutz auf einen Blick
+#### Datenschutz auf einen Blick
 
 Diese Website ist ein nicht-kommerzielles, didaktisch motiviertes
 Angebot. Es werden so wenige personenbezogene Daten verarbeitet
 wie technisch möglich. Es kommen keine Tracking-Cookies, keine
 Werbenetzwerke und keine personalisierten Profile zum Einsatz.
 
-### Speicherdauer
+#### Speicherdauer
 
 Sofern in dieser Erklärung keine speziellere Speicherdauer
 genannt ist, verbleiben personenbezogene Daten so lange beim
 Verantwortlichen, bis der Zweck für die Datenverarbeitung
 entfällt.
 
-### Rechtsgrundlagen der Datenverarbeitung
+#### Rechtsgrundlagen der Datenverarbeitung
 
 - **Art. 6 Abs. 1 lit. a DSGVO** — Einwilligung,
 - **Art. 6 Abs. 1 lit. b DSGVO** — Vertrag bzw. vorvertragliche
@@ -95,7 +95,7 @@ entfällt.
   Reichweitenmessung, urheberrechtliche
   Vergütungsansprüche).
 
-### Empfänger und Übermittlung in Drittländer
+#### Empfänger und Übermittlung in Drittländer
 
 Hosting der Website-Auslieferung erfolgt durch GitHub, Inc.;
 damit ist eine Verarbeitung personenbezogener Daten in den USA
@@ -107,7 +107,7 @@ Standardvertragsklauseln. Eine darüber hinausgehende
 Reichweitenmessung mittels Plausible Analytics erfolgt auf einer
 **selbst gehosteten Instanz auf einem Server in Deutschland**.
 
-### Widerruf, Widerspruch, Beschwerde
+#### Widerruf, Widerspruch, Beschwerde
 
 Eine erteilte Einwilligung kann jederzeit mit Wirkung für die
 Zukunft widerrufen werden (Art. 7 Abs. 3 DSGVO). Gegen eine
@@ -115,26 +115,26 @@ Verarbeitung auf Grundlage von Art. 6 Abs. 1 lit. e oder f DSGVO
 können Sie aus Gründen Ihrer besonderen Situation Widerspruch
 einlegen (Art. 21).
 
-### Beschwerderecht bei der zuständigen Aufsichtsbehörde
+#### Beschwerderecht bei der zuständigen Aufsichtsbehörde
 
 **Sächsischer Datenschutz- und Transparenzbeauftragter**\
 Devrientstraße 1\
 01067 Dresden\
 <https://www.saechsdsb.de/>
 
-### Auskunft, Berichtigung, Löschung, Datenübertragbarkeit
+#### Auskunft, Berichtigung, Löschung, Datenübertragbarkeit
 
 Auskunft (Art. 15), Berichtigung (16), Löschung (17),
 Einschränkung (18), Datenübertragbarkeit (20).
 
-### SSL- bzw. TLS-Verschlüsselung
+#### SSL- bzw. TLS-Verschlüsselung
 
 Diese Seite nutzt aus Sicherheitsgründen eine TLS-
 Verschlüsselung.
 
-## 3. Datenerfassung auf dieser Website
+### Datenerfassung auf dieser Website
 
-### Server-Log-Dateien
+#### Server-Log-Dateien
 
 Der Provider der Seiten (GitHub Pages, GitHub, Inc., 88 Colin P
 Kelly Jr St, San Francisco, CA 94107, USA) erhebt automatisch
@@ -144,21 +144,21 @@ Datenquellen durch den Verantwortlichen findet **nicht** statt.
 Rechtsgrundlage: Art. 6 Abs. 1 lit. f DSGVO.
 [GitHub Privacy Statement](https://docs.github.com/en/site-policy/privacy-policies/github-privacy-statement).
 
-### Cookies
+#### Cookies
 
 Diese Website setzt **keine eigenen Tracking-Cookies**.
 Technisch notwendige Cookies (z. B. Theme-Präferenz) sind durch
 **§ 25 Abs. 2 Nr. 2 TDDDG** gedeckt.
 
-### Kontaktaufnahme per E-Mail
+#### Kontaktaufnahme per E-Mail
 
 Bei Kontakt per E-Mail werden die mitgeteilten Daten zur
 Bearbeitung gespeichert. Rechtsgrundlage: Art. 6 Abs. 1 lit. b
 bzw. f DSGVO.
 
-## 4. Analyse-Tools und Tools von Drittanbietern
+### Analyse-Tools und Tools von Drittanbietern
 
-### Plausible Analytics (selbst gehostet)
+#### Plausible Analytics (selbst gehostet)
 
 Diese Website verwendet **Plausible Analytics** zur statistischen
 Reichweitenmessung. Plausible wird als **selbst gehostete
@@ -177,7 +177,7 @@ nach § 25 TDDDG ist nicht erforderlich.
 Weitere Informationen:
 <https://plausible.io/data-policy>
 
-### VG Wort Zählpixel (Standard)
+#### VG Wort Zählpixel (Standard)
 
 Auf einzelnen, kennzeichenpflichtig angemeldeten Kursseiten wird
 ein **Zählpixel** der Verwertungsgesellschaft WORT eingebunden:
@@ -197,15 +197,15 @@ Rechtsgrundlage: Art. 6 Abs. 1 lit. f DSGVO.
 Weitere Informationen:
 <https://www.vgwort.de/datenschutz.html>
 
-### GitHub Pages
+#### GitHub Pages
 
 Anbieterin: GitHub, Inc., 88 Colin P Kelly Jr St, San Francisco,
 CA 94107, USA.
 [GitHub Privacy Statement](https://docs.github.com/en/site-policy/privacy-policies/github-privacy-statement).
 
-## 5. Eingebettete Inhalte und Schriftarten
+### Eingebettete Inhalte und Schriftarten
 
-### Google Fonts (CDN)
+#### Google Fonts (CDN)
 
 Diese Website bindet die Schriften **Source Sans 3** und
 **JetBrains Mono** über die Google-Fonts-CDN ein. Beim Aufruf
@@ -215,14 +215,14 @@ House, Barrow Street, Dublin 4, Irland. Rechtsgrundlage: Art. 6
 Abs. 1 lit. f DSGVO.
 <https://policies.google.com/privacy>.
 
-### Externe Verlinkungen
+#### Externe Verlinkungen
 
 Die Kursseiten verweisen auf externe Quellen (CRAN,
 Bioconductor, Wikipedia, GitHub, Verlage, Repositorien u. a.).
 Beim Klick auf solche Links verlassen Sie diese Seite; die
 jeweilige Datenschutzpolitik des verlinkten Angebots gilt.
 
-## 6. Ihre Rechte als betroffene Person
+### Ihre Rechte als betroffene Person
 
 Auskunft (Art. 15), Berichtigung (16), Löschung (17),
 Einschränkung (18), Datenübertragbarkeit (20), Widerspruch (21),
@@ -232,9 +232,9 @@ Widerruf (Art. 7 Abs. 3), Beschwerde (Art. 77).
 
 ---
 
-# Haftungsausschluss {#haftungsausschluss}
+## Haftungsausschluss {#haftungsausschluss}
 
-## Haftung für Inhalte
+### Haftung für Inhalte
 
 Als Diensteanbieter bin ich gemäß § 7 Abs. 1 DDG für eigene
 Inhalte auf diesen Seiten nach den allgemeinen Gesetzen
@@ -254,7 +254,7 @@ Die bereitgestellten Code-Beispiele und Modellanalysen dienen
 ausschließlich Lehr- und Demonstrationszwecken und sind keine
 Anleitung für produktive Datenanalysen ohne fachliche Prüfung.
 
-## Haftung für Links
+### Haftung für Links
 
 Diese Website enthält Links zu externen Websites Dritter, auf
 deren Inhalte ich keinen Einfluss habe. Deshalb kann ich für
@@ -270,7 +270,7 @@ ohne konkrete Anhaltspunkte einer Rechtsverletzung nicht
 zumutbar. Bei Bekanntwerden von Rechtsverletzungen werde ich
 derartige Links umgehend entfernen.
 
-## Urheberrecht
+### Urheberrecht
 
 Die durch den Seitenbetreiber erstellten Inhalte und Werke auf
 diesen Seiten unterliegen dem deutschen Urheberrecht. Die

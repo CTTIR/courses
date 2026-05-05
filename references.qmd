@@ -1,6 +1,5 @@
 ---
 title: "References"
-title-block-style: none
 toc: true
 ---
 

@@ -1,6 +1,5 @@
 ---
 title: "The research workflow"
-title-block-style: none
 toc: true
 ---
 

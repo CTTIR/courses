@@ -1,6 +1,5 @@
 ---
-title: "Course 1 — Foundations of Biostatistics with R"
-title-block-style: none
+title: "Course 1"
 toc: true
 ---
 

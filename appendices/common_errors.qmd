@@ -1,6 +1,5 @@
 ---
 title: "Common errors"
-title-block-style: none
 toc: true
 ---
 
