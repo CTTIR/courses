@@ -14,7 +14,7 @@ statistics than memorise recipes.
 :::
 :::
 
-## About These Courses
+## About This Tutorial Collection
 
 This site hosts a four-course biostatistics programme written in R and
 Quarto and released under the MIT licence. The aim is to offer a
