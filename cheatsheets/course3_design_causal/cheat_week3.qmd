@@ -96,3 +96,15 @@ Stabilised weights stay closer to 1; trim extremes to avoid outliers.
 
 - Hernán & Robins, *Causal Inference: What If*.
 - Therneau & Grambsch, *Modeling Survival Data*.
+
+::: {.vgwort-pixel}
+```{=html}
+<!-- VG Wort Zählmarke — public ID: 0f53cdabb35e4903be00e79d95157b6c -->
+<img src="https://vg09.met.vgwort.de/na/0f53cdabb35e4903be00e79d95157b6c"
+     width="1" height="1" alt=""
+     loading="eager"
+     fetchpriority="high"
+     decoding="async"
+     style="position:absolute;visibility:hidden;" />
+```
+:::

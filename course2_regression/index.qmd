@@ -139,3 +139,15 @@ other lab is referenced by at least one later course.
 - [Course 2 schedule](schedule.qmd) — linked index of every lab, deck, and
   R script.
 - [Unified references](../references.qmd).
+
+::: {.vgwort-pixel}
+```{=html}
+<!-- VG Wort Zählmarke — public ID: 100b8112f0964ae3be95ab24c9c231d5 -->
+<img src="https://vg09.met.vgwort.de/na/100b8112f0964ae3be95ab24c9c231d5"
+     width="1" height="1" alt=""
+     loading="eager"
+     fetchpriority="high"
+     decoding="async"
+     style="position:absolute;visibility:hidden;" />
+```
+:::

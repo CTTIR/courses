@@ -151,3 +151,15 @@ dispersion is above 1.2 or so; it will very rarely hurt.
 ```{r}
 sessionInfo()
 ```
+
+::: {.vgwort-pixel}
+```{=html}
+<!-- VG Wort Zählmarke — public ID: 108044a5445540d1928c3e43fefbe207 -->
+<img src="https://vg09.met.vgwort.de/na/108044a5445540d1928c3e43fefbe207"
+     width="1" height="1" alt=""
+     loading="eager"
+     fetchpriority="high"
+     decoding="async"
+     style="position:absolute;visibility:hidden;" />
+```
+:::

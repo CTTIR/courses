@@ -158,3 +158,15 @@ presentation. Most reviewers catch this, most readers do not.
 ```{r}
 sessionInfo()
 ```
+
+::: {.vgwort-pixel}
+```{=html}
+<!-- VG Wort Zählmarke — public ID: 0f8501bd5e0d4214a14a799c4390ded7 -->
+<img src="https://vg09.met.vgwort.de/na/0f8501bd5e0d4214a14a799c4390ded7"
+     width="1" height="1" alt=""
+     loading="eager"
+     fetchpriority="high"
+     decoding="async"
+     style="position:absolute;visibility:hidden;" />
+```
+:::

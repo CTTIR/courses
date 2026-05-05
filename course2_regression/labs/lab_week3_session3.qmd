@@ -173,3 +173,15 @@ A nice classroom moment: show both models side-by-side and note that
 ```{r}
 sessionInfo()
 ```
+
+::: {.vgwort-pixel}
+```{=html}
+<!-- VG Wort Zählmarke — public ID: 107f44c025db4aee87b37dbf574b5f39 -->
+<img src="https://vg09.met.vgwort.de/na/107f44c025db4aee87b37dbf574b5f39"
+     width="1" height="1" alt=""
+     loading="eager"
+     fetchpriority="high"
+     decoding="async"
+     style="position:absolute;visibility:hidden;" />
+```
+:::

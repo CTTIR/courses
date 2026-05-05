@@ -144,3 +144,15 @@ as "best by pairwise CI".
 ```{r}
 sessionInfo()
 ```
+
+::: {.vgwort-pixel}
+```{=html}
+<!-- VG Wort Zählmarke — public ID: 11244399368946e7a701b8356b733d72 -->
+<img src="https://vg09.met.vgwort.de/na/11244399368946e7a701b8356b733d72"
+     width="1" height="1" alt=""
+     loading="eager"
+     fetchpriority="high"
+     decoding="async"
+     style="position:absolute;visibility:hidden;" />
+```
+:::

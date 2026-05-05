@@ -89,3 +89,15 @@ collect_metrics(tuned)
 
 - Biecek & Burzykowski, *Explanatory Model Analysis*.
 - Molnar, *Interpretable Machine Learning*.
+
+::: {.vgwort-pixel}
+```{=html}
+<!-- VG Wort Zählmarke — public ID: 0f7087e5fbaf48a2ae950508b3790972 -->
+<img src="https://vg09.met.vgwort.de/na/0f7087e5fbaf48a2ae950508b3790972"
+     width="1" height="1" alt=""
+     loading="eager"
+     fetchpriority="high"
+     decoding="async"
+     style="position:absolute;visibility:hidden;" />
+```
+:::

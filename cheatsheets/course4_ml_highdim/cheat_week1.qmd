@@ -94,3 +94,15 @@ downstream stats. Global geometry is often distorted.
 
 - Hastie, Tibshirani, Friedman, *The Elements of Statistical Learning*.
 - James et al., *ISLR2*.
+
+::: {.vgwort-pixel}
+```{=html}
+<!-- VG Wort Zählmarke — public ID: 0f62cf1c4187491bab12e4777c282cfd -->
+<img src="https://vg09.met.vgwort.de/na/0f62cf1c4187491bab12e4777c282cfd"
+     width="1" height="1" alt=""
+     loading="eager"
+     fetchpriority="high"
+     decoding="async"
+     style="position:absolute;visibility:hidden;" />
+```
+:::

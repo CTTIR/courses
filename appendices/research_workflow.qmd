@@ -98,3 +98,15 @@ The act of writing it down so that others can trust, cite, and build on
 the finding.
 *Covered in:* [Writing a report](writing_a_report.qmd),
 [Course 2 W4 S5](../course2_regression/labs/lab_week4_session5.qmd).
+
+::: {.vgwort-pixel}
+```{=html}
+<!-- VG Wort Zählmarke — public ID: 0f16acf9e5a348078f9731af0c489faf -->
+<img src="https://vg09.met.vgwort.de/na/0f16acf9e5a348078f9731af0c489faf"
+     width="1" height="1" alt=""
+     loading="eager"
+     fetchpriority="high"
+     decoding="async"
+     style="position:absolute;visibility:hidden;" />
+```
+:::

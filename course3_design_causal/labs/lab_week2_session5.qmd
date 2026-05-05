@@ -171,3 +171,15 @@ interpretation.
 ```{r}
 sessionInfo()
 ```
+
+::: {.vgwort-pixel}
+```{=html}
+<!-- VG Wort Zählmarke — public ID: 10fa43159fa7415fba0c98641c4dd777 -->
+<img src="https://vg09.met.vgwort.de/na/10fa43159fa7415fba0c98641c4dd777"
+     width="1" height="1" alt=""
+     loading="eager"
+     fetchpriority="high"
+     decoding="async"
+     style="position:absolute;visibility:hidden;" />
+```
+:::

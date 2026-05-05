@@ -222,3 +222,15 @@ significant even when the distribution is wrong.
 ```{r}
 sessionInfo()
 ```
+
+::: {.vgwort-pixel}
+```{=html}
+<!-- VG Wort Zählmarke — public ID: 0fbfbd6631584f4c84b93b68d8d34a35 -->
+<img src="https://vg09.met.vgwort.de/na/0fbfbd6631584f4c84b93b68d8d34a35"
+     width="1" height="1" alt=""
+     loading="eager"
+     fetchpriority="high"
+     decoding="async"
+     style="position:absolute;visibility:hidden;" />
+```
+:::

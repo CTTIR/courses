@@ -195,3 +195,15 @@ slides.
 ```{r}
 sessionInfo()
 ```
+
+::: {.vgwort-pixel}
+```{=html}
+<!-- VG Wort Zählmarke — public ID: 10cd62669f954e9ca0bd931ae0c91f94 -->
+<img src="https://vg09.met.vgwort.de/na/10cd62669f954e9ca0bd931ae0c91f94"
+     width="1" height="1" alt=""
+     loading="eager"
+     fetchpriority="high"
+     decoding="async"
+     style="position:absolute;visibility:hidden;" />
+```
+:::

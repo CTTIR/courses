@@ -184,3 +184,15 @@ procedures.
 ```{r}
 sessionInfo()
 ```
+
+::: {.vgwort-pixel}
+```{=html}
+<!-- VG Wort Zählmarke — public ID: 1101b28209524fd0b455ee524186fc74 -->
+<img src="https://vg09.met.vgwort.de/na/1101b28209524fd0b455ee524186fc74"
+     width="1" height="1" alt=""
+     loading="eager"
+     fetchpriority="high"
+     decoding="async"
+     style="position:absolute;visibility:hidden;" />
+```
+:::

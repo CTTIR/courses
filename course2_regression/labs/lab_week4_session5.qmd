@@ -170,3 +170,15 @@ model it is an implementation detail.
 ```{r}
 sessionInfo()
 ```
+
+::: {.vgwort-pixel}
+```{=html}
+<!-- VG Wort Zählmarke — public ID: 10bed53ad5634df28d8a11eb4621e4da -->
+<img src="https://vg09.met.vgwort.de/na/10bed53ad5634df28d8a11eb4621e4da"
+     width="1" height="1" alt=""
+     loading="eager"
+     fetchpriority="high"
+     decoding="async"
+     style="position:absolute;visibility:hidden;" />
+```
+:::

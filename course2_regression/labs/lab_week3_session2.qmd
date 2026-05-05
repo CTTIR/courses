@@ -161,3 +161,15 @@ choosing to inflate the effect* — it is fixed before randomisation.
 ```{r}
 sessionInfo()
 ```
+
+::: {.vgwort-pixel}
+```{=html}
+<!-- VG Wort Zählmarke — public ID: 10706fbb7d5c4f8bb2a28f75f1e7521d -->
+<img src="https://vg09.met.vgwort.de/na/10706fbb7d5c4f8bb2a28f75f1e7521d"
+     width="1" height="1" alt=""
+     loading="eager"
+     fetchpriority="high"
+     decoding="async"
+     style="position:absolute;visibility:hidden;" />
+```
+:::

@@ -180,3 +180,15 @@ representation must be learned.
 ```{r}
 sessionInfo()
 ```
+
+::: {.vgwort-pixel}
+```{=html}
+<!-- VG Wort Zählmarke — public ID: 1193587d21a94384bfa781bf523b9a73 -->
+<img src="https://vg09.met.vgwort.de/na/1193587d21a94384bfa781bf523b9a73"
+     width="1" height="1" alt=""
+     loading="eager"
+     fetchpriority="high"
+     decoding="async"
+     style="position:absolute;visibility:hidden;" />
+```
+:::

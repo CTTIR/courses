@@ -140,3 +140,15 @@ capstone lab (W4 S5) is the one to present at a group meeting.
 - [Course 4 schedule](schedule.qmd) — linked index of every lab, deck, and
   R script.
 - [Unified references](../references.qmd).
+
+::: {.vgwort-pixel}
+```{=html}
+<!-- VG Wort Zählmarke — public ID: 1143e5e778aa4b8cac9f2c3bc07f10f4 -->
+<img src="https://vg09.met.vgwort.de/na/1143e5e778aa4b8cac9f2c3bc07f10f4"
+     width="1" height="1" alt=""
+     loading="eager"
+     fetchpriority="high"
+     decoding="async"
+     style="position:absolute;visibility:hidden;" />
+```
+:::

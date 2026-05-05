@@ -168,3 +168,15 @@ using the predicted probability as a risk need calibration too.
 ```{r}
 sessionInfo()
 ```
+
+::: {.vgwort-pixel}
+```{=html}
+<!-- VG Wort Zählmarke — public ID: 1085b49000e04c72b86473fa1a4fcb9e -->
+<img src="https://vg09.met.vgwort.de/na/1085b49000e04c72b86473fa1a4fcb9e"
+     width="1" height="1" alt=""
+     loading="eager"
+     fetchpriority="high"
+     decoding="async"
+     style="position:absolute;visibility:hidden;" />
+```
+:::

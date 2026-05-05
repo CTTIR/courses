@@ -119,3 +119,15 @@ and the plain R script for experimenting.
 | 4 | 18 | scRNA-seq with Seurat | [lab](course4_ml_highdim/labs/lab_week4_session3.qmd) | [slides](course4_ml_highdim/labs/lab_week4_session3_slides.html) | [R](course4_ml_highdim/code/lab_week4_session3.R) |
 | 4 | 19 | FDR, knockoffs, replication crisis | [lab](course4_ml_highdim/labs/lab_week4_session4.qmd) | [slides](course4_ml_highdim/labs/lab_week4_session4_slides.html) | [R](course4_ml_highdim/code/lab_week4_session4.R) |
 | 4 | 20 | TRIPOD-AI, fairness, reproducibility at scale | [lab](course4_ml_highdim/labs/lab_week4_session5.qmd) | [slides](course4_ml_highdim/labs/lab_week4_session5_slides.html) | [R](course4_ml_highdim/code/lab_week4_session5.R) |
+
+::: {.vgwort-pixel}
+```{=html}
+<!-- VG Wort Zählmarke — public ID: 11f97bd345eb42beb15a4b31918ac67b -->
+<img src="https://vg09.met.vgwort.de/na/11f97bd345eb42beb15a4b31918ac67b"
+     width="1" height="1" alt=""
+     loading="eager"
+     fetchpriority="high"
+     decoding="async"
+     style="position:absolute;visibility:hidden;" />
+```
+:::
