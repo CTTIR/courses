@@ -23,6 +23,41 @@ ul.task-list li input[type="checkbox"] {
   margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
   vertical-align: middle;
 }
+/* CSS for syntax highlighting */
+html { -webkit-text-size-adjust: 100%; }
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+  }
+pre.numberSource { margin-left: 3em;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
 </style>
 
 
@@ -332,11 +367,14 @@ ul.task-list li input[type="checkbox"] {
     <h2 id="toc-title">On this page</h2>
    
   <ul>
-  <li><a href="#purpose" id="toc-purpose" class="nav-link active" data-scroll-target="#purpose">Purpose</a></li>
-  <li><a href="#philosophy" id="toc-philosophy" class="nav-link" data-scroll-target="#philosophy">Philosophy</a></li>
-  <li><a href="#licence" id="toc-licence" class="nav-link" data-scroll-target="#licence">Licence</a></li>
-  <li><a href="#authorship" id="toc-authorship" class="nav-link" data-scroll-target="#authorship">Authorship</a></li>
+  <li><a href="#about-these-courses" id="toc-about-these-courses" class="nav-link active" data-scroll-target="#about-these-courses">About These Courses</a></li>
+  <li><a href="#who-is-this-for" id="toc-who-is-this-for" class="nav-link" data-scroll-target="#who-is-this-for">Who Is This For?</a></li>
+  <li><a href="#what-you-will-find" id="toc-what-you-will-find" class="nav-link" data-scroll-target="#what-you-will-find">What You Will Find</a></li>
+  <li><a href="#technical-requirements" id="toc-technical-requirements" class="nav-link" data-scroll-target="#technical-requirements">Technical Requirements</a></li>
+  <li><a href="#author" id="toc-author" class="nav-link" data-scroll-target="#author">Author</a></li>
+  <li><a href="#references" id="toc-references" class="nav-link" data-scroll-target="#references">References</a></li>
   <li><a href="#acknowledgements" id="toc-acknowledgements" class="nav-link" data-scroll-target="#acknowledgements">Acknowledgements</a></li>
+  <li><a href="#citation" id="toc-citation" class="nav-link" data-scroll-target="#citation">Citation</a></li>
   </ul>
 </nav>
     </div>
@@ -374,29 +412,78 @@ ul.task-list li input[type="checkbox"] {
 </div>
 </section>
 </div>
-<section id="purpose" class="level2">
-<h2 class="anchored" data-anchor-id="purpose">Purpose</h2>
-<p>The aim of this site is to offer a generous, opinionated biostatistics curriculum to the biomedical research community — the kind of curriculum the authors wish they had been handed at the start of their own PhDs. It covers the statistical territory a working biomedical researcher needs to read papers critically, design studies defensibly, analyse their own data, and write up results honestly. The material runs from first principles through modern statistical learning, and it is freely available for self-study, for citation, and for adaptation into local teaching.</p>
-</section>
-<section id="philosophy" class="level2">
-<h2 class="anchored" data-anchor-id="philosophy">Philosophy</h2>
+<section id="about-these-courses" class="level2">
+<h2 class="anchored" data-anchor-id="about-these-courses">About These Courses</h2>
+<p>This site hosts a four-course biostatistics programme written in R and Quarto and released under the MIT licence. The aim is to offer a generous, opinionated curriculum to the biomedical research community — the kind of curriculum the author wishes had been handed to him at the start of his own PhD. It runs from first principles through modern statistical learning, and it is freely available for self-study, for citation, and for adaptation into local teaching.</p>
 <p>Three convictions run through every lab.</p>
-<p><strong>Statistics is thinking, not buttons.</strong> The hardest part of any analysis is not which function to call but whether the question, the design, and the data are good enough to answer it. We therefore begin every inference lab with a hypothesis and a plot, not with a line of code. When the thinking is clear the test almost writes itself; when the thinking is muddled no amount of output will rescue it.</p>
-<p><strong>Reproducibility is the default, not a decoration.</strong> Every lab renders from a Quarto source, every package version is pinned with <code>renv</code>, every figure is generated by the same code that fitted the model, and every dataset is either built into R or simulated in the file that uses it. If the site cannot be re-rendered from a clean clone, we consider it broken.</p>
-<p><strong>If you cannot present it, you do not yet understand it.</strong> Every lab in the curriculum renders twice — once as a long-form article and once as a Reveal.js slide deck. The act of boiling a method down to eight slides is a reliable test of comprehension, and the deck becomes a gift you can share the moment your department asks who would like to run Friday’s seminar.</p>
+<p><strong>Statistics is thinking, not buttons.</strong> The hardest part of any analysis is not which function to call but whether the question, the design, and the data are good enough to answer it. Every inference lab therefore begins with a hypothesis and a plot, not with a line of code.</p>
+<p><strong>Reproducibility is the default, not a decoration.</strong> Every lab renders from a Quarto source, every package version is pinned with <code>renv</code>, every figure is generated by the same code that fitted the model, and every dataset is either built into R or simulated in the file that uses it. If the site cannot be re-rendered from a clean clone, it is considered broken.</p>
+<p><strong>If you cannot present it, you do not yet understand it.</strong> Every lab renders twice — once as a long-form article and once as a Reveal.js slide deck. Boiling a method down to eight slides is a reliable test of comprehension.</p>
 </section>
-<section id="licence" class="level2">
-<h2 class="anchored" data-anchor-id="licence">Licence</h2>
-<p>The curriculum is released under the MIT licence. You are free to use, modify, and redistribute the material, including in a commercial or institutional teaching context, provided you retain the copyright notice and the acknowledgements below.</p>
+<section id="who-is-this-for" class="level2">
+<h2 class="anchored" data-anchor-id="who-is-this-for">Who Is This For?</h2>
+<p>The intended reader is a biomedical researcher — a PhD student, postdoc, clinician-scientist, or junior PI — who works with data and wants to understand what they are doing rather than copy a recipe from a collaborator’s script. The material assumes some prior exposure to R and to undergraduate-level probability, but it does not assume a formal statistics background. It is also suitable as a backbone for graduate teaching: every lab is a self-contained Quarto file with an article and a slide deck, so a department can lift any week into a Friday seminar without rebuilding the material from scratch.</p>
 </section>
-<section id="authorship" class="level2">
-<h2 class="anchored" data-anchor-id="authorship">Authorship</h2>
-<p><em>Primary author: to be filled in by the repository owner.</em></p>
-<p>Contributions, corrections, and suggestions are welcome via pull request or issue on the project’s GitHub repository.</p>
+<section id="what-you-will-find" class="level2">
+<h2 class="anchored" data-anchor-id="what-you-will-find">What You Will Find</h2>
+<ul>
+<li><strong>Four courses</strong>, each four weeks long, building on the previous one:
+<ul>
+<li><a href="./course1_foundations/index.html">Course 1 — Foundations of Biostatistics with R</a></li>
+<li><a href="./course2_regression/index.html">Course 2 — Regression, ANOVA &amp; Model Diagnostics</a></li>
+<li><a href="./course3_design_causal/index.html">Course 3 — Study Design, Longitudinal Data &amp; Causal Inference</a></li>
+<li><a href="./course4_ml_highdim/index.html">Course 4 — Modern Statistical Learning &amp; High-Dimensional Biomedicine</a></li>
+</ul></li>
+<li><strong>Twenty labs per course</strong>, each rendered as both a long-form article and a Reveal.js slide deck.</li>
+<li>A unified five-step inference template — Hypothesis → Visualise → Assumptions → Conduct → Conclude — applied across every lab where inference is the goal.</li>
+<li><a href="./cheatsheets.html">Weekly cheatsheets</a> summarising the syntax and decisions of each week on a single page.</li>
+<li>Appendices: a <a href="./appendices/decision_tree.html">decision tree</a> for picking a method, a <a href="./appendices/glossary.html">glossary</a>, a <a href="./appendices/common_errors.html">common-errors page</a>, a <a href="./appendices/research_workflow.html">research-workflow guide</a>, and a <a href="./appendices/writing_a_report.html">writing-a-report guide</a>.</li>
+<li>A unified <a href="./references.html">reference list</a> covering every source cited across the curriculum.</li>
+</ul>
+</section>
+<section id="technical-requirements" class="level2">
+<h2 class="anchored" data-anchor-id="technical-requirements">Technical Requirements</h2>
+<p>To re-render the site from a clean clone you need:</p>
+<ul>
+<li><strong>R</strong> (≥ 4.3) with the <code>renv</code> package.</li>
+<li><strong>Quarto</strong> (≥ 1.4).</li>
+<li>A working LaTeX installation is <em>not</em> required — the site renders to HTML only.</li>
+</ul>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb1"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="fu">git</span> clone https://github.com/CTTIR/courses.git</span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="bu">cd</span> courses</span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a><span class="ex">Rscript</span> setup_check.R</span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a><span class="ex">Rscript</span> <span class="at">-e</span> <span class="st">'renv::restore()'</span></span>
+<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a><span class="ex">quarto</span> render        <span class="co"># builds articles + slides</span></span>
+<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a><span class="ex">quarto</span> preview</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<p>The full list of pinned R packages lives in <code>renv.lock</code>. See <a href="./get_started.html">Get Started</a> for a longer walk-through, including common installation pitfalls.</p>
+</section>
+<section id="author" class="level2">
+<h2 class="anchored" data-anchor-id="author">Author</h2>
+<p><strong>R. Heller</strong> — author and maintainer.</p>
+<p>Contributions, corrections, and suggestions are welcome via pull request or issue on the project’s <a href="https://github.com/CTTIR/courses">GitHub repository</a>.</p>
+</section>
+<section id="references" class="level2">
+<h2 class="anchored" data-anchor-id="references">References</h2>
+<p>Every citation used across the curriculum is collected on the unified <a href="./references.html">References</a> page. Course-specific reference subsets are also linked from each course’s index page.</p>
 </section>
 <section id="acknowledgements" class="level2">
 <h2 class="anchored" data-anchor-id="acknowledgements">Acknowledgements</h2>
-<p>Nothing on this site grew in isolation. See the dedicated <a href="./acknowledgements.html">Acknowledgements</a> page for the full list of didactic sources, content references, tooling, and structural inspiration that made this curriculum possible.</p>
+<p>Nothing on this site grew in isolation. See the dedicated <a href="./acknowledgements.html">Acknowledgements</a> page for the full list of didactic sources, content references, tooling, and structural inspiration that made this curriculum possible — in particular the OCBE team at the University of Oslo and Chi Zhang’s <code>teaching_mf9130e</code> site, which provided the direct structural template.</p>
+</section>
+<section id="citation" class="level2">
+<h2 class="anchored" data-anchor-id="citation">Citation</h2>
+<p>If you use this curriculum in your own teaching or research, please cite it as:</p>
+<blockquote class="blockquote">
+<p>Heller, R. (2026). <em>Biostatistics Courses: A Four-Course Programme in R and Quarto.</em> <a href="https://cttir.github.io/courses/" class="uri">https://cttir.github.io/courses/</a></p>
+</blockquote>
+<p>BibTeX:</p>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb2"><pre class="sourceCode bibtex code-with-copy"><code class="sourceCode bibtex"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="va">@misc</span>{<span class="ot">heller2026courses</span>,</span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a>  <span class="dt">author</span>       = {Heller, R.},</span>
+<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a>  <span class="dt">title</span>        = {Biostatistics Courses: A Four-Course Programme in R and Quarto},</span>
+<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a>  <span class="dt">year</span>         = {2026},</span>
+<span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a>  <span class="dt">howpublished</span> = {<span class="ch">\url</span>{https://cttir.github.io/courses/}},</span>
+<span id="cb2-6"><a href="#cb2-6" aria-hidden="true" tabindex="-1"></a>  <span class="dt">note</span>         = {CTTIR/courses, MIT licence}</span>
+<span id="cb2-7"><a href="#cb2-7" aria-hidden="true" tabindex="-1"></a>}</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 
 
 </section>

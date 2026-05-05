@@ -37,3 +37,21 @@ https://cttir.github.io/courses/
 ## Licence
 
 MIT.
+
+## Citation
+
+If you use this curriculum in your own teaching or research, please cite it as:
+
+> Heller, R. (2026). *Biostatistics Courses: A Four-Course Programme in R and Quarto.* https://cttir.github.io/courses/
+
+BibTeX:
+
+```bibtex
+@misc{heller2026courses,
+  author       = {Heller, R.},
+  title        = {Biostatistics Courses: A Four-Course Programme in R and Quarto},
+  year         = {2026},
+  howpublished = {\url{https://cttir.github.io/courses/}},
+  note         = {CTTIR/courses, MIT licence}
+}
+```
