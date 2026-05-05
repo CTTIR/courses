@@ -90,15 +90,3 @@ S-shape → heavy tails. U-shape → skew. Plot before the test.
 
 - Altman, *Practical Statistics for Medical Research*.
 - Gelman et al., *Bayesian Data Analysis*, ch. 1.
-
-::: {.vgwort-pixel}
-```{=html}
-<!-- VG Wort Zählmarke — public ID: 0f2f8fadb24348e295b8865de7ab8e03 -->
-<img src="https://vg09.met.vgwort.de/na/0f2f8fadb24348e295b8865de7ab8e03"
-     width="1" height="1" alt=""
-     loading="eager"
-     fetchpriority="high"
-     decoding="async"
-     style="position:absolute;visibility:hidden;" />
-```
-:::

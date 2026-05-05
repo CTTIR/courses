@@ -168,15 +168,3 @@ any findings.
 ```{r}
 sessionInfo()
 ```
-
-::: {.vgwort-pixel}
-```{=html}
-<!-- VG Wort Zählmarke — public ID: 10353e2e19b9416e9129629ed65630ea -->
-<img src="https://vg09.met.vgwort.de/na/10353e2e19b9416e9129629ed65630ea"
-     width="1" height="1" alt=""
-     loading="eager"
-     fetchpriority="high"
-     decoding="async"
-     style="position:absolute;visibility:hidden;" />
-```
-:::

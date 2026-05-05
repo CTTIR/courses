@@ -217,15 +217,3 @@ use for a single reading, and which for a large calibration study.
 ```{r}
 sessionInfo()
 ```
-
-::: {.vgwort-pixel}
-```{=html}
-<!-- VG Wort Zählmarke — public ID: 0f86ec2955094fdcbfd0053e8cf5e301 -->
-<img src="https://vg09.met.vgwort.de/na/0f86ec2955094fdcbfd0053e8cf5e301"
-     width="1" height="1" alt=""
-     loading="eager"
-     fetchpriority="high"
-     decoding="async"
-     style="position:absolute;visibility:hidden;" />
-```
-:::

@@ -180,15 +180,3 @@ fine for teaching but too loose for planning.
 ```{r}
 sessionInfo()
 ```
-
-::: {.vgwort-pixel}
-```{=html}
-<!-- VG Wort Zählmarke — public ID: 10e134044b8446a5b64e661daf236e4f -->
-<img src="https://vg09.met.vgwort.de/na/10e134044b8446a5b64e661daf236e4f"
-     width="1" height="1" alt=""
-     loading="eager"
-     fetchpriority="high"
-     decoding="async"
-     style="position:absolute;visibility:hidden;" />
-```
-:::

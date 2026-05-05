@@ -170,15 +170,3 @@ that centring is a small habit with a large readability payoff.
 ```{r}
 sessionInfo()
 ```
-
-::: {.vgwort-pixel}
-```{=html}
-<!-- VG Wort Zählmarke — public ID: 1033a9b746af4e22b74eed76136d83a2 -->
-<img src="https://vg09.met.vgwort.de/na/1033a9b746af4e22b74eed76136d83a2"
-     width="1" height="1" alt=""
-     loading="eager"
-     fetchpriority="high"
-     decoding="async"
-     style="position:absolute;visibility:hidden;" />
-```
-:::

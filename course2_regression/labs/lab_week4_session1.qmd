@@ -174,15 +174,3 @@ to make the power loss visceral.
 ```{r}
 sessionInfo()
 ```
-
-::: {.vgwort-pixel}
-```{=html}
-<!-- VG Wort Zählmarke — public ID: 108663008bc8481bbb2e3e4eca28b581 -->
-<img src="https://vg09.met.vgwort.de/na/108663008bc8481bbb2e3e4eca28b581"
-     width="1" height="1" alt=""
-     loading="eager"
-     fetchpriority="high"
-     decoding="async"
-     style="position:absolute;visibility:hidden;" />
-```
-:::

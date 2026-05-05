@@ -187,15 +187,3 @@ values above 0.7 on many observations invalidate the comparison.
 ```{r}
 sessionInfo()
 ```
-
-::: {.vgwort-pixel}
-```{=html}
-<!-- VG Wort Zählmarke — public ID: 11aa2004f20d487f9b57cc480a221c3b -->
-<img src="https://vg09.met.vgwort.de/na/11aa2004f20d487f9b57cc480a221c3b"
-     width="1" height="1" alt=""
-     loading="eager"
-     fetchpriority="high"
-     decoding="async"
-     style="position:absolute;visibility:hidden;" />
-```
-:::

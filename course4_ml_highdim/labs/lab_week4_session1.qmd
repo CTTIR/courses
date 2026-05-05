@@ -204,15 +204,3 @@ PCA or clustering; raw counts should not be used for those tasks.
 ```{r}
 sessionInfo()
 ```
-
-::: {.vgwort-pixel}
-```{=html}
-<!-- VG Wort Zählmarke — public ID: 11d9fff2954c4b25bbcbe1f6d095cebf -->
-<img src="https://vg09.met.vgwort.de/na/11d9fff2954c4b25bbcbe1f6d095cebf"
-     width="1" height="1" alt=""
-     loading="eager"
-     fetchpriority="high"
-     decoding="async"
-     style="position:absolute;visibility:hidden;" />
-```
-:::

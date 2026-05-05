@@ -165,15 +165,3 @@ good is a quiet form of bias.
 ```{r}
 sessionInfo()
 ```
-
-::: {.vgwort-pixel}
-```{=html}
-<!-- VG Wort Zählmarke — public ID: 10cf3e61d781428188f0847e38e52b96 -->
-<img src="https://vg09.met.vgwort.de/na/10cf3e61d781428188f0847e38e52b96"
-     width="1" height="1" alt=""
-     loading="eager"
-     fetchpriority="high"
-     decoding="async"
-     style="position:absolute;visibility:hidden;" />
-```
-:::

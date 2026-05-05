@@ -93,15 +93,3 @@ cpt.mean(x, method = "PELT") |> plot()
 
 - van Buuren, *Flexible Imputation of Missing Data*.
 - Fitzmaurice, Laird, Ware, *Applied Longitudinal Analysis*.
-
-::: {.vgwort-pixel}
-```{=html}
-<!-- VG Wort Zählmarke — public ID: 0f4ea014c054489bb121d2217703a693 -->
-<img src="https://vg09.met.vgwort.de/na/0f4ea014c054489bb121d2217703a693"
-     width="1" height="1" alt=""
-     loading="eager"
-     fetchpriority="high"
-     decoding="async"
-     style="position:absolute;visibility:hidden;" />
-```
-:::

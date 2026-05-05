@@ -190,15 +190,3 @@ drives the choice, not a preference for one method.
 ```{r}
 sessionInfo()
 ```
-
-::: {.vgwort-pixel}
-```{=html}
-<!-- VG Wort Zählmarke — public ID: 1020a65e430f4e04b08c0af8abfee34f -->
-<img src="https://vg09.met.vgwort.de/na/1020a65e430f4e04b08c0af8abfee34f"
-     width="1" height="1" alt=""
-     loading="eager"
-     fetchpriority="high"
-     decoding="async"
-     style="position:absolute;visibility:hidden;" />
-```
-:::

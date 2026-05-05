@@ -185,15 +185,3 @@ gene symbols, but your measured genes may be a biased subset.
 ```{r}
 sessionInfo()
 ```
-
-::: {.vgwort-pixel}
-```{=html}
-<!-- VG Wort Zählmarke — public ID: 11df59de7e7142b991f8c54e0cb69a3f -->
-<img src="https://vg09.met.vgwort.de/na/11df59de7e7142b991f8c54e0cb69a3f"
-     width="1" height="1" alt=""
-     loading="eager"
-     fetchpriority="high"
-     decoding="async"
-     style="position:absolute;visibility:hidden;" />
-```
-:::

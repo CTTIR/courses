@@ -209,15 +209,3 @@ iframe:
 
 This works in any lab `.qmd` and renders identically in both the HTML
 article and the Reveal.js deck.
-
-::: {.vgwort-pixel}
-```{=html}
-<!-- VG Wort Zählmarke — public ID: 11fe3db1a394411e9d988f52994cca71 -->
-<img src="https://vg09.met.vgwort.de/na/11fe3db1a394411e9d988f52994cca71"
-     width="1" height="1" alt=""
-     loading="eager"
-     fetchpriority="high"
-     decoding="async"
-     style="position:absolute;visibility:hidden;" />
-```
-:::

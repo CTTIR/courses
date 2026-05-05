@@ -104,15 +104,3 @@ trial |>
 
 - Altman, Machin et al., *Statistics with Confidence*.
 - [`gtsummary` docs](https://www.danieldsjoberg.com/gtsummary/).
-
-::: {.vgwort-pixel}
-```{=html}
-<!-- VG Wort Zählmarke — public ID: 0f38421ac52d45c99d59a7fbc35a858d -->
-<img src="https://vg09.met.vgwort.de/na/0f38421ac52d45c99d59a7fbc35a858d"
-     width="1" height="1" alt=""
-     loading="eager"
-     fetchpriority="high"
-     decoding="async"
-     style="position:absolute;visibility:hidden;" />
-```
-:::

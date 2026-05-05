@@ -151,15 +151,3 @@ is approximate.
 ```{r}
 sessionInfo()
 ```
-
-::: {.vgwort-pixel}
-```{=html}
-<!-- VG Wort Zählmarke — public ID: 1056b26181f148fd8c1bdc7cfc6641ce -->
-<img src="https://vg09.met.vgwort.de/na/1056b26181f148fd8c1bdc7cfc6641ce"
-     width="1" height="1" alt=""
-     loading="eager"
-     fetchpriority="high"
-     decoding="async"
-     style="position:absolute;visibility:hidden;" />
-```
-:::

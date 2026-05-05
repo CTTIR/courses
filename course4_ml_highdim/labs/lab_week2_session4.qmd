@@ -198,15 +198,3 @@ is to learn filters that respond to salient features.
 ```{r}
 sessionInfo()
 ```
-
-::: {.vgwort-pixel}
-```{=html}
-<!-- VG Wort Zählmarke — public ID: 119822da0fd349ffa1bd52f1bb08ed38 -->
-<img src="https://vg09.met.vgwort.de/na/119822da0fd349ffa1bd52f1bb08ed38"
-     width="1" height="1" alt=""
-     loading="eager"
-     fetchpriority="high"
-     decoding="async"
-     style="position:absolute;visibility:hidden;" />
-```
-:::

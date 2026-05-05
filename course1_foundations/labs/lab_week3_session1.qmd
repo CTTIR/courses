@@ -197,15 +197,3 @@ sure to let the audience see it large, not crowded into a side slide.
 ```{r}
 sessionInfo()
 ```
-
-::: {.vgwort-pixel}
-```{=html}
-<!-- VG Wort Zählmarke — public ID: 0fc0a64ae67e4092ab58b2d892359a52 -->
-<img src="https://vg09.met.vgwort.de/na/0fc0a64ae67e4092ab58b2d892359a52"
-     width="1" height="1" alt=""
-     loading="eager"
-     fetchpriority="high"
-     decoding="async"
-     style="position:absolute;visibility:hidden;" />
-```
-:::

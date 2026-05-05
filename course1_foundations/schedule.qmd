@@ -36,15 +36,3 @@ be read.
 | 4 | 18 | Pearson and Spearman correlation | [lab](labs/lab_week4_session3.qmd) | [slides](labs/lab_week4_session3_slides.html) | [R](code/lab_week4_session3.R) |
 | 4 | 19 | Non-parametric tests | [lab](labs/lab_week4_session4.qmd) | [slides](labs/lab_week4_session4_slides.html) | [R](code/lab_week4_session4.R) |
 | 4 | 20 | Sample size, power, Quarto reporting | [lab](labs/lab_week4_session5.qmd) | [slides](labs/lab_week4_session5_slides.html) | [R](code/lab_week4_session5.R) |
-
-::: {.vgwort-pixel}
-```{=html}
-<!-- VG Wort Zählmarke — public ID: 10003fc0e0ef4c8b8d241ff8872086d5 -->
-<img src="https://vg09.met.vgwort.de/na/10003fc0e0ef4c8b8d241ff8872086d5"
-     width="1" height="1" alt=""
-     loading="eager"
-     fetchpriority="high"
-     decoding="async"
-     style="position:absolute;visibility:hidden;" />
-```
-:::

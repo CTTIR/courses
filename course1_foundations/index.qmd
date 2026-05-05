@@ -137,15 +137,3 @@ labs in that week). Every other lab is load-bearing for Course 2.
   R script.
 - [Unified references](../references.qmd) — the sources behind this course
   (and every course on the site).
-
-::: {.vgwort-pixel}
-```{=html}
-<!-- VG Wort Zählmarke — public ID: 0f8242d86f9440909af2d816f3cb0353 -->
-<img src="https://vg09.met.vgwort.de/na/0f8242d86f9440909af2d816f3cb0353"
-     width="1" height="1" alt=""
-     loading="eager"
-     fetchpriority="high"
-     decoding="async"
-     style="position:absolute;visibility:hidden;" />
-```
-:::

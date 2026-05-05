@@ -99,15 +99,3 @@ source. If the numbers in the text are not the numbers in the
 not reproducible. Quarto, `renv`, and a version-controlled repository
 are together enough to get this right; the `targets` package is the
 next step up for anything large enough to need a dependency graph.
-
-::: {.vgwort-pixel}
-```{=html}
-<!-- VG Wort Zählmarke — public ID: 0f2100f660af4d80a2c926214713e617 -->
-<img src="https://vg09.met.vgwort.de/na/0f2100f660af4d80a2c926214713e617"
-     width="1" height="1" alt=""
-     loading="eager"
-     fetchpriority="high"
-     decoding="async"
-     style="position:absolute;visibility:hidden;" />
-```
-:::

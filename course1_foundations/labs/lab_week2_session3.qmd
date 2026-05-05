@@ -221,15 +221,3 @@ relative cost of a false positive vs. a false negative.
 ```{r}
 sessionInfo()
 ```
-
-::: {.vgwort-pixel}
-```{=html}
-<!-- VG Wort Zählmarke — public ID: 0fb5cc4a8916448186c7b8989ce4ad8a -->
-<img src="https://vg09.met.vgwort.de/na/0fb5cc4a8916448186c7b8989ce4ad8a"
-     width="1" height="1" alt=""
-     loading="eager"
-     fetchpriority="high"
-     decoding="async"
-     style="position:absolute;visibility:hidden;" />
-```
-:::

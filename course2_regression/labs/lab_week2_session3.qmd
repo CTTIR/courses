@@ -152,15 +152,3 @@ unbalanced designs and longitudinal data.
 ```{r}
 sessionInfo()
 ```
-
-::: {.vgwort-pixel}
-```{=html}
-<!-- VG Wort Zählmarke — public ID: 10516ebb587d47b8b3554a951ea1fb29 -->
-<img src="https://vg09.met.vgwort.de/na/10516ebb587d47b8b3554a951ea1fb29"
-     width="1" height="1" alt=""
-     loading="eager"
-     fetchpriority="high"
-     decoding="async"
-     style="position:absolute;visibility:hidden;" />
-```
-:::

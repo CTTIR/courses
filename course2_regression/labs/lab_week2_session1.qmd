@@ -140,15 +140,3 @@ mostly about what functions you want on top.
 ```{r}
 sessionInfo()
 ```
-
-::: {.vgwort-pixel}
-```{=html}
-<!-- VG Wort Zählmarke — public ID: 103dce9e7bf348df9e14aba4dfea7cbf -->
-<img src="https://vg09.met.vgwort.de/na/103dce9e7bf348df9e14aba4dfea7cbf"
-     width="1" height="1" alt=""
-     loading="eager"
-     fetchpriority="high"
-     decoding="async"
-     style="position:absolute;visibility:hidden;" />
-```
-:::

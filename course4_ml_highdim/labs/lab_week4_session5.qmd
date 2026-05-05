@@ -212,15 +212,3 @@ appropriate governance.
 ```{r}
 sessionInfo()
 ```
-
-::: {.vgwort-pixel}
-```{=html}
-<!-- VG Wort Zählmarke — public ID: 11e99bfe5f08458a8d1ca85a969b2eed -->
-<img src="https://vg09.met.vgwort.de/na/11e99bfe5f08458a8d1ca85a969b2eed"
-     width="1" height="1" alt=""
-     loading="eager"
-     fetchpriority="high"
-     decoding="async"
-     style="position:absolute;visibility:hidden;" />
-```
-:::

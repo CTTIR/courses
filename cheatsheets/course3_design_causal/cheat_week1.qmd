@@ -83,15 +83,3 @@ adaptive rules, non-standard outcomes.
 
 - Matthews, *Introduction to Randomized Controlled Clinical Trials*.
 - Chow & Liu, *Design and Analysis of Clinical Trials*.
-
-::: {.vgwort-pixel}
-```{=html}
-<!-- VG Wort Zählmarke — public ID: 0f4add49ba6d411eba99d07de00d11eb -->
-<img src="https://vg09.met.vgwort.de/na/0f4add49ba6d411eba99d07de00d11eb"
-     width="1" height="1" alt=""
-     loading="eager"
-     fetchpriority="high"
-     decoding="async"
-     style="position:absolute;visibility:hidden;" />
-```
-:::

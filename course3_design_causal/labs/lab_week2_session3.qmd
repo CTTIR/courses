@@ -170,15 +170,3 @@ mixture of chi-squares. `lmerTest` and `anova()` do this for you.
 ```{r}
 sessionInfo()
 ```
-
-::: {.vgwort-pixel}
-```{=html}
-<!-- VG Wort Zählmarke — public ID: 10e7a809ef7648e4b130924883597bcf -->
-<img src="https://vg09.met.vgwort.de/na/10e7a809ef7648e4b130924883597bcf"
-     width="1" height="1" alt=""
-     loading="eager"
-     fetchpriority="high"
-     decoding="async"
-     style="position:absolute;visibility:hidden;" />
-```
-:::

@@ -177,26 +177,6 @@ nach § 25 TDDDG ist nicht erforderlich.
 Weitere Informationen:
 <https://plausible.io/data-policy>
 
-#### VG Wort Zählpixel (Standard)
-
-Auf einzelnen, kennzeichenpflichtig angemeldeten Kursseiten wird
-ein **Zählpixel** der Verwertungsgesellschaft WORT eingebunden:
-
-**Verwertungsgesellschaft WORT (VG WORT)**\
-Untere Weidenstraße 5\
-81543 München\
-Deutschland\
-<https://www.vgwort.de/>
-
-Zweck: Erfassung statistischer Kennzahlen zur Berechnung von
-Vergütungsansprüchen gemäß § 53 UrhG / METIS-Programm. **Keine
-Cookies.** Die IP-Adresse wird durch VG Wort SHA-256-gehasht und
-gekürzt. Verarbeitung auf Servern in Deutschland.
-Rechtsgrundlage: Art. 6 Abs. 1 lit. f DSGVO.
-
-Weitere Informationen:
-<https://www.vgwort.de/datenschutz.html>
-
 #### GitHub Pages
 
 Anbieterin: GitHub, Inc., 88 Colin P Kelly Jr St, San Francisco,

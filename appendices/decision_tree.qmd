@@ -111,15 +111,3 @@ The first branch is always about the shape of your question: *comparison*,
   [Course 3 W3 S3](../course3_design_causal/labs/lab_week3_session3.qmd).
 - **Non-randomised treatment:** propensity scores or IPTW. [Course 3 W3 S4](../course3_design_causal/labs/lab_week3_session4.qmd).
 - **A plausible instrument:** instrumental-variable regression. [Course 3 W3 S5](../course3_design_causal/labs/lab_week3_session5.qmd).
-
-::: {.vgwort-pixel}
-```{=html}
-<!-- VG Wort Zählmarke — public ID: 0f12624c6d264e6abdb899ee73b13cac -->
-<img src="https://vg09.met.vgwort.de/na/0f12624c6d264e6abdb899ee73b13cac"
-     width="1" height="1" alt=""
-     loading="eager"
-     fetchpriority="high"
-     decoding="async"
-     style="position:absolute;visibility:hidden;" />
-```
-:::

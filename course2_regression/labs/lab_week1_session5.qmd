@@ -173,15 +173,3 @@ variance pattern → sandwich.
 ```{r}
 sessionInfo()
 ```
-
-::: {.vgwort-pixel}
-```{=html}
-<!-- VG Wort Zählmarke — public ID: 103b97b371774ea593bf2280b7ed9a07 -->
-<img src="https://vg09.met.vgwort.de/na/103b97b371774ea593bf2280b7ed9a07"
-     width="1" height="1" alt=""
-     loading="eager"
-     fetchpriority="high"
-     decoding="async"
-     style="position:absolute;visibility:hidden;" />
-```
-:::

@@ -722,15 +722,3 @@ the three closest labs as further reading.
 })();
 </script>
 ```
-
-::: {.vgwort-pixel}
-```{=html}
-<!-- VG Wort Zählmarke — public ID: 11f14a562174485f993febf59cca9d61 -->
-<img src="https://vg09.met.vgwort.de/na/11f14a562174485f993febf59cca9d61"
-     width="1" height="1" alt=""
-     loading="eager"
-     fetchpriority="high"
-     decoding="async"
-     style="position:absolute;visibility:hidden;" />
-```
-:::

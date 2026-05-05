@@ -35,15 +35,3 @@ Every lab, every deck, every R script for Course 4.
 | 4 | 18 | scRNA-seq with Seurat | [lab](labs/lab_week4_session3.qmd) | [slides](labs/lab_week4_session3_slides.html) | [R](code/lab_week4_session3.R) |
 | 4 | 19 | FDR, knockoffs, replication crisis | [lab](labs/lab_week4_session4.qmd) | [slides](labs/lab_week4_session4_slides.html) | [R](code/lab_week4_session4.R) |
 | 4 | 20 | TRIPOD-AI, fairness, reproducibility at scale | [lab](labs/lab_week4_session5.qmd) | [slides](labs/lab_week4_session5_slides.html) | [R](code/lab_week4_session5.R) |
-
-::: {.vgwort-pixel}
-```{=html}
-<!-- VG Wort Zählmarke — public ID: 11ebd29a7023477d9b5cc8550ba8549c -->
-<img src="https://vg09.met.vgwort.de/na/11ebd29a7023477d9b5cc8550ba8549c"
-     width="1" height="1" alt=""
-     loading="eager"
-     fetchpriority="high"
-     decoding="async"
-     style="position:absolute;visibility:hidden;" />
-```
-:::

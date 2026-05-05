@@ -166,15 +166,3 @@ supervised (LDA) to two-view (CCA) — is the point.
 ```{r}
 sessionInfo()
 ```
-
-::: {.vgwort-pixel}
-```{=html}
-<!-- VG Wort Zählmarke — public ID: 117e74f45ab94013b223a6f798ab4859 -->
-<img src="https://vg09.met.vgwort.de/na/117e74f45ab94013b223a6f798ab4859"
-     width="1" height="1" alt=""
-     loading="eager"
-     fetchpriority="high"
-     decoding="async"
-     style="position:absolute;visibility:hidden;" />
-```
-:::

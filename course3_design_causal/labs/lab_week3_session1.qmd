@@ -192,15 +192,3 @@ follow-up" is suspiciously longer in the exposed group.
 ```{r}
 sessionInfo()
 ```
-
-::: {.vgwort-pixel}
-```{=html}
-<!-- VG Wort Zählmarke — public ID: 10fd2764fa054dfb97f84d5e603c1c21 -->
-<img src="https://vg09.met.vgwort.de/na/10fd2764fa054dfb97f84d5e603c1c21"
-     width="1" height="1" alt=""
-     loading="eager"
-     fetchpriority="high"
-     decoding="async"
-     style="position:absolute;visibility:hidden;" />
-```
-:::

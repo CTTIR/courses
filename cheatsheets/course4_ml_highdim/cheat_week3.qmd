@@ -94,15 +94,3 @@ r <- timeROC(T = df$time, delta = df$event,
 
 - Gelman et al., *Bayesian Data Analysis*, 3e.
 - Royston & Altman, *External validation of a Cox prognostic model*.
-
-::: {.vgwort-pixel}
-```{=html}
-<!-- VG Wort Zählmarke — public ID: 0f72fee8e944452398100438ef87bc47 -->
-<img src="https://vg09.met.vgwort.de/na/0f72fee8e944452398100438ef87bc47"
-     width="1" height="1" alt=""
-     loading="eager"
-     fetchpriority="high"
-     decoding="async"
-     style="position:absolute;visibility:hidden;" />
-```
-:::

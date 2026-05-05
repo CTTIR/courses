@@ -185,15 +185,3 @@ pseudoreplication to a wet-lab audience.
 ```{r}
 sessionInfo()
 ```
-
-::: {.vgwort-pixel}
-```{=html}
-<!-- VG Wort Zählmarke — public ID: 10dd2aa26fdb4bc697c5f43147ae0426 -->
-<img src="https://vg09.met.vgwort.de/na/10dd2aa26fdb4bc697c5f43147ae0426"
-     width="1" height="1" alt=""
-     loading="eager"
-     fetchpriority="high"
-     decoding="async"
-     style="position:absolute;visibility:hidden;" />
-```
-:::

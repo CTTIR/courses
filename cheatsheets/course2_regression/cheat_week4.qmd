@@ -96,15 +96,3 @@ ggplot(df, aes((x + y)/2, y - x)) + geom_point() +
 
 - Harrell, *BBR*, ch. 17–18.
 - Royston & Altman, *Prognosis research*.
-
-::: {.vgwort-pixel}
-```{=html}
-<!-- VG Wort Zählmarke — public ID: 0f43f74d80024e6bb5001e767dd30b7a -->
-<img src="https://vg09.met.vgwort.de/na/0f43f74d80024e6bb5001e767dd30b7a"
-     width="1" height="1" alt=""
-     loading="eager"
-     fetchpriority="high"
-     decoding="async"
-     style="position:absolute;visibility:hidden;" />
-```
-:::

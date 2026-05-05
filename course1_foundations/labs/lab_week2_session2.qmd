@@ -210,15 +210,3 @@ mammography, PSA, COVID rapid testing. The numbers are memorable.
 ```{r}
 sessionInfo()
 ```
-
-::: {.vgwort-pixel}
-```{=html}
-<!-- VG Wort Zählmarke — public ID: 0fafb90c2b77421083f17b88c0ce51f2 -->
-<img src="https://vg09.met.vgwort.de/na/0fafb90c2b77421083f17b88c0ce51f2"
-     width="1" height="1" alt=""
-     loading="eager"
-     fetchpriority="high"
-     decoding="async"
-     style="position:absolute;visibility:hidden;" />
-```
-:::

@@ -195,15 +195,3 @@ If this curriculum is useful in your teaching or research, please cite it.
   note         = {MIT licence. Source: \url{https://github.com/CTTIR/courses}}
 }
 ```
-
-::: {.vgwort-pixel}
-```{=html}
-<!-- VG Wort Zählmarke — public ID: 11f7de9311a74739a84c2defa3e83dff -->
-<img src="https://vg09.met.vgwort.de/na/11f7de9311a74739a84c2defa3e83dff"
-     width="1" height="1" alt=""
-     loading="eager"
-     fetchpriority="high"
-     decoding="async"
-     style="position:absolute;visibility:hidden;" />
-```
-:::

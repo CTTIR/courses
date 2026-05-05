@@ -202,15 +202,3 @@ interval without an effect size; no effect size without units.
 ```{r}
 sessionInfo()
 ```
-
-::: {.vgwort-pixel}
-```{=html}
-<!-- VG Wort Zählmarke — public ID: 0ffc5b102dd34471a88617bad962ba97 -->
-<img src="https://vg09.met.vgwort.de/na/0ffc5b102dd34471a88617bad962ba97"
-     width="1" height="1" alt=""
-     loading="eager"
-     fetchpriority="high"
-     decoding="async"
-     style="position:absolute;visibility:hidden;" />
-```
-:::

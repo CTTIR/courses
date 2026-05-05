@@ -23,6 +23,41 @@ ul.task-list li input[type="checkbox"] {
   margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
   vertical-align: middle;
 }
+/* CSS for syntax highlighting */
+html { -webkit-text-size-adjust: 100%; }
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+  }
+pre.numberSource { margin-left: 3em;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
 </style>
 
 
@@ -332,12 +367,13 @@ ul.task-list li input[type="checkbox"] {
     <h2 id="toc-title">On this page</h2>
    
   <ul>
-  <li><a href="#direct-inspiration" id="toc-direct-inspiration" class="nav-link active" data-scroll-target="#direct-inspiration">Direct inspiration</a></li>
+  <li><a href="#on-this-page" id="toc-on-this-page" class="nav-link active" data-scroll-target="#on-this-page">On this page</a></li>
   <li><a href="#comprehensive-references" id="toc-comprehensive-references" class="nav-link" data-scroll-target="#comprehensive-references">Comprehensive references</a></li>
   <li><a href="#teaching-ecosystems" id="toc-teaching-ecosystems" class="nav-link" data-scroll-target="#teaching-ecosystems">Teaching ecosystems</a></li>
   <li><a href="#pedagogy-and-reproducibility" id="toc-pedagogy-and-reproducibility" class="nav-link" data-scroll-target="#pedagogy-and-reproducibility">Pedagogy and reproducibility</a></li>
   <li><a href="#packages-used" id="toc-packages-used" class="nav-link" data-scroll-target="#packages-used">Packages used</a></li>
-  <li><a href="#closing-note" id="toc-closing-note" class="nav-link" data-scroll-target="#closing-note">Closing note</a></li>
+  <li><a href="#acknowledgements" id="toc-acknowledgements" class="nav-link" data-scroll-target="#acknowledgements">Acknowledgements</a></li>
+  <li><a href="#cite-this-curriculum" id="toc-cite-this-curriculum" class="nav-link" data-scroll-target="#cite-this-curriculum">Cite this curriculum</a></li>
   </ul>
 </nav>
     </div>
@@ -375,20 +411,17 @@ ul.task-list li input[type="checkbox"] {
 </div>
 </section>
 </div>
+<section id="on-this-page" class="level2">
+<h2 class="anchored" data-anchor-id="on-this-page">On this page</h2>
+<ul>
+<li><a href="#comprehensive-references">Comprehensive references</a></li>
+<li><a href="#teaching-ecosystems">Teaching ecosystems</a></li>
+<li><a href="#pedagogy-and-reproducibility">Pedagogy and reproducibility</a></li>
+<li><a href="#packages-used">Packages used</a></li>
+<li><a href="#acknowledgements">Acknowledgements</a></li>
+<li><a href="#cite-this-curriculum">Cite this curriculum</a></li>
+</ul>
 <p>The list below is not exhaustive — nothing that tries to cover an entire field ever is — but it names the sources we leaned on hardest and the teachers whose own openly available material shaped the pedagogy. Every entry links to something you can read for free today. Where a book is not open-access we have flagged it, and where a web resource exists in parallel we have linked to that instead.</p>
-<section id="direct-inspiration" class="level2">
-<h2 class="anchored" data-anchor-id="direct-inspiration">Direct inspiration</h2>
-<div class="card-grid">
-<div class="card">
-<div class="kicker">
-<p>Course structure</p>
-</div>
-<section id="chi-zhang-mf9130e-university-of-oslo" class="level3">
-<h3 class="anchored" data-anchor-id="chi-zhang-mf9130e-university-of-oslo"><a href="https://ocbe-uio.github.io/teaching_mf9130e/">Chi Zhang — <em>MF9130E</em>, University of Oslo</a></h3>
-<p>The OCBE introductory course that inspired the layout of this site. A model of how to teach biostatistics transparently and openly, with every lab reproducible from source. See also the <a href="https://github.com/ocbe-uio/teaching_mf9130e">GitHub repository</a>.</p>
-</section>
-</div>
-</div>
 </section>
 <section id="comprehensive-references" class="level2">
 <h2 class="anchored" data-anchor-id="comprehensive-references">Comprehensive references</h2>
@@ -409,6 +442,15 @@ ul.task-list li input[type="checkbox"] {
 <section id="frank-harrell-regression-modeling-strategies" class="level3">
 <h3 class="anchored" data-anchor-id="frank-harrell-regression-modeling-strategies"><a href="https://hbiostat.org/rms/">Frank Harrell — <em>Regression Modeling Strategies</em></a></h3>
 <p>The companion to BBR. Spline fitting, calibration, validation, and the <code>rms</code> package, all in one place.</p>
+</section>
+</div>
+<div class="card">
+<div class="kicker">
+<p>Course structure</p>
+</div>
+<section id="chi-zhang-mf9130e-university-of-oslo" class="level3">
+<h3 class="anchored" data-anchor-id="chi-zhang-mf9130e-university-of-oslo"><a href="https://ocbe-uio.github.io/teaching_mf9130e/">Chi Zhang — <em>MF9130E</em>, University of Oslo</a></h3>
+<p>The OCBE introductory course that inspired the layout of this site. A model of how to teach biostatistics transparently and openly, with every lab reproducible from source. See also the <a href="https://github.com/ocbe-uio/teaching_mf9130e">GitHub repository</a>.</p>
 </section>
 </div>
 <div class="card">
@@ -517,13 +559,22 @@ ul.task-list li input[type="checkbox"] {
 <h2 class="anchored" data-anchor-id="packages-used">Packages used</h2>
 <p>Every R package loaded by the labs is listed in <code>renv.lock</code> and re-exported by <code>citation()</code> in the session-info block at the foot of each lab. If you reuse any analysis here, cite the package authors alongside this site.</p>
 </section>
-<section id="closing-note" class="level2">
-<h2 class="anchored" data-anchor-id="closing-note">Closing note</h2>
+<section id="acknowledgements" class="level2">
+<h2 class="anchored" data-anchor-id="acknowledgements">Acknowledgements</h2>
+<p>Beyond the sources above, this curriculum stands on the shoulders of teachers, tool-builders, colleagues, and reviewers whose contributions are named in full on the dedicated <a href="./acknowledgements.html">Acknowledgements</a> page — covering didactics and pedagogy, content depth, tooling, and personal thanks.</p>
 <p>We are grateful to all the educators above for making their work openly available. The entire point of a site like this one is that the next version of it, wherever and by whomever it is written, will be better.</p>
-<div class="vgwort-pixel">
-<!-- VG Wort Zählmarke — public ID: 11f7de9311a74739a84c2defa3e83dff -->
-<img src="https://vg09.met.vgwort.de/na/11f7de9311a74739a84c2defa3e83dff" width="1" height="1" alt="" loading="eager" fetchpriority="high" decoding="async" style="position:absolute;visibility:hidden;">
-</div>
+</section>
+<section id="cite-this-curriculum" class="level2">
+<h2 class="anchored" data-anchor-id="cite-this-curriculum">Cite this curriculum</h2>
+<p>If this curriculum is useful in your teaching or research, please cite it.</p>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb1"><pre class="sourceCode bibtex code-with-copy"><code class="sourceCode bibtex"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="va">@misc</span>{<span class="ot">heller2026courses</span>,</span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a>  <span class="dt">author</span>       = {Heller, Raban},</span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a>  <span class="dt">title</span>        = {{<span class="ch">\#</span>}courses: A four-course biostatistics programme in R and Quarto},</span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a>  <span class="dt">year</span>         = {2026},</span>
+<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a>  <span class="dt">publisher</span>    = {CTTIR},</span>
+<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a>  <span class="dt">howpublished</span> = {<span class="ch">\url</span>{https://cttir.github.io/courses/}},</span>
+<span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a>  <span class="dt">note</span>         = {MIT licence. Source: <span class="ch">\url</span>{https://github.com/CTTIR/courses}}</span>
+<span id="cb1-8"><a href="#cb1-8" aria-hidden="true" tabindex="-1"></a>}</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 
 
 </section>

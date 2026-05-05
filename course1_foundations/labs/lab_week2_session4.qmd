@@ -202,15 +202,3 @@ same axes at decreasing *p* and watch them converge.
 ```{r}
 sessionInfo()
 ```
-
-::: {.vgwort-pixel}
-```{=html}
-<!-- VG Wort Zählmarke — public ID: 0fbf982a40844dc9be773c7f549ef140 -->
-<img src="https://vg09.met.vgwort.de/na/0fbf982a40844dc9be773c7f549ef140"
-     width="1" height="1" alt=""
-     loading="eager"
-     fetchpriority="high"
-     decoding="async"
-     style="position:absolute;visibility:hidden;" />
-```
-:::

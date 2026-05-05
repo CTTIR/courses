@@ -195,15 +195,3 @@ often a cleaner answer than a Wilcoxon on the raw data.
 ```{r}
 sessionInfo()
 ```
-
-::: {.vgwort-pixel}
-```{=html}
-<!-- VG Wort Zählmarke — public ID: 0ff863ef128b475a80bdfcd525024402 -->
-<img src="https://vg09.met.vgwort.de/na/0ff863ef128b475a80bdfcd525024402"
-     width="1" height="1" alt=""
-     loading="eager"
-     fetchpriority="high"
-     decoding="async"
-     style="position:absolute;visibility:hidden;" />
-```
-:::

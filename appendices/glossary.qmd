@@ -192,15 +192,3 @@ Each entry links to the first lab in which the term appears.
 ## W
 
 **Wilcoxon test.** Non-parametric test for paired (signed-rank) or unpaired (rank-sum) data. [Course 1 W4 S4](../course1_foundations/labs/lab_week4_session4.qmd).
-
-::: {.vgwort-pixel}
-```{=html}
-<!-- VG Wort Zählmarke — public ID: 0f1683dbb9064949a8f6db8a738dd151 -->
-<img src="https://vg09.met.vgwort.de/na/0f1683dbb9064949a8f6db8a738dd151"
-     width="1" height="1" alt=""
-     loading="eager"
-     fetchpriority="high"
-     decoding="async"
-     style="position:absolute;visibility:hidden;" />
-```
-:::

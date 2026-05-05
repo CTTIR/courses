@@ -169,15 +169,3 @@ restriction; DiD: parallel trends; RDD: continuity at the cutoff.
 ```{r}
 sessionInfo()
 ```
-
-::: {.vgwort-pixel}
-```{=html}
-<!-- VG Wort Zählmarke — public ID: 11100c99e1314806908e325d5fa0720a -->
-<img src="https://vg09.met.vgwort.de/na/11100c99e1314806908e325d5fa0720a"
-     width="1" height="1" alt=""
-     loading="eager"
-     fetchpriority="high"
-     decoding="async"
-     style="position:absolute;visibility:hidden;" />
-```
-:::

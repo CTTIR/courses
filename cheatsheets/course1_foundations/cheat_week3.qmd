@@ -86,15 +86,3 @@ Given data $x$ and model $f(x; \theta)$:
 
 - Harrell, *Biostatistics for Biomedical Research*, ch. 3–5.
 - Efron & Tibshirani, *An Introduction to the Bootstrap*.
-
-::: {.vgwort-pixel}
-```{=html}
-<!-- VG Wort Zählmarke — public ID: 0f3145566dc8405fbf87f176250c4148 -->
-<img src="https://vg09.met.vgwort.de/na/0f3145566dc8405fbf87f176250c4148"
-     width="1" height="1" alt=""
-     loading="eager"
-     fetchpriority="high"
-     decoding="async"
-     style="position:absolute;visibility:hidden;" />
-```
-:::
