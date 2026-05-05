@@ -1,6 +1,7 @@
 ---
 title: "Biostatistics Courses"
 pagetitle: "Biostatistics Courses"
+title-block-style: none
 toc: false
 ---
 

@@ -1,5 +1,6 @@
 ---
 title: "Course 3 — Study Design, Longitudinal Data & Causal Inference"
+title-block-style: none
 toc: true
 ---
 

@@ -1,5 +1,6 @@
 ---
 title: "Schedule"
+title-block-style: none
 toc: true
 ---
 

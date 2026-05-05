@@ -1,5 +1,6 @@
 ---
 title: "Course 4 — Modern Statistical Learning & High-Dimensional Biomedicine"
+title-block-style: none
 toc: true
 ---
 

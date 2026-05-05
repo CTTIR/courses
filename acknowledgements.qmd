@@ -1,5 +1,6 @@
 ---
 title: "Acknowledgements"
+title-block-style: none
 toc: true
 ---
 
@@ -207,7 +208,7 @@ software exists. We cite the tools we lean on hardest:
   definition of "useful" that this curriculum now tries to meet.
 
 Any errors here are our own. If you spot one, please
-[open an issue](https://github.com/r-heller/courses/issues).
+[open an issue](https://github.com/CTTIR/courses/issues).
 
 ## Licence
 

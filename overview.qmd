@@ -1,6 +1,7 @@
 ---
 title: "Overview"
 pagetitle: "Overview & Label Network"
+title-block-style: none
 toc: false
 format:
   html:

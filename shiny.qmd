@@ -1,5 +1,6 @@
 ---
 title: "Interactive apps"
+title-block-style: none
 toc: true
 ---
 
@@ -22,7 +23,7 @@ your understanding.
 
 ::: {.callout-tip}
 **Source:** every app is a single `app.R` in
-[`shiny/<app-name>/`](https://github.com/r-heller/courses/tree/main/shiny)
+[`shiny/<app-name>/`](https://github.com/CTTIR/courses/tree/main/shiny)
 on GitHub. They are designed for self-hosted Shiny Server but run
 locally with one command:
 

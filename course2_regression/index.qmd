@@ -1,5 +1,6 @@
 ---
 title: "Course 2 — Regression, ANOVA & Model Diagnostics"
+title-block-style: none
 toc: true
 ---
 

@@ -1,5 +1,6 @@
 ---
 title: "Decision tree: which method?"
+title-block-style: none
 toc: true
 ---
 

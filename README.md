@@ -23,8 +23,8 @@ inspiration. See `references.qmd` for the full list of sources.
 ## Build
 
 ```bash
-git clone https://github.com/CHANGE_ME/biostats_curriculum.git
-cd biostats_curriculum
+git clone https://github.com/CTTIR/courses.git
+cd courses
 Rscript setup_check.R
 Rscript -e 'renv::restore()'
 quarto render        # builds articles + slides
@@ -32,7 +32,7 @@ quarto preview
 ```
 
 ## URL
-https://r-heller.github.io/courses/
+https://cttir.github.io/courses/
 
 ## Licence
 

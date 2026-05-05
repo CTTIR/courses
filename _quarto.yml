@@ -16,7 +16,7 @@ execute:
 website:
   title: "#courses"
   description: "A four-course biostatistics programme in R and Quarto."
-  site-url: "https://r-heller.github.io/courses/"
+  site-url: "https://cttir.github.io/courses/"
   navbar:
     title: "#courses"
     left:
@@ -35,16 +35,10 @@ website:
       - href: about.qmd
         text: "About"
     right:
-      - text: "Rechtliches"
-        menu:
-          - href: impressum.qmd
-            text: "Impressum"
-          - href: datenschutz.qmd
-            text: "Datenschutzerklärung"
-          - href: haftungsausschluss.qmd
-            text: "Haftungsausschluss"
+      - href: impressum.qmd
+        text: "Impressum"
       - icon: github
-        href: https://github.com/r-heller/courses
+        href: https://github.com/CTTIR/courses
   page-navigation: true
   page-footer:
     left: "Biostatistics Courses · MIT"
@@ -60,8 +54,6 @@ website:
       [References](/references.qmd) ·
       [Acknowledgements](/acknowledgements.qmd) ·
       **[Impressum](/impressum.qmd)** ·
-      **[Datenschutz](/datenschutz.qmd)** ·
-      **[Haftungsausschluss](/haftungsausschluss.qmd)** ·
       [Kontakt](mailto:58561665+r-heller@users.noreply.github.com)
     right: "Built with [Quarto](https://quarto.org)"
 
@@ -71,8 +63,8 @@ filters:
 format:
   html:
     theme:
-      light: [flatly, assets/light.scss]
       dark:  [darkly, assets/dark.scss]
+      light: [flatly, assets/light.scss]
     toc: true
     toc-depth: 3
     toc-location: right

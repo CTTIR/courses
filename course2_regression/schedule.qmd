@@ -1,5 +1,6 @@
 ---
 title: "Course 2 — Schedule"
+title-block-style: none
 toc: true
 ---
 

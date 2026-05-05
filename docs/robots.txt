@@ -1,1 +1,1 @@
-Sitemap: https://r-heller.github.io/courses/sitemap.xml
+Sitemap: https://cttir.github.io/courses/sitemap.xml
