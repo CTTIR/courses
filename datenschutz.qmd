@@ -1,0 +1,186 @@
+---
+title: "Datenschutzerklärung"
+lang: de
+aliases:
+  - /legal/privacy/
+  - /privacy/
+---
+
+# Datenschutzerklärung
+
+## 1. Verantwortlicher
+
+Verantwortliche Stelle im Sinne der Datenschutz-Grundverordnung
+(DSGVO) ist:
+
+R. Heller\
+Albert-Einstein-Straße 47\
+02977 Hoyerswerda\
+Deutschland
+
+E-Mail: [58561665+r-heller@users.noreply.github.com](mailto:58561665+r-heller@users.noreply.github.com)
+
+Eine gesetzliche Pflicht zur Bestellung eines/einer
+Datenschutzbeauftragten besteht nicht; entsprechend ist keine
+solche Person bestellt.
+
+## 2. Allgemeine Hinweise und Pflichtinformationen
+
+### Datenschutz auf einen Blick
+
+Diese Website ist ein nicht-kommerzielles, didaktisch motiviertes
+Angebot. Es werden so wenige personenbezogene Daten verarbeitet
+wie technisch möglich. Es kommen keine Tracking-Cookies, keine
+Werbenetzwerke und keine personalisierten Profile zum Einsatz.
+
+### Speicherdauer
+
+Sofern in dieser Erklärung keine speziellere Speicherdauer
+genannt ist, verbleiben personenbezogene Daten so lange beim
+Verantwortlichen, bis der Zweck für die Datenverarbeitung
+entfällt.
+
+### Rechtsgrundlagen der Datenverarbeitung
+
+- **Art. 6 Abs. 1 lit. a DSGVO** — Einwilligung,
+- **Art. 6 Abs. 1 lit. b DSGVO** — Vertrag bzw. vorvertragliche
+  Maßnahmen,
+- **Art. 6 Abs. 1 lit. f DSGVO** — berechtigte Interessen
+  (stabiler Betrieb, Sicherheit, statistische
+  Reichweitenmessung, urheberrechtliche
+  Vergütungsansprüche).
+
+### Empfänger und Übermittlung in Drittländer
+
+Hosting der Website-Auslieferung erfolgt durch GitHub, Inc.;
+damit ist eine Verarbeitung personenbezogener Daten in den USA
+möglich. Schriftarten werden über Google Fonts (Google Ireland
+Limited) ausgeliefert. Beide Übermittlungen erfolgen auf
+Grundlage des EU-US Data Privacy Framework bzw.
+Standardvertragsklauseln. Eine darüber hinausgehende
+Übermittlung in Drittländer findet **nicht** statt. Die
+Reichweitenmessung mittels Plausible Analytics erfolgt auf einer
+**selbst gehosteten Instanz auf einem Server in Deutschland**.
+
+### Widerruf, Widerspruch, Beschwerde
+
+Eine erteilte Einwilligung kann jederzeit mit Wirkung für die
+Zukunft widerrufen werden (Art. 7 Abs. 3 DSGVO). Gegen eine
+Verarbeitung auf Grundlage von Art. 6 Abs. 1 lit. e oder f DSGVO
+können Sie aus Gründen Ihrer besonderen Situation Widerspruch
+einlegen (Art. 21).
+
+### Beschwerderecht bei der zuständigen Aufsichtsbehörde
+
+**Sächsischer Datenschutz- und Transparenzbeauftragter**\
+Devrientstraße 1\
+01067 Dresden\
+<https://www.saechsdsb.de/>
+
+### Auskunft, Berichtigung, Löschung, Datenübertragbarkeit
+
+Auskunft (Art. 15), Berichtigung (16), Löschung (17),
+Einschränkung (18), Datenübertragbarkeit (20).
+
+### SSL- bzw. TLS-Verschlüsselung
+
+Diese Seite nutzt aus Sicherheitsgründen eine TLS-
+Verschlüsselung.
+
+## 3. Datenerfassung auf dieser Website
+
+### Server-Log-Dateien
+
+Der Provider der Seiten (GitHub Pages, GitHub, Inc., 88 Colin P
+Kelly Jr St, San Francisco, CA 94107, USA) erhebt automatisch
+Server-Log-Dateien (Browsertyp, Betriebssystem, Referrer-URL,
+Hostname, Uhrzeit, IP-Adresse). Eine Zusammenführung mit anderen
+Datenquellen durch den Verantwortlichen findet **nicht** statt.
+Rechtsgrundlage: Art. 6 Abs. 1 lit. f DSGVO.
+[GitHub Privacy Statement](https://docs.github.com/en/site-policy/privacy-policies/github-privacy-statement).
+
+### Cookies
+
+Diese Website setzt **keine eigenen Tracking-Cookies**.
+Technisch notwendige Cookies (z. B. Theme-Präferenz) sind durch
+**§ 25 Abs. 2 Nr. 2 TDDDG** gedeckt.
+
+### Kontaktaufnahme per E-Mail
+
+Bei Kontakt per E-Mail werden die mitgeteilten Daten zur
+Bearbeitung gespeichert. Rechtsgrundlage: Art. 6 Abs. 1 lit. b
+bzw. f DSGVO.
+
+## 4. Analyse-Tools und Tools von Drittanbietern
+
+### Plausible Analytics (selbst gehostet)
+
+Diese Website verwendet **Plausible Analytics** zur statistischen
+Reichweitenmessung. Plausible wird als **selbst gehostete
+Instanz** unter `analytics.hellebo.de` betrieben; der Server
+steht in **Deutschland**. Eine Übermittlung an Plausible
+Insights OÜ oder andere Drittanbieter findet **nicht** statt.
+
+Plausible ist **cookielos** und erhebt **keine
+personenbezogenen Daten** im engeren Sinn. IP-Adressen werden
+nicht gespeichert; zur Sitzungserkennung wird täglich rotierend
+ein gesalzener Hash gebildet.
+
+Rechtsgrundlage: Art. 6 Abs. 1 lit. f DSGVO. Eine Einwilligung
+nach § 25 TDDDG ist nicht erforderlich.
+
+Weitere Informationen:
+<https://plausible.io/data-policy>
+
+### VG Wort Zählpixel (Standard)
+
+Auf einzelnen, kennzeichenpflichtig angemeldeten Kursseiten wird
+ein **Zählpixel** der Verwertungsgesellschaft WORT eingebunden:
+
+**Verwertungsgesellschaft WORT (VG WORT)**\
+Untere Weidenstraße 5\
+81543 München\
+Deutschland\
+<https://www.vgwort.de/>
+
+Zweck: Erfassung statistischer Kennzahlen zur Berechnung von
+Vergütungsansprüchen gemäß § 53 UrhG / METIS-Programm. **Keine
+Cookies.** Die IP-Adresse wird durch VG Wort SHA-256-gehasht und
+gekürzt. Verarbeitung auf Servern in Deutschland.
+Rechtsgrundlage: Art. 6 Abs. 1 lit. f DSGVO.
+
+Weitere Informationen:
+<https://www.vgwort.de/datenschutz.html>
+
+### GitHub Pages
+
+Anbieterin: GitHub, Inc., 88 Colin P Kelly Jr St, San Francisco,
+CA 94107, USA.
+[GitHub Privacy Statement](https://docs.github.com/en/site-policy/privacy-policies/github-privacy-statement).
+
+## 5. Eingebettete Inhalte und Schriftarten
+
+### Google Fonts (CDN)
+
+Diese Website bindet die Schriften **Source Sans 3** und
+**JetBrains Mono** über die Google-Fonts-CDN ein. Beim Aufruf
+überträgt Ihr Browser dabei Verbindungsdaten (insbesondere die
+IP-Adresse) an Google. Anbieter: Google Ireland Limited, Gordon
+House, Barrow Street, Dublin 4, Irland. Rechtsgrundlage: Art. 6
+Abs. 1 lit. f DSGVO.
+<https://policies.google.com/privacy>.
+
+### Externe Verlinkungen
+
+Die Kursseiten verweisen auf externe Quellen (CRAN,
+Bioconductor, Wikipedia, GitHub, Verlage, Repositorien u. a.).
+Beim Klick auf solche Links verlassen Sie diese Seite; die
+jeweilige Datenschutzpolitik des verlinkten Angebots gilt.
+
+## 6. Ihre Rechte als betroffene Person
+
+Auskunft (Art. 15), Berichtigung (16), Löschung (17),
+Einschränkung (18), Datenübertragbarkeit (20), Widerspruch (21),
+Widerruf (Art. 7 Abs. 3), Beschwerde (Art. 77).
+
+*Stand: 2026-05-05.*
