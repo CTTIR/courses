@@ -14,29 +14,21 @@ it came from somewhere else first.
 :::
 :::
 
+## On this page
+
+- [Comprehensive references](#comprehensive-references)
+- [Teaching ecosystems](#teaching-ecosystems)
+- [Pedagogy and reproducibility](#pedagogy-and-reproducibility)
+- [Packages used](#packages-used)
+- [Acknowledgements](#acknowledgements)
+- [Cite this curriculum](#cite-this-curriculum)
+
 The list below is not exhaustive — nothing that tries to cover an
 entire field ever is — but it names the sources we leaned on hardest and
 the teachers whose own openly available material shaped the pedagogy.
 Every entry links to something you can read for free today. Where a book
 is not open-access we have flagged it, and where a web resource exists in
 parallel we have linked to that instead.
-
-## Direct inspiration
-
-::: {.card-grid}
-
-::: {.card}
-::: {.kicker}
-Course structure
-:::
-### [Chi Zhang — *MF9130E*, University of Oslo](https://ocbe-uio.github.io/teaching_mf9130e/)
-The OCBE introductory course that inspired the layout of this site. A
-model of how to teach biostatistics transparently and openly, with every
-lab reproducible from source. See also the
-[GitHub repository](https://github.com/ocbe-uio/teaching_mf9130e).
-:::
-
-:::
 
 ## Comprehensive references
 
@@ -59,6 +51,17 @@ Regression modelling
 ### [Frank Harrell — *Regression Modeling Strategies*](https://hbiostat.org/rms/)
 The companion to BBR. Spline fitting, calibration, validation, and the
 `rms` package, all in one place.
+:::
+
+::: {.card}
+::: {.kicker}
+Course structure
+:::
+### [Chi Zhang — *MF9130E*, University of Oslo](https://ocbe-uio.github.io/teaching_mf9130e/)
+The OCBE introductory course that inspired the layout of this site. A
+model of how to teach biostatistics transparently and openly, with every
+lab reproducible from source. See also the
+[GitHub repository](https://github.com/ocbe-uio/teaching_mf9130e).
 :::
 
 ::: {.card}
@@ -166,11 +169,32 @@ Every R package loaded by the labs is listed in `renv.lock` and re-exported
 by `citation()` in the session-info block at the foot of each lab. If you
 reuse any analysis here, cite the package authors alongside this site.
 
-## Closing note
+## Acknowledgements
+
+Beyond the sources above, this curriculum stands on the shoulders of
+teachers, tool-builders, colleagues, and reviewers whose contributions are
+named in full on the dedicated [Acknowledgements](acknowledgements.qmd)
+page — covering didactics and pedagogy, content depth, tooling, and
+personal thanks.
 
 We are grateful to all the educators above for making their work openly
 available. The entire point of a site like this one is that the next
 version of it, wherever and by whomever it is written, will be better.
+
+## Cite this curriculum
+
+If this curriculum is useful in your teaching or research, please cite it.
+
+```bibtex
+@misc{heller2026courses,
+  author       = {Heller, Raban},
+  title        = {{\#}courses: A four-course biostatistics programme in R and Quarto},
+  year         = {2026},
+  publisher    = {CTTIR},
+  howpublished = {\url{https://cttir.github.io/courses/}},
+  note         = {MIT licence. Source: \url{https://github.com/CTTIR/courses}}
+}
+```
 
 ::: {.vgwort-pixel}
 ```{=html}
