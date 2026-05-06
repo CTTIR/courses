@@ -41,6 +41,125 @@ COURSE_DIR = {
     "course4": "course4_ml_highdim",
 }
 
+# Cross-cutting "method-family" tags, derived from each lab's title +
+# its hand-tagged keywords. Each entry is a single derived tag with a
+# list of regex patterns; if any pattern matches the haystack the tag
+# is added. This is the same mechanism the tutorials site uses to make
+# the graph dense across topics. Mirrors that vocabulary so a viewer
+# moving between the two sites recognises the cluster names.
+MID_LEVEL_TAGS: dict[str, list[str]] = {
+    "regression-methods": [
+        r"\bregression\b", r"\bglm\b", r"\bglmm\b", r"\bgam\b",
+        r"\blasso\b", r"\bridge\b", r"\belastic[- ]net\b",
+        r"\blogistic\b", r"\bordinal\b", r"\bmultinomial\b",
+        r"\bpoisson\b", r"\bnegative[- ]binomial\b",
+    ],
+    "hypothesis-testing": [
+        r"\bt[- ]test\b", r"\banova\b", r"\bchi[- ]square\b",
+        r"\bhypothesis\b", r"\bp[- ]value\b", r"\bcontrast\b",
+        r"\bgoodness[- ]of[- ]fit\b",
+    ],
+    "non-parametric": [
+        r"\bnon[- ]parametric\b", r"\brank[- ]?test\b",
+        r"\bspearman\b", r"\bwilcoxon\b", r"\bkruskal\b",
+        r"\bbootstrap\b", r"\bpermutation\b",
+    ],
+    "design-and-power": [
+        r"\bpower\b", r"\bsample[- ]size\b", r"\bdesign\b",
+        r"\bfactorial\b", r"\brcbd\b", r"\bblocking\b",
+        r"\bcrossover\b", r"\brandomi[sz]ation\b",
+    ],
+    "causal-inference": [
+        r"\bcausal\b", r"\bdag\b", r"\bpropensity\b",
+        r"\biptw\b", r"\bg[- ]methods?\b", r"\bdid\b",
+        r"\bdifference[- ]in[- ]differences?\b", r"\binstrumental\b",
+        r"\bconfound", r"\brdd\b",
+    ],
+    "longitudinal-and-mixed": [
+        r"\bmixed[- ]model\b", r"\bgee\b", r"\blongitudinal\b",
+        r"\brepeated[- ]measures\b", r"\bgrowth curve\b",
+        r"\blme4\b", r"\brandom[- ]effects?\b",
+    ],
+    "time-to-event": [
+        r"\bsurvival\b", r"\bhazard\b", r"\bkaplan\b", r"\bcox\b",
+        r"\bcensor", r"\btime[- ]to[- ]event\b", r"\blog[- ]rank\b",
+        r"\bcompeting[- ]risks?\b", r"\bmultistate\b",
+    ],
+    "diagnostics-and-prediction": [
+        r"\broc\b", r"\bauc\b", r"\bbrier\b", r"\bcalibrat",
+        r"\bdiscriminat", r"\bdiagnostic\b", r"\bsensitivity\b",
+        r"\bspecificity\b", r"\blikelihood ratio\b",
+        r"\bdecision[- ]curve\b", r"\bnri\b", r"\bidi\b",
+        r"\btripod\b", r"\bvalidation\b", r"\bbiomarker\b",
+    ],
+    "agreement-reliability": [
+        r"\bagreement\b", r"\breliability\b", r"\bkappa\b",
+        r"\bicc\b", r"\bbland[- ]altman\b", r"\bconcordance\b",
+    ],
+    "multivariate-and-dimreduction": [
+        r"\bpca\b", r"\bfa\b", r"\bcca\b", r"\blda\b",
+        r"\bumap\b", r"\bt[- ]sne\b", r"\bcluster",
+        r"\bdimensionality\b", r"\bunsupervised\b",
+    ],
+    "machine-learning-methods": [
+        r"\brandom forest\b", r"\bxgboost\b", r"\bboost",
+        r"\bdeep learning\b", r"\bneural\b", r"\btorch\b",
+        r"\bsvm\b", r"\bensemble\b", r"\btidymodels\b",
+        r"\bcross[- ]validation\b", r"\bregularisation\b",
+        r"\binterpretability\b", r"\bshap\b",
+    ],
+    "bayesian-methods": [
+        r"\bbayes", r"\bposterior\b", r"\bprior\b", r"\bmcmc\b",
+        r"\bstan\b", r"\bbrms\b", r"\bhierarchical\b", r"\bloo\b",
+    ],
+    "missing-data": [
+        r"\bmissing\b", r"\bmcar\b", r"\bmar\b", r"\bmnar\b",
+        r"\bimputation\b", r"\bmice\b",
+    ],
+    "evidence-synthesis": [
+        r"\bmeta[- ]analysis\b", r"\bsystematic review\b",
+        r"\bprisma\b", r"\bforest plot\b", r"\bnetwork meta\b",
+        r"\bheterogeneity\b",
+    ],
+    "omics-and-genomics": [
+        r"\brna[- ]seq\b", r"\bscrna\b", r"\bsingle[- ]cell\b",
+        r"\bdeseq", r"\bedger\b", r"\bseurat\b", r"\bgsea\b",
+        r"\bomics\b", r"\benrichment\b", r"\bbiomarker\b",
+        r"\bdifferential expression\b",
+    ],
+    "high-dimensional": [
+        r"\bhigh[- ]dimensional\b", r"\bregularis", r"\bfdr\b",
+        r"\bmultiple[- ]testing\b", r"\bknockoff", r"\blasso\b",
+        r"\bdimensionality\b",
+    ],
+    "reproducibility-and-reporting": [
+        r"\bquarto\b", r"\brenv\b", r"\bworkflow\b", r"\breporting\b",
+        r"\breproducib", r"\bpre[- ]registration\b", r"\bsap\b",
+        r"\bstrobe\b", r"\bconsort\b", r"\btripod\b", r"\bprisma\b",
+    ],
+    "probability-and-distributions": [
+        r"\bdistribution\b", r"\bprobability\b", r"\bbayes' theorem\b",
+        r"\bpoisson\b", r"\bbinomial\b", r"\bbernoulli\b",
+        r"\bnormal\b", r"\bqq[- ]plot\b",
+    ],
+    "asymptotic-and-foundations": [
+        r"\bclt\b", r"\bcentral limit\b", r"\blikelihood\b",
+        r"\bestimation\b", r"\bstandard error", r"\bsampling\b",
+        r"\bfoundations?\b",
+    ],
+}
+
+_COMPILED_PATTERNS = {
+    tag: [re.compile(p, re.IGNORECASE) for p in patterns]
+    for tag, patterns in MID_LEVEL_TAGS.items()
+}
+
+
+def _derive_mid_tags(title: str, base_tags: list[str]) -> list[str]:
+    haystack = " ".join([title or "", " ".join(base_tags or [])])
+    return [tag for tag, regs in _COMPILED_PATTERNS.items()
+            if any(r.search(haystack) for r in regs)]
+
 
 # --------------------------------------------------------------------------- #
 # Minimal YAML parser — only the shapes we read.
@@ -147,12 +266,27 @@ def main() -> int:
             slug = L["id"]
             stem = slug.split("/", 1)[1]
             url = f"{COURSE_DIR[cid]}/labs/{stem}.html"
+
+            # Enrich the hand-curated tags with cross-course method-family
+            # tags (regex over title+tags) and a `course:<slug>` tag so
+            # same-course labs cluster in the layout. Same approach as
+            # the tutorials site; keeps the graph dense across the
+            # otherwise-disjoint course boundaries.
+            mid = _derive_mid_tags(L["title"], tags)
+            course_tag = f"course:{cid}"
+            seen_t: set[str] = set()
+            enriched: list[str] = []
+            for t in [*tags, course_tag, *mid]:
+                if t and t not in seen_t:
+                    seen_t.add(t)
+                    enriched.append(t)
+
             nodes.append({
                 "id": slug,
                 "title": L["title"],
                 "url": url,
                 "topic": cid,
-                "tags": tags,
+                "tags": enriched,
                 "labels": [],          # courses have no separate labels axis
                 "date": "",            # not tracked in courses
                 "year": 0,
