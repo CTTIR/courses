@@ -44,8 +44,13 @@ def main() -> int:
     edges = data["edges"]
     topic_label = {t["id"]: t["label"] for t in data.get("topics", [])}
 
+    # Only count solid (≥2-tag) edges as related-lab candidates.
+    # Weak (dashed) edges signal soft relations on the graph but are
+    # too noisy to be a "Related labs" recommendation.
     adj: dict[str, list[tuple[str, int]]] = defaultdict(list)
     for e in edges:
+        if e.get("dashed"):
+            continue
         adj[e["source"]].append((e["target"], e["weight"]))
         adj[e["target"]].append((e["source"], e["weight"]))
 

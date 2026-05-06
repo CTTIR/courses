@@ -29,7 +29,8 @@ LABS_YAML = ROOT / "_data" / "labs.yml"
 COURSES_YAML = ROOT / "_data" / "courses.yml"
 ARTIFACTS = ROOT / "artifacts"
 
-SHARED_TAG_THRESHOLD = 2
+SHARED_TAG_THRESHOLD = 2          # solid edges
+WEAK_TAG_THRESHOLD = 1            # dashed edges (≥1, < SHARED_TAG_THRESHOLD)
 
 # Filesystem-name override per course slug. labs/<lab>.qmd live under
 # the *long* directory names (course1_foundations/, …) but the JS layer
@@ -178,8 +179,10 @@ def _parse_list_under(text: str, key: str) -> list[dict]:
     cur: dict | None = None
     in_list = False
     for raw in text.splitlines():
-        line = raw.split("#", 1)[0].rstrip() if "#" in raw else raw.rstrip()
-        if not line.strip():
+        line = raw.rstrip()
+        # Skip full-line comments only. Stripping inline `#` is unsafe
+        # because quoted hex colours like "#1f77b4" contain `#`.
+        if not line.strip() or line.lstrip().startswith("#"):
             continue
         if line.strip() == f"{key}:":
             in_list = True
@@ -310,10 +313,25 @@ def main() -> int:
                 continue
             for i, j in combinations(ids, 2):
                 pair[(i, j)] += 1
-        edges = [
-            {"source": nodes[i]["id"], "target": nodes[j]["id"], "weight": w}
-            for (i, j), w in pair.items() if w >= SHARED_TAG_THRESHOLD
-        ]
+        # Two-tier edges: ≥2 shared tags = solid, exactly 1 = dashed.
+        # The JS layer reads the `dashed` flag and renders weak edges
+        # as dashed, lower-opacity strokes so they signal a softer
+        # relation without overwhelming the layout.
+        edges = []
+        for (i, j), w in pair.items():
+            if w >= SHARED_TAG_THRESHOLD:
+                edges.append({
+                    "source": nodes[i]["id"],
+                    "target": nodes[j]["id"],
+                    "weight": w,
+                })
+            elif w >= WEAK_TAG_THRESHOLD:
+                edges.append({
+                    "source": nodes[i]["id"],
+                    "target": nodes[j]["id"],
+                    "weight": w,
+                    "dashed": True,
+                })
         if not edges:
             raise BuildError("computed graph has zero edges")
 

@@ -26,12 +26,21 @@ export function createGraph({ container, graph, controller, root, topicById }) {
     url: root + n.url,
   }));
 
-  const visEdges = graph.edges.map((e, i) => ({
-    id: i,
-    from: idToIndex.get(e.source),
-    to: idToIndex.get(e.target),
-    value: e.weight,
-  }));
+  const visEdges = graph.edges.map((e, i) => {
+    const edge = {
+      id: i,
+      from: idToIndex.get(e.source),
+      to: idToIndex.get(e.target),
+      value: e.weight,
+    };
+    if (e.dashed) {
+      // 1-tag-overlap edges: dashed, lower opacity, thinner. Communicates
+      // a weaker relation without crowding out the solid (≥2-tag) edges.
+      edge.dashes = [4, 4];
+      edge.value = 0.6;
+    }
+    return edge;
+  });
 
   const dataset = {
     nodes: new vis.DataSet(visNodes),
