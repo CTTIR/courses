@@ -1,6 +1,18 @@
 project:
   type: website
   output-dir: docs
+  pre-render:
+    # build_graph.py validates _data/labs.yml against _data/courses.yml
+    # and emits artifacts/graph.json for the overview module.
+    - python scripts/build_graph.py
+    # build_related.py emits one _includes/related/<course>__<stem>.html
+    # per lab; the Lua filter at _filters/related-include.lua appends
+    # each partial to its lab page at render time.
+    - python scripts/build_related.py
+  post-render:
+    # Pagefind static search index. Soft-skips if Node is unavailable
+    # locally; CI installs Node 20 before render.
+    - python scripts/build_pagefind.py
   render:
     - "*.qmd"
     - "course1_foundations/**/*.qmd"
@@ -9,6 +21,10 @@ project:
     - "course4_ml_highdim/**/*.qmd"
     - "appendices/**/*.qmd"
     - "cheatsheets/**/*.qmd"
+  resources:
+    - "css/**"
+    - "assets/js/**"
+    - "artifacts/**"
 
 execute:
   freeze: auto
@@ -17,6 +33,9 @@ website:
   title: "#courses"
   description: "A four-course biostatistics programme in R and Quarto."
   site-url: "https://cttir.github.io/courses/"
+  # Pagefind replaces Quarto's default lunr search via the
+  # post-render hook above.
+  search: false
   navbar:
     title: "#courses"
     left:
@@ -62,6 +81,10 @@ format:
     theme:
       dark:  [darkly, assets/dark.scss]
       light: [flatly, assets/light.scss]
+    filters:
+      # Appends the matching _includes/related/<course>__<stem>.html
+      # partial to each lab page. No-op on non-lab pages.
+      - _filters/related-include.lua
     toc: true
     toc-depth: 3
     toc-location: right

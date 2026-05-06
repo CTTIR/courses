@@ -1,0 +1,483 @@
+# Auto-extracted from the legacy inline LABS array in overview.qmd.
+# Single source of truth for the courses overview module.
+labs:
+  - id: course1/lab_week1_session1
+    title: "Scientific process & research workflow"
+    course: course1
+    week: 1
+    session: 1
+    tags: ["workflow", "reporting", "research-design"]
+  - id: course1/lab_week1_session2
+    title: "R, RStudio, Quarto, renv toolchain"
+    course: course1
+    week: 1
+    session: 2
+    tags: ["r", "quarto", "reproducibility", "workflow"]
+  - id: course1/lab_week1_session3
+    title: "Data types, tidy data, measurement quality"
+    course: course1
+    week: 1
+    session: 3
+    tags: ["tidy-data", "data-hygiene", "measurement"]
+  - id: course1/lab_week1_session4
+    title: "Import, joins, missingness with dplyr"
+    course: course1
+    week: 1
+    session: 4
+    tags: ["dplyr", "tidy-data", "missing-data"]
+  - id: course1/lab_week1_session5
+    title: "ggplot2 grammar and multi-panel layouts"
+    course: course1
+    week: 1
+    session: 5
+    tags: ["ggplot2", "visualisation"]
+  - id: course1/lab_week2_session1
+    title: "Descriptives and Table 1 with gtsummary"
+    course: course1
+    week: 2
+    session: 1
+    tags: ["descriptives", "reporting", "gtsummary"]
+  - id: course1/lab_week2_session2
+    title: "Probability and Bayes' theorem"
+    course: course1
+    week: 2
+    session: 2
+    tags: ["probability", "bayes"]
+  - id: course1/lab_week2_session3
+    title: "Diagnostic testing: sensitivity, specificity, LR"
+    course: course1
+    week: 2
+    session: 3
+    tags: ["diagnostics", "probability", "clinical"]
+  - id: course1/lab_week2_session4
+    title: "Discrete distributions: Bernoulli, binomial, Poisson"
+    course: course1
+    week: 2
+    session: 4
+    tags: ["distributions", "probability", "poisson"]
+  - id: course1/lab_week2_session5
+    title: "Continuous distributions and Q-Q plots"
+    course: course1
+    week: 2
+    session: 5
+    tags: ["distributions", "visualisation", "assumptions"]
+  - id: course1/lab_week3_session1
+    title: "Populations, samples, CLT by simulation"
+    course: course1
+    week: 3
+    session: 1
+    tags: ["sampling", "simulation", "clt"]
+  - id: course1/lab_week3_session2
+    title: "Bootstrap and permutation"
+    course: course1
+    week: 3
+    session: 2
+    tags: ["bootstrap", "resampling", "simulation"]
+  - id: course1/lab_week3_session3
+    title: "Maximum likelihood and standard errors"
+    course: course1
+    week: 3
+    session: 3
+    tags: ["likelihood", "inference"]
+  - id: course1/lab_week3_session4
+    title: "One-sample t and one-proportion"
+    course: course1
+    week: 3
+    session: 4
+    tags: ["t-test", "proportions", "inference"]
+  - id: course1/lab_week3_session5
+    title: "Hypothesis testing philosophy"
+    course: course1
+    week: 3
+    session: 5
+    tags: ["hypothesis-testing", "inference", "reporting"]
+  - id: course1/lab_week4_session1
+    title: "Two-sample and paired t; effect sizes"
+    course: course1
+    week: 4
+    session: 1
+    tags: ["t-test", "effect-size", "inference"]
+  - id: course1/lab_week4_session2
+    title: "Two proportions and goodness-of-fit"
+    course: course1
+    week: 4
+    session: 2
+    tags: ["proportions", "chi-square", "inference"]
+  - id: course1/lab_week4_session3
+    title: "Pearson and Spearman correlation"
+    course: course1
+    week: 4
+    session: 3
+    tags: ["correlation", "non-parametric"]
+  - id: course1/lab_week4_session4
+    title: "Non-parametric tests"
+    course: course1
+    week: 4
+    session: 4
+    tags: ["non-parametric", "rank-tests", "inference"]
+  - id: course1/lab_week4_session5
+    title: "Sample size, power, Quarto reporting"
+    course: course1
+    week: 4
+    session: 5
+    tags: ["power", "sample-size", "reporting", "quarto"]
+  - id: course2/lab_week1_session1
+    title: "Correlation vs regression; Model-I/II"
+    course: course2
+    week: 1
+    session: 1
+    tags: ["correlation", "regression"]
+  - id: course2/lab_week1_session2
+    title: "Simple linear regression"
+    course: course2
+    week: 1
+    session: 2
+    tags: ["regression", "linear-model", "inference"]
+  - id: course2/lab_week1_session3
+    title: "Multiple regression: confounding & interaction"
+    course: course2
+    week: 1
+    session: 3
+    tags: ["regression", "confounding", "interaction"]
+  - id: course2/lab_week1_session4
+    title: "Diagnostics: residuals, leverage, Cook, VIF"
+    course: course2
+    week: 1
+    session: 4
+    tags: ["regression", "diagnostics", "assumptions"]
+  - id: course2/lab_week1_session5
+    title: "Robust and weighted regression; HC SEs"
+    course: course2
+    week: 1
+    session: 5
+    tags: ["regression", "robust", "standard-errors"]
+  - id: course2/lab_week2_session1
+    title: "One-way ANOVA and contrasts"
+    course: course2
+    week: 2
+    session: 1
+    tags: ["anova", "contrasts", "linear-model"]
+  - id: course2/lab_week2_session2
+    title: "Two-way / factorial ANOVA"
+    course: course2
+    week: 2
+    session: 2
+    tags: ["anova", "interaction", "linear-model"]
+  - id: course2/lab_week2_session3
+    title: "RCBD and repeated measures"
+    course: course2
+    week: 2
+    session: 3
+    tags: ["anova", "repeated-measures", "mixed-models"]
+  - id: course2/lab_week2_session4
+    title: "GAMs with mgcv"
+    course: course2
+    week: 2
+    session: 4
+    tags: ["gam", "regression", "non-linear"]
+  - id: course2/lab_week2_session5
+    title: "Non-linear regression with nls"
+    course: course2
+    week: 2
+    session: 5
+    tags: ["non-linear", "regression"]
+  - id: course2/lab_week3_session1
+    title: "Logistic regression"
+    course: course2
+    week: 3
+    session: 1
+    tags: ["glm", "logistic", "regression"]
+  - id: course2/lab_week3_session2
+    title: "ANCOVA in RCTs"
+    course: course2
+    week: 3
+    session: 2
+    tags: ["anova", "rct", "regression", "clinical-trials"]
+  - id: course2/lab_week3_session3
+    title: "Ordinal and multinomial regression"
+    course: course2
+    week: 3
+    session: 3
+    tags: ["glm", "ordinal", "regression"]
+  - id: course2/lab_week3_session4
+    title: "Poisson and negative-binomial regression"
+    course: course2
+    week: 3
+    session: 4
+    tags: ["glm", "poisson", "count-data", "regression"]
+  - id: course2/lab_week3_session5
+    title: "Calibration, discrimination, ROC/AUC, Brier"
+    course: course2
+    week: 3
+    session: 5
+    tags: ["calibration", "discrimination", "prediction", "diagnostics"]
+  - id: course2/lab_week4_session1
+    title: "Dichotomisation, change scores, RTM"
+    course: course2
+    week: 4
+    session: 1
+    tags: ["measurement", "pitfalls", "regression"]
+  - id: course2/lab_week4_session2
+    title: "Kappa, ICC, Bland-Altman"
+    course: course2
+    week: 4
+    session: 2
+    tags: ["agreement", "measurement", "reliability"]
+  - id: course2/lab_week4_session3
+    title: "Survival primer: KM, log-rank, Cox"
+    course: course2
+    week: 4
+    session: 3
+    tags: ["survival", "time-to-event", "regression"]
+  - id: course2/lab_week4_session4
+    title: "Decision curves, NRI/IDI"
+    course: course2
+    week: 4
+    session: 4
+    tags: ["prediction", "decision-analysis", "clinical"]
+  - id: course2/lab_week4_session5
+    title: "Explanation vs prediction; reporting guidelines"
+    course: course2
+    week: 4
+    session: 5
+    tags: ["prediction", "reporting", "philosophy"]
+  - id: course3/lab_week1_session1
+    title: "Observational designs and STROBE"
+    course: course3
+    week: 1
+    session: 1
+    tags: ["observational", "reporting", "research-design"]
+  - id: course3/lab_week1_session2
+    title: "Randomised controlled trials"
+    course: course3
+    week: 1
+    session: 2
+    tags: ["rct", "clinical-trials", "research-design"]
+  - id: course3/lab_week1_session3
+    title: "Adaptive, non-inferiority, equivalence trials"
+    course: course3
+    week: 1
+    session: 3
+    tags: ["rct", "clinical-trials", "adaptive"]
+  - id: course3/lab_week1_session4
+    title: "Bench and translational design"
+    course: course3
+    week: 1
+    session: 4
+    tags: ["research-design", "bench", "translational"]
+  - id: course3/lab_week1_session5
+    title: "Power: closed-form and simulation-based"
+    course: course3
+    week: 1
+    session: 5
+    tags: ["power", "sample-size", "simulation"]
+  - id: course3/lab_week2_session1
+    title: "MCAR, MAR, MNAR"
+    course: course3
+    week: 2
+    session: 1
+    tags: ["missing-data", "assumptions"]
+  - id: course3/lab_week2_session2
+    title: "Multiple imputation with mice"
+    course: course3
+    week: 2
+    session: 2
+    tags: ["missing-data", "imputation"]
+  - id: course3/lab_week2_session3
+    title: "Linear mixed models with lme4"
+    course: course3
+    week: 2
+    session: 3
+    tags: ["mixed-models", "longitudinal", "regression"]
+  - id: course3/lab_week2_session4
+    title: "GLMMs and GEE"
+    course: course3
+    week: 2
+    session: 4
+    tags: ["mixed-models", "glm", "longitudinal"]
+  - id: course3/lab_week2_session5
+    title: "Time series basics"
+    course: course3
+    week: 2
+    session: 5
+    tags: ["time-series", "longitudinal"]
+  - id: course3/lab_week3_session1
+    title: "Time-varying covariates, landmark, immortal-time"
+    course: course3
+    week: 3
+    session: 1
+    tags: ["survival", "time-to-event", "bias"]
+  - id: course3/lab_week3_session2
+    title: "Competing risks and multistate models"
+    course: course3
+    week: 3
+    session: 2
+    tags: ["survival", "competing-risks", "time-to-event"]
+  - id: course3/lab_week3_session3
+    title: "DAGs with dagitty"
+    course: course3
+    week: 3
+    session: 3
+    tags: ["causal-inference", "dag", "confounding"]
+  - id: course3/lab_week3_session4
+    title: "Propensity scores and IPTW"
+    course: course3
+    week: 3
+    session: 4
+    tags: ["causal-inference", "propensity", "observational"]
+  - id: course3/lab_week3_session5
+    title: "G-methods, IV, DiD, RDD; HTE"
+    course: course3
+    week: 3
+    session: 5
+    tags: ["causal-inference", "g-methods", "heterogeneous-effects"]
+  - id: course3/lab_week4_session1
+    title: "Systematic reviews and PRISMA"
+    course: course3
+    week: 4
+    session: 1
+    tags: ["meta-analysis", "reporting", "evidence-synthesis"]
+  - id: course3/lab_week4_session2
+    title: "Meta-analysis basics"
+    course: course3
+    week: 4
+    session: 2
+    tags: ["meta-analysis", "evidence-synthesis"]
+  - id: course3/lab_week4_session3
+    title: "Network meta-analysis"
+    course: course3
+    week: 4
+    session: 3
+    tags: ["meta-analysis", "networks", "evidence-synthesis"]
+  - id: course3/lab_week4_session4
+    title: "SIR / SEIR with deSolve"
+    course: course3
+    week: 4
+    session: 4
+    tags: ["epidemiology", "ode", "simulation"]
+  - id: course3/lab_week4_session5
+    title: "Pre-registration and SAPs"
+    course: course3
+    week: 4
+    session: 5
+    tags: ["reproducibility", "reporting", "research-design"]
+  - id: course4/lab_week1_session1
+    title: "Cross-validation, nested CV, bootstrap"
+    course: course4
+    week: 1
+    session: 1
+    tags: ["cross-validation", "resampling", "ml"]
+  - id: course4/lab_week1_session2
+    title: "Regularisation: ridge, lasso, elastic net"
+    course: course4
+    week: 1
+    session: 2
+    tags: ["regularisation", "regression", "ml", "high-dimensional"]
+  - id: course4/lab_week1_session3
+    title: "PCA, FA, CCA, LDA"
+    course: course4
+    week: 1
+    session: 3
+    tags: ["dimensionality-reduction", "unsupervised", "high-dimensional"]
+  - id: course4/lab_week1_session4
+    title: "Clustering: k-means, hierarchical, model-based"
+    course: course4
+    week: 1
+    session: 4
+    tags: ["clustering", "unsupervised", "ml"]
+  - id: course4/lab_week1_session5
+    title: "UMAP and t-SNE"
+    course: course4
+    week: 1
+    session: 5
+    tags: ["dimensionality-reduction", "visualisation", "unsupervised"]
+  - id: course4/lab_week2_session1
+    title: "Trees, random forests, boosting"
+    course: course4
+    week: 2
+    session: 1
+    tags: ["trees", "ensembles", "ml"]
+  - id: course4/lab_week2_session2
+    title: "Interpretability and SHAP"
+    course: course4
+    week: 2
+    session: 2
+    tags: ["interpretability", "ml", "explainability"]
+  - id: course4/lab_week2_session3
+    title: "Tabular neural networks with torch"
+    course: course4
+    week: 2
+    session: 3
+    tags: ["deep-learning", "ml", "torch"]
+  - id: course4/lab_week2_session4
+    title: "Imaging and sequence models intro"
+    course: course4
+    week: 2
+    session: 4
+    tags: ["deep-learning", "imaging", "sequence-models"]
+  - id: course4/lab_week2_session5
+    title: "tidymodels pipelines"
+    course: course4
+    week: 2
+    session: 5
+    tags: ["ml", "workflow", "tidymodels"]
+  - id: course4/lab_week3_session1
+    title: "Bayesian thinking; α vs decision error"
+    course: course4
+    week: 3
+    session: 1
+    tags: ["bayes", "inference", "decision-analysis"]
+  - id: course4/lab_week3_session2
+    title: "brms / Stan, LOO, hierarchical"
+    course: course4
+    week: 3
+    session: 2
+    tags: ["bayes", "mcmc", "hierarchical"]
+  - id: course4/lab_week3_session3
+    title: "Biomarker statistics"
+    course: course4
+    week: 3
+    session: 3
+    tags: ["biomarkers", "diagnostics", "clinical"]
+  - id: course4/lab_week3_session4
+    title: "Survival ML"
+    course: course4
+    week: 3
+    session: 4
+    tags: ["survival", "ml", "time-to-event"]
+  - id: course4/lab_week3_session5
+    title: "Time-dependent Brier, IPA, external validation"
+    course: course4
+    week: 3
+    session: 5
+    tags: ["calibration", "prediction", "validation", "survival"]
+  - id: course4/lab_week4_session1
+    title: "RNA-seq with DESeq2/edgeR"
+    course: course4
+    week: 4
+    session: 1
+    tags: ["omics", "rna-seq", "high-dimensional"]
+  - id: course4/lab_week4_session2
+    title: "Enrichment analysis"
+    course: course4
+    week: 4
+    session: 2
+    tags: ["omics", "enrichment", "high-dimensional"]
+  - id: course4/lab_week4_session3
+    title: "scRNA-seq with Seurat"
+    course: course4
+    week: 4
+    session: 3
+    tags: ["omics", "single-cell", "high-dimensional"]
+  - id: course4/lab_week4_session4
+    title: "FDR, knockoffs, replication crisis"
+    course: course4
+    week: 4
+    session: 4
+    tags: ["multiple-testing", "fdr", "reproducibility"]
+  - id: course4/lab_week4_session5
+    title: "TRIPOD-AI, fairness, reproducibility at scale"
+    course: course4
+    week: 4
+    session: 5
+    tags: ["reporting", "fairness", "reproducibility", "ml"]

@@ -1,0 +1,37 @@
+# Course registry — single source of truth for the four courses.
+# Consumed by scripts/build_graph.py (validates labs.yml `course` keys
+# against this list) and emitted into artifacts/graph.json under
+# `topics:` so the JS layer reuses the tutorials' data shape verbatim.
+#
+# Colours mirror the tutorials project's accent set so a viewer flipping
+# between cttir.github.io/courses and cttir.github.io/tutorials sees a
+# consistent visual language.
+
+topics:
+  - slug: course1
+    display: "Course 1 — Foundations"
+    color: "#1f77b4"
+    blurb: "Statistical foundations and the R/Quarto toolchain."
+    order: 1
+    href: "course1_foundations/index.html"
+
+  - slug: course2
+    display: "Course 2 — Regression"
+    color: "#2ca02c"
+    blurb: "Linear, GLM, and mixed-model regression."
+    order: 2
+    href: "course2_regression/index.html"
+
+  - slug: course3
+    display: "Course 3 — Design & Causal"
+    color: "#d62728"
+    blurb: "Experimental design and causal inference."
+    order: 3
+    href: "course3_design_causal/index.html"
+
+  - slug: course4
+    display: "Course 4 — ML & High-Dim"
+    color: "#9467bd"
+    blurb: "Machine learning and high-dimensional methods."
+    order: 4
+    href: "course4_ml_highdim/index.html"
