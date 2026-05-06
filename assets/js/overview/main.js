@@ -13,6 +13,7 @@ import { createSearch } from "./search.js";
 import { createSlider } from "./slider.js";
 import { createHeatmap } from "./heatmap.js";
 import { createMobileNav } from "./mobile-nav.js";
+import { createAutocomplete } from "./autocomplete.js";
 
 function detectRoot() {
   const brand = document.querySelector(".navbar-brand[href]");
@@ -57,6 +58,10 @@ async function bootstrap() {
   const slider    = createSlider({ controller, minYear, maxYear });
   const heatmap   = createHeatmap({ controller, graph });
   const mobileNav = createMobileNav({ graph, topicById, root });
+  // Title-only autocomplete dropdown on the search input. Independent
+  // of Pagefind: typing surfaces lab-title matches instantly for direct
+  // navigation, while Pagefind keeps driving the linked filter.
+  createAutocomplete({ graph, root, topicById });
 
   bindResetButton(document.getElementById("network-reset"), graphView);
 
