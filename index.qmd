@@ -20,7 +20,7 @@ title-block-style: none
 OPEN CURRICULUM · R · QUARTO · MIT
 :::
 
-# [#courses](https://cttir.github.io/courses/)
+# #courses
 ::: {.lead}
 A four-course ladder from first principles to modern statistical learning,
 built for biomedical researchers who want to stop guessing about statistics.
