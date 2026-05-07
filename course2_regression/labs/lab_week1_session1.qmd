@@ -1,6 +1,6 @@
 ---
 title: "Week 1, Session 1 — Correlation vs regression; Model-I/II regression"
-subtitle: "Course 2 — Biostatistics Courses"
+subtitle: "Course 2 — #courses"
 format:
   html:
     toc: true

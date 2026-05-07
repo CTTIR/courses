@@ -1,6 +1,6 @@
 ---
 title: "Week 3, Session 3 — DAGs with dagitty and ggdag"
-subtitle: "Course 3 — Biostatistics Courses"
+subtitle: "Course 3 — #courses"
 format:
   html:
     toc: true

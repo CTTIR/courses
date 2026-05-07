@@ -1,6 +1,6 @@
 ---
 title: "Week 2, Session 3 — Linear mixed models with lme4"
-subtitle: "Course 3 — Biostatistics Courses"
+subtitle: "Course 3 — #courses"
 format:
   html:
     toc: true

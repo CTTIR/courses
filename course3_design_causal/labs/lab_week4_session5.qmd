@@ -1,6 +1,6 @@
 ---
 title: "Week 4, Session 5 — Pre-registration and statistical analysis plans"
-subtitle: "Course 3 — Biostatistics Courses"
+subtitle: "Course 3 — #courses"
 format:
   html:
     toc: true

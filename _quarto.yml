@@ -60,7 +60,7 @@ website:
         href: https://github.com/CTTIR/courses
   page-navigation: true
   page-footer:
-    left: "Biostatistics Courses · MIT"
+    left: "#courses · MIT"
     center: |
       [Get Started](/get_started.qmd) · [Overview](/overview.qmd) · [Schedule](/schedule.qmd) ·
       [Cheatsheets](/cheatsheets.qmd) ·

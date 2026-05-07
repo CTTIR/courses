@@ -1,6 +1,6 @@
 ---
 title: "Week 3, Session 3 — Biomarker statistics (Youden, NRI, decision curves)"
-subtitle: "Course 4 — Biostatistics Courses"
+subtitle: "Course 4 — #courses"
 format:
   html:
     toc: true

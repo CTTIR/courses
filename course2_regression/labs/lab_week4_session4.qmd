@@ -1,6 +1,6 @@
 ---
 title: "Week 4, Session 4 — Decision curves, NRI, IDI"
-subtitle: "Course 2 — Biostatistics Courses"
+subtitle: "Course 2 — #courses"
 format:
   html:
     toc: true

@@ -1,5 +1,5 @@
 ---
-pagetitle: "Biostatistics Courses"
+pagetitle: "#courses"
 toc: false
 ---
 
@@ -9,7 +9,7 @@ toc: false
        class="ctir-avatar" />
 </a>
 
-# [Biostatistics Courses](https://cttir.github.io/courses/)
+# [#courses](https://cttir.github.io/courses/)
 
 ::: {.hero}
 ::: {.kicker}

@@ -1,6 +1,6 @@
 ---
 title: "Week 2, Session 1 — One-way ANOVA and contrasts (emmeans)"
-subtitle: "Course 2 — Biostatistics Courses"
+subtitle: "Course 2 — #courses"
 format:
   html:
     toc: true

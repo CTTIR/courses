@@ -1,6 +1,6 @@
 ---
 title: "Week 4, Session 1 — RNA-seq with DESeq2 / edgeR"
-subtitle: "Course 4 — Biostatistics Courses"
+subtitle: "Course 4 — #courses"
 format:
   html:
     toc: true

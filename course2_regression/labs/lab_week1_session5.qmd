@@ -1,6 +1,6 @@
 ---
 title: "Week 1, Session 5 — Robust regression, weighted LS, HC (sandwich) standard errors"
-subtitle: "Course 2 — Biostatistics Courses"
+subtitle: "Course 2 — #courses"
 format:
   html:
     toc: true

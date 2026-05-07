@@ -1,4 +1,4 @@
-# Biostatistics Courses
+# #courses
 
 A four-course biostatistics programme in R and Quarto, hosted on GitHub Pages.
 Standalone courses site, referenced from the owner's main website.

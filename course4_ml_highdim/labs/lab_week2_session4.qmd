@@ -1,6 +1,6 @@
 ---
 title: "Week 2, Session 4 — Imaging and sequence models intro"
-subtitle: "Course 4 — Biostatistics Courses"
+subtitle: "Course 4 — #courses"
 format:
   html:
     toc: true

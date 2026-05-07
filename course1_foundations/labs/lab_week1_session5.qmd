@@ -1,6 +1,6 @@
 ---
 title: "Week 1, Session 5 — ggplot2 grammar and multi-panel layouts"
-subtitle: "Course 1 — Biostatistics Courses"
+subtitle: "Course 1 — #courses"
 format:
   html:
     toc: true

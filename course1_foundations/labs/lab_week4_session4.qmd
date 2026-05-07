@@ -1,6 +1,6 @@
 ---
 title: "Week 4, Session 4 — Non-parametric tests"
-subtitle: "Course 1 — Biostatistics Courses"
+subtitle: "Course 1 — #courses"
 format:
   html:
     toc: true

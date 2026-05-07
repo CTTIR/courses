@@ -1,6 +1,6 @@
 ---
 title: "Week 3, Session 4 — Survival ML (random survival forest, DeepSurv)"
-subtitle: "Course 4 — Biostatistics Courses"
+subtitle: "Course 4 — #courses"
 format:
   html:
     toc: true

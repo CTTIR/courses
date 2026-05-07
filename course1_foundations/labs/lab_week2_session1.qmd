@@ -1,6 +1,6 @@
 ---
 title: "Week 2, Session 1 — Descriptive statistics and Table 1"
-subtitle: "Course 1 — Biostatistics Courses"
+subtitle: "Course 1 — #courses"
 format:
   html:
     toc: true

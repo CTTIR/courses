@@ -1,6 +1,6 @@
 ---
 title: "Week 1, Session 4 — Clustering: k-means, hierarchical, model-based"
-subtitle: "Course 4 — Biostatistics Courses"
+subtitle: "Course 4 — #courses"
 format:
   html:
     toc: true

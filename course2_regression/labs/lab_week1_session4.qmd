@@ -1,6 +1,6 @@
 ---
 title: "Week 1, Session 4 — Diagnostics: residuals, QQ, leverage, Cook's distance, VIF"
-subtitle: "Course 2 — Biostatistics Courses"
+subtitle: "Course 2 — #courses"
 format:
   html:
     toc: true

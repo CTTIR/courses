@@ -1,6 +1,6 @@
 ---
 title: "Week 2, Session 4 — GAMs with mgcv"
-subtitle: "Course 2 — Biostatistics Courses"
+subtitle: "Course 2 — #courses"
 format:
   html:
     toc: true

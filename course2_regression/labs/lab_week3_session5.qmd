@@ -1,6 +1,6 @@
 ---
 title: "Week 3, Session 5 — Calibration, discrimination, ROC/AUC, Brier score"
-subtitle: "Course 2 — Biostatistics Courses"
+subtitle: "Course 2 — #courses"
 format:
   html:
     toc: true

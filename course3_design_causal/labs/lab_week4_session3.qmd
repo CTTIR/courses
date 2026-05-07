@@ -1,6 +1,6 @@
 ---
 title: "Week 4, Session 3 — Network meta-analysis"
-subtitle: "Course 3 — Biostatistics Courses"
+subtitle: "Course 3 — #courses"
 format:
   html:
     toc: true

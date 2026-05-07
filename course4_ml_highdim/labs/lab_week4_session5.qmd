@@ -1,6 +1,6 @@
 ---
 title: "Week 4, Session 5 — TRIPOD-AI, fairness auditing, reproducibility at scale"
-subtitle: "Course 4 — Biostatistics Courses"
+subtitle: "Course 4 — #courses"
 format:
   html:
     toc: true

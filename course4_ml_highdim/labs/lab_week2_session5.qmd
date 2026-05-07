@@ -1,6 +1,6 @@
 ---
 title: "Week 2, Session 5 — tidymodels pipelines"
-subtitle: "Course 4 — Biostatistics Courses"
+subtitle: "Course 4 — #courses"
 format:
   html:
     toc: true

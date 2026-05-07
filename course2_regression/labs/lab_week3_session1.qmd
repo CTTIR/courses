@@ -1,6 +1,6 @@
 ---
 title: "Week 3, Session 1 — Logistic regression (binomial GLM)"
-subtitle: "Course 2 — Biostatistics Courses"
+subtitle: "Course 2 — #courses"
 format:
   html:
     toc: true

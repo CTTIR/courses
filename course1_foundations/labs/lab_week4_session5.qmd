@@ -1,6 +1,6 @@
 ---
 title: "Week 4, Session 5 — Sample size, power, and Quarto reporting"
-subtitle: "Course 1 — Biostatistics Courses"
+subtitle: "Course 1 — #courses"
 format:
   html:
     toc: true

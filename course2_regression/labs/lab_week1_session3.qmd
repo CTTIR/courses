@@ -1,6 +1,6 @@
 ---
 title: "Week 1, Session 3 — Multiple regression: confounding, interaction, centring"
-subtitle: "Course 2 — Biostatistics Courses"
+subtitle: "Course 2 — #courses"
 format:
   html:
     toc: true

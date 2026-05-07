@@ -1,6 +1,6 @@
 ---
 title: "Week 2, Session 1 — Trees, random forests, gradient boosting"
-subtitle: "Course 4 — Biostatistics Courses"
+subtitle: "Course 4 — #courses"
 format:
   html:
     toc: true

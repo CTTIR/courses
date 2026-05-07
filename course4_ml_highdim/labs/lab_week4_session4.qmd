@@ -1,6 +1,6 @@
 ---
 title: "Week 4, Session 4 — FDR, knockoffs, replication crisis"
-subtitle: "Course 4 — Biostatistics Courses"
+subtitle: "Course 4 — #courses"
 format:
   html:
     toc: true

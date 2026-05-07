@@ -1,6 +1,6 @@
 ---
 title: "Week 2, Session 2 — Two-way / factorial ANOVA with interaction"
-subtitle: "Course 2 — Biostatistics Courses"
+subtitle: "Course 2 — #courses"
 format:
   html:
     toc: true

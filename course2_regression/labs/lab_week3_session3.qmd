@@ -1,6 +1,6 @@
 ---
 title: "Week 3, Session 3 — Ordinal and multinomial regression"
-subtitle: "Course 2 — Biostatistics Courses"
+subtitle: "Course 2 — #courses"
 format:
   html:
     toc: true
