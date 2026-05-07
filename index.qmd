@@ -1,8 +1,15 @@
 ---
-title: "Biostatistics Courses"
 pagetitle: "Biostatistics Courses"
 toc: false
 ---
+
+<a href="https://cttir.github.io/website/" class="ctir-avatar-link" aria-label="CTIR home">
+  <img src="https://cttir.github.io/website/images/cttir-logo.png"
+       alt="CTIR — Computational Trauma and Tissue Injury Research"
+       class="ctir-avatar" />
+</a>
+
+# [Biostatistics Courses](https://cttir.github.io/courses/)
 
 ::: {.hero}
 ::: {.kicker}
