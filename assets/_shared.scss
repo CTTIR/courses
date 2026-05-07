@@ -177,6 +177,11 @@ hr {
   margin-bottom: 0.5rem;
 }
 
+/* When `title-block-style: none` is set, Quarto still emits an empty/duplicate
+   title-block-header (without the `default` modifier). Hide it so landing
+   pages can render their own H1 inside `.hero`. */
+#title-block-header.quarto-title-block:not(.default) { display: none; }
+
 /* CTIR avatar (cross-site logo from CTTIR/website) */
 .ctir-avatar {
   width: 56px;
