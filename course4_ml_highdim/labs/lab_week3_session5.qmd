@@ -1,6 +1,6 @@
 ---
 title: "Week 3, Session 5 — Time-dependent Brier, IPA, external validation"
-subtitle: "Course 4 — Biostatistics Courses"
+subtitle: "Course 4 — #courses"
 format:
   html:
     toc: true

@@ -1,6 +1,6 @@
 ---
 title: "Week 3, Session 1 — Time-varying covariates and immortal-time bias"
-subtitle: "Course 3 — Biostatistics Courses"
+subtitle: "Course 3 — #courses"
 format:
   html:
     toc: true

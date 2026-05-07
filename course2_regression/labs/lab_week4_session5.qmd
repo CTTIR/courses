@@ -1,6 +1,6 @@
 ---
 title: "Week 4, Session 5 — Explanation vs prediction; reporting"
-subtitle: "Course 2 — Biostatistics Courses"
+subtitle: "Course 2 — #courses"
 format:
   html:
     toc: true

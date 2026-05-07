@@ -1,6 +1,6 @@
 ---
 title: "Week 2, Session 2 — Multiple imputation with mice"
-subtitle: "Course 3 — Biostatistics Courses"
+subtitle: "Course 3 — #courses"
 format:
   html:
     toc: true

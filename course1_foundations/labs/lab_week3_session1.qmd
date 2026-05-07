@@ -1,6 +1,6 @@
 ---
 title: "Week 3, Session 1 — Populations, samples, and the central limit theorem"
-subtitle: "Course 1 — Biostatistics Courses"
+subtitle: "Course 1 — #courses"
 format:
   html:
     toc: true

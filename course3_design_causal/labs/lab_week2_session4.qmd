@@ -1,6 +1,6 @@
 ---
 title: "Week 2, Session 4 — GLMMs and GEE"
-subtitle: "Course 3 — Biostatistics Courses"
+subtitle: "Course 3 — #courses"
 format:
   html:
     toc: true

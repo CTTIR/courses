@@ -1,6 +1,6 @@
 ---
 title: "Week 1, Session 1 — Cross-validation, nested CV, bootstrap .632+"
-subtitle: "Course 4 — Biostatistics Courses"
+subtitle: "Course 4 — #courses"
 format:
   html:
     toc: true

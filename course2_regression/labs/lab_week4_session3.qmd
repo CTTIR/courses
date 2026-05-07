@@ -1,6 +1,6 @@
 ---
 title: "Week 4, Session 3 — Survival primer: KM, log-rank, Cox PH"
-subtitle: "Course 2 — Biostatistics Courses"
+subtitle: "Course 2 — #courses"
 format:
   html:
     toc: true

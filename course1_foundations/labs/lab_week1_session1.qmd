@@ -1,6 +1,6 @@
 ---
 title: "Week 1, Session 1 — Scientific process and research workflow"
-subtitle: "Course 1 — Biostatistics Courses"
+subtitle: "Course 1 — #courses"
 format:
   html:
     toc: true

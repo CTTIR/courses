@@ -1,6 +1,6 @@
 ---
 title: "Week 4, Session 3 — Pearson and Spearman correlation"
-subtitle: "Course 1 — Biostatistics Courses"
+subtitle: "Course 1 — #courses"
 format:
   html:
     toc: true

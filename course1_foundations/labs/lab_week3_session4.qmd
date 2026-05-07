@@ -1,6 +1,6 @@
 ---
 title: "Week 3, Session 4 — One-sample t-test and one-proportion test"
-subtitle: "Course 1 — Biostatistics Courses"
+subtitle: "Course 1 — #courses"
 format:
   html:
     toc: true

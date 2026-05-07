@@ -1,6 +1,6 @@
 ---
 title: "Week 1, Session 3 — Data types, tidy data, accuracy and precision"
-subtitle: "Course 1 — Biostatistics Courses"
+subtitle: "Course 1 — #courses"
 format:
   html:
     toc: true

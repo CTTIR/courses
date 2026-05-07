@@ -1,6 +1,6 @@
 ---
 title: "Week 2, Session 4 — Discrete distributions: Bernoulli, binomial, Poisson"
-subtitle: "Course 1 — Biostatistics Courses"
+subtitle: "Course 1 — #courses"
 format:
   html:
     toc: true

@@ -1,6 +1,6 @@
 ---
 title: "Week 2, Session 1 — MCAR, MAR, MNAR"
-subtitle: "Course 3 — Biostatistics Courses"
+subtitle: "Course 3 — #courses"
 format:
   html:
     toc: true

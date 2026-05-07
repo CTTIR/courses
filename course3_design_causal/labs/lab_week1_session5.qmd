@@ -1,6 +1,6 @@
 ---
 title: "Week 1, Session 5 — Power: closed-form and simulation"
-subtitle: "Course 3 — Biostatistics Courses"
+subtitle: "Course 3 — #courses"
 format:
   html:
     toc: true

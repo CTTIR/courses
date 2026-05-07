@@ -1,6 +1,6 @@
 ---
 title: "Week 2, Session 3 — RCBD and repeated measures → mixed models"
-subtitle: "Course 2 — Biostatistics Courses"
+subtitle: "Course 2 — #courses"
 format:
   html:
     toc: true

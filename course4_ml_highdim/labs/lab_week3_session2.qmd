@@ -1,6 +1,6 @@
 ---
 title: "Week 3, Session 2 — brms / Stan, LOO, hierarchical models"
-subtitle: "Course 4 — Biostatistics Courses"
+subtitle: "Course 4 — #courses"
 format:
   html:
     toc: true

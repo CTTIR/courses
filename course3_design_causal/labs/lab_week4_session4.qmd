@@ -1,6 +1,6 @@
 ---
 title: "Week 4, Session 4 — SIR and SEIR models with deSolve"
-subtitle: "Course 3 — Biostatistics Courses"
+subtitle: "Course 3 — #courses"
 format:
   html:
     toc: true

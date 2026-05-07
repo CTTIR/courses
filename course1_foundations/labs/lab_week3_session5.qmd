@@ -1,6 +1,6 @@
 ---
 title: "Week 3, Session 5 — Hypothesis testing, p-values, type I/II errors"
-subtitle: "Course 1 — Biostatistics Courses"
+subtitle: "Course 1 — #courses"
 format:
   html:
     toc: true

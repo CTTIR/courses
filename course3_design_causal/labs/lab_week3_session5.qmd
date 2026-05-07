@@ -1,6 +1,6 @@
 ---
 title: "Week 3, Session 5 — G-methods, IV, DiD, RDD; heterogeneity of treatment effect"
-subtitle: "Course 3 — Biostatistics Courses"
+subtitle: "Course 3 — #courses"
 format:
   html:
     toc: true

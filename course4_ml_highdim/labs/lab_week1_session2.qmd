@@ -1,6 +1,6 @@
 ---
 title: "Week 1, Session 2 — Regularisation: ridge, lasso, elastic net"
-subtitle: "Course 4 — Biostatistics Courses"
+subtitle: "Course 4 — #courses"
 format:
   html:
     toc: true
