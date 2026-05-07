@@ -177,6 +177,19 @@ hr {
   margin-bottom: 0.5rem;
 }
 
+/* CTIR avatar (cross-site logo from CTTIR/website) */
+.ctir-avatar {
+  width: 56px;
+  height: 56px;
+  border-radius: 8px;
+  object-fit: cover;
+  display: block;
+}
+.ctir-avatar-link {
+  display: inline-block;
+  margin-bottom: 0.5rem;
+}
+
 /* Card grid */
 .card-grid {
   display: grid;
