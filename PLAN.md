@@ -1,96 +1,53 @@
-# Recon — landing avatar + linked title (branch `feat/landing-avatar`)
+# Recon — site rename "Biostatistics Courses" → "#courses" (branch `chore/rename-to-hash-courses`)
 
-Mirrors `CTTIR/tutorials` PR `feat/landing-avatar` (recon-only at HEAD —
-no merged implementation yet, so class names defined here are the source
-of truth and tutorials will copy these on merge).
+Brings the H1 / page title surfaces in line with the navbar (`#courses`)
+and the sister sites (`#tutorials`, `#ressources`).
 
-## Title rendering surface
+## Rename targets (site name / page H1 / branding surfaces)
 
-`index.qmd` carries:
+| File | Line | Current | New |
+|------|------|---------|-----|
+| `index.qmd` | 2 | `pagetitle: "Biostatistics Courses"` | `pagetitle: "#courses"` |
+| `index.qmd` | 12 | `# [Biostatistics Courses](https://cttir.github.io/courses/)` | `# [#courses](https://cttir.github.io/courses/)` |
+| `_quarto.yml` | 63 | `left: "Biostatistics Courses · MIT"` (page-footer) | `left: "#courses · MIT"` |
+| `README.md` | 1 | `# Biostatistics Courses` | `# #courses` |
+| `course{1..4}*/labs/*.qmd` | 3 (×80) | `subtitle: "Course N — Biostatistics Courses"` | `subtitle: "Course N — #courses"` |
 
-- YAML frontmatter `title: "Biostatistics Courses"` and
-  `pagetitle: "Biostatistics Courses"`. No `title-block-style: none` —
-  Quarto renders its default title block from `title:`.
-- An explicit body H1 inside `::: {.hero}`:
-  `# A four-course ladder, end to end`.
+The lab-page `subtitle:` field functions as a page-level brand line
+("which series does this lab belong to?") — same role as the navbar
+brand, so it is in scope.
 
-**Live `<title>` reads `Biostatistics Courses – #courses`** (Quarto's
-`<title>` tag = page `title` + " – " + site `title`). The page H1 the
-user wants linked to the courses index is therefore the **YAML-driven
-"Biostatistics Courses"** title block, NOT the body hero H1.
+`_quarto.yml` `website.title`, `website.navbar.title`, and the navbar
+`#courses` brand are **already** `#courses`. Untouched.
 
-This differs from the tutorials site, where `title-block-style: none`
-suppresses the YAML title block and the body H1 (`# #tutorials`) is the
-sole rendered H1. Here we have two H1s today: the title block
-("Biostatistics Courses") and the hero body ("A four-course ladder,
-end to end"). The hero body line is functionally a subtitle.
+## Keep (descriptive / citation prose — NOT site-title surfaces)
 
-## Decision
+| File | Line | Context |
+|------|------|---------|
+| `about.qmd` | 130 | Suggested citation: `Heller, R. (2026). *Biostatistics Courses: A Four-Course Programme...*` |
+| `about.qmd` | 138 | BibTeX `title = {Biostatistics Courses: A Four-Course Programme in R and Quarto}` |
+| `README.md` | 45 | Same suggested citation block |
+| `README.md` | 52 | Same BibTeX entry |
 
-Per the prompt's branching instructions ("If the H1 comes from page YAML
-`title:` — remove `title:` from the YAML and write the H1 explicitly in
-the body as a Markdown link"):
+These cite the work by its formal descriptive title. Renaming a BibTeX
+`title` field to `#courses` would be inappropriate (citations need a
+human-readable, typeset-safe title). They describe the work, not the
+site brand. Out of scope per the prompt's "do not rewrite body copy
+that describes the curriculum" rule.
 
-1. **Remove** `title:` from `index.qmd` YAML. Keep `pagetitle:` so the
-   browser `<title>` tag stays `Biostatistics Courses – #courses`.
-2. **Add** an explicit body H1 above the existing `::: {.hero}` block:
-   `# [Biostatistics Courses](https://cttir.github.io/courses/)`.
-3. **Insert** the avatar `<a><img></a>` block immediately above that
-   linked H1. Avatar links to `https://cttir.github.io/website/`.
-4. **Leave** the hero block intact (kicker + "A four-course ladder, end
-   to end" + lead). It will render as a body H1 below the new linked
-   H1; this preserves the current visual hierarchy. The prompt's
-   deliverables call this line a "H2/subtitle" but explicitly says
-   "still renders correctly below the H1" — i.e. do not modify it.
+Body prose in `index.qmd` ("this site hosts a complete, opinionated
+biostatistics programme…") already uses lowercase "biostatistics" as
+descriptive English — no hits for the cased phrase "Biostatistics
+Courses" outside the rows above.
 
-Resulting top of `index.qmd`:
-
-```markdown
----
-pagetitle: "Biostatistics Courses"
-toc: false
----
-
-<a href="https://cttir.github.io/website/" class="ctir-avatar-link" aria-label="CTIR home">
-  <img src="https://cttir.github.io/website/images/cttir-logo.png"
-       alt="CTIR — Computational Trauma and Tissue Injury Research"
-       class="ctir-avatar" />
-</a>
-
-# [Biostatistics Courses](https://cttir.github.io/courses/)
-
-::: {.hero}
-::: {.kicker}
-OPEN CURRICULUM · R · QUARTO · MIT
-:::
-# A four-course ladder, end to end
-...
-```
-
-## Existing navbar `#courses` link
-
-Defined in `_quarto.yml` at `website.title: "#courses"` and
-`website.navbar.title: "#courses"`. Quarto renders this as the
-`.navbar-brand` and auto-links it to the site root. Untouched.
-
-## CSS surface
-
-Themes wire `assets/light.scss` and `assets/dark.scss`, both of which
-import `assets/_shared.scss` (hero/kicker styles already live there).
-New `.ctir-avatar` / `.ctir-avatar-link` rules go into `_shared.scss`
-adjacent to the hero block (~line 170) so they apply in both themes.
-Class names match what the tutorials sister PR will use, so the two
-sites stay visually consistent.
-
-## Cross-site image
-
-Source: `https://cttir.github.io/website/images/cttir-logo.png` — lives
-in `CTTIR/website` (Hugo). Referenced live; **not** copied into this
-repo. Update at the source to propagate to both sister sites.
+`PLAN.md` historical recon entries (lines 11–60) are stale by design —
+this very file overwrites them.
 
 ## Out of scope
 
-- Navbar, footer, page-footer left/center/right.
-- Any course content, hero subtitle, card grid, or schedule prose.
-- The four course landing pages and their titles.
-- Any title-block partial override.
+- Body prose mentioning "biostatistics" (descriptive).
+- Citations in `about.qmd` and `README.md`.
+- Course landing pages and per-lab `title:` fields (not "Biostatistics
+  Courses"; out of the rename scope).
+- The avatar / linked-H1 from PR #1 — link target preserved, only the
+  visible text inside `# [...](...)` changes.
