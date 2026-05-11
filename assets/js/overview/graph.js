@@ -94,7 +94,11 @@ export function createGraph({ container, graph, controller, root, topicById }) {
       return ((n >> 16 & 255) + (n >> 8 & 255) + (n & 255)) / 3 < 128;
     })();
     return {
-      nodes: { shape: "dot", size: 8, font: { size: 10, color: fg }, borderWidth: 1 },
+      // size matches the .chip-swatch (0.65rem ≈ 10px) so the network
+      // dot reads as the same circle as the legend swatch.
+      // borderWidth: 0 — any visible 1px stroke darkens a small dot
+      // and made the rendered colour drift from the chip swatch hex.
+      nodes: { shape: "dot", size: 10, font: { size: 10, color: fg }, borderWidth: 0 },
       edges: {
         color: { color: isDark ? "rgba(200,200,200,0.18)" : "rgba(80,80,80,0.22)", highlight: accent },
         smooth: false,
