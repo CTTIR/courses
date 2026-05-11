@@ -16,15 +16,23 @@ export function createGraph({ container, graph, controller, root, topicById }) {
   const idToIndex = new Map();
   graph.nodes.forEach((n, i) => idToIndex.set(n.id, i));
 
-  const visNodes = graph.nodes.map((n, i) => ({
-    id: i,
-    label: n.title.length > 28 ? n.title.slice(0, 26) + "…" : n.title,
-    title: `${n.title}\n${topicById.get(n.topic)?.label ?? n.topic}\n${(n.tags || []).slice(0, 6).join(", ")}`,
-    color: topicById.get(n.topic)?.color || "#888",
-    group: n.topic,
-    nodeRef: n,
-    url: root + n.url,
-  }));
+  const visNodes = graph.nodes.map((n, i) => {
+    const hex = topicById.get(n.topic)?.color || "#888";
+    return {
+      id: i,
+      label: n.title.length > 28 ? n.title.slice(0, 26) + "…" : n.title,
+      title: `${n.title}\n${topicById.get(n.topic)?.label ?? n.topic}\n${(n.tags || []).slice(0, 6).join(", ")}`,
+      // Pin background and border to the same hex used by the topic
+      // chip swatches so the legend and the network read identically.
+      // vis-network's string-color shortcut otherwise derives a
+      // slightly darker border, making the rendered dot drift from
+      // the swatch colour.
+      color: { background: hex, border: hex, highlight: { background: hex, border: hex }, hover: { background: hex, border: hex } },
+      group: n.topic,
+      nodeRef: n,
+      url: root + n.url,
+    };
+  });
 
   const visEdges = graph.edges.map((e, i) => {
     const edge = {
