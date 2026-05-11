@@ -2,4 +2,4 @@
 
 - about.qmd: added "Use of LLM tools" section
   (self-hosted Mistral Le Chat via Ollama/ollamar + Copilot in RStudio)
-- Commit: pending
+- Commit: fc436ff
