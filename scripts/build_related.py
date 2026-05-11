@@ -43,6 +43,7 @@ def main() -> int:
     nodes = data["nodes"]
     edges = data["edges"]
     topic_label = {t["id"]: t["label"] for t in data.get("topics", [])}
+    by_id_tags = {n["id"]: set(n.get("tags", [])) for n in nodes}
 
     # Only count solid (≥2-tag) edges as related-lab candidates.
     # Weak (dashed) edges signal soft relations on the graph but are
@@ -77,7 +78,9 @@ def main() -> int:
             skipped += 1
             continue
 
-        partial_path(self_node["id"]).write_text(render(self_node, top, topic_label), encoding="utf-8")
+        partial_path(self_node["id"]).write_text(
+            render(self_node, top, topic_label, by_id_tags), encoding="utf-8"
+        )
         written += 1
 
     print(
@@ -92,25 +95,53 @@ def partial_path(node_id: str) -> Path:
     return OUT / (node_id.replace("/", "__") + ".html")
 
 
-def render(self_node: dict, top: list[dict], topic_label: dict[str, str]) -> str:
+def render(
+    self_node: dict,
+    top: list[dict],
+    topic_label: dict[str, str],
+    by_id_tags: dict[str, set[str]],
+) -> str:
+    self_tags = set(self_node.get("tags", []))
+    # Hand-curated tags only (drop the synthetic `course:<slug>` marker
+    # used by build_graph.py — it's a layout aid, not a topic signal).
+    def visible(tags: set[str]) -> list[str]:
+        return sorted(t for t in tags if not t.startswith("course:"))
+
     items = []
+    union_shared: set[str] = set()
     for n in top:
         topic_disp = topic_label.get(n["topic"], n["topic"])
-        # Lab pages live at <coursedir>/labs/<stem>.html, so peer labs
-        # in the same course are "./<stem>.html" and peers in a
-        # different course are "../../<otherdir>/labs/<stem>.html".
         target_dir = COURSE_DIR.get(n["topic"], n["topic"])
         url = f"../../{target_dir}/labs/{n['id'].split('/', 1)[1]}.html"
+
+        shared = visible(self_tags & by_id_tags.get(n["id"], set()))
+        union_shared.update(shared)
+        # Per-tile description: name the tags this neighbour shares with
+        # the current lab. Honest about *why* it's related rather than
+        # forcing a hand-written summary we don't have.
+        desc = ", ".join(shared) if shared else ""
+        desc_html = f'<div class="related-desc">Shared: {html.escape(desc)}</div>' if desc else ""
+
         items.append(
             '<div class="related-item">'
             f'<span class="topic">{html.escape(topic_disp)}</span>'
             f'<a href="{html.escape(url, quote=True)}">{html.escape(n["title"])}</a>'
+            f'{desc_html}'
             "</div>"
         )
+
+    blurb_tags = sorted(union_shared)[:6]
+    blurb_html = (
+        f'<p class="related-blurb">Closest matches by shared tags '
+        f'({html.escape(", ".join(blurb_tags))}).</p>\n'
+        if blurb_tags
+        else ""
+    )
 
     return (
         '<section class="related-tutorials" data-render="static">\n'
         "<h2>Related labs</h2>\n"
+        f"{blurb_html}"
         f'<div class="related-list">{"".join(items)}</div>\n'
         '<p class="network-link"><a href="../../overview.html">Explore the full label network &rarr;</a></p>\n'
         "</section>\n"
