@@ -42,8 +42,8 @@ A few OS-specific notes:
 ## Clone and check
 
 ```bash
-git clone https://github.com/CHANGE_ME/biostats_curriculum.git
-cd biostats_curriculum
+git clone https://github.com/CTTIR/courses.git
+cd courses
 Rscript setup_check.R
 ```
 
