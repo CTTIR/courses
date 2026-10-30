@@ -46,22 +46,49 @@ for (k in 1:K) {
 }
 nested_mse <- mean(outer_mse)
 
+# Apparent error uses the model trained on the original sample.
+yhat_full <- as.numeric(predict(cv1, newx = X, s = "lambda.min"))
+err_app <- mean((y - yhat_full)^2)
 B <- 50
-errs_in <- errs_oob <- numeric(B)
-for (b in 1:B) {
+oob_loss <- matrix(NA_real_, nrow = n, ncol = B)
+for (b in seq_len(B)) {
   idx <- sample.int(n, n, replace = TRUE)
   oob <- setdiff(seq_len(n), unique(idx))
-  fit_b <- cv.glmnet(X[idx, ], y[idx], alpha = 1, nfolds = 5)
-  yhat_in  <- as.numeric(predict(fit_b, newx = X[idx, ], s = "lambda.min"))
-  yhat_oob <- as.numeric(predict(fit_b, newx = X[oob, ], s = "lambda.min"))
-  errs_in[b]  <- mean((y[idx] - yhat_in)^2)
-  errs_oob[b] <- mean((y[oob] - yhat_oob)^2)
+  if (!length(oob)) next
+  # Copies of the same observation stay together in the tuning folds.
+  unique_idx <- unique(idx)
+  boot_folds <- sample(rep(seq_len(5), length.out = length(unique_idx)))
+  fit_b <- cv.glmnet(X[idx, ], y[idx], alpha = 1,
+                     foldid = boot_folds[match(idx, unique_idx)])
+  yhat_oob <- as.numeric(predict(fit_b, newx = X[oob, , drop = FALSE],
+                                 s = "lambda.min"))
+  oob_loss[oob, b] <- (y[oob] - yhat_oob)^2
 }
-err_app <- mean(errs_in); err_oob <- mean(errs_oob)
-err_632 <- 0.368 * err_app + 0.632 * err_oob
+stopifnot(all(rowSums(!is.na(oob_loss)) > 0))
+# Average within observations first, so each observation has equal weight.
+err_oob <- mean(rowMeans(oob_loss, na.rm = TRUE))
+# No-information loss: all pairings of observed responses and fitted predictions.
+gamma <- mean(outer(y, yhat_full, "-")^2)
+bootstrap_errors <- function(apparent, oob, no_information) {
+  stopifnot(all(is.finite(c(apparent, oob, no_information))),
+            all(c(apparent, oob, no_information) >= 0))
+  base <- 0.368 * apparent + 0.632 * oob
+  bounded_oob <- min(oob, no_information)
+  relative <- if (oob > apparent && no_information > apparent) {
+    (bounded_oob - apparent) / (no_information - apparent)
+  } else 0
+  # Efron & Tibshirani (1997), equations 31-32: bounded correction.
+  plus <- base + (bounded_oob - apparent) *
+    0.368 * 0.632 * relative / (1 - 0.368 * relative)
+  c(boot632 = base, boot632plus = plus, relative_overfit = relative)
+}
+boot_errors <- bootstrap_errors(err_app, err_oob, gamma)
+err_632 <- unname(boot_errors["boot632"])
+err_632plus <- unname(boot_errors["boot632plus"])
+c(apparent = err_app, oob = err_oob, boot_errors, nested = nested_mse)
 
 # --- 6. Report -------------------------------------------------
 cat(sprintf(
-  "Naive CV MSE:  %.2f\nNested CV MSE: %.2f\nBoot .632 MSE: %.2f\n",
-  naive_mse, nested_mse, err_632
+  "Naive CV MSE:  %.2f\nNested CV MSE: %.2f\nBoot .632 MSE: %.2f\nBoot .632+ MSE: %.2f\n",
+  naive_mse, nested_mse, err_632, err_632plus
 ))

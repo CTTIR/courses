@@ -2,7 +2,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
 
 <meta charset="utf-8">
-<meta name="generator" content="quarto-1.9.37">
+<meta name="generator" content="quarto-1.10.19">
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
@@ -13,10 +13,13 @@
 /* Default styles provided by pandoc.
 ** See https://pandoc.org/MANUAL.html#variables-for-html for config info.
 */
-code{white-space: pre-wrap;}
 span.smallcaps{font-variant: small-caps;}
-div.columns{display: flex; gap: min(4vw, 1.5em);}
-div.column{flex: auto; overflow-x: auto;}
+div.columns{display: flex; gap: 1.5em;}
+div.column{flex: auto;}
+@media screen {
+div.columns{gap: min(4vw, 1.5em);}
+div.column{overflow-x: auto;}
+}
 div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
 ul.task-list{list-style: none;}
 ul.task-list li input[type="checkbox"] {
@@ -71,12 +74,12 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <script src="../../site_libs/quarto-html/tippy.umd.min.js"></script>
 <script src="../../site_libs/quarto-html/anchor.min.js"></script>
 <link href="../../site_libs/quarto-html/tippy.css" rel="stylesheet">
-<link href="../../site_libs/quarto-html/quarto-syntax-highlighting-2065f9e58f6345017599ef1c45dc3d4f.css" rel="stylesheet" class="quarto-color-scheme" id="quarto-text-highlighting-styles">
-<link href="../../site_libs/quarto-html/quarto-syntax-highlighting-dark-ced54966b0e53f059c291d5781927a30.css" rel="stylesheet" class="quarto-color-scheme quarto-color-alternate" id="quarto-text-highlighting-styles">
+<link href="../../site_libs/quarto-html/quarto-syntax-highlighting-9f3547545508946eee83ef8b606cbadf.css" rel="stylesheet" class="quarto-color-scheme" id="quarto-text-highlighting-styles">
+<link href="../../site_libs/quarto-html/quarto-syntax-highlighting-dark-8d43248e80c6749424940840481457b2.css" rel="stylesheet" class="quarto-color-scheme quarto-color-alternate" id="quarto-text-highlighting-styles">
 <script src="../../site_libs/bootstrap/bootstrap.min.js"></script>
 <link href="../../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
-<link href="../../site_libs/bootstrap/bootstrap-e6d3843e299d450790cfb48988d4232e.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme" id="quarto-bootstrap" data-mode="light">
-<link href="../../site_libs/bootstrap/bootstrap-dark-a84e9e0d3bdc903e291dd8ca38ce98a5.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme quarto-color-alternate" id="quarto-bootstrap" data-mode="dark">
+<link href="../../site_libs/bootstrap/bootstrap-0c1962fc29c4e87f8b37717c07588c31.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme" id="quarto-bootstrap" data-mode="light">
+<link href="../../site_libs/bootstrap/bootstrap-dark-33ee418c30da5be27be819967c4cb66e.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme quarto-color-alternate" id="quarto-bootstrap" data-mode="dark">
 <script id="quarto-search-options" type="application/json">{
   "language": {
     "search-no-results-text": "No results",
@@ -93,9 +96,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   }
 }</script>
 <script defer="" data-domain="cttir.github.io/courses" src="https://analytics.hellebo.de/js/script.file-downloads.outbound-links.js"></script>
-
 <script>window.plausible = window.plausible || function() { (window.plausible.q = window.plausible.q || []).push(arguments) }</script>
-
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin="">
 <link href="https://fonts.googleapis.com/css2?family=Source+Sans+3:wght@300;400;500;600;700&amp;family=JetBrains+Mono:wght@400;500&amp;display=swap" rel="stylesheet">
@@ -449,7 +450,7 @@ Note
 <span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a>mu <span class="ot">&lt;-</span> <span class="dv">2</span> <span class="sc">*</span> <span class="fu">runif</span>(n_gene, <span class="dv">1</span>, <span class="dv">10</span>)   <span class="co"># baseline mean per gene</span></span>
 <span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a>lfc <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="fu">rep</span>(<span class="fu">log</span>(<span class="dv">3</span>), <span class="dv">10</span>), <span class="fu">rep</span>(<span class="dv">0</span>, n_gene <span class="sc">-</span> <span class="dv">10</span>))</span>
 <span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a>counts <span class="ot">&lt;-</span> <span class="fu">sapply</span>(<span class="fu">seq_len</span>(n_samp), <span class="cf">function</span>(j) {</span>
-<span id="cb2-6"><a href="#cb2-6" aria-hidden="true" tabindex="-1"></a>  rate <span class="ot">&lt;-</span> mu <span class="sc">*</span> <span class="fu">exp</span>(<span class="fu">ifelse</span>(group[j] <span class="sc">==</span> <span class="st">"B"</span>, lfc, <span class="dv">0</span>))</span>
+<span id="cb2-6"><a href="#cb2-6" aria-hidden="true" tabindex="-1"></a>  rate <span class="ot">&lt;-</span> mu <span class="sc">*</span> <span class="fu">exp</span>(<span class="cf">if</span> (group[j] <span class="sc">==</span> <span class="st">"B"</span>) lfc <span class="cf">else</span> <span class="fu">rep</span>(<span class="dv">0</span>, n_gene))</span>
 <span id="cb2-7"><a href="#cb2-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">rnbinom</span>(n_gene, <span class="at">mu =</span> rate, <span class="at">size =</span> <span class="dv">5</span>)</span>
 <span id="cb2-8"><a href="#cb2-8" aria-hidden="true" tabindex="-1"></a>})</span>
 <span id="cb2-9"><a href="#cb2-9" aria-hidden="true" tabindex="-1"></a><span class="fu">rownames</span>(counts) <span class="ot">&lt;-</span> <span class="fu">paste0</span>(<span class="st">"g"</span>, <span class="fu">seq_len</span>(n_gene))</span>
@@ -496,29 +497,63 @@ Note
 </div>
 <p>A per-gene negative-binomial GLM that runs.</p>
 <div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb5"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a>pvals <span class="ot">&lt;-</span> <span class="fu">numeric</span>(n_gene)</span>
-<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a>logfcs <span class="ot">&lt;-</span> <span class="fu">numeric</span>(n_gene)</span>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb5"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a>pvals <span class="ot">&lt;-</span> logfcs <span class="ot">&lt;-</span> <span class="fu">rep</span>(<span class="cn">NA_real_</span>, n_gene)</span>
+<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a>fit_problems <span class="ot">&lt;-</span> <span class="fu">rep</span>(<span class="st">""</span>, n_gene)</span>
 <span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> (g <span class="cf">in</span> <span class="fu">seq_len</span>(n_gene)) {</span>
 <span id="cb5-4"><a href="#cb5-4" aria-hidden="true" tabindex="-1"></a>  y <span class="ot">&lt;-</span> counts[g, ]</span>
-<span id="cb5-5"><a href="#cb5-5" aria-hidden="true" tabindex="-1"></a>  fit <span class="ot">&lt;-</span> <span class="fu">try</span>(<span class="fu">glm.nb</span>(y <span class="sc">~</span> group), <span class="at">silent =</span> <span class="cn">TRUE</span>)</span>
-<span id="cb5-6"><a href="#cb5-6" aria-hidden="true" tabindex="-1"></a>  <span class="cf">if</span> (<span class="fu">inherits</span>(fit, <span class="st">"try-error"</span>)) { pvals[g] <span class="ot">&lt;-</span> <span class="cn">NA</span>; <span class="cf">next</span> }</span>
-<span id="cb5-7"><a href="#cb5-7" aria-hidden="true" tabindex="-1"></a>  s <span class="ot">&lt;-</span> <span class="fu">summary</span>(fit)</span>
-<span id="cb5-8"><a href="#cb5-8" aria-hidden="true" tabindex="-1"></a>  pvals[g]  <span class="ot">&lt;-</span> s<span class="sc">$</span>coefficients[<span class="dv">2</span>, <span class="dv">4</span>]</span>
-<span id="cb5-9"><a href="#cb5-9" aria-hidden="true" tabindex="-1"></a>  logfcs[g] <span class="ot">&lt;-</span> s<span class="sc">$</span>coefficients[<span class="dv">2</span>, <span class="dv">1</span>]</span>
-<span id="cb5-10"><a href="#cb5-10" aria-hidden="true" tabindex="-1"></a>}</span>
-<span id="cb5-11"><a href="#cb5-11" aria-hidden="true" tabindex="-1"></a>padj <span class="ot">&lt;-</span> <span class="fu">p.adjust</span>(pvals, <span class="at">method =</span> <span class="st">"BH"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<span id="cb5-5"><a href="#cb5-5" aria-hidden="true" tabindex="-1"></a>  problems <span class="ot">&lt;-</span> <span class="fu">character</span>()</span>
+<span id="cb5-6"><a href="#cb5-6" aria-hidden="true" tabindex="-1"></a>  fit <span class="ot">&lt;-</span> <span class="fu">tryCatch</span>(<span class="fu">withCallingHandlers</span>(</span>
+<span id="cb5-7"><a href="#cb5-7" aria-hidden="true" tabindex="-1"></a>    <span class="fu">glm.nb</span>(y <span class="sc">~</span> group),</span>
+<span id="cb5-8"><a href="#cb5-8" aria-hidden="true" tabindex="-1"></a>    <span class="at">warning =</span> <span class="cf">function</span>(w) problems <span class="ot">&lt;&lt;-</span> <span class="fu">c</span>(problems, <span class="fu">conditionMessage</span>(w))</span>
+<span id="cb5-9"><a href="#cb5-9" aria-hidden="true" tabindex="-1"></a>  ), <span class="at">error =</span> <span class="cf">function</span>(e) {</span>
+<span id="cb5-10"><a href="#cb5-10" aria-hidden="true" tabindex="-1"></a>    problems <span class="ot">&lt;&lt;-</span> <span class="fu">c</span>(problems, <span class="fu">conditionMessage</span>(e)); <span class="cn">NULL</span></span>
+<span id="cb5-11"><a href="#cb5-11" aria-hidden="true" tabindex="-1"></a>  })</span>
+<span id="cb5-12"><a href="#cb5-12" aria-hidden="true" tabindex="-1"></a>  <span class="cf">if</span> (<span class="fu">is.null</span>(fit) <span class="sc">||</span> <span class="fu">length</span>(problems) <span class="sc">||</span> <span class="sc">!</span><span class="fu">isTRUE</span>(fit<span class="sc">$</span>converged)) {</span>
+<span id="cb5-13"><a href="#cb5-13" aria-hidden="true" tabindex="-1"></a>    fit_problems[g] <span class="ot">&lt;-</span> <span class="fu">paste</span>(<span class="fu">c</span>(problems, <span class="st">"fit not used for inference"</span>), <span class="at">collapse =</span> <span class="st">"; "</span>)</span>
+<span id="cb5-14"><a href="#cb5-14" aria-hidden="true" tabindex="-1"></a>    <span class="cf">next</span></span>
+<span id="cb5-15"><a href="#cb5-15" aria-hidden="true" tabindex="-1"></a>  }</span>
+<span id="cb5-16"><a href="#cb5-16" aria-hidden="true" tabindex="-1"></a>  estimates <span class="ot">&lt;-</span> <span class="fu">summary</span>(fit)<span class="sc">$</span>coefficients</span>
+<span id="cb5-17"><a href="#cb5-17" aria-hidden="true" tabindex="-1"></a>  pvals[g] <span class="ot">&lt;-</span> estimates[<span class="dv">2</span>, <span class="dv">4</span>]</span>
+<span id="cb5-18"><a href="#cb5-18" aria-hidden="true" tabindex="-1"></a>  logfcs[g] <span class="ot">&lt;-</span> estimates[<span class="dv">2</span>, <span class="dv">1</span>]</span>
+<span id="cb5-19"><a href="#cb5-19" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb5-20"><a href="#cb5-20" aria-hidden="true" tabindex="-1"></a>padj <span class="ot">&lt;-</span> <span class="fu">p.adjust</span>(pvals, <span class="at">method =</span> <span class="st">"BH"</span>, <span class="at">n =</span> n_gene)</span>
+<span id="cb5-21"><a href="#cb5-21" aria-hidden="true" tabindex="-1"></a>discovered <span class="ot">&lt;-</span> <span class="sc">!</span><span class="fu">is.na</span>(padj) <span class="sc">&amp;</span> padj <span class="sc">&lt;</span> .<span class="dv">05</span></span>
+<span id="cb5-22"><a href="#cb5-22" aria-hidden="true" tabindex="-1"></a>recovery <span class="ot">&lt;-</span> <span class="fu">mean</span>(discovered[<span class="dv">1</span><span class="sc">:</span><span class="dv">10</span>])</span>
+<span id="cb5-23"><a href="#cb5-23" aria-hidden="true" tabindex="-1"></a>null_flagged <span class="ot">&lt;-</span> <span class="fu">mean</span>(discovered[<span class="dv">11</span><span class="sc">:</span>n_gene])</span>
+<span id="cb5-24"><a href="#cb5-24" aria-hidden="true" tabindex="-1"></a>fdp <span class="ot">&lt;-</span> <span class="fu">sum</span>(discovered[<span class="dv">11</span><span class="sc">:</span>n_gene]) <span class="sc">/</span> <span class="fu">max</span>(<span class="fu">sum</span>(discovered), <span class="dv">1</span>)</span>
+<span id="cb5-25"><a href="#cb5-25" aria-hidden="true" tabindex="-1"></a><span class="fu">cat</span>(<span class="st">"Genes with failed or warned fits (excluded):"</span>, <span class="fu">sum</span>(<span class="fu">nzchar</span>(fit_problems)), <span class="st">"</span><span class="sc">\n</span><span class="st">"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>Genes with failed or warned fits (excluded): 64 </code></pre>
+</div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb7"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="fu">print</span>(<span class="fu">head</span>(<span class="fu">data.frame</span>(<span class="at">gene =</span> <span class="fu">rownames</span>(counts), <span class="at">reason =</span> fit_problems)[<span class="fu">nzchar</span>(fit_problems), ]))</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>   gene
+11  g11
+23  g23
+25  g25
+34  g34
+37  g37
+43  g43
+                                                                         reason
+11 iteration limit reached; iteration limit reached; fit not used for inference
+23 iteration limit reached; iteration limit reached; fit not used for inference
+25 iteration limit reached; iteration limit reached; fit not used for inference
+34 iteration limit reached; iteration limit reached; fit not used for inference
+37 iteration limit reached; iteration limit reached; fit not used for inference
+43 iteration limit reached; iteration limit reached; fit not used for inference</code></pre>
+</div>
 </div>
 </section>
 <section id="check" class="level2">
 <h2 class="anchored" data-anchor-id="check">4. Check</h2>
 <p>Volcano plot with the truly DE genes flagged.</p>
 <div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb6"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a>truth <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="fu">rep</span>(<span class="st">"DE"</span>, <span class="dv">10</span>), <span class="fu">rep</span>(<span class="st">"null"</span>, n_gene <span class="sc">-</span> <span class="dv">10</span>))</span>
-<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a><span class="fu">tibble</span>(<span class="at">lfc =</span> logfcs, <span class="at">padj =</span> padj, <span class="at">truth =</span> truth) <span class="sc">|&gt;</span></span>
-<span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">drop_na</span>() <span class="sc">|&gt;</span></span>
-<span id="cb6-4"><a href="#cb6-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ggplot</span>(<span class="fu">aes</span>(lfc, <span class="sc">-</span><span class="fu">log10</span>(padj), <span class="at">colour =</span> truth)) <span class="sc">+</span></span>
-<span id="cb6-5"><a href="#cb6-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_point</span>(<span class="at">alpha =</span> <span class="fl">0.6</span>) <span class="sc">+</span></span>
-<span id="cb6-6"><a href="#cb6-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">x =</span> <span class="st">"log fold change (B vs A)"</span>, <span class="at">y =</span> <span class="st">"-log10(padj)"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb9"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a>truth <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="fu">rep</span>(<span class="st">"DE"</span>, <span class="dv">10</span>), <span class="fu">rep</span>(<span class="st">"null"</span>, n_gene <span class="sc">-</span> <span class="dv">10</span>))</span>
+<span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a><span class="fu">tibble</span>(<span class="at">lfc =</span> logfcs, <span class="at">padj =</span> padj, <span class="at">truth =</span> truth) <span class="sc">|&gt;</span></span>
+<span id="cb9-3"><a href="#cb9-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">drop_na</span>() <span class="sc">|&gt;</span></span>
+<span id="cb9-4"><a href="#cb9-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ggplot</span>(<span class="fu">aes</span>(lfc, <span class="sc">-</span><span class="fu">log10</span>(padj), <span class="at">colour =</span> truth)) <span class="sc">+</span></span>
+<span id="cb9-5"><a href="#cb9-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_point</span>(<span class="at">alpha =</span> <span class="fl">0.6</span>) <span class="sc">+</span></span>
+<span id="cb9-6"><a href="#cb9-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">x =</span> <span class="st">"log fold change (B vs A)"</span>, <span class="at">y =</span> <span class="st">"-log10(padj)"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output-display">
 <div>
 <figure class="figure">
@@ -528,22 +563,22 @@ Note
 </div>
 </div>
 <div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb7"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="fu">mean</span>(padj[<span class="dv">1</span><span class="sc">:</span><span class="dv">10</span>] <span class="sc">&lt;</span> <span class="fl">0.05</span>, <span class="at">na.rm =</span> <span class="cn">TRUE</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb10"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a>recovery</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stdout">
-<pre><code>[1] 0.9</code></pre>
+<pre><code>[1] 0.2</code></pre>
 </div>
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb9"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a><span class="fu">mean</span>(padj[<span class="dv">11</span><span class="sc">:</span>n_gene] <span class="sc">&lt;</span> <span class="fl">0.05</span>, <span class="at">na.rm =</span> <span class="cn">TRUE</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb12"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a>null_flagged</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stdout">
-<pre><code>[1] 0.9183673</code></pre>
+<pre><code>[1] 0.008163265</code></pre>
 </div>
 </div>
 </section>
 <section id="report" class="level2">
 <h2 class="anchored" data-anchor-id="report">5. Report</h2>
 <blockquote class="blockquote">
-<p>On a simulated 500-gene, 10-sample RNA-seq dataset with 10 truly differentially expressed genes (log fold change ≈ 1.1), per-gene negative-binomial GLMs followed by Benjamini–Hochberg adjustment recovered 90% of the true DE genes at FDR &lt; 0.05 and yielded a false-discovery rate among null genes of 91.8%.</p>
+<p>On a simulated 500-gene, 10-sample RNA-seq dataset with 10 truly differentially expressed genes (log fold change ≈ 1.1), per-gene negative-binomial GLMs followed by Benjamini–Hochberg adjustment recovered 20% of the true DE genes at BH-adjusted p &lt; 0.05 and flagged 0.8% of null genes. The realised false-discovery proportion among discoveries was 66.7%. 64 genes had failed or warned fits and were excluded from inference; these genes count as unrecovered in the summaries.</p>
 </blockquote>
-<p>DESeq2 and edgeR would improve power by shrinking gene-wise dispersion across the experiment; the per-gene fit shown here is a transparent but low-power version of the same idea.</p>
+<p>The null-gene flagging proportion and the false-discovery proportion have different denominators; FDR is the expectation of the latter over repeated experiments. The small-sample, per-gene Wald tests here are an illustration, not a validated RNA-seq analysis pipeline. DESeq2 and edgeR estimate dispersion using information across genes; use their diagnostics and established workflows for real data. Do not silently discard fit warnings or failed genes.</p>
 <div class="notes">
 <p>Mention that <code>vst</code> or <code>rlog</code> transformations are standard before PCA or clustering; raw counts should not be used for those tasks.</p>
 </div>
@@ -566,19 +601,18 @@ Note
 <section id="session-info" class="level2">
 <h2 class="anchored" data-anchor-id="session-info">Session info</h2>
 <div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb11"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a><span class="fu">sessionInfo</span>()</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb14"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a><span class="fu">sessionInfo</span>()</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stdout">
-<pre><code>R version 4.5.2 (2025-10-31 ucrt)
-Platform: x86_64-w64-mingw32/x64
-Running under: Windows 11 x64 (build 26200)
+<pre><code>R version 4.6.1 (2026-06-24)
+Platform: aarch64-apple-darwin27.0.0
+Running under: macOS Golden Gate 27.0.1
 
 Matrix products: default
-  LAPACK version 3.12.1
+BLAS:   /opt/homebrew/Cellar/openblas/0.3.34/lib/libopenblasp-r0.3.34.dylib 
+LAPACK: /opt/homebrew/Cellar/r/4.6.1_1/lib/R/lib/libRlapack.dylib;  LAPACK version 3.12.1
 
 locale:
-[1] LC_COLLATE=English_Germany.utf8  LC_CTYPE=English_Germany.utf8   
-[3] LC_MONETARY=English_Germany.utf8 LC_NUMERIC=C                    
-[5] LC_TIME=English_Germany.utf8    
+[1] C.UTF-8/C.UTF-8/C.UTF-8/C/C.UTF-8/C.UTF-8
 
 time zone: Europe/Berlin
 tzcode source: internal
@@ -592,15 +626,15 @@ other attached packages:
  [9] tibble_3.3.1    ggplot2_4.0.3   tidyverse_2.0.0
 
 loaded via a namespace (and not attached):
- [1] gtable_0.3.6       jsonlite_2.0.0     compiler_4.5.2     tidyselect_1.2.1  
+ [1] gtable_0.3.6       jsonlite_2.0.0     compiler_4.6.1     tidyselect_1.2.1  
  [5] scales_1.4.0       yaml_2.3.12        fastmap_1.2.0      R6_2.6.1          
- [9] labeling_0.4.3     generics_0.1.4     knitr_1.51         htmlwidgets_1.6.4 
-[13] pillar_1.11.1      RColorBrewer_1.1-3 tzdb_0.5.0         rlang_1.2.0       
-[17] stringi_1.8.7      xfun_0.57          S7_0.2.2           otel_0.2.0        
-[21] timechange_0.4.0   cli_3.6.6          withr_3.0.2        magrittr_2.0.4    
-[25] digest_0.6.39      grid_4.5.2         hms_1.1.4          lifecycle_1.0.5   
+ [9] labeling_0.4.3     generics_0.1.4     knitr_1.52         htmlwidgets_1.6.4 
+[13] pillar_1.11.1      RColorBrewer_1.1-3 tzdb_0.5.0         rlang_1.3.0       
+[17] stringi_1.8.9      xfun_0.62          S7_0.2.2           otel_0.2.0        
+[21] timechange_0.4.0   cli_3.6.6          withr_3.0.3        magrittr_2.0.5    
+[25] digest_0.6.39      grid_4.6.1         hms_1.1.4          lifecycle_1.0.5   
 [29] vctrs_0.7.3        evaluate_1.0.5     glue_1.8.1         farver_2.1.2      
-[33] rmarkdown_2.31     tools_4.5.2        pkgconfig_2.0.3    htmltools_0.5.9   </code></pre>
+[33] rmarkdown_2.32     tools_4.6.1        pkgconfig_2.0.3    htmltools_0.5.9   </code></pre>
 </div>
 </div>
 
@@ -608,17 +642,11 @@ loaded via a namespace (and not attached):
 <!-- -->
 
 <section class="related-tutorials" data-render="static">
-
 <h2 class="anchored">Related labs</h2>
-
 <p class="related-blurb">Closest matches by shared tags (high-dimensional, omics, omics-and-genomics).</p>
-
 <div class="related-list"><div class="related-item"><span class="topic">Course 4 — ML &amp; High-Dim</span><a href="../../course4_ml_highdim/labs/lab_week4_session2.html">Enrichment analysis</a><div class="related-desc">Shared: high-dimensional, omics, omics-and-genomics</div></div><div class="related-item"><span class="topic">Course 4 — ML &amp; High-Dim</span><a href="../../course4_ml_highdim/labs/lab_week4_session3.html">scRNA-seq with Seurat</a><div class="related-desc">Shared: high-dimensional, omics, omics-and-genomics</div></div><div class="related-item"><span class="topic">Course 4 — ML &amp; High-Dim</span><a href="../../course4_ml_highdim/labs/lab_week1_session2.html">Regularisation: ridge, lasso, elastic net</a><div class="related-desc">Shared: high-dimensional</div></div></div>
-
 <p class="network-link"><a href="../../overview.html">Explore the full label network →</a></p>
-
 </section>
-
 
 </section>
 
@@ -728,16 +756,16 @@ loaded via a namespace (and not attached):
     }
     function toggleCodeHandler(show) {
       return function(e) {
-        const detailsSrc = window.document.querySelectorAll(".cell > details > .sourceCode");
-        for (let i=0; i<detailsSrc.length; i++) {
-          const details = detailsSrc[i].parentElement;
+        const cellDetails = window.document.querySelectorAll(".cell details.code-fold");
+        for (let i=0; i<cellDetails.length; i++) {
+          const details = cellDetails[i];
           if (show) {
             details.open = true;
           } else {
             details.removeAttribute("open");
           }
         }
-        const cellCodeDivs = window.document.querySelectorAll(".cell > .sourceCode");
+        const cellCodeDivs = window.document.querySelectorAll(".cell div.sourceCode.cell-code");
         const fromCls = show ? "hidden" : "unhidden";
         const toCls = show ? "unhidden" : "hidden";
         for (let i=0; i<cellCodeDivs.length; i++) {
@@ -1092,219 +1120,239 @@ loaded via a namespace (and not attached):
     }
   });
   </script><div class="modal fade" id="quarto-embedded-source-code-modal" tabindex="-1" aria-labelledby="quarto-embedded-source-code-modal-label" aria-hidden="true"><div class="modal-dialog modal-dialog-scrollable"><div class="modal-content"><div class="modal-header"><h5 class="modal-title" id="quarto-embedded-source-code-modal-label">Source Code</h5><button class="btn-close" data-bs-dismiss="modal"></button></div><div class="modal-body"><div class="">
-<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb13" data-shortcodes="false"><pre class="sourceCode markdown code-with-copy"><code class="sourceCode markdown"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a><span class="co">---</span></span>
-<span id="cb13-2"><a href="#cb13-2" aria-hidden="true" tabindex="-1"></a><span class="an">title:</span><span class="co"> "Week 4, Session 1 — RNA-seq with DESeq2 / edgeR"</span></span>
-<span id="cb13-3"><a href="#cb13-3" aria-hidden="true" tabindex="-1"></a><span class="an">subtitle:</span><span class="co"> "Course 4 — #courses"</span></span>
-<span id="cb13-4"><a href="#cb13-4" aria-hidden="true" tabindex="-1"></a><span class="an">format:</span></span>
-<span id="cb13-5"><a href="#cb13-5" aria-hidden="true" tabindex="-1"></a><span class="co">  html:</span></span>
-<span id="cb13-6"><a href="#cb13-6" aria-hidden="true" tabindex="-1"></a><span class="co">    toc: true</span></span>
-<span id="cb13-7"><a href="#cb13-7" aria-hidden="true" tabindex="-1"></a><span class="co">    toc-depth: 3</span></span>
-<span id="cb13-8"><a href="#cb13-8" aria-hidden="true" tabindex="-1"></a><span class="co">    code-fold: false</span></span>
-<span id="cb13-9"><a href="#cb13-9" aria-hidden="true" tabindex="-1"></a><span class="co">    code-tools: true</span></span>
-<span id="cb13-10"><a href="#cb13-10" aria-hidden="true" tabindex="-1"></a><span class="co">  revealjs:</span></span>
-<span id="cb13-11"><a href="#cb13-11" aria-hidden="true" tabindex="-1"></a><span class="co">    output-file: "lab_week4_session1_slides.html"</span></span>
-<span id="cb13-12"><a href="#cb13-12" aria-hidden="true" tabindex="-1"></a><span class="co">    theme: [default, ../../assets/slides.scss]</span></span>
-<span id="cb13-13"><a href="#cb13-13" aria-hidden="true" tabindex="-1"></a><span class="co">    slide-number: c/t</span></span>
-<span id="cb13-14"><a href="#cb13-14" aria-hidden="true" tabindex="-1"></a><span class="co">    progress: true</span></span>
-<span id="cb13-15"><a href="#cb13-15" aria-hidden="true" tabindex="-1"></a><span class="co">    scrollable: true</span></span>
-<span id="cb13-16"><a href="#cb13-16" aria-hidden="true" tabindex="-1"></a><span class="co">    transition: none</span></span>
-<span id="cb13-17"><a href="#cb13-17" aria-hidden="true" tabindex="-1"></a><span class="co">    preview-links: auto</span></span>
-<span id="cb13-18"><a href="#cb13-18" aria-hidden="true" tabindex="-1"></a><span class="an">execute:</span></span>
-<span id="cb13-19"><a href="#cb13-19" aria-hidden="true" tabindex="-1"></a><span class="co">  warning: false</span></span>
-<span id="cb13-20"><a href="#cb13-20" aria-hidden="true" tabindex="-1"></a><span class="co">  message: false</span></span>
-<span id="cb13-21"><a href="#cb13-21" aria-hidden="true" tabindex="-1"></a><span class="co">---</span></span>
-<span id="cb13-22"><a href="#cb13-22" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb13-23"><a href="#cb13-23" aria-hidden="true" tabindex="-1"></a>::: {.callout-note}</span>
-<span id="cb13-24"><a href="#cb13-24" aria-hidden="true" tabindex="-1"></a>**Workflow labs** use the variant template:</span>
-<span id="cb13-25"><a href="#cb13-25" aria-hidden="true" tabindex="-1"></a>Goal → Approach → Execution → Check → Report.</span>
-<span id="cb13-26"><a href="#cb13-26" aria-hidden="true" tabindex="-1"></a>:::</span>
-<span id="cb13-27"><a href="#cb13-27" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb13-28"><a href="#cb13-28" aria-hidden="true" tabindex="-1"></a><span class="fu">## Learning objectives</span></span>
-<span id="cb13-29"><a href="#cb13-29" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb13-30"><a href="#cb13-30" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>Describe the count-model assumptions behind DESeq2 and edgeR and</span>
-<span id="cb13-31"><a href="#cb13-31" aria-hidden="true" tabindex="-1"></a>  explain the role of dispersion estimation.</span>
-<span id="cb13-32"><a href="#cb13-32" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>Set up a design matrix for a two-group comparison and for a more</span>
-<span id="cb13-33"><a href="#cb13-33" aria-hidden="true" tabindex="-1"></a>  complex experiment.</span>
-<span id="cb13-34"><a href="#cb13-34" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>Recognise when a log-transformed <span class="in">`limma-voom`</span> workflow is preferable.</span>
-<span id="cb13-35"><a href="#cb13-35" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb13-36"><a href="#cb13-36" aria-hidden="true" tabindex="-1"></a><span class="fu">## Prerequisites</span></span>
-<span id="cb13-37"><a href="#cb13-37" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb13-38"><a href="#cb13-38" aria-hidden="true" tabindex="-1"></a>GLMs from Course 2; multiple testing from Course 1.</span>
-<span id="cb13-39"><a href="#cb13-39" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb13-40"><a href="#cb13-40" aria-hidden="true" tabindex="-1"></a><span class="fu">## Background</span></span>
-<span id="cb13-41"><a href="#cb13-41" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb13-42"><a href="#cb13-42" aria-hidden="true" tabindex="-1"></a>Bulk RNA-sequencing yields integer counts per gene per sample. Raw</span>
-<span id="cb13-43"><a href="#cb13-43" aria-hidden="true" tabindex="-1"></a>counts are heteroscedastic — variance grows with the mean — and the</span>
-<span id="cb13-44"><a href="#cb13-44" aria-hidden="true" tabindex="-1"></a>distribution has a long tail. DESeq2 and edgeR model counts as</span>
-<span id="cb13-45"><a href="#cb13-45" aria-hidden="true" tabindex="-1"></a>negative-binomial, with a gene-specific dispersion shrunk toward a</span>
-<span id="cb13-46"><a href="#cb13-46" aria-hidden="true" tabindex="-1"></a>trend estimated across the dataset. This shrinkage is the statistical</span>
-<span id="cb13-47"><a href="#cb13-47" aria-hidden="true" tabindex="-1"></a>heart of modern differential-expression analysis in low-replicate</span>
-<span id="cb13-48"><a href="#cb13-48" aria-hidden="true" tabindex="-1"></a>studies.</span>
-<span id="cb13-49"><a href="#cb13-49" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb13-50"><a href="#cb13-50" aria-hidden="true" tabindex="-1"></a><span class="in">`limma-voom`</span> takes a different route: model the log-counts with</span>
-<span id="cb13-51"><a href="#cb13-51" aria-hidden="true" tabindex="-1"></a>precision weights that reflect the count-level mean–variance trend.</span>
-<span id="cb13-52"><a href="#cb13-52" aria-hidden="true" tabindex="-1"></a>The output is a familiar linear-model workflow with all of its tools</span>
-<span id="cb13-53"><a href="#cb13-53" aria-hidden="true" tabindex="-1"></a>(contrasts, interactions, F-tests). For large or complex designs,</span>
-<span id="cb13-54"><a href="#cb13-54" aria-hidden="true" tabindex="-1"></a><span class="in">`limma-voom`</span> is often the most flexible.</span>
-<span id="cb13-55"><a href="#cb13-55" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb13-56"><a href="#cb13-56" aria-hidden="true" tabindex="-1"></a>::: {.content-visible when-format="html"}</span>
-<span id="cb13-57"><a href="#cb13-57" aria-hidden="true" tabindex="-1"></a>DESeq2 and edgeR are Bioconductor packages, not CRAN. We show their</span>
-<span id="cb13-58"><a href="#cb13-58" aria-hidden="true" tabindex="-1"></a>call pattern with <span class="in">`#| eval: false`</span> and walk through a conceptually</span>
-<span id="cb13-59"><a href="#cb13-59" aria-hidden="true" tabindex="-1"></a>parallel simulation with base R GLMs so the ideas run end-to-end in</span>
-<span id="cb13-60"><a href="#cb13-60" aria-hidden="true" tabindex="-1"></a>any environment.</span>
-<span id="cb13-61"><a href="#cb13-61" aria-hidden="true" tabindex="-1"></a>:::</span>
-<span id="cb13-62"><a href="#cb13-62" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb13-63"><a href="#cb13-63" aria-hidden="true" tabindex="-1"></a><span class="fu">## Setup</span></span>
-<span id="cb13-64"><a href="#cb13-64" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb13-67"><a href="#cb13-67" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
-<span id="cb13-68"><a href="#cb13-68" aria-hidden="true" tabindex="-1"></a><span class="co">#| label: setup</span></span>
-<span id="cb13-69"><a href="#cb13-69" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(tidyverse)</span>
-<span id="cb13-70"><a href="#cb13-70" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(MASS)</span>
-<span id="cb13-71"><a href="#cb13-71" aria-hidden="true" tabindex="-1"></a><span class="fu">set.seed</span>(<span class="dv">42</span>)</span>
-<span id="cb13-72"><a href="#cb13-72" aria-hidden="true" tabindex="-1"></a><span class="fu">theme_set</span>(<span class="fu">theme_minimal</span>(<span class="at">base_size =</span> <span class="dv">12</span>))</span>
-<span id="cb13-73"><a href="#cb13-73" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
-<span id="cb13-74"><a href="#cb13-74" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb13-75"><a href="#cb13-75" aria-hidden="true" tabindex="-1"></a><span class="fu">## 1. Goal</span></span>
-<span id="cb13-76"><a href="#cb13-76" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb13-77"><a href="#cb13-77" aria-hidden="true" tabindex="-1"></a>Simulate a small RNA-seq count matrix with two conditions and</span>
-<span id="cb13-78"><a href="#cb13-78" aria-hidden="true" tabindex="-1"></a>demonstrate the DESeq2/edgeR pipeline pattern alongside a base-R</span>
-<span id="cb13-79"><a href="#cb13-79" aria-hidden="true" tabindex="-1"></a>negative-binomial GLM that actually runs.</span>
-<span id="cb13-80"><a href="#cb13-80" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb13-81"><a href="#cb13-81" aria-hidden="true" tabindex="-1"></a><span class="fu">## 2. Approach</span></span>
-<span id="cb13-82"><a href="#cb13-82" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb13-83"><a href="#cb13-83" aria-hidden="true" tabindex="-1"></a>Simulate 500 genes × 10 samples (5 per group). Ten genes are truly</span>
-<span id="cb13-84"><a href="#cb13-84" aria-hidden="true" tabindex="-1"></a>differentially expressed.</span>
-<span id="cb13-85"><a href="#cb13-85" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb13-88"><a href="#cb13-88" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
-<span id="cb13-89"><a href="#cb13-89" aria-hidden="true" tabindex="-1"></a>n_gene <span class="ot">&lt;-</span> <span class="dv">500</span>; n_samp <span class="ot">&lt;-</span> <span class="dv">10</span></span>
-<span id="cb13-90"><a href="#cb13-90" aria-hidden="true" tabindex="-1"></a>group <span class="ot">&lt;-</span> <span class="fu">rep</span>(<span class="fu">c</span>(<span class="st">"A"</span>, <span class="st">"B"</span>), <span class="at">each =</span> <span class="dv">5</span>)</span>
-<span id="cb13-91"><a href="#cb13-91" aria-hidden="true" tabindex="-1"></a>mu <span class="ot">&lt;-</span> <span class="dv">2</span> <span class="sc">*</span> <span class="fu">runif</span>(n_gene, <span class="dv">1</span>, <span class="dv">10</span>)   <span class="co"># baseline mean per gene</span></span>
-<span id="cb13-92"><a href="#cb13-92" aria-hidden="true" tabindex="-1"></a>lfc <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="fu">rep</span>(<span class="fu">log</span>(<span class="dv">3</span>), <span class="dv">10</span>), <span class="fu">rep</span>(<span class="dv">0</span>, n_gene <span class="sc">-</span> <span class="dv">10</span>))</span>
-<span id="cb13-93"><a href="#cb13-93" aria-hidden="true" tabindex="-1"></a>counts <span class="ot">&lt;-</span> <span class="fu">sapply</span>(<span class="fu">seq_len</span>(n_samp), <span class="cf">function</span>(j) {</span>
-<span id="cb13-94"><a href="#cb13-94" aria-hidden="true" tabindex="-1"></a>  rate <span class="ot">&lt;-</span> mu <span class="sc">*</span> <span class="fu">exp</span>(<span class="fu">ifelse</span>(group[j] <span class="sc">==</span> <span class="st">"B"</span>, lfc, <span class="dv">0</span>))</span>
-<span id="cb13-95"><a href="#cb13-95" aria-hidden="true" tabindex="-1"></a>  <span class="fu">rnbinom</span>(n_gene, <span class="at">mu =</span> rate, <span class="at">size =</span> <span class="dv">5</span>)</span>
-<span id="cb13-96"><a href="#cb13-96" aria-hidden="true" tabindex="-1"></a>})</span>
-<span id="cb13-97"><a href="#cb13-97" aria-hidden="true" tabindex="-1"></a><span class="fu">rownames</span>(counts) <span class="ot">&lt;-</span> <span class="fu">paste0</span>(<span class="st">"g"</span>, <span class="fu">seq_len</span>(n_gene))</span>
-<span id="cb13-98"><a href="#cb13-98" aria-hidden="true" tabindex="-1"></a><span class="fu">colnames</span>(counts) <span class="ot">&lt;-</span> <span class="fu">paste0</span>(<span class="st">"s"</span>, <span class="fu">seq_len</span>(n_samp))</span>
-<span id="cb13-99"><a href="#cb13-99" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb13-100"><a href="#cb13-100" aria-hidden="true" tabindex="-1"></a><span class="fu">tibble</span>(<span class="at">mean =</span> <span class="fu">rowMeans</span>(counts), <span class="at">var =</span> <span class="fu">apply</span>(counts, <span class="dv">1</span>, var)) <span class="sc">|&gt;</span></span>
-<span id="cb13-101"><a href="#cb13-101" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ggplot</span>(<span class="fu">aes</span>(mean, var)) <span class="sc">+</span> <span class="fu">geom_point</span>(<span class="at">alpha =</span> <span class="fl">0.3</span>) <span class="sc">+</span></span>
-<span id="cb13-102"><a href="#cb13-102" aria-hidden="true" tabindex="-1"></a>  <span class="fu">scale_x_log10</span>() <span class="sc">+</span> <span class="fu">scale_y_log10</span>() <span class="sc">+</span></span>
-<span id="cb13-103"><a href="#cb13-103" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_abline</span>(<span class="at">slope =</span> <span class="dv">1</span>, <span class="at">intercept =</span> <span class="dv">0</span>, <span class="at">colour =</span> <span class="st">"grey50"</span>) <span class="sc">+</span></span>
-<span id="cb13-104"><a href="#cb13-104" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">title =</span> <span class="st">"mean–variance (log–log)"</span>)</span>
-<span id="cb13-105"><a href="#cb13-105" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
-<span id="cb13-106"><a href="#cb13-106" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb13-107"><a href="#cb13-107" aria-hidden="true" tabindex="-1"></a><span class="fu">## 3. Execution</span></span>
-<span id="cb13-108"><a href="#cb13-108" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb13-109"><a href="#cb13-109" aria-hidden="true" tabindex="-1"></a>A DESeq2 call pattern (not run).</span>
-<span id="cb13-110"><a href="#cb13-110" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb13-113"><a href="#cb13-113" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
-<span id="cb13-114"><a href="#cb13-114" aria-hidden="true" tabindex="-1"></a><span class="co">#| eval: false</span></span>
-<span id="cb13-115"><a href="#cb13-115" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(DESeq2)</span>
-<span id="cb13-116"><a href="#cb13-116" aria-hidden="true" tabindex="-1"></a>dds <span class="ot">&lt;-</span> <span class="fu">DESeqDataSetFromMatrix</span>(</span>
-<span id="cb13-117"><a href="#cb13-117" aria-hidden="true" tabindex="-1"></a>  <span class="at">countData =</span> counts,</span>
-<span id="cb13-118"><a href="#cb13-118" aria-hidden="true" tabindex="-1"></a>  <span class="at">colData   =</span> <span class="fu">data.frame</span>(<span class="at">group =</span> group),</span>
-<span id="cb13-119"><a href="#cb13-119" aria-hidden="true" tabindex="-1"></a>  <span class="at">design    =</span> <span class="sc">~</span> group</span>
-<span id="cb13-120"><a href="#cb13-120" aria-hidden="true" tabindex="-1"></a>)</span>
-<span id="cb13-121"><a href="#cb13-121" aria-hidden="true" tabindex="-1"></a>dds <span class="ot">&lt;-</span> <span class="fu">DESeq</span>(dds)</span>
-<span id="cb13-122"><a href="#cb13-122" aria-hidden="true" tabindex="-1"></a>res <span class="ot">&lt;-</span> <span class="fu">results</span>(dds, <span class="at">contrast =</span> <span class="fu">c</span>(<span class="st">"group"</span>, <span class="st">"B"</span>, <span class="st">"A"</span>))</span>
-<span id="cb13-123"><a href="#cb13-123" aria-hidden="true" tabindex="-1"></a><span class="fu">head</span>(res[<span class="fu">order</span>(res<span class="sc">$</span>padj), ])</span>
-<span id="cb13-124"><a href="#cb13-124" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
-<span id="cb13-125"><a href="#cb13-125" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb13-126"><a href="#cb13-126" aria-hidden="true" tabindex="-1"></a>An edgeR call pattern (not run).</span>
-<span id="cb13-127"><a href="#cb13-127" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb13-130"><a href="#cb13-130" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
-<span id="cb13-131"><a href="#cb13-131" aria-hidden="true" tabindex="-1"></a><span class="co">#| eval: false</span></span>
-<span id="cb13-132"><a href="#cb13-132" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(edgeR)</span>
-<span id="cb13-133"><a href="#cb13-133" aria-hidden="true" tabindex="-1"></a>dge <span class="ot">&lt;-</span> <span class="fu">DGEList</span>(<span class="at">counts =</span> counts, <span class="at">group =</span> group)</span>
-<span id="cb13-134"><a href="#cb13-134" aria-hidden="true" tabindex="-1"></a>dge <span class="ot">&lt;-</span> <span class="fu">calcNormFactors</span>(dge)</span>
-<span id="cb13-135"><a href="#cb13-135" aria-hidden="true" tabindex="-1"></a>design <span class="ot">&lt;-</span> <span class="fu">model.matrix</span>(<span class="sc">~</span> group)</span>
-<span id="cb13-136"><a href="#cb13-136" aria-hidden="true" tabindex="-1"></a>dge <span class="ot">&lt;-</span> <span class="fu">estimateDisp</span>(dge, design)</span>
-<span id="cb13-137"><a href="#cb13-137" aria-hidden="true" tabindex="-1"></a>fit <span class="ot">&lt;-</span> <span class="fu">glmQLFit</span>(dge, design)</span>
-<span id="cb13-138"><a href="#cb13-138" aria-hidden="true" tabindex="-1"></a>qlf <span class="ot">&lt;-</span> <span class="fu">glmQLFTest</span>(fit, <span class="at">coef =</span> <span class="dv">2</span>)</span>
-<span id="cb13-139"><a href="#cb13-139" aria-hidden="true" tabindex="-1"></a><span class="fu">topTags</span>(qlf)</span>
-<span id="cb13-140"><a href="#cb13-140" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
-<span id="cb13-141"><a href="#cb13-141" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb13-142"><a href="#cb13-142" aria-hidden="true" tabindex="-1"></a>A per-gene negative-binomial GLM that runs.</span>
-<span id="cb13-143"><a href="#cb13-143" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb13-146"><a href="#cb13-146" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
-<span id="cb13-147"><a href="#cb13-147" aria-hidden="true" tabindex="-1"></a>pvals <span class="ot">&lt;-</span> <span class="fu">numeric</span>(n_gene)</span>
-<span id="cb13-148"><a href="#cb13-148" aria-hidden="true" tabindex="-1"></a>logfcs <span class="ot">&lt;-</span> <span class="fu">numeric</span>(n_gene)</span>
-<span id="cb13-149"><a href="#cb13-149" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> (g <span class="cf">in</span> <span class="fu">seq_len</span>(n_gene)) {</span>
-<span id="cb13-150"><a href="#cb13-150" aria-hidden="true" tabindex="-1"></a>  y <span class="ot">&lt;-</span> counts[g, ]</span>
-<span id="cb13-151"><a href="#cb13-151" aria-hidden="true" tabindex="-1"></a>  fit <span class="ot">&lt;-</span> <span class="fu">try</span>(<span class="fu">glm.nb</span>(y <span class="sc">~</span> group), <span class="at">silent =</span> <span class="cn">TRUE</span>)</span>
-<span id="cb13-152"><a href="#cb13-152" aria-hidden="true" tabindex="-1"></a>  <span class="cf">if</span> (<span class="fu">inherits</span>(fit, <span class="st">"try-error"</span>)) { pvals[g] <span class="ot">&lt;-</span> <span class="cn">NA</span>; <span class="cf">next</span> }</span>
-<span id="cb13-153"><a href="#cb13-153" aria-hidden="true" tabindex="-1"></a>  s <span class="ot">&lt;-</span> <span class="fu">summary</span>(fit)</span>
-<span id="cb13-154"><a href="#cb13-154" aria-hidden="true" tabindex="-1"></a>  pvals[g]  <span class="ot">&lt;-</span> s<span class="sc">$</span>coefficients[<span class="dv">2</span>, <span class="dv">4</span>]</span>
-<span id="cb13-155"><a href="#cb13-155" aria-hidden="true" tabindex="-1"></a>  logfcs[g] <span class="ot">&lt;-</span> s<span class="sc">$</span>coefficients[<span class="dv">2</span>, <span class="dv">1</span>]</span>
-<span id="cb13-156"><a href="#cb13-156" aria-hidden="true" tabindex="-1"></a>}</span>
-<span id="cb13-157"><a href="#cb13-157" aria-hidden="true" tabindex="-1"></a>padj <span class="ot">&lt;-</span> <span class="fu">p.adjust</span>(pvals, <span class="at">method =</span> <span class="st">"BH"</span>)</span>
-<span id="cb13-158"><a href="#cb13-158" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
-<span id="cb13-159"><a href="#cb13-159" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb13-160"><a href="#cb13-160" aria-hidden="true" tabindex="-1"></a><span class="fu">## 4. Check</span></span>
-<span id="cb13-161"><a href="#cb13-161" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb13-162"><a href="#cb13-162" aria-hidden="true" tabindex="-1"></a>Volcano plot with the truly DE genes flagged.</span>
-<span id="cb13-163"><a href="#cb13-163" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb13-166"><a href="#cb13-166" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
-<span id="cb13-167"><a href="#cb13-167" aria-hidden="true" tabindex="-1"></a>truth <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="fu">rep</span>(<span class="st">"DE"</span>, <span class="dv">10</span>), <span class="fu">rep</span>(<span class="st">"null"</span>, n_gene <span class="sc">-</span> <span class="dv">10</span>))</span>
-<span id="cb13-168"><a href="#cb13-168" aria-hidden="true" tabindex="-1"></a><span class="fu">tibble</span>(<span class="at">lfc =</span> logfcs, <span class="at">padj =</span> padj, <span class="at">truth =</span> truth) <span class="sc">|&gt;</span></span>
-<span id="cb13-169"><a href="#cb13-169" aria-hidden="true" tabindex="-1"></a>  <span class="fu">drop_na</span>() <span class="sc">|&gt;</span></span>
-<span id="cb13-170"><a href="#cb13-170" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ggplot</span>(<span class="fu">aes</span>(lfc, <span class="sc">-</span><span class="fu">log10</span>(padj), <span class="at">colour =</span> truth)) <span class="sc">+</span></span>
-<span id="cb13-171"><a href="#cb13-171" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_point</span>(<span class="at">alpha =</span> <span class="fl">0.6</span>) <span class="sc">+</span></span>
-<span id="cb13-172"><a href="#cb13-172" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">x =</span> <span class="st">"log fold change (B vs A)"</span>, <span class="at">y =</span> <span class="st">"-log10(padj)"</span>)</span>
-<span id="cb13-173"><a href="#cb13-173" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
-<span id="cb13-174"><a href="#cb13-174" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb13-177"><a href="#cb13-177" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
-<span id="cb13-178"><a href="#cb13-178" aria-hidden="true" tabindex="-1"></a><span class="fu">mean</span>(padj[<span class="dv">1</span><span class="sc">:</span><span class="dv">10</span>] <span class="sc">&lt;</span> <span class="fl">0.05</span>, <span class="at">na.rm =</span> <span class="cn">TRUE</span>)</span>
-<span id="cb13-179"><a href="#cb13-179" aria-hidden="true" tabindex="-1"></a><span class="fu">mean</span>(padj[<span class="dv">11</span><span class="sc">:</span>n_gene] <span class="sc">&lt;</span> <span class="fl">0.05</span>, <span class="at">na.rm =</span> <span class="cn">TRUE</span>)</span>
-<span id="cb13-180"><a href="#cb13-180" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
-<span id="cb13-181"><a href="#cb13-181" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb13-182"><a href="#cb13-182" aria-hidden="true" tabindex="-1"></a><span class="fu">## 5. Report</span></span>
-<span id="cb13-183"><a href="#cb13-183" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb13-184"><a href="#cb13-184" aria-hidden="true" tabindex="-1"></a><span class="at">&gt; On a simulated 500-gene, 10-sample RNA-seq dataset with 10 truly</span></span>
-<span id="cb13-185"><a href="#cb13-185" aria-hidden="true" tabindex="-1"></a><span class="at">&gt; differentially expressed genes (log fold change ≈ 1.1),</span></span>
-<span id="cb13-186"><a href="#cb13-186" aria-hidden="true" tabindex="-1"></a><span class="at">&gt; per-gene negative-binomial GLMs followed by Benjamini–Hochberg</span></span>
-<span id="cb13-187"><a href="#cb13-187" aria-hidden="true" tabindex="-1"></a><span class="at">&gt; adjustment recovered</span></span>
-<span id="cb13-188"><a href="#cb13-188" aria-hidden="true" tabindex="-1"></a><span class="at">&gt; </span><span class="in">`r round(mean(padj[1:10] &lt; 0.05, na.rm = TRUE) * 100, 0)`</span><span class="at">% of the</span></span>
-<span id="cb13-189"><a href="#cb13-189" aria-hidden="true" tabindex="-1"></a><span class="at">&gt; true DE genes at FDR &lt; 0.05 and yielded a false-discovery rate</span></span>
-<span id="cb13-190"><a href="#cb13-190" aria-hidden="true" tabindex="-1"></a><span class="at">&gt; among null genes of</span></span>
-<span id="cb13-191"><a href="#cb13-191" aria-hidden="true" tabindex="-1"></a><span class="at">&gt; </span><span class="in">`r round(mean(padj[11:n_gene] &lt; 0.05, na.rm = TRUE) * 100, 1)`</span><span class="at">%.</span></span>
-<span id="cb13-192"><a href="#cb13-192" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb13-193"><a href="#cb13-193" aria-hidden="true" tabindex="-1"></a>DESeq2 and edgeR would improve power by shrinking gene-wise</span>
-<span id="cb13-194"><a href="#cb13-194" aria-hidden="true" tabindex="-1"></a>dispersion across the experiment; the per-gene fit shown here is a</span>
-<span id="cb13-195"><a href="#cb13-195" aria-hidden="true" tabindex="-1"></a>transparent but low-power version of the same idea.</span>
-<span id="cb13-196"><a href="#cb13-196" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb13-197"><a href="#cb13-197" aria-hidden="true" tabindex="-1"></a>::: {.notes}</span>
-<span id="cb13-198"><a href="#cb13-198" aria-hidden="true" tabindex="-1"></a>Mention that <span class="in">`vst`</span> or <span class="in">`rlog`</span> transformations are standard before</span>
-<span id="cb13-199"><a href="#cb13-199" aria-hidden="true" tabindex="-1"></a>PCA or clustering; raw counts should not be used for those tasks.</span>
-<span id="cb13-200"><a href="#cb13-200" aria-hidden="true" tabindex="-1"></a>:::</span>
-<span id="cb13-201"><a href="#cb13-201" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb13-202"><a href="#cb13-202" aria-hidden="true" tabindex="-1"></a><span class="fu">## Common pitfalls</span></span>
-<span id="cb13-203"><a href="#cb13-203" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb13-204"><a href="#cb13-204" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>Running a *t*-test on raw counts — the variance structure is wrong.</span>
-<span id="cb13-205"><a href="#cb13-205" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>Filtering genes after seeing the results (data-driven filters are</span>
-<span id="cb13-206"><a href="#cb13-206" aria-hidden="true" tabindex="-1"></a>  fine only if applied before testing).</span>
-<span id="cb13-207"><a href="#cb13-207" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>Forgetting to include batch or library-size terms in the design.</span>
-<span id="cb13-208"><a href="#cb13-208" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb13-209"><a href="#cb13-209" aria-hidden="true" tabindex="-1"></a><span class="fu">## Further reading</span></span>
-<span id="cb13-210"><a href="#cb13-210" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb13-211"><a href="#cb13-211" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>Love MI, Huber W, Anders S (2014), *Moderated estimation of fold</span>
-<span id="cb13-212"><a href="#cb13-212" aria-hidden="true" tabindex="-1"></a>  change and dispersion for RNA-seq data with DESeq2*.</span>
-<span id="cb13-213"><a href="#cb13-213" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>Law CW et al. (2014), *voom: precision weights unlock linear model</span>
-<span id="cb13-214"><a href="#cb13-214" aria-hidden="true" tabindex="-1"></a>  analysis tools for RNA-seq read counts*.</span>
-<span id="cb13-215"><a href="#cb13-215" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb13-216"><a href="#cb13-216" aria-hidden="true" tabindex="-1"></a><span class="fu">## Session info</span></span>
-<span id="cb13-217"><a href="#cb13-217" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb13-220"><a href="#cb13-220" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
-<span id="cb13-221"><a href="#cb13-221" aria-hidden="true" tabindex="-1"></a><span class="fu">sessionInfo</span>()</span>
-<span id="cb13-222"><a href="#cb13-222" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb16" data-shortcodes="false"><pre class="sourceCode markdown code-with-copy"><code class="sourceCode markdown"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a><span class="co">---</span></span>
+<span id="cb16-2"><a href="#cb16-2" aria-hidden="true" tabindex="-1"></a><span class="an">title:</span><span class="co"> "Week 4, Session 1 — RNA-seq with DESeq2 / edgeR"</span></span>
+<span id="cb16-3"><a href="#cb16-3" aria-hidden="true" tabindex="-1"></a><span class="an">subtitle:</span><span class="co"> "Course 4 — #courses"</span></span>
+<span id="cb16-4"><a href="#cb16-4" aria-hidden="true" tabindex="-1"></a><span class="an">format:</span></span>
+<span id="cb16-5"><a href="#cb16-5" aria-hidden="true" tabindex="-1"></a><span class="co">  html:</span></span>
+<span id="cb16-6"><a href="#cb16-6" aria-hidden="true" tabindex="-1"></a><span class="co">    toc: true</span></span>
+<span id="cb16-7"><a href="#cb16-7" aria-hidden="true" tabindex="-1"></a><span class="co">    toc-depth: 3</span></span>
+<span id="cb16-8"><a href="#cb16-8" aria-hidden="true" tabindex="-1"></a><span class="co">    code-fold: false</span></span>
+<span id="cb16-9"><a href="#cb16-9" aria-hidden="true" tabindex="-1"></a><span class="co">    code-tools: true</span></span>
+<span id="cb16-10"><a href="#cb16-10" aria-hidden="true" tabindex="-1"></a><span class="co">  revealjs:</span></span>
+<span id="cb16-11"><a href="#cb16-11" aria-hidden="true" tabindex="-1"></a><span class="co">    output-file: "lab_week4_session1_slides.html"</span></span>
+<span id="cb16-12"><a href="#cb16-12" aria-hidden="true" tabindex="-1"></a><span class="co">    theme: [default, ../../assets/slides.scss]</span></span>
+<span id="cb16-13"><a href="#cb16-13" aria-hidden="true" tabindex="-1"></a><span class="co">    slide-number: c/t</span></span>
+<span id="cb16-14"><a href="#cb16-14" aria-hidden="true" tabindex="-1"></a><span class="co">    progress: true</span></span>
+<span id="cb16-15"><a href="#cb16-15" aria-hidden="true" tabindex="-1"></a><span class="co">    scrollable: true</span></span>
+<span id="cb16-16"><a href="#cb16-16" aria-hidden="true" tabindex="-1"></a><span class="co">    transition: none</span></span>
+<span id="cb16-17"><a href="#cb16-17" aria-hidden="true" tabindex="-1"></a><span class="co">    preview-links: auto</span></span>
+<span id="cb16-18"><a href="#cb16-18" aria-hidden="true" tabindex="-1"></a><span class="an">execute:</span></span>
+<span id="cb16-19"><a href="#cb16-19" aria-hidden="true" tabindex="-1"></a><span class="co">  warning: false</span></span>
+<span id="cb16-20"><a href="#cb16-20" aria-hidden="true" tabindex="-1"></a><span class="co">  message: false</span></span>
+<span id="cb16-21"><a href="#cb16-21" aria-hidden="true" tabindex="-1"></a><span class="co">---</span></span>
+<span id="cb16-22"><a href="#cb16-22" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb16-23"><a href="#cb16-23" aria-hidden="true" tabindex="-1"></a>::: {.callout-note}</span>
+<span id="cb16-24"><a href="#cb16-24" aria-hidden="true" tabindex="-1"></a>**Workflow labs** use the variant template:</span>
+<span id="cb16-25"><a href="#cb16-25" aria-hidden="true" tabindex="-1"></a>Goal → Approach → Execution → Check → Report.</span>
+<span id="cb16-26"><a href="#cb16-26" aria-hidden="true" tabindex="-1"></a>:::</span>
+<span id="cb16-27"><a href="#cb16-27" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb16-28"><a href="#cb16-28" aria-hidden="true" tabindex="-1"></a><span class="fu">## Learning objectives</span></span>
+<span id="cb16-29"><a href="#cb16-29" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb16-30"><a href="#cb16-30" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>Describe the count-model assumptions behind DESeq2 and edgeR and</span>
+<span id="cb16-31"><a href="#cb16-31" aria-hidden="true" tabindex="-1"></a>  explain the role of dispersion estimation.</span>
+<span id="cb16-32"><a href="#cb16-32" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>Set up a design matrix for a two-group comparison and for a more</span>
+<span id="cb16-33"><a href="#cb16-33" aria-hidden="true" tabindex="-1"></a>  complex experiment.</span>
+<span id="cb16-34"><a href="#cb16-34" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>Recognise when a log-transformed <span class="in">`limma-voom`</span> workflow is preferable.</span>
+<span id="cb16-35"><a href="#cb16-35" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb16-36"><a href="#cb16-36" aria-hidden="true" tabindex="-1"></a><span class="fu">## Prerequisites</span></span>
+<span id="cb16-37"><a href="#cb16-37" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb16-38"><a href="#cb16-38" aria-hidden="true" tabindex="-1"></a>GLMs from Course 2; multiple testing from Course 1.</span>
+<span id="cb16-39"><a href="#cb16-39" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb16-40"><a href="#cb16-40" aria-hidden="true" tabindex="-1"></a><span class="fu">## Background</span></span>
+<span id="cb16-41"><a href="#cb16-41" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb16-42"><a href="#cb16-42" aria-hidden="true" tabindex="-1"></a>Bulk RNA-sequencing yields integer counts per gene per sample. Raw</span>
+<span id="cb16-43"><a href="#cb16-43" aria-hidden="true" tabindex="-1"></a>counts are heteroscedastic — variance grows with the mean — and the</span>
+<span id="cb16-44"><a href="#cb16-44" aria-hidden="true" tabindex="-1"></a>distribution has a long tail. DESeq2 and edgeR model counts as</span>
+<span id="cb16-45"><a href="#cb16-45" aria-hidden="true" tabindex="-1"></a>negative-binomial, with a gene-specific dispersion shrunk toward a</span>
+<span id="cb16-46"><a href="#cb16-46" aria-hidden="true" tabindex="-1"></a>trend estimated across the dataset. This shrinkage is the statistical</span>
+<span id="cb16-47"><a href="#cb16-47" aria-hidden="true" tabindex="-1"></a>heart of modern differential-expression analysis in low-replicate</span>
+<span id="cb16-48"><a href="#cb16-48" aria-hidden="true" tabindex="-1"></a>studies.</span>
+<span id="cb16-49"><a href="#cb16-49" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb16-50"><a href="#cb16-50" aria-hidden="true" tabindex="-1"></a><span class="in">`limma-voom`</span> takes a different route: model the log-counts with</span>
+<span id="cb16-51"><a href="#cb16-51" aria-hidden="true" tabindex="-1"></a>precision weights that reflect the count-level mean–variance trend.</span>
+<span id="cb16-52"><a href="#cb16-52" aria-hidden="true" tabindex="-1"></a>The output is a familiar linear-model workflow with all of its tools</span>
+<span id="cb16-53"><a href="#cb16-53" aria-hidden="true" tabindex="-1"></a>(contrasts, interactions, F-tests). For large or complex designs,</span>
+<span id="cb16-54"><a href="#cb16-54" aria-hidden="true" tabindex="-1"></a><span class="in">`limma-voom`</span> is often the most flexible.</span>
+<span id="cb16-55"><a href="#cb16-55" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb16-56"><a href="#cb16-56" aria-hidden="true" tabindex="-1"></a>::: {.content-visible when-format="html"}</span>
+<span id="cb16-57"><a href="#cb16-57" aria-hidden="true" tabindex="-1"></a>DESeq2 and edgeR are Bioconductor packages, not CRAN. We show their</span>
+<span id="cb16-58"><a href="#cb16-58" aria-hidden="true" tabindex="-1"></a>call pattern with <span class="in">`#| eval: false`</span> and walk through a conceptually</span>
+<span id="cb16-59"><a href="#cb16-59" aria-hidden="true" tabindex="-1"></a>parallel simulation with base R GLMs so the ideas run end-to-end in</span>
+<span id="cb16-60"><a href="#cb16-60" aria-hidden="true" tabindex="-1"></a>any environment.</span>
+<span id="cb16-61"><a href="#cb16-61" aria-hidden="true" tabindex="-1"></a>:::</span>
+<span id="cb16-62"><a href="#cb16-62" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb16-63"><a href="#cb16-63" aria-hidden="true" tabindex="-1"></a><span class="fu">## Setup</span></span>
+<span id="cb16-64"><a href="#cb16-64" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb16-67"><a href="#cb16-67" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
+<span id="cb16-68"><a href="#cb16-68" aria-hidden="true" tabindex="-1"></a><span class="co">#| label: setup</span></span>
+<span id="cb16-69"><a href="#cb16-69" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(tidyverse)</span>
+<span id="cb16-70"><a href="#cb16-70" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(MASS)</span>
+<span id="cb16-71"><a href="#cb16-71" aria-hidden="true" tabindex="-1"></a><span class="fu">set.seed</span>(<span class="dv">42</span>)</span>
+<span id="cb16-72"><a href="#cb16-72" aria-hidden="true" tabindex="-1"></a><span class="fu">theme_set</span>(<span class="fu">theme_minimal</span>(<span class="at">base_size =</span> <span class="dv">12</span>))</span>
+<span id="cb16-73"><a href="#cb16-73" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb16-74"><a href="#cb16-74" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb16-75"><a href="#cb16-75" aria-hidden="true" tabindex="-1"></a><span class="fu">## 1. Goal</span></span>
+<span id="cb16-76"><a href="#cb16-76" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb16-77"><a href="#cb16-77" aria-hidden="true" tabindex="-1"></a>Simulate a small RNA-seq count matrix with two conditions and</span>
+<span id="cb16-78"><a href="#cb16-78" aria-hidden="true" tabindex="-1"></a>demonstrate the DESeq2/edgeR pipeline pattern alongside a base-R</span>
+<span id="cb16-79"><a href="#cb16-79" aria-hidden="true" tabindex="-1"></a>negative-binomial GLM that actually runs.</span>
+<span id="cb16-80"><a href="#cb16-80" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb16-81"><a href="#cb16-81" aria-hidden="true" tabindex="-1"></a><span class="fu">## 2. Approach</span></span>
+<span id="cb16-82"><a href="#cb16-82" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb16-83"><a href="#cb16-83" aria-hidden="true" tabindex="-1"></a>Simulate 500 genes × 10 samples (5 per group). Ten genes are truly</span>
+<span id="cb16-84"><a href="#cb16-84" aria-hidden="true" tabindex="-1"></a>differentially expressed.</span>
+<span id="cb16-85"><a href="#cb16-85" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb16-88"><a href="#cb16-88" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
+<span id="cb16-89"><a href="#cb16-89" aria-hidden="true" tabindex="-1"></a>n_gene <span class="ot">&lt;-</span> <span class="dv">500</span>; n_samp <span class="ot">&lt;-</span> <span class="dv">10</span></span>
+<span id="cb16-90"><a href="#cb16-90" aria-hidden="true" tabindex="-1"></a>group <span class="ot">&lt;-</span> <span class="fu">rep</span>(<span class="fu">c</span>(<span class="st">"A"</span>, <span class="st">"B"</span>), <span class="at">each =</span> <span class="dv">5</span>)</span>
+<span id="cb16-91"><a href="#cb16-91" aria-hidden="true" tabindex="-1"></a>mu <span class="ot">&lt;-</span> <span class="dv">2</span> <span class="sc">*</span> <span class="fu">runif</span>(n_gene, <span class="dv">1</span>, <span class="dv">10</span>)   <span class="co"># baseline mean per gene</span></span>
+<span id="cb16-92"><a href="#cb16-92" aria-hidden="true" tabindex="-1"></a>lfc <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="fu">rep</span>(<span class="fu">log</span>(<span class="dv">3</span>), <span class="dv">10</span>), <span class="fu">rep</span>(<span class="dv">0</span>, n_gene <span class="sc">-</span> <span class="dv">10</span>))</span>
+<span id="cb16-93"><a href="#cb16-93" aria-hidden="true" tabindex="-1"></a>counts <span class="ot">&lt;-</span> <span class="fu">sapply</span>(<span class="fu">seq_len</span>(n_samp), <span class="cf">function</span>(j) {</span>
+<span id="cb16-94"><a href="#cb16-94" aria-hidden="true" tabindex="-1"></a>  rate <span class="ot">&lt;-</span> mu <span class="sc">*</span> <span class="fu">exp</span>(<span class="cf">if</span> (group[j] <span class="sc">==</span> <span class="st">"B"</span>) lfc <span class="cf">else</span> <span class="fu">rep</span>(<span class="dv">0</span>, n_gene))</span>
+<span id="cb16-95"><a href="#cb16-95" aria-hidden="true" tabindex="-1"></a>  <span class="fu">rnbinom</span>(n_gene, <span class="at">mu =</span> rate, <span class="at">size =</span> <span class="dv">5</span>)</span>
+<span id="cb16-96"><a href="#cb16-96" aria-hidden="true" tabindex="-1"></a>})</span>
+<span id="cb16-97"><a href="#cb16-97" aria-hidden="true" tabindex="-1"></a><span class="fu">rownames</span>(counts) <span class="ot">&lt;-</span> <span class="fu">paste0</span>(<span class="st">"g"</span>, <span class="fu">seq_len</span>(n_gene))</span>
+<span id="cb16-98"><a href="#cb16-98" aria-hidden="true" tabindex="-1"></a><span class="fu">colnames</span>(counts) <span class="ot">&lt;-</span> <span class="fu">paste0</span>(<span class="st">"s"</span>, <span class="fu">seq_len</span>(n_samp))</span>
+<span id="cb16-99"><a href="#cb16-99" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb16-100"><a href="#cb16-100" aria-hidden="true" tabindex="-1"></a><span class="fu">tibble</span>(<span class="at">mean =</span> <span class="fu">rowMeans</span>(counts), <span class="at">var =</span> <span class="fu">apply</span>(counts, <span class="dv">1</span>, var)) <span class="sc">|&gt;</span></span>
+<span id="cb16-101"><a href="#cb16-101" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ggplot</span>(<span class="fu">aes</span>(mean, var)) <span class="sc">+</span> <span class="fu">geom_point</span>(<span class="at">alpha =</span> <span class="fl">0.3</span>) <span class="sc">+</span></span>
+<span id="cb16-102"><a href="#cb16-102" aria-hidden="true" tabindex="-1"></a>  <span class="fu">scale_x_log10</span>() <span class="sc">+</span> <span class="fu">scale_y_log10</span>() <span class="sc">+</span></span>
+<span id="cb16-103"><a href="#cb16-103" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_abline</span>(<span class="at">slope =</span> <span class="dv">1</span>, <span class="at">intercept =</span> <span class="dv">0</span>, <span class="at">colour =</span> <span class="st">"grey50"</span>) <span class="sc">+</span></span>
+<span id="cb16-104"><a href="#cb16-104" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">title =</span> <span class="st">"mean–variance (log–log)"</span>)</span>
+<span id="cb16-105"><a href="#cb16-105" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb16-106"><a href="#cb16-106" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb16-107"><a href="#cb16-107" aria-hidden="true" tabindex="-1"></a><span class="fu">## 3. Execution</span></span>
+<span id="cb16-108"><a href="#cb16-108" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb16-109"><a href="#cb16-109" aria-hidden="true" tabindex="-1"></a>A DESeq2 call pattern (not run).</span>
+<span id="cb16-110"><a href="#cb16-110" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb16-113"><a href="#cb16-113" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
+<span id="cb16-114"><a href="#cb16-114" aria-hidden="true" tabindex="-1"></a><span class="co">#| eval: false</span></span>
+<span id="cb16-115"><a href="#cb16-115" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(DESeq2)</span>
+<span id="cb16-116"><a href="#cb16-116" aria-hidden="true" tabindex="-1"></a>dds <span class="ot">&lt;-</span> <span class="fu">DESeqDataSetFromMatrix</span>(</span>
+<span id="cb16-117"><a href="#cb16-117" aria-hidden="true" tabindex="-1"></a>  <span class="at">countData =</span> counts,</span>
+<span id="cb16-118"><a href="#cb16-118" aria-hidden="true" tabindex="-1"></a>  <span class="at">colData   =</span> <span class="fu">data.frame</span>(<span class="at">group =</span> group),</span>
+<span id="cb16-119"><a href="#cb16-119" aria-hidden="true" tabindex="-1"></a>  <span class="at">design    =</span> <span class="sc">~</span> group</span>
+<span id="cb16-120"><a href="#cb16-120" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb16-121"><a href="#cb16-121" aria-hidden="true" tabindex="-1"></a>dds <span class="ot">&lt;-</span> <span class="fu">DESeq</span>(dds)</span>
+<span id="cb16-122"><a href="#cb16-122" aria-hidden="true" tabindex="-1"></a>res <span class="ot">&lt;-</span> <span class="fu">results</span>(dds, <span class="at">contrast =</span> <span class="fu">c</span>(<span class="st">"group"</span>, <span class="st">"B"</span>, <span class="st">"A"</span>))</span>
+<span id="cb16-123"><a href="#cb16-123" aria-hidden="true" tabindex="-1"></a><span class="fu">head</span>(res[<span class="fu">order</span>(res<span class="sc">$</span>padj), ])</span>
+<span id="cb16-124"><a href="#cb16-124" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb16-125"><a href="#cb16-125" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb16-126"><a href="#cb16-126" aria-hidden="true" tabindex="-1"></a>An edgeR call pattern (not run).</span>
+<span id="cb16-127"><a href="#cb16-127" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb16-130"><a href="#cb16-130" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
+<span id="cb16-131"><a href="#cb16-131" aria-hidden="true" tabindex="-1"></a><span class="co">#| eval: false</span></span>
+<span id="cb16-132"><a href="#cb16-132" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(edgeR)</span>
+<span id="cb16-133"><a href="#cb16-133" aria-hidden="true" tabindex="-1"></a>dge <span class="ot">&lt;-</span> <span class="fu">DGEList</span>(<span class="at">counts =</span> counts, <span class="at">group =</span> group)</span>
+<span id="cb16-134"><a href="#cb16-134" aria-hidden="true" tabindex="-1"></a>dge <span class="ot">&lt;-</span> <span class="fu">calcNormFactors</span>(dge)</span>
+<span id="cb16-135"><a href="#cb16-135" aria-hidden="true" tabindex="-1"></a>design <span class="ot">&lt;-</span> <span class="fu">model.matrix</span>(<span class="sc">~</span> group)</span>
+<span id="cb16-136"><a href="#cb16-136" aria-hidden="true" tabindex="-1"></a>dge <span class="ot">&lt;-</span> <span class="fu">estimateDisp</span>(dge, design)</span>
+<span id="cb16-137"><a href="#cb16-137" aria-hidden="true" tabindex="-1"></a>fit <span class="ot">&lt;-</span> <span class="fu">glmQLFit</span>(dge, design)</span>
+<span id="cb16-138"><a href="#cb16-138" aria-hidden="true" tabindex="-1"></a>qlf <span class="ot">&lt;-</span> <span class="fu">glmQLFTest</span>(fit, <span class="at">coef =</span> <span class="dv">2</span>)</span>
+<span id="cb16-139"><a href="#cb16-139" aria-hidden="true" tabindex="-1"></a><span class="fu">topTags</span>(qlf)</span>
+<span id="cb16-140"><a href="#cb16-140" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb16-141"><a href="#cb16-141" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb16-142"><a href="#cb16-142" aria-hidden="true" tabindex="-1"></a>A per-gene negative-binomial GLM that runs.</span>
+<span id="cb16-143"><a href="#cb16-143" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb16-146"><a href="#cb16-146" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
+<span id="cb16-147"><a href="#cb16-147" aria-hidden="true" tabindex="-1"></a>pvals <span class="ot">&lt;-</span> logfcs <span class="ot">&lt;-</span> <span class="fu">rep</span>(<span class="cn">NA_real_</span>, n_gene)</span>
+<span id="cb16-148"><a href="#cb16-148" aria-hidden="true" tabindex="-1"></a>fit_problems <span class="ot">&lt;-</span> <span class="fu">rep</span>(<span class="st">""</span>, n_gene)</span>
+<span id="cb16-149"><a href="#cb16-149" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> (g <span class="cf">in</span> <span class="fu">seq_len</span>(n_gene)) {</span>
+<span id="cb16-150"><a href="#cb16-150" aria-hidden="true" tabindex="-1"></a>  y <span class="ot">&lt;-</span> counts[g, ]</span>
+<span id="cb16-151"><a href="#cb16-151" aria-hidden="true" tabindex="-1"></a>  problems <span class="ot">&lt;-</span> <span class="fu">character</span>()</span>
+<span id="cb16-152"><a href="#cb16-152" aria-hidden="true" tabindex="-1"></a>  fit <span class="ot">&lt;-</span> <span class="fu">tryCatch</span>(<span class="fu">withCallingHandlers</span>(</span>
+<span id="cb16-153"><a href="#cb16-153" aria-hidden="true" tabindex="-1"></a>    <span class="fu">glm.nb</span>(y <span class="sc">~</span> group),</span>
+<span id="cb16-154"><a href="#cb16-154" aria-hidden="true" tabindex="-1"></a>    <span class="at">warning =</span> <span class="cf">function</span>(w) problems <span class="ot">&lt;&lt;-</span> <span class="fu">c</span>(problems, <span class="fu">conditionMessage</span>(w))</span>
+<span id="cb16-155"><a href="#cb16-155" aria-hidden="true" tabindex="-1"></a>  ), <span class="at">error =</span> <span class="cf">function</span>(e) {</span>
+<span id="cb16-156"><a href="#cb16-156" aria-hidden="true" tabindex="-1"></a>    problems <span class="ot">&lt;&lt;-</span> <span class="fu">c</span>(problems, <span class="fu">conditionMessage</span>(e)); <span class="cn">NULL</span></span>
+<span id="cb16-157"><a href="#cb16-157" aria-hidden="true" tabindex="-1"></a>  })</span>
+<span id="cb16-158"><a href="#cb16-158" aria-hidden="true" tabindex="-1"></a>  <span class="cf">if</span> (<span class="fu">is.null</span>(fit) <span class="sc">||</span> <span class="fu">length</span>(problems) <span class="sc">||</span> <span class="sc">!</span><span class="fu">isTRUE</span>(fit<span class="sc">$</span>converged)) {</span>
+<span id="cb16-159"><a href="#cb16-159" aria-hidden="true" tabindex="-1"></a>    fit_problems[g] <span class="ot">&lt;-</span> <span class="fu">paste</span>(<span class="fu">c</span>(problems, <span class="st">"fit not used for inference"</span>), <span class="at">collapse =</span> <span class="st">"; "</span>)</span>
+<span id="cb16-160"><a href="#cb16-160" aria-hidden="true" tabindex="-1"></a>    <span class="cf">next</span></span>
+<span id="cb16-161"><a href="#cb16-161" aria-hidden="true" tabindex="-1"></a>  }</span>
+<span id="cb16-162"><a href="#cb16-162" aria-hidden="true" tabindex="-1"></a>  estimates <span class="ot">&lt;-</span> <span class="fu">summary</span>(fit)<span class="sc">$</span>coefficients</span>
+<span id="cb16-163"><a href="#cb16-163" aria-hidden="true" tabindex="-1"></a>  pvals[g] <span class="ot">&lt;-</span> estimates[<span class="dv">2</span>, <span class="dv">4</span>]</span>
+<span id="cb16-164"><a href="#cb16-164" aria-hidden="true" tabindex="-1"></a>  logfcs[g] <span class="ot">&lt;-</span> estimates[<span class="dv">2</span>, <span class="dv">1</span>]</span>
+<span id="cb16-165"><a href="#cb16-165" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb16-166"><a href="#cb16-166" aria-hidden="true" tabindex="-1"></a>padj <span class="ot">&lt;-</span> <span class="fu">p.adjust</span>(pvals, <span class="at">method =</span> <span class="st">"BH"</span>, <span class="at">n =</span> n_gene)</span>
+<span id="cb16-167"><a href="#cb16-167" aria-hidden="true" tabindex="-1"></a>discovered <span class="ot">&lt;-</span> <span class="sc">!</span><span class="fu">is.na</span>(padj) <span class="sc">&amp;</span> padj <span class="sc">&lt;</span> .<span class="dv">05</span></span>
+<span id="cb16-168"><a href="#cb16-168" aria-hidden="true" tabindex="-1"></a>recovery <span class="ot">&lt;-</span> <span class="fu">mean</span>(discovered[<span class="dv">1</span><span class="sc">:</span><span class="dv">10</span>])</span>
+<span id="cb16-169"><a href="#cb16-169" aria-hidden="true" tabindex="-1"></a>null_flagged <span class="ot">&lt;-</span> <span class="fu">mean</span>(discovered[<span class="dv">11</span><span class="sc">:</span>n_gene])</span>
+<span id="cb16-170"><a href="#cb16-170" aria-hidden="true" tabindex="-1"></a>fdp <span class="ot">&lt;-</span> <span class="fu">sum</span>(discovered[<span class="dv">11</span><span class="sc">:</span>n_gene]) <span class="sc">/</span> <span class="fu">max</span>(<span class="fu">sum</span>(discovered), <span class="dv">1</span>)</span>
+<span id="cb16-171"><a href="#cb16-171" aria-hidden="true" tabindex="-1"></a><span class="fu">cat</span>(<span class="st">"Genes with failed or warned fits (excluded):"</span>, <span class="fu">sum</span>(<span class="fu">nzchar</span>(fit_problems)), <span class="st">"</span><span class="sc">\n</span><span class="st">"</span>)</span>
+<span id="cb16-172"><a href="#cb16-172" aria-hidden="true" tabindex="-1"></a><span class="fu">print</span>(<span class="fu">head</span>(<span class="fu">data.frame</span>(<span class="at">gene =</span> <span class="fu">rownames</span>(counts), <span class="at">reason =</span> fit_problems)[<span class="fu">nzchar</span>(fit_problems), ]))</span>
+<span id="cb16-173"><a href="#cb16-173" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb16-174"><a href="#cb16-174" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb16-175"><a href="#cb16-175" aria-hidden="true" tabindex="-1"></a><span class="fu">## 4. Check</span></span>
+<span id="cb16-176"><a href="#cb16-176" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb16-177"><a href="#cb16-177" aria-hidden="true" tabindex="-1"></a>Volcano plot with the truly DE genes flagged.</span>
+<span id="cb16-178"><a href="#cb16-178" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb16-181"><a href="#cb16-181" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
+<span id="cb16-182"><a href="#cb16-182" aria-hidden="true" tabindex="-1"></a>truth <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="fu">rep</span>(<span class="st">"DE"</span>, <span class="dv">10</span>), <span class="fu">rep</span>(<span class="st">"null"</span>, n_gene <span class="sc">-</span> <span class="dv">10</span>))</span>
+<span id="cb16-183"><a href="#cb16-183" aria-hidden="true" tabindex="-1"></a><span class="fu">tibble</span>(<span class="at">lfc =</span> logfcs, <span class="at">padj =</span> padj, <span class="at">truth =</span> truth) <span class="sc">|&gt;</span></span>
+<span id="cb16-184"><a href="#cb16-184" aria-hidden="true" tabindex="-1"></a>  <span class="fu">drop_na</span>() <span class="sc">|&gt;</span></span>
+<span id="cb16-185"><a href="#cb16-185" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ggplot</span>(<span class="fu">aes</span>(lfc, <span class="sc">-</span><span class="fu">log10</span>(padj), <span class="at">colour =</span> truth)) <span class="sc">+</span></span>
+<span id="cb16-186"><a href="#cb16-186" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_point</span>(<span class="at">alpha =</span> <span class="fl">0.6</span>) <span class="sc">+</span></span>
+<span id="cb16-187"><a href="#cb16-187" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">x =</span> <span class="st">"log fold change (B vs A)"</span>, <span class="at">y =</span> <span class="st">"-log10(padj)"</span>)</span>
+<span id="cb16-188"><a href="#cb16-188" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb16-189"><a href="#cb16-189" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb16-192"><a href="#cb16-192" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
+<span id="cb16-193"><a href="#cb16-193" aria-hidden="true" tabindex="-1"></a>recovery</span>
+<span id="cb16-194"><a href="#cb16-194" aria-hidden="true" tabindex="-1"></a>null_flagged</span>
+<span id="cb16-195"><a href="#cb16-195" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb16-196"><a href="#cb16-196" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb16-197"><a href="#cb16-197" aria-hidden="true" tabindex="-1"></a><span class="fu">## 5. Report</span></span>
+<span id="cb16-198"><a href="#cb16-198" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb16-199"><a href="#cb16-199" aria-hidden="true" tabindex="-1"></a><span class="at">&gt; On a simulated 500-gene, 10-sample RNA-seq dataset with 10 truly</span></span>
+<span id="cb16-200"><a href="#cb16-200" aria-hidden="true" tabindex="-1"></a><span class="at">&gt; differentially expressed genes (log fold change ≈ 1.1),</span></span>
+<span id="cb16-201"><a href="#cb16-201" aria-hidden="true" tabindex="-1"></a><span class="at">&gt; per-gene negative-binomial GLMs followed by Benjamini–Hochberg</span></span>
+<span id="cb16-202"><a href="#cb16-202" aria-hidden="true" tabindex="-1"></a><span class="at">&gt; adjustment recovered</span></span>
+<span id="cb16-203"><a href="#cb16-203" aria-hidden="true" tabindex="-1"></a><span class="at">&gt; </span><span class="in">`r round(recovery * 100, 0)`</span><span class="at">% of the</span></span>
+<span id="cb16-204"><a href="#cb16-204" aria-hidden="true" tabindex="-1"></a><span class="at">&gt; true DE genes at BH-adjusted p &lt; 0.05 and flagged</span></span>
+<span id="cb16-205"><a href="#cb16-205" aria-hidden="true" tabindex="-1"></a><span class="at">&gt; </span><span class="in">`r round(null_flagged * 100, 1)`</span><span class="at">% of null genes. The realised</span></span>
+<span id="cb16-206"><a href="#cb16-206" aria-hidden="true" tabindex="-1"></a><span class="at">&gt; false-discovery proportion among discoveries was </span><span class="in">`r round(fdp * 100, 1)`</span><span class="at">%.</span></span>
+<span id="cb16-207"><a href="#cb16-207" aria-hidden="true" tabindex="-1"></a><span class="at">&gt; </span><span class="in">`r sum(nzchar(fit_problems))`</span><span class="at"> genes had failed or warned fits and were</span></span>
+<span id="cb16-208"><a href="#cb16-208" aria-hidden="true" tabindex="-1"></a><span class="at">&gt; excluded from inference; these genes count as unrecovered in the summaries.</span></span>
+<span id="cb16-209"><a href="#cb16-209" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb16-210"><a href="#cb16-210" aria-hidden="true" tabindex="-1"></a>The null-gene flagging proportion and the false-discovery proportion have</span>
+<span id="cb16-211"><a href="#cb16-211" aria-hidden="true" tabindex="-1"></a>different denominators; FDR is the expectation of the latter over repeated</span>
+<span id="cb16-212"><a href="#cb16-212" aria-hidden="true" tabindex="-1"></a>experiments. The small-sample, per-gene Wald tests here are an illustration,</span>
+<span id="cb16-213"><a href="#cb16-213" aria-hidden="true" tabindex="-1"></a>not a validated RNA-seq analysis pipeline. DESeq2 and edgeR estimate dispersion</span>
+<span id="cb16-214"><a href="#cb16-214" aria-hidden="true" tabindex="-1"></a>using information across genes; use their diagnostics and established workflows</span>
+<span id="cb16-215"><a href="#cb16-215" aria-hidden="true" tabindex="-1"></a>for real data. Do not silently discard fit warnings or failed genes.</span>
+<span id="cb16-216"><a href="#cb16-216" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb16-217"><a href="#cb16-217" aria-hidden="true" tabindex="-1"></a>::: {.notes}</span>
+<span id="cb16-218"><a href="#cb16-218" aria-hidden="true" tabindex="-1"></a>Mention that <span class="in">`vst`</span> or <span class="in">`rlog`</span> transformations are standard before</span>
+<span id="cb16-219"><a href="#cb16-219" aria-hidden="true" tabindex="-1"></a>PCA or clustering; raw counts should not be used for those tasks.</span>
+<span id="cb16-220"><a href="#cb16-220" aria-hidden="true" tabindex="-1"></a>:::</span>
+<span id="cb16-221"><a href="#cb16-221" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb16-222"><a href="#cb16-222" aria-hidden="true" tabindex="-1"></a><span class="fu">## Common pitfalls</span></span>
+<span id="cb16-223"><a href="#cb16-223" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb16-224"><a href="#cb16-224" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>Running a *t*-test on raw counts — the variance structure is wrong.</span>
+<span id="cb16-225"><a href="#cb16-225" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>Filtering genes after seeing the results (data-driven filters are</span>
+<span id="cb16-226"><a href="#cb16-226" aria-hidden="true" tabindex="-1"></a>  fine only if applied before testing).</span>
+<span id="cb16-227"><a href="#cb16-227" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>Forgetting to include batch or library-size terms in the design.</span>
+<span id="cb16-228"><a href="#cb16-228" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb16-229"><a href="#cb16-229" aria-hidden="true" tabindex="-1"></a><span class="fu">## Further reading</span></span>
+<span id="cb16-230"><a href="#cb16-230" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb16-231"><a href="#cb16-231" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>Love MI, Huber W, Anders S (2014), *Moderated estimation of fold</span>
+<span id="cb16-232"><a href="#cb16-232" aria-hidden="true" tabindex="-1"></a>  change and dispersion for RNA-seq data with DESeq2*.</span>
+<span id="cb16-233"><a href="#cb16-233" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>Law CW et al. (2014), *voom: precision weights unlock linear model</span>
+<span id="cb16-234"><a href="#cb16-234" aria-hidden="true" tabindex="-1"></a>  analysis tools for RNA-seq read counts*.</span>
+<span id="cb16-235"><a href="#cb16-235" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb16-236"><a href="#cb16-236" aria-hidden="true" tabindex="-1"></a><span class="fu">## Session info</span></span>
+<span id="cb16-237"><a href="#cb16-237" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb16-240"><a href="#cb16-240" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
+<span id="cb16-241"><a href="#cb16-241" aria-hidden="true" tabindex="-1"></a><span class="fu">sessionInfo</span>()</span>
+<span id="cb16-242"><a href="#cb16-242" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
 </code></pre></div><button title="Copy to Clipboard" class="code-copy-button" data-in-quarto-modal=""><i class="bi"></i></button></div>
 </div></div></div></div></div>
 </div> <!-- /content -->
 <footer class="footer">
   <div class="nav-footer">
     <div class="nav-footer-left">
-<p>#courses · MIT</p>
+<p>Prose: CC BY 4.0 · Code: MIT</p>
 </div>   
     <div class="nav-footer-center">
 <p><a href="../../get_started.html">Get Started</a> · <a href="../../overview.html">Overview</a> · <a href="../../schedule.html">Schedule</a> · <a href="../../cheatsheets.html">Cheatsheets</a> · <a href="../../shiny.html">Interactive apps</a> · <a href="../../appendices/research_workflow.html">Research workflow</a> · <a href="../../appendices/decision_tree.html">Decision tree</a> · <a href="../../appendices/glossary.html">Glossary</a> · <a href="../../appendices/common_errors.html">Common errors</a> · <a href="../../appendices/writing_a_report.html">Writing a report</a> · <a href="../../references.html">References</a> · <a href="../../acknowledgements.html">Acknowledgements</a> · <strong><a href="../../impressum.html">Impressum</a></strong> · <a href="mailto:58561665+r-heller@users.noreply.github.com">Kontakt</a></p>

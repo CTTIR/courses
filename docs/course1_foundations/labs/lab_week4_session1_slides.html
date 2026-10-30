@@ -6,8 +6,8 @@
 <script src="../../site_libs/quarto-html/tippy.umd.min.js"></script>
 <link href="../../site_libs/quarto-html/tippy.css" rel="stylesheet">
 <link href="../../site_libs/quarto-html/light-border.css" rel="stylesheet">
-<link href="../../site_libs/quarto-html/quarto-syntax-highlighting-dark-d0ae9245876894da5ac7e18953ecc5cc.css" rel="stylesheet" id="quarto-text-highlighting-styles"><meta charset="utf-8">
-  <meta name="generator" content="quarto-1.9.37">
+<link href="../../site_libs/quarto-html/quarto-syntax-highlighting-dark-b626d73c4c936ccc3cb08be7d45d1df6.css" rel="stylesheet" id="quarto-text-highlighting-styles"><meta charset="utf-8">
+  <meta name="generator" content="quarto-1.10.19">
 
   <meta name="author" content="R. Heller">
   <title>#courses – Week 4, Session 1 — Two-sample and paired t-tests</title>
@@ -20,10 +20,13 @@
     /* Default styles provided by pandoc.
     ** See https://pandoc.org/MANUAL.html#variables-for-html for config info.
     */
-    code{white-space: pre-wrap;}
     span.smallcaps{font-variant: small-caps;}
-    div.columns{display: flex; gap: min(4vw, 1.5em);}
-    div.column{flex: auto; overflow-x: auto;}
+    div.columns{display: flex; gap: 1.5em;}
+    div.column{flex: auto;}
+    @media screen {
+    div.columns{gap: min(4vw, 1.5em);}
+    div.column{overflow-x: auto;}
+    }
     div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
     ul.task-list{list-style: none;}
     ul.task-list li input[type="checkbox"] {
@@ -31,72 +34,6 @@
       margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
       vertical-align: middle;
     }
-    /* CSS for syntax highlighting */
-    html { -webkit-text-size-adjust: 100%; }
-    pre > code.sourceCode { white-space: pre; position: relative; }
-    pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
-    pre > code.sourceCode > span:empty { height: 1.2em; }
-    .sourceCode { overflow: visible; }
-    code.sourceCode > span { color: inherit; text-decoration: inherit; }
-    div.sourceCode { margin: 1em 0; }
-    pre.sourceCode { margin: 0; }
-    @media screen {
-    div.sourceCode { overflow: auto; }
-    }
-    @media print {
-    pre > code.sourceCode { white-space: pre-wrap; }
-    pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
-    }
-    pre.numberSource code
-      { counter-reset: source-line 0; }
-    pre.numberSource code > span
-      { position: relative; left: -4em; counter-increment: source-line; }
-    pre.numberSource code > span > a:first-child::before
-      { content: counter(source-line);
-        position: relative; left: -1em; text-align: right; vertical-align: baseline;
-        border: none; display: inline-block;
-        -webkit-touch-callout: none; -webkit-user-select: none;
-        -khtml-user-select: none; -moz-user-select: none;
-        -ms-user-select: none; user-select: none;
-        padding: 0 4px; width: 4em;
-      }
-    pre.numberSource { margin-left: 3em;  padding-left: 4px; }
-    div.sourceCode
-      { color: #f8f8f2;  }
-    @media screen {
-    pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
-    }
-    code span { color: #f8f8f2; } /* Normal */
-    code span.al { color: #f07178; } /* Alert */
-    code span.an { color: #d4d0ab; } /* Annotation */
-    code span.at { color: #00e0e0; } /* Attribute */
-    code span.bn { color: #d4d0ab; } /* BaseN */
-    code span.bu { color: #abe338; } /* BuiltIn */
-    code span.cf { color: #ffa07a; font-weight: bold; } /* ControlFlow */
-    code span.ch { color: #abe338; } /* Char */
-    code span.cn { color: #ffd700; } /* Constant */
-    code span.co { color: #f8f8f2; font-style: italic; } /* Comment */
-    code span.cv { color: #ffd700; } /* CommentVar */
-    code span.do { color: #f8f8f2; } /* Documentation */
-    code span.dt { color: #ffa07a; } /* DataType */
-    code span.dv { color: #d4d0ab; } /* DecVal */
-    code span.er { color: #f07178; text-decoration: underline; } /* Error */
-    code span.ex { color: #00e0e0; font-weight: bold; } /* Extension */
-    code span.fl { color: #d4d0ab; } /* Float */
-    code span.fu { color: #ffa07a; } /* Function */
-    code span.im { color: #abe338; } /* Import */
-    code span.in { color: #d4d0ab; } /* Information */
-    code span.kw { color: #ffa07a; font-weight: bold; } /* Keyword */
-    code span.op { color: #ffa07a; } /* Operator */
-    code span.ot { color: #00e0e0; } /* Other */
-    code span.pp { color: #dcc6e0; } /* Preprocessor */
-    code span.re { color: #00e0e0; background-color: #f8f8f2; } /* RegionMarker */
-    code span.sc { color: #abe338; } /* SpecialChar */
-    code span.ss { color: #abe338; } /* SpecialString */
-    code span.st { color: #abe338; } /* String */
-    code span.va { color: #00e0e0; } /* Variable */
-    code span.vs { color: #abe338; } /* VerbatimString */
-    code span.wa { color: #dcc6e0; } /* Warning */
   </style>
   <link rel="stylesheet" href="../../site_libs/revealjs/dist/theme/quarto-95712503ec230d592661dbfa35434f1f.css">
   <link href="../../site_libs/revealjs/plugin/quarto-line-highlight/line-highlight.css" rel="stylesheet">
@@ -205,7 +142,7 @@
 <div class="quarto-title-authors">
 <div class="quarto-title-author">
 <div class="quarto-title-author-name">
-R. Heller 
+R. Heller
 </div>
 </div>
 </div>
@@ -247,12 +184,6 @@ R. Heller
 </section>
 <section id="setup" class="slide level2">
 <h2>Setup</h2>
-<div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb1"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a></a><span class="fu">library</span>(tidyverse)</span>
-<span id="cb1-2"><a></a><span class="fu">library</span>(effectsize)</span>
-<span id="cb1-3"><a></a><span class="fu">set.seed</span>(<span class="dv">42</span>)</span>
-<span id="cb1-4"><a></a><span class="fu">theme_set</span>(<span class="fu">theme_minimal</span>(<span class="at">base_size =</span> <span class="dv">12</span>))</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
-</div>
 </section>
 <section id="hypothesis" class="slide level2">
 <h2>1. Hypothesis</h2>
@@ -268,47 +199,19 @@ R. Heller
 <section id="visualise" class="slide level2">
 <h2>2. Visualise</h2>
 <div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb2"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb2-1"><a></a>n <span class="ot">&lt;-</span> <span class="dv">40</span></span>
-<span id="cb2-2"><a></a>trt <span class="ot">&lt;-</span> <span class="fu">rnorm</span>(n, <span class="at">mean =</span> <span class="dv">135</span>, <span class="at">sd =</span> <span class="dv">12</span>)</span>
-<span id="cb2-3"><a></a>pla <span class="ot">&lt;-</span> <span class="fu">rnorm</span>(n, <span class="at">mean =</span> <span class="dv">142</span>, <span class="at">sd =</span> <span class="dv">12</span>)</span>
-<span id="cb2-4"><a></a>df_ind <span class="ot">&lt;-</span> <span class="fu">tibble</span>(</span>
-<span id="cb2-5"><a></a>  <span class="at">arm =</span> <span class="fu">rep</span>(<span class="fu">c</span>(<span class="st">"placebo"</span>, <span class="st">"treatment"</span>), <span class="at">each =</span> n),</span>
-<span id="cb2-6"><a></a>  <span class="at">sbp =</span> <span class="fu">c</span>(pla, trt)</span>
-<span id="cb2-7"><a></a>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
-</div>
-<div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb3"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb3-1"><a></a>df_ind <span class="sc">|&gt;</span></span>
-<span id="cb3-2"><a></a>  <span class="fu">ggplot</span>(<span class="fu">aes</span>(arm, sbp, <span class="at">fill =</span> arm)) <span class="sc">+</span></span>
-<span id="cb3-3"><a></a>  <span class="fu">geom_boxplot</span>(<span class="at">alpha =</span> <span class="fl">0.6</span>, <span class="at">colour =</span> <span class="st">"grey30"</span>) <span class="sc">+</span></span>
-<span id="cb3-4"><a></a>  <span class="fu">labs</span>(<span class="at">x =</span> <span class="cn">NULL</span>, <span class="at">y =</span> <span class="st">"SBP (mmHg)"</span>) <span class="sc">+</span></span>
-<span id="cb3-5"><a></a>  <span class="fu">theme</span>(<span class="at">legend.position =</span> <span class="st">"none"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output-display">
 <div>
 <figure>
-<p><img data-src="lab_week4_session1_files/figure-html/unnamed-chunk-2-1.png" width="576"></p>
+<p><img data-src="lab_week4_session1_files/figure-revealjs/unnamed-chunk-2-1.png" width="576"></p>
 </figure>
 </div>
 </div>
 </div>
 <div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb4"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb4-1"><a></a>n2 <span class="ot">&lt;-</span> <span class="dv">30</span></span>
-<span id="cb4-2"><a></a>pre  <span class="ot">&lt;-</span> <span class="fu">rnorm</span>(n2, <span class="dv">148</span>, <span class="dv">10</span>)</span>
-<span id="cb4-3"><a></a>post <span class="ot">&lt;-</span> pre <span class="sc">-</span> <span class="fu">rnorm</span>(n2, <span class="dv">5</span>, <span class="dv">7</span>)  <span class="co"># true mean drop of 5</span></span>
-<span id="cb4-4"><a></a>df_pair <span class="ot">&lt;-</span> <span class="fu">tibble</span>(<span class="at">id =</span> <span class="fu">seq_len</span>(n2), <span class="at">pre =</span> pre, <span class="at">post =</span> post) <span class="sc">|&gt;</span></span>
-<span id="cb4-5"><a></a>  <span class="fu">mutate</span>(<span class="at">delta =</span> post <span class="sc">-</span> pre)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
-</div>
-<div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb5"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb5-1"><a></a>df_pair <span class="sc">|&gt;</span></span>
-<span id="cb5-2"><a></a>  <span class="fu">pivot_longer</span>(<span class="fu">c</span>(pre, post), <span class="at">names_to =</span> <span class="st">"time"</span>, <span class="at">values_to =</span> <span class="st">"sbp"</span>) <span class="sc">|&gt;</span></span>
-<span id="cb5-3"><a></a>  <span class="fu">mutate</span>(<span class="at">time =</span> <span class="fu">factor</span>(time, <span class="at">levels =</span> <span class="fu">c</span>(<span class="st">"pre"</span>, <span class="st">"post"</span>))) <span class="sc">|&gt;</span></span>
-<span id="cb5-4"><a></a>  <span class="fu">ggplot</span>(<span class="fu">aes</span>(time, sbp, <span class="at">group =</span> id)) <span class="sc">+</span></span>
-<span id="cb5-5"><a></a>  <span class="fu">geom_line</span>(<span class="at">alpha =</span> <span class="fl">0.4</span>) <span class="sc">+</span></span>
-<span id="cb5-6"><a></a>  <span class="fu">geom_point</span>(<span class="at">alpha =</span> <span class="fl">0.6</span>) <span class="sc">+</span></span>
-<span id="cb5-7"><a></a>  <span class="fu">labs</span>(<span class="at">x =</span> <span class="cn">NULL</span>, <span class="at">y =</span> <span class="st">"SBP (mmHg)"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output-display">
 <div>
 <figure>
-<p><img data-src="lab_week4_session1_files/figure-html/unnamed-chunk-4-1.png" width="576"></p>
+<p><img data-src="lab_week4_session1_files/figure-revealjs/unnamed-chunk-4-1.png" width="576"></p>
 </figure>
 </div>
 </div>
@@ -317,56 +220,44 @@ R. Heller
 <section id="assumptions" class="slide level2">
 <h2>3. Assumptions</h2>
 <p>Independent <em>t</em>: approximate normality of the sample means; Welch’s does not require equal variances. Paired <em>t</em>: approximate normality of the within-subject differences.</p>
-<div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb6"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb6-1"><a></a>df_pair <span class="sc">|&gt;</span></span>
-<span id="cb6-2"><a></a>  <span class="fu">ggplot</span>(<span class="fu">aes</span>(<span class="at">sample =</span> delta)) <span class="sc">+</span></span>
-<span id="cb6-3"><a></a>  <span class="fu">stat_qq</span>() <span class="sc">+</span> <span class="fu">stat_qq_line</span>(<span class="at">colour =</span> <span class="st">"firebrick"</span>) <span class="sc">+</span></span>
-<span id="cb6-4"><a></a>  <span class="fu">labs</span>(<span class="at">x =</span> <span class="st">"Theoretical"</span>, <span class="at">y =</span> <span class="st">"Sample (pair differences)"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 
-</div>
-<img data-src="lab_week4_session1_files/figure-html/unnamed-chunk-5-1.png" width="480" class="r-stretch"></section>
+<img data-src="lab_week4_session1_files/figure-revealjs/unnamed-chunk-5-1.png" width="480" class="r-stretch"></section>
 <section id="conduct" class="slide level2">
 <h2>4. Conduct</h2>
 <h3 id="two-sample-welch">Two-sample (Welch)</h3>
 <div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb7"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb7-1"><a></a>tt_welch <span class="ot">&lt;-</span> <span class="fu">t.test</span>(sbp <span class="sc">~</span> arm, <span class="at">data =</span> df_ind, <span class="at">var.equal =</span> <span class="cn">FALSE</span>)</span>
-<span id="cb7-2"><a></a>tt_welch</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>
     Welch Two Sample t-test
 
 data:  sbp by arm
-t = 2.9095, df = 72.3, p-value = 0.004807
-alternative hypothesis: true difference in means between group placebo and group treatment is not equal to 0
+t = -2.9095, df = 72.3, p-value = 0.004807
+alternative hypothesis: true difference in means between group treatment and group placebo is not equal to 0
 95 percent confidence interval:
-  2.655371 14.209770
+ -14.209770  -2.655371
 sample estimates:
-  mean in group placebo mean in group treatment 
-               142.9581                134.5256 </code></pre>
+mean in group treatment   mean in group placebo 
+               134.5256                142.9581 </code></pre>
 </div>
 </div>
 <h3 id="two-sample-student-for-comparison">Two-sample Student (for comparison)</h3>
 <div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb9"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb9-1"><a></a>tt_student <span class="ot">&lt;-</span> <span class="fu">t.test</span>(sbp <span class="sc">~</span> arm, <span class="at">data =</span> df_ind, <span class="at">var.equal =</span> <span class="cn">TRUE</span>)</span>
-<span id="cb9-2"><a></a>tt_student</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>
     Two Sample t-test
 
 data:  sbp by arm
-t = 2.9095, df = 78, p-value = 0.004715
-alternative hypothesis: true difference in means between group placebo and group treatment is not equal to 0
+t = -2.9095, df = 78, p-value = 0.004715
+alternative hypothesis: true difference in means between group treatment and group placebo is not equal to 0
 95 percent confidence interval:
-  2.662545 14.202597
+ -14.202597  -2.662545
 sample estimates:
-  mean in group placebo mean in group treatment 
-               142.9581                134.5256 </code></pre>
+mean in group treatment   mean in group placebo 
+               134.5256                142.9581 </code></pre>
 </div>
 </div>
 <h3 id="paired">Paired</h3>
 <div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb11"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb11-1"><a></a>tt_paired <span class="ot">&lt;-</span> <span class="fu">t.test</span>(df_pair<span class="sc">$</span>post, df_pair<span class="sc">$</span>pre, <span class="at">paired =</span> <span class="cn">TRUE</span>)</span>
-<span id="cb11-2"><a></a>tt_paired</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>
     Paired t-test
@@ -383,21 +274,17 @@ mean difference
 </div>
 <h3 id="effect-size">Effect size</h3>
 <div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb13"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb13-1"><a></a>d_ind    <span class="ot">&lt;-</span> <span class="fu">cohens_d</span>(sbp <span class="sc">~</span> arm, <span class="at">data =</span> df_ind)</span>
-<span id="cb13-2"><a></a>g_ind    <span class="ot">&lt;-</span> <span class="fu">hedges_g</span>(sbp <span class="sc">~</span> arm, <span class="at">data =</span> df_ind)</span>
-<span id="cb13-3"><a></a>d_paired <span class="ot">&lt;-</span> <span class="fu">cohens_d</span>(df_pair<span class="sc">$</span>post, df_pair<span class="sc">$</span>pre, <span class="at">paired =</span> <span class="cn">TRUE</span>)</span>
-<span id="cb13-4"><a></a><span class="fu">list</span>(<span class="at">d_ind =</span> d_ind, <span class="at">g_ind =</span> g_ind, <span class="at">d_paired =</span> d_paired)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>$d_ind
-Cohen's d |       95% CI
-------------------------
-0.65      | [0.20, 1.10]
+Cohen's d |         95% CI
+--------------------------
+-0.65     | [-1.10, -0.20]
 
 - Estimated using pooled SD.
 $g_ind
-Hedges' g |       95% CI
-------------------------
-0.64      | [0.20, 1.09]
+Hedges' g |         95% CI
+--------------------------
+-0.64     | [-1.09, -0.20]
 
 - Estimated using pooled SD.
 $d_paired
@@ -410,7 +297,7 @@ Cohen's d |         95% CI
 <section id="concluding-statement" class="slide level2">
 <h2>5. Concluding statement</h2>
 <blockquote>
-<p><strong>Independent comparison.</strong> Mean SBP was 134.5 mmHg (SD 14.7) in the treatment arm and 143 (SD 11) in placebo. A Welch’s <em>t</em>-test gave <em>t</em>(72.3) = 2.91, <em>p</em> = 0.0048, mean difference 8.4 mmHg (95% CI -14.2 to -2.7). Cohen’s <em>d</em> = 0.65 (Hedges’ <em>g</em> = 0.64), a small-to-medium effect.</p>
+<p><strong>Independent comparison.</strong> Mean SBP was 134.5 mmHg (SD 14.7) in the treatment arm and 143 (SD 11) in placebo. A Welch’s <em>t</em>-test gave <em>t</em>(72.3) = -2.91, <em>p</em> = 0.0048, mean difference (treatment − placebo) -8.4 mmHg (95% CI -14.2 to -2.7). Cohen’s <em>d</em> = -0.65 (Hedges’ <em>g</em> = -0.64).</p>
 </blockquote>
 <blockquote>
 <p><strong>Paired comparison.</strong> The within-subject change (post − pre) had mean -3.2 mmHg (SD 7); paired <em>t</em>-test <em>t</em>(29) = -2.47, <em>p</em> = 0.019, 95% CI -5.8 to -0.6.</p>
@@ -449,19 +336,17 @@ Cohen's d |         95% CI
 <section id="session-info" class="slide level2">
 <h2>Session info</h2>
 <div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb15"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb15-1"><a></a><span class="fu">sessionInfo</span>()</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stdout">
-<pre><code>R version 4.5.2 (2025-10-31 ucrt)
-Platform: x86_64-w64-mingw32/x64
-Running under: Windows 11 x64 (build 26200)
+<pre><code>R version 4.6.1 (2026-06-24)
+Platform: aarch64-apple-darwin27.0.0
+Running under: macOS Golden Gate 27.0.1
 
 Matrix products: default
-  LAPACK version 3.12.1
+BLAS:   /opt/homebrew/Cellar/openblas/0.3.34/lib/libopenblasp-r0.3.34.dylib 
+LAPACK: /opt/homebrew/Cellar/r/4.6.1_1/lib/R/lib/libRlapack.dylib;  LAPACK version 3.12.1
 
 locale:
-[1] LC_COLLATE=English_Germany.utf8  LC_CTYPE=English_Germany.utf8   
-[3] LC_MONETARY=English_Germany.utf8 LC_NUMERIC=C                    
-[5] LC_TIME=English_Germany.utf8    
+[1] C.UTF-8/C.UTF-8/C.UTF-8/C/C.UTF-8/C.UTF-8
 
 time zone: Europe/Berlin
 tzcode source: internal
@@ -470,25 +355,23 @@ attached base packages:
 [1] stats     graphics  grDevices utils     datasets  methods   base     
 
 other attached packages:
- [1] effectsize_1.0.2 lubridate_1.9.5  forcats_1.0.1    stringr_1.6.0   
+ [1] effectsize_1.0.3 lubridate_1.9.5  forcats_1.0.1    stringr_1.6.0   
  [5] dplyr_1.2.1      purrr_1.2.2      readr_2.2.0      tidyr_1.3.2     
  [9] tibble_3.3.1     ggplot2_4.0.3    tidyverse_2.0.0 
 
 loaded via a namespace (and not attached):
- [1] sandwich_3.1-1     generics_0.1.4     stringi_1.8.7      lattice_0.22-9    
- [5] hms_1.1.4          digest_0.6.39      magrittr_2.0.4     evaluate_1.0.5    
- [9] grid_4.5.2         timechange_0.4.0   estimability_1.5.1 RColorBrewer_1.1-3
-[13] mvtnorm_1.3-7      fastmap_1.2.0      Matrix_1.7-5       jsonlite_2.0.0    
-[17] survival_3.8-6     multcomp_1.4-30    scales_1.4.0       TH.data_1.1-5     
-[21] codetools_0.2-20   cli_3.6.6          rlang_1.2.0        splines_4.5.2     
-[25] withr_3.0.2        yaml_2.3.12        otel_0.2.0         tools_4.5.2       
-[29] datawizard_1.3.1   tzdb_0.5.0         coda_0.19-4.1      bayestestR_0.17.0 
-[33] vctrs_0.7.3        R6_2.6.1           zoo_1.8-15         lifecycle_1.0.5   
-[37] emmeans_2.0.3      htmlwidgets_1.6.4  MASS_7.3-65        insight_1.5.0     
-[41] pkgconfig_2.0.3    pillar_1.11.1      gtable_0.3.6       glue_1.8.1        
-[45] xfun_0.57          tidyselect_1.2.1   parameters_0.28.3  knitr_1.51        
-[49] xtable_1.8-8       farver_2.1.2       htmltools_0.5.9    labeling_0.4.3    
-[53] rmarkdown_2.31     compiler_4.5.2     S7_0.2.2          </code></pre>
+ [1] generics_0.1.4     stringi_1.8.9      lattice_0.22-9     hms_1.1.4         
+ [5] digest_0.6.39      magrittr_2.0.5     evaluate_1.0.5     grid_4.6.1        
+ [9] timechange_0.4.0   estimability_2.0.0 RColorBrewer_1.1-3 mvtnorm_1.4-2     
+[13] fastmap_1.2.0      jsonlite_2.0.0     scales_1.4.0       cli_3.6.6         
+[17] rlang_1.3.0        withr_3.0.3        yaml_2.3.12        otel_0.2.0        
+[21] tools_4.6.1        datawizard_1.4.1   tzdb_0.5.0         coda_0.19-4.1     
+[25] bayestestR_0.20.0  vctrs_0.7.3        R6_2.6.1           lifecycle_1.0.5   
+[29] emmeans_2.0.4      insight_1.6.1      pkgconfig_2.0.3    pillar_1.11.1     
+[33] gtable_0.3.6       glue_1.8.1         xfun_0.62          tidyselect_1.2.1  
+[37] parameters_0.30.0  knitr_1.52         farver_2.1.2       xtable_1.8-8      
+[41] htmltools_0.5.9    labeling_0.4.3     rmarkdown_2.32     compiler_4.6.1    
+[45] S7_0.2.2          </code></pre>
 </div>
 </div>
 
@@ -709,6 +592,44 @@ loaded via a namespace (and not attached):
         ]
       });
     </script>
+    
+    <script>
+      // htmlwidgets need to know to resize themselves when slides are shown/hidden.
+      // Fire the "slideenter" event (handled by htmlwidgets.js) when the current
+      // slide changes (different for each slide format).
+      (function () {
+        // dispatch for htmlwidgets
+        function fireSlideEnter() {
+          const event = window.document.createEvent("Event");
+          event.initEvent("slideenter", true, true);
+          window.document.dispatchEvent(event);
+        }
+
+        function fireSlideChanged(previousSlide, currentSlide) {
+          fireSlideEnter();
+
+          // dispatch for shiny
+          if (window.jQuery) {
+            if (previousSlide) {
+              window.jQuery(previousSlide).trigger("hidden");
+            }
+            if (currentSlide) {
+              window.jQuery(currentSlide).trigger("shown");
+            }
+          }
+        }
+
+        // hookup for slidy
+        if (window.w3c_slidy) {
+          window.w3c_slidy.add_observer(function (slide_num) {
+            // slide_num starts at position 1
+            fireSlideChanged(null, w3c_slidy.slides[slide_num - 1]);
+          });
+        }
+
+      })();
+    </script>
+
     <script id="quarto-html-after-body" type="application/javascript">
       window.document.addEventListener("DOMContentLoaded", function (event) {
         const tabsets =  window.document.querySelectorAll(".panel-tabset-tabby")

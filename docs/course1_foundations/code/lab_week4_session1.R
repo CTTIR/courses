@@ -16,7 +16,8 @@ theme_set(theme_minimal(base_size = 12))
 n <- 40
 trt <- rnorm(n, 135, 12)
 pla <- rnorm(n, 142, 12)
-df_ind <- tibble(arm = rep(c("placebo", "treatment"), each = n),
+df_ind <- tibble(arm = factor(rep(c("placebo", "treatment"), each = n),
+                              levels = c("treatment", "placebo")),
                  sbp = c(pla, trt))
 
 n2 <- 30
@@ -46,8 +47,8 @@ print(tt_welch)
 print(tt_paired)
 
 # --- 6. Report -------------------------------------------------
-cat(sprintf("Welch diff = %.1f, p = %.3f, d = %.2f\n",
-            diff(rev(tt_welch$estimate)),
+cat(sprintf("Welch treatment-minus-placebo diff = %.1f, p = %.3f, d = %.2f\n",
+            unname(tt_welch$estimate[1] - tt_welch$estimate[2]),
             tt_welch$p.value,
             d_ind$Cohens_d))
 cat(sprintf("Paired delta = %.1f, p = %.3f, d = %.2f\n",

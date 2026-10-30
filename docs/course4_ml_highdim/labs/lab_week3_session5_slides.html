@@ -6,8 +6,8 @@
 <script src="../../site_libs/quarto-html/tippy.umd.min.js"></script>
 <link href="../../site_libs/quarto-html/tippy.css" rel="stylesheet">
 <link href="../../site_libs/quarto-html/light-border.css" rel="stylesheet">
-<link href="../../site_libs/quarto-html/quarto-syntax-highlighting-dark-d0ae9245876894da5ac7e18953ecc5cc.css" rel="stylesheet" id="quarto-text-highlighting-styles"><meta charset="utf-8">
-  <meta name="generator" content="quarto-1.9.37">
+<link href="../../site_libs/quarto-html/quarto-syntax-highlighting-dark-b626d73c4c936ccc3cb08be7d45d1df6.css" rel="stylesheet" id="quarto-text-highlighting-styles"><meta charset="utf-8">
+  <meta name="generator" content="quarto-1.10.19">
 
   <meta name="author" content="R. Heller">
   <title>#courses – Week 3, Session 5 — Time-dependent Brier, IPA, external validation</title>
@@ -20,10 +20,13 @@
     /* Default styles provided by pandoc.
     ** See https://pandoc.org/MANUAL.html#variables-for-html for config info.
     */
-    code{white-space: pre-wrap;}
     span.smallcaps{font-variant: small-caps;}
-    div.columns{display: flex; gap: min(4vw, 1.5em);}
-    div.column{flex: auto; overflow-x: auto;}
+    div.columns{display: flex; gap: 1.5em;}
+    div.column{flex: auto;}
+    @media screen {
+    div.columns{gap: min(4vw, 1.5em);}
+    div.column{overflow-x: auto;}
+    }
     div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
     ul.task-list{list-style: none;}
     ul.task-list li input[type="checkbox"] {
@@ -31,72 +34,6 @@
       margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
       vertical-align: middle;
     }
-    /* CSS for syntax highlighting */
-    html { -webkit-text-size-adjust: 100%; }
-    pre > code.sourceCode { white-space: pre; position: relative; }
-    pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
-    pre > code.sourceCode > span:empty { height: 1.2em; }
-    .sourceCode { overflow: visible; }
-    code.sourceCode > span { color: inherit; text-decoration: inherit; }
-    div.sourceCode { margin: 1em 0; }
-    pre.sourceCode { margin: 0; }
-    @media screen {
-    div.sourceCode { overflow: auto; }
-    }
-    @media print {
-    pre > code.sourceCode { white-space: pre-wrap; }
-    pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
-    }
-    pre.numberSource code
-      { counter-reset: source-line 0; }
-    pre.numberSource code > span
-      { position: relative; left: -4em; counter-increment: source-line; }
-    pre.numberSource code > span > a:first-child::before
-      { content: counter(source-line);
-        position: relative; left: -1em; text-align: right; vertical-align: baseline;
-        border: none; display: inline-block;
-        -webkit-touch-callout: none; -webkit-user-select: none;
-        -khtml-user-select: none; -moz-user-select: none;
-        -ms-user-select: none; user-select: none;
-        padding: 0 4px; width: 4em;
-      }
-    pre.numberSource { margin-left: 3em;  padding-left: 4px; }
-    div.sourceCode
-      { color: #f8f8f2;  }
-    @media screen {
-    pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
-    }
-    code span { color: #f8f8f2; } /* Normal */
-    code span.al { color: #f07178; } /* Alert */
-    code span.an { color: #d4d0ab; } /* Annotation */
-    code span.at { color: #00e0e0; } /* Attribute */
-    code span.bn { color: #d4d0ab; } /* BaseN */
-    code span.bu { color: #abe338; } /* BuiltIn */
-    code span.cf { color: #ffa07a; font-weight: bold; } /* ControlFlow */
-    code span.ch { color: #abe338; } /* Char */
-    code span.cn { color: #ffd700; } /* Constant */
-    code span.co { color: #f8f8f2; font-style: italic; } /* Comment */
-    code span.cv { color: #ffd700; } /* CommentVar */
-    code span.do { color: #f8f8f2; } /* Documentation */
-    code span.dt { color: #ffa07a; } /* DataType */
-    code span.dv { color: #d4d0ab; } /* DecVal */
-    code span.er { color: #f07178; text-decoration: underline; } /* Error */
-    code span.ex { color: #00e0e0; font-weight: bold; } /* Extension */
-    code span.fl { color: #d4d0ab; } /* Float */
-    code span.fu { color: #ffa07a; } /* Function */
-    code span.im { color: #abe338; } /* Import */
-    code span.in { color: #d4d0ab; } /* Information */
-    code span.kw { color: #ffa07a; font-weight: bold; } /* Keyword */
-    code span.op { color: #ffa07a; } /* Operator */
-    code span.ot { color: #00e0e0; } /* Other */
-    code span.pp { color: #dcc6e0; } /* Preprocessor */
-    code span.re { color: #00e0e0; background-color: #f8f8f2; } /* RegionMarker */
-    code span.sc { color: #abe338; } /* SpecialChar */
-    code span.ss { color: #abe338; } /* SpecialString */
-    code span.st { color: #abe338; } /* String */
-    code span.va { color: #00e0e0; } /* Variable */
-    code span.vs { color: #abe338; } /* VerbatimString */
-    code span.wa { color: #dcc6e0; } /* Warning */
   </style>
   <link rel="stylesheet" href="../../site_libs/revealjs/dist/theme/quarto-95712503ec230d592661dbfa35434f1f.css">
   <link href="../../site_libs/revealjs/plugin/quarto-line-highlight/line-highlight.css" rel="stylesheet">
@@ -205,7 +142,7 @@
 <div class="quarto-title-authors">
 <div class="quarto-title-author">
 <div class="quarto-title-author-name">
-R. Heller 
+R. Heller
 </div>
 </div>
 </div>
@@ -242,18 +179,11 @@ R. Heller
 <section id="background" class="slide level2">
 <h2>Background</h2>
 <p>Validation is the point at which a prediction model either earns its keep or does not. Internal validation — CV or the bootstrap on the training data — controls optimism from the fitting step. External validation applies the fixed model to an independent cohort and measures discrimination, calibration, and clinical utility. Time- dependent Brier scores and IPA (1 − Brier/Brier_null) summarise the cost of a probabilistic prediction at a given horizon, combining discrimination and calibration into a single number per time.</p>
-<p>Real biomedical models routinely lose performance on external cohorts. Distribution shift (different age, comorbidities, measurement protocols) is the usual reason; miscalibration is the usual failure mode. This lab simulates both and shows the diagnostic signature each leaves behind.</p>
+<p>Real biomedical models routinely lose performance on external cohorts. Changes in case mix, measurement, baseline risk, or predictor effects can affect performance in different ways. This lab changes the covariate distribution while keeping the conditional event model fixed.</p>
 <p>TRIPOD-AI asks you to report all three — discrimination, calibration, clinical utility — on both internal and external data, and to disclose the shift between them. A reader who only sees AUC on internal data has no basis for deploying the model.</p>
 </section>
 <section id="setup" class="slide level2">
 <h2>Setup</h2>
-<div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb1"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a></a><span class="fu">library</span>(tidyverse)</span>
-<span id="cb1-2"><a></a><span class="fu">library</span>(survival)</span>
-<span id="cb1-3"><a></a><span class="fu">library</span>(pROC)</span>
-<span id="cb1-4"><a></a><span class="fu">set.seed</span>(<span class="dv">42</span>)</span>
-<span id="cb1-5"><a></a><span class="fu">theme_set</span>(<span class="fu">theme_minimal</span>(<span class="at">base_size =</span> <span class="dv">12</span>))</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
-</div>
 </section>
 <section id="hypothesis" class="slide level2">
 <h2>1. Hypothesis</h2>
@@ -261,97 +191,31 @@ R. Heller
 </section>
 <section id="visualise" class="slide level2">
 <h2>2. Visualise</h2>
-<div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb2"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb2-1"><a></a>make_cohort <span class="ot">&lt;-</span> <span class="cf">function</span>(n, <span class="at">mu_x =</span> <span class="dv">0</span>, <span class="at">beta =</span> <span class="fl">0.6</span>) {</span>
-<span id="cb2-2"><a></a>  x <span class="ot">&lt;-</span> <span class="fu">rnorm</span>(n, mu_x)</span>
-<span id="cb2-3"><a></a>  lp <span class="ot">&lt;-</span> beta <span class="sc">*</span> x</span>
-<span id="cb2-4"><a></a>  t <span class="ot">&lt;-</span> <span class="fu">rexp</span>(n, <span class="at">rate =</span> <span class="fu">exp</span>(lp <span class="sc">-</span> <span class="dv">1</span>))</span>
-<span id="cb2-5"><a></a>  c <span class="ot">&lt;-</span> <span class="fu">rexp</span>(n, <span class="at">rate =</span> <span class="fl">0.1</span>)</span>
-<span id="cb2-6"><a></a>  time <span class="ot">&lt;-</span> <span class="fu">pmin</span>(t, c)</span>
-<span id="cb2-7"><a></a>  event <span class="ot">&lt;-</span> <span class="fu">as.integer</span>(t <span class="sc">&lt;=</span> c)</span>
-<span id="cb2-8"><a></a>  <span class="fu">tibble</span>(<span class="at">x =</span> x, <span class="at">time =</span> time, <span class="at">event =</span> event)</span>
-<span id="cb2-9"><a></a>}</span>
-<span id="cb2-10"><a></a>dev  <span class="ot">&lt;-</span> <span class="fu">make_cohort</span>(<span class="dv">500</span>, <span class="at">mu_x =</span> <span class="dv">0</span>)</span>
-<span id="cb2-11"><a></a>ext  <span class="ot">&lt;-</span> <span class="fu">make_cohort</span>(<span class="dv">500</span>, <span class="at">mu_x =</span> <span class="fl">1.0</span>)   <span class="co"># distribution shift</span></span>
-<span id="cb2-12"><a></a><span class="fu">bind_rows</span>(dev <span class="sc">|&gt;</span> <span class="fu">mutate</span>(<span class="at">cohort =</span> <span class="st">"dev"</span>),</span>
-<span id="cb2-13"><a></a>          ext <span class="sc">|&gt;</span> <span class="fu">mutate</span>(<span class="at">cohort =</span> <span class="st">"ext"</span>)) <span class="sc">|&gt;</span></span>
-<span id="cb2-14"><a></a>  <span class="fu">ggplot</span>(<span class="fu">aes</span>(x, <span class="at">fill =</span> cohort)) <span class="sc">+</span></span>
-<span id="cb2-15"><a></a>  <span class="fu">geom_histogram</span>(<span class="at">bins =</span> <span class="dv">30</span>, <span class="at">alpha =</span> <span class="fl">0.7</span>, <span class="at">position =</span> <span class="st">"identity"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 
-</div>
-<img data-src="lab_week3_session5_files/figure-html/unnamed-chunk-1-1.png" width="672" class="r-stretch"></section>
+<img data-src="lab_week3_session5_files/figure-revealjs/unnamed-chunk-1-1.png" width="960" class="r-stretch"></section>
 <section id="assumptions" class="slide level2">
 <h2>3. Assumptions</h2>
-<p>Independent right censoring; Cox proportional hazards in the development cohort; no time-varying covariates.</p>
+<p>Censoring is independent of both event time and covariates in this simulation. We use marginal inverse-probability-of-censoring weights (IPCW), require positive censoring survival at the horizon, assume Cox proportional hazards, and use no time-varying covariates. Subjects censored before the horizon have unknown outcomes and are not coded as event-free.</p>
 </section>
 <section id="conduct" class="slide level2">
 <h2>4. Conduct</h2>
 <p>Fit on dev; predict survival at a fixed horizon on both cohorts.</p>
 <div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb3"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb3-1"><a></a>fit <span class="ot">&lt;-</span> <span class="fu">coxph</span>(<span class="fu">Surv</span>(time, event) <span class="sc">~</span> x, <span class="at">data =</span> dev)</span>
-<span id="cb3-2"><a></a>horizon <span class="ot">&lt;-</span> <span class="dv">3</span></span>
-<span id="cb3-3"><a></a></span>
-<span id="cb3-4"><a></a>predict_surv <span class="ot">&lt;-</span> <span class="cf">function</span>(fit, newdata, t) {</span>
-<span id="cb3-5"><a></a>  bh <span class="ot">&lt;-</span> <span class="fu">basehaz</span>(fit, <span class="at">centered =</span> <span class="cn">FALSE</span>)</span>
-<span id="cb3-6"><a></a>  H0 <span class="ot">&lt;-</span> <span class="fu">approx</span>(bh<span class="sc">$</span>time, bh<span class="sc">$</span>hazard, <span class="at">xout =</span> t, <span class="at">rule =</span> <span class="dv">2</span>)<span class="sc">$</span>y</span>
-<span id="cb3-7"><a></a>  lp <span class="ot">&lt;-</span> <span class="fu">predict</span>(fit, <span class="at">newdata =</span> newdata, <span class="at">type =</span> <span class="st">"lp"</span>)</span>
-<span id="cb3-8"><a></a>  <span class="fu">exp</span>(<span class="sc">-</span>H0 <span class="sc">*</span> <span class="fu">exp</span>(lp))</span>
-<span id="cb3-9"><a></a>}</span>
-<span id="cb3-10"><a></a></span>
-<span id="cb3-11"><a></a>s_dev <span class="ot">&lt;-</span> <span class="fu">predict_surv</span>(fit, dev, horizon)</span>
-<span id="cb3-12"><a></a>s_ext <span class="ot">&lt;-</span> <span class="fu">predict_surv</span>(fit, ext, horizon)</span>
-<span id="cb3-13"><a></a></span>
-<span id="cb3-14"><a></a><span class="co"># Observed indicator (for simple Brier w/out censoring at horizon)</span></span>
-<span id="cb3-15"><a></a>obs_dev <span class="ot">&lt;-</span> dev<span class="sc">$</span>event <span class="sc">==</span> <span class="dv">1</span> <span class="sc">&amp;</span> dev<span class="sc">$</span>time <span class="sc">&lt;=</span> horizon</span>
-<span id="cb3-16"><a></a>obs_ext <span class="ot">&lt;-</span> ext<span class="sc">$</span>event <span class="sc">==</span> <span class="dv">1</span> <span class="sc">&amp;</span> ext<span class="sc">$</span>time <span class="sc">&lt;=</span> horizon</span>
-<span id="cb3-17"><a></a></span>
-<span id="cb3-18"><a></a>brier <span class="ot">&lt;-</span> <span class="cf">function</span>(p_event, obs) <span class="fu">mean</span>((p_event <span class="sc">-</span> obs)<span class="sc">^</span><span class="dv">2</span>)</span>
-<span id="cb3-19"><a></a>brier_null <span class="ot">&lt;-</span> <span class="cf">function</span>(obs) <span class="fu">mean</span>((<span class="fu">mean</span>(obs) <span class="sc">-</span> obs)<span class="sc">^</span><span class="dv">2</span>)</span>
-<span id="cb3-20"><a></a>b_dev <span class="ot">&lt;-</span> <span class="fu">brier</span>(<span class="dv">1</span> <span class="sc">-</span> s_dev, obs_dev); b0_dev <span class="ot">&lt;-</span> <span class="fu">brier_null</span>(obs_dev)</span>
-<span id="cb3-21"><a></a>b_ext <span class="ot">&lt;-</span> <span class="fu">brier</span>(<span class="dv">1</span> <span class="sc">-</span> s_ext, obs_ext); b0_ext <span class="ot">&lt;-</span> <span class="fu">brier_null</span>(obs_ext)</span>
-<span id="cb3-22"><a></a>ipa_dev <span class="ot">&lt;-</span> <span class="dv">1</span> <span class="sc">-</span> b_dev <span class="sc">/</span> b0_dev</span>
-<span id="cb3-23"><a></a>ipa_ext <span class="ot">&lt;-</span> <span class="dv">1</span> <span class="sc">-</span> b_ext <span class="sc">/</span> b0_ext</span>
-<span id="cb3-24"><a></a></span>
-<span id="cb3-25"><a></a>auc_dev <span class="ot">&lt;-</span> <span class="fu">as.numeric</span>(<span class="fu">auc</span>(<span class="fu">roc</span>(obs_dev, <span class="dv">1</span> <span class="sc">-</span> s_dev, <span class="at">quiet =</span> <span class="cn">TRUE</span>)))</span>
-<span id="cb3-26"><a></a>auc_ext <span class="ot">&lt;-</span> <span class="fu">as.numeric</span>(<span class="fu">auc</span>(<span class="fu">roc</span>(obs_ext, <span class="dv">1</span> <span class="sc">-</span> s_ext, <span class="at">quiet =</span> <span class="cn">TRUE</span>)))</span>
-<span id="cb3-27"><a></a></span>
-<span id="cb3-28"><a></a><span class="fu">tibble</span>(<span class="at">cohort =</span> <span class="fu">c</span>(<span class="st">"dev"</span>, <span class="st">"ext"</span>),</span>
-<span id="cb3-29"><a></a>       <span class="at">auc =</span> <span class="fu">c</span>(auc_dev, auc_ext),</span>
-<span id="cb3-30"><a></a>       <span class="at">brier =</span> <span class="fu">c</span>(b_dev, b_ext),</span>
-<span id="cb3-31"><a></a>       <span class="at">ipa  =</span> <span class="fu">c</span>(ipa_dev, ipa_ext))</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stdout">
-<pre><code># A tibble: 2 × 4
-  cohort   auc brier    ipa
-  &lt;chr&gt;  &lt;dbl&gt; &lt;dbl&gt;  &lt;dbl&gt;
-1 dev    0.712 0.218 0.107 
-2 ext    0.689 0.186 0.0405</code></pre>
+<pre><code>                           auc     brier       ipa
+development_apparent 0.7606899 0.1909777 0.1791146
+external             0.7399078 0.1375266 0.1099784</code></pre>
 </div>
 </div>
 <p>A calibration plot at the horizon.</p>
-<div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb5"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb5-1"><a></a>mk_cal <span class="ot">&lt;-</span> <span class="cf">function</span>(p, y, lab) {</span>
-<span id="cb5-2"><a></a>  <span class="fu">tibble</span>(<span class="at">p =</span> p, <span class="at">y =</span> y, <span class="at">cohort =</span> lab) <span class="sc">|&gt;</span></span>
-<span id="cb5-3"><a></a>    <span class="fu">mutate</span>(<span class="at">bin =</span> <span class="fu">cut</span>(p, <span class="fu">quantile</span>(p, <span class="fu">seq</span>(<span class="dv">0</span>, <span class="dv">1</span>, <span class="at">by =</span> <span class="fl">0.1</span>)),</span>
-<span id="cb5-4"><a></a>                     <span class="at">include.lowest =</span> <span class="cn">TRUE</span>)) <span class="sc">|&gt;</span></span>
-<span id="cb5-5"><a></a>    <span class="fu">group_by</span>(cohort, bin) <span class="sc">|&gt;</span></span>
-<span id="cb5-6"><a></a>    <span class="fu">summarise</span>(<span class="at">mean_pred =</span> <span class="fu">mean</span>(p), <span class="at">obs =</span> <span class="fu">mean</span>(y), <span class="at">.groups =</span> <span class="st">"drop"</span>)</span>
-<span id="cb5-7"><a></a>}</span>
-<span id="cb5-8"><a></a><span class="fu">bind_rows</span>(<span class="fu">mk_cal</span>(<span class="dv">1</span> <span class="sc">-</span> s_dev, obs_dev, <span class="st">"dev"</span>),</span>
-<span id="cb5-9"><a></a>          <span class="fu">mk_cal</span>(<span class="dv">1</span> <span class="sc">-</span> s_ext, obs_ext, <span class="st">"ext"</span>)) <span class="sc">|&gt;</span></span>
-<span id="cb5-10"><a></a>  <span class="fu">ggplot</span>(<span class="fu">aes</span>(mean_pred, obs, <span class="at">colour =</span> cohort)) <span class="sc">+</span></span>
-<span id="cb5-11"><a></a>  <span class="fu">geom_point</span>() <span class="sc">+</span> <span class="fu">geom_line</span>() <span class="sc">+</span></span>
-<span id="cb5-12"><a></a>  <span class="fu">geom_abline</span>(<span class="at">slope =</span> <span class="dv">1</span>, <span class="at">intercept =</span> <span class="dv">0</span>, <span class="at">colour =</span> <span class="st">"grey50"</span>) <span class="sc">+</span></span>
-<span id="cb5-13"><a></a>  <span class="fu">labs</span>(<span class="at">x =</span> <span class="st">"predicted event prob at horizon"</span>,</span>
-<span id="cb5-14"><a></a>       <span class="at">y =</span> <span class="st">"observed event proportion"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 
-</div>
-<img data-src="lab_week3_session5_files/figure-html/unnamed-chunk-3-1.png" width="672" class="r-stretch"></section>
+<img data-src="lab_week3_session5_files/figure-revealjs/unnamed-chunk-3-1.png" width="960" class="r-stretch"></section>
 <section id="concluding-statement" class="slide level2">
 <h2>5. Concluding statement</h2>
 <blockquote>
-<p>On a simulated external cohort with shifted covariate distribution, a Cox model fit on the development cohort retained discrimination (AUC 0.69) but lost calibration, with IPA falling from 0.11 (development) to 0.04 (external). The calibration plot showed systematic over-prediction in the shifted cohort.</p>
+<p>At horizon 3, the independent simulated external cohort had cumulative/dynamic AUC 0.74, IPCW Brier score 0.138, and IPA 0.11. Apparent development values were AUC 0.76, Brier 0.191, and IPA 0.18. Development estimates reuse training data and therefore do not constitute internal validation.</p>
 </blockquote>
-<p>Distribution shift does not always show up in AUC; it often shows up first in calibration. Reporting Brier/IPA alongside AUC catches this failure mode.</p>
+<p>Only the distribution of X changes here; the conditional event-time model is unchanged. Such covariate shift need not cause miscalibration. Brier, AUC, and the cohort-specific null model used for IPA may change with case mix even when predictions remain calibrated. The grouped calibration plot is descriptive and has sampling uncertainty; it does not establish a systematic direction of error in every simulation.</p>
 <aside class="notes">
 <p>Mention that recalibration (update the baseline hazard or the intercept of a logistic model) often fixes calibration without retraining the whole model.</p>
 <style type="text/css">
@@ -377,6 +241,7 @@ R. Heller
 <section id="further-reading" class="slide level2">
 <h2>Further reading</h2>
 <ul>
+<li>Graf E, Schmoor C, Sauerbrei W, Schumacher M (1999), <a href="https://pubmed.ncbi.nlm.nih.gov/10474158/">Assessment and comparison of prognostic classification schemes for survival data</a>.</li>
 <li>Kattan MW, Gerds TA (2018), <em>The index of prediction accuracy: an intuitive measure useful for evaluating risk prediction models</em>.</li>
 <li>Steyerberg EW, <em>Clinical Prediction Models</em>, ch.&nbsp;15–17.</li>
 </ul>
@@ -384,19 +249,17 @@ R. Heller
 <section id="session-info" class="slide level2">
 <h2>Session info</h2>
 <div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb6"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb6-1"><a></a><span class="fu">sessionInfo</span>()</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stdout">
-<pre><code>R version 4.5.2 (2025-10-31 ucrt)
-Platform: x86_64-w64-mingw32/x64
-Running under: Windows 11 x64 (build 26200)
+<pre><code>R version 4.6.1 (2026-06-24)
+Platform: aarch64-apple-darwin27.0.0
+Running under: macOS Golden Gate 27.0.1
 
 Matrix products: default
-  LAPACK version 3.12.1
+BLAS:   /opt/homebrew/Cellar/openblas/0.3.34/lib/libopenblasp-r0.3.34.dylib 
+LAPACK: /opt/homebrew/Cellar/r/4.6.1_1/lib/R/lib/libRlapack.dylib;  LAPACK version 3.12.1
 
 locale:
-[1] LC_COLLATE=English_Germany.utf8  LC_CTYPE=English_Germany.utf8   
-[3] LC_MONETARY=English_Germany.utf8 LC_NUMERIC=C                    
-[5] LC_TIME=English_Germany.utf8    
+[1] C.UTF-8/C.UTF-8/C.UTF-8/C/C.UTF-8/C.UTF-8
 
 time zone: Europe/Berlin
 tzcode source: internal
@@ -405,22 +268,21 @@ attached base packages:
 [1] stats     graphics  grDevices utils     datasets  methods   base     
 
 other attached packages:
- [1] pROC_1.19.0.1   survival_3.8-6  lubridate_1.9.5 forcats_1.0.1  
+ [1] pROC_1.19.1     survival_3.8-6  lubridate_1.9.5 forcats_1.0.1  
  [5] stringr_1.6.0   dplyr_1.2.1     purrr_1.2.2     readr_2.2.0    
  [9] tidyr_1.3.2     tibble_3.3.1    ggplot2_4.0.3   tidyverse_2.0.0
 
 loaded via a namespace (and not attached):
- [1] Matrix_1.7-5       gtable_0.3.6       jsonlite_2.0.0     compiler_4.5.2    
- [5] Rcpp_1.1.1-1.1     tidyselect_1.2.1   splines_4.5.2      scales_1.4.0      
+ [1] Matrix_1.7-5       gtable_0.3.6       jsonlite_2.0.0     compiler_4.6.1    
+ [5] Rcpp_1.1.2         tidyselect_1.2.1   splines_4.6.1      scales_1.4.0      
  [9] yaml_2.3.12        fastmap_1.2.0      lattice_0.22-9     R6_2.6.1          
-[13] labeling_0.4.3     generics_0.1.4     knitr_1.51         htmlwidgets_1.6.4 
-[17] pillar_1.11.1      RColorBrewer_1.1-3 tzdb_0.5.0         rlang_1.2.0       
-[21] utf8_1.2.6         stringi_1.8.7      xfun_0.57          S7_0.2.2          
-[25] otel_0.2.0         timechange_0.4.0   cli_3.6.6          withr_3.0.2       
-[29] magrittr_2.0.4     digest_0.6.39      grid_4.5.2         hms_1.1.4         
-[33] lifecycle_1.0.5    vctrs_0.7.3        evaluate_1.0.5     glue_1.8.1        
-[37] farver_2.1.2       rmarkdown_2.31     tools_4.5.2        pkgconfig_2.0.3   
-[41] htmltools_0.5.9   </code></pre>
+[13] labeling_0.4.3     generics_0.1.4     knitr_1.52         pillar_1.11.1     
+[17] RColorBrewer_1.1-3 tzdb_0.5.0         rlang_1.3.0        stringi_1.8.9     
+[21] xfun_0.62          S7_0.2.2           otel_0.2.0         timechange_0.4.0  
+[25] cli_3.6.6          withr_3.0.3        magrittr_2.0.5     digest_0.6.39     
+[29] grid_4.6.1         hms_1.1.4          lifecycle_1.0.5    vctrs_0.7.3       
+[33] evaluate_1.0.5     glue_1.8.1         farver_2.1.2       rmarkdown_2.32    
+[37] tools_4.6.1        pkgconfig_2.0.3    htmltools_0.5.9   </code></pre>
 </div>
 </div>
 
@@ -641,6 +503,44 @@ loaded via a namespace (and not attached):
         ]
       });
     </script>
+    
+    <script>
+      // htmlwidgets need to know to resize themselves when slides are shown/hidden.
+      // Fire the "slideenter" event (handled by htmlwidgets.js) when the current
+      // slide changes (different for each slide format).
+      (function () {
+        // dispatch for htmlwidgets
+        function fireSlideEnter() {
+          const event = window.document.createEvent("Event");
+          event.initEvent("slideenter", true, true);
+          window.document.dispatchEvent(event);
+        }
+
+        function fireSlideChanged(previousSlide, currentSlide) {
+          fireSlideEnter();
+
+          // dispatch for shiny
+          if (window.jQuery) {
+            if (previousSlide) {
+              window.jQuery(previousSlide).trigger("hidden");
+            }
+            if (currentSlide) {
+              window.jQuery(currentSlide).trigger("shown");
+            }
+          }
+        }
+
+        // hookup for slidy
+        if (window.w3c_slidy) {
+          window.w3c_slidy.add_observer(function (slide_num) {
+            // slide_num starts at position 1
+            fireSlideChanged(null, w3c_slidy.slides[slide_num - 1]);
+          });
+        }
+
+      })();
+    </script>
+
     <script id="quarto-html-after-body" type="application/javascript">
       window.document.addEventListener("DOMContentLoaded", function (event) {
         const tabsets =  window.document.querySelectorAll(".panel-tabset-tabby")

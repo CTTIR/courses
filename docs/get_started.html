@@ -2,7 +2,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
 
 <meta charset="utf-8">
-<meta name="generator" content="quarto-1.9.37">
+<meta name="generator" content="quarto-1.10.19">
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
@@ -12,10 +12,13 @@
 /* Default styles provided by pandoc.
 ** See https://pandoc.org/MANUAL.html#variables-for-html for config info.
 */
-code{white-space: pre-wrap;}
 span.smallcaps{font-variant: small-caps;}
-div.columns{display: flex; gap: min(4vw, 1.5em);}
-div.column{flex: auto; overflow-x: auto;}
+div.columns{display: flex; gap: 1.5em;}
+div.column{flex: auto;}
+@media screen {
+div.columns{gap: min(4vw, 1.5em);}
+div.column{overflow-x: auto;}
+}
 div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
 ul.task-list{list-style: none;}
 ul.task-list li input[type="checkbox"] {
@@ -70,12 +73,12 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <script src="site_libs/quarto-html/tippy.umd.min.js"></script>
 <script src="site_libs/quarto-html/anchor.min.js"></script>
 <link href="site_libs/quarto-html/tippy.css" rel="stylesheet">
-<link href="site_libs/quarto-html/quarto-syntax-highlighting-2065f9e58f6345017599ef1c45dc3d4f.css" rel="stylesheet" class="quarto-color-scheme" id="quarto-text-highlighting-styles">
-<link href="site_libs/quarto-html/quarto-syntax-highlighting-dark-ced54966b0e53f059c291d5781927a30.css" rel="stylesheet" class="quarto-color-scheme quarto-color-alternate" id="quarto-text-highlighting-styles">
+<link href="site_libs/quarto-html/quarto-syntax-highlighting-9f3547545508946eee83ef8b606cbadf.css" rel="stylesheet" class="quarto-color-scheme" id="quarto-text-highlighting-styles">
+<link href="site_libs/quarto-html/quarto-syntax-highlighting-dark-8d43248e80c6749424940840481457b2.css" rel="stylesheet" class="quarto-color-scheme quarto-color-alternate" id="quarto-text-highlighting-styles">
 <script src="site_libs/bootstrap/bootstrap.min.js"></script>
 <link href="site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
-<link href="site_libs/bootstrap/bootstrap-e6d3843e299d450790cfb48988d4232e.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme" id="quarto-bootstrap" data-mode="light">
-<link href="site_libs/bootstrap/bootstrap-dark-a84e9e0d3bdc903e291dd8ca38ce98a5.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme quarto-color-alternate" id="quarto-bootstrap" data-mode="dark">
+<link href="site_libs/bootstrap/bootstrap-0c1962fc29c4e87f8b37717c07588c31.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme" id="quarto-bootstrap" data-mode="light">
+<link href="site_libs/bootstrap/bootstrap-dark-33ee418c30da5be27be819967c4cb66e.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme quarto-color-alternate" id="quarto-bootstrap" data-mode="dark">
 <script id="quarto-search-options" type="application/json">{
   "language": {
     "search-no-results-text": "No results",
@@ -92,9 +95,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   }
 }</script>
 <script defer="" data-domain="cttir.github.io/courses" src="https://analytics.hellebo.de/js/script.file-downloads.outbound-links.js"></script>
-
 <script>window.plausible = window.plausible || function() { (window.plausible.q = window.plausible.q || []).push(arguments) }</script>
-
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin="">
 <link href="https://fonts.googleapis.com/css2?family=Source+Sans+3:wght@300;400;500;600;700&amp;family=JetBrains+Mono:wght@400;500&amp;display=swap" rel="stylesheet">
@@ -351,8 +352,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
    
   <ul>
   <li><a href="#before-you-start" id="toc-before-you-start" class="nav-link active" data-scroll-target="#before-you-start">Before you start</a></li>
-  <li><a href="#clone-and-check" id="toc-clone-and-check" class="nav-link" data-scroll-target="#clone-and-check">Clone and check</a></li>
-  <li><a href="#restore-the-environment" id="toc-restore-the-environment" class="nav-link" data-scroll-target="#restore-the-environment">Restore the environment</a></li>
+  <li><a href="#clone-and-restore" id="toc-clone-and-restore" class="nav-link" data-scroll-target="#clone-and-restore">Clone and restore</a></li>
   <li><a href="#render-the-site-locally" id="toc-render-the-site-locally" class="nav-link" data-scroll-target="#render-the-site-locally">Render the site locally</a></li>
   <li><a href="#render-only-articles-or-only-slides" id="toc-render-only-articles-or-only-slides" class="nav-link" data-scroll-target="#render-only-articles-or-only-slides">Render only articles or only slides</a></li>
   <li><a href="#folder-tour" id="toc-folder-tour" class="nav-link" data-scroll-target="#folder-tour">Folder tour</a></li>
@@ -392,68 +392,68 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <section id="from-a-fresh-laptop-to-a-local-site" class="level1">
 <h1>From a fresh laptop to a local site</h1>
 <div class="lead">
-<p>From a fresh laptop to a locally rendered version of this site in about twenty minutes.</p>
+<p>Install the tools, restore the recorded environment, and render the curriculum. Initial package compilation can take considerably longer than a routine rebuild.</p>
 </div>
 </section>
 </div>
 <section id="before-you-start" class="level2">
 <h2 class="anchored" data-anchor-id="before-you-start">Before you start</h2>
-<p>You need four things installed on your machine:</p>
+<p>Install these tools before restoring the project:</p>
 <ul>
-<li><strong>R</strong>, version 4.3 or newer — <a href="https://cloud.r-project.org" class="uri">https://cloud.r-project.org</a></li>
-<li><strong>RStudio Desktop</strong> (or Positron) — <a href="https://posit.co/download/rstudio-desktop/" class="uri">https://posit.co/download/rstudio-desktop/</a></li>
-<li><strong>Quarto</strong>, version 1.4 or newer — <a href="https://quarto.org/docs/get-started/" class="uri">https://quarto.org/docs/get-started/</a></li>
+<li><strong>R</strong>, version 4.6.1 for the recorded environment — <a href="https://cloud.r-project.org" class="uri">https://cloud.r-project.org</a></li>
+<li><strong>RStudio Desktop</strong> (or Positron, optional) — <a href="https://posit.co/download/rstudio-desktop/" class="uri">https://posit.co/download/rstudio-desktop/</a></li>
+<li><strong>Quarto</strong>, version 1.10.19 — <a href="https://quarto.org/docs/get-started/" class="uri">https://quarto.org/docs/get-started/</a></li>
 <li><strong>Git</strong> — <a href="https://git-scm.com/downloads" class="uri">https://git-scm.com/downloads</a></li>
+<li><strong>Python 3</strong>, version 3.9 or newer, available as <code>python3</code></li>
+<li><strong>Node.js</strong>, version 24 or newer, including npm</li>
 </ul>
-<p>If you would rather not install anything locally, every lab also runs on <a href="https://posit.cloud"><strong>Posit Cloud</strong></a>: create a new project, clone the repository, and use the in-browser RStudio.</p>
+<p>A remote R environment such as <a href="https://posit.cloud">Posit Cloud</a> may also be used, provided it has these prerequisites and enough memory and installation time. That hosted environment is not part of the local qualification.</p>
 <p>A few OS-specific notes:</p>
 <ul>
-<li>On <strong>macOS</strong>, install the Xcode command-line tools once with <code>xcode-select --install</code> so R can build packages from source.</li>
+<li>On <strong>macOS</strong>, install the Xcode command-line tools once with <code>xcode-select --install</code> so R can build packages from source. Homebrew users also need <code>brew install cmake fftw pkg-config</code> for native dependencies.</li>
 <li>On <strong>Windows</strong>, install <a href="https://cran.r-project.org/bin/windows/Rtools/">Rtools</a> matching your R version; some packages in the <code>renv</code> lock file build from source on first use.</li>
-<li>On <strong>Linux</strong>, install the development headers listed by <code>sudo apt install</code> — most commonly <code>libcurl4-openssl-dev</code>, <code>libssl-dev</code>, <code>libxml2-dev</code>, <code>libfontconfig1-dev</code>, <code>libfreetype6-dev</code>, <code>libharfbuzz-dev</code>, <code>libfribidi-dev</code>, and <code>libgit2-dev</code>.</li>
+<li>On <strong>Linux</strong>, install the development headers listed by <code>sudo apt install</code> — most commonly <code>libcurl4-openssl-dev</code>, <code>libssl-dev</code>, <code>libxml2-dev</code>, <code>libfontconfig1-dev</code>, <code>libfreetype6-dev</code>, <code>libharfbuzz-dev</code>, <code>libfribidi-dev</code>, and <code>libgit2-dev</code>, <code>libfftw3-dev</code>, and <code>cmake</code>.</li>
 </ul>
 </section>
-<section id="clone-and-check" class="level2">
-<h2 class="anchored" data-anchor-id="clone-and-check">Clone and check</h2>
-<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb1"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="fu">git</span> clone https://github.com/CHANGE_ME/biostats_curriculum.git</span>
-<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="bu">cd</span> biostats_curriculum</span>
-<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a><span class="ex">Rscript</span> setup_check.R</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
-<p><code>setup_check.R</code> prints your R version and platform, walks through the list of required packages, attempts to install anything missing from CRAN, and reports how many succeeded and how many failed. If a package fails, the most common cause is a missing system library — the error message usually names the header file, and the appendix on <a href="./appendices/common_errors.html">Common errors</a> collects the fixes we see most often.</p>
-</section>
-<section id="restore-the-environment" class="level2">
-<h2 class="anchored" data-anchor-id="restore-the-environment">Restore the environment</h2>
-<p>The project is pinned with <a href="https://rstudio.github.io/renv/"><code>renv</code></a>. To install the exact package versions listed in <code>renv.lock</code>:</p>
-<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb2"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="ex">Rscript</span> <span class="at">-e</span> <span class="st">'renv::restore()'</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
-<p><code>renv</code> keeps each project’s packages in a private library, so installing packages for this curriculum will not interfere with anything else on your machine. On first run it prints a list of packages it intends to install and asks for confirmation — answer <code>y</code>.</p>
+<section id="clone-and-restore" class="level2">
+<h2 class="anchored" data-anchor-id="clone-and-restore">Clone and restore</h2>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb1"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="fu">git</span> clone https://github.com/CTTIR/courses.git</span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="bu">cd</span> courses</span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a><span class="ex">Rscript</span> <span class="at">-e</span> <span class="st">'renv::restore(prompt=FALSE)'</span></span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a><span class="ex">npm</span> ci</span>
+<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a><span class="ex">Rscript</span> setup_check.R</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<p><a href="https://rstudio.github.io/renv/"><code>renv</code></a> restores the versioned package records into the project library. Native packages may require additional system headers; read the first installation error if restoration fails. The R version itself and system libraries are not installed by <code>renv</code>.</p>
+<p><code>setup_check.R</code> is read-only. It reports missing packages, version mismatches, or missing command-line tools and exits with a failure status until they are fixed. It never silently installs or upgrades packages. The lockfile covers executable lessons and the local Shiny apps; optional chunks marked <code>eval: false</code> describe additional workflows and do not claim to have run without their data or tools.</p>
 </section>
 <section id="render-the-site-locally" class="level2">
 <h2 class="anchored" data-anchor-id="render-the-site-locally">Render the site locally</h2>
 <p>Two commands, depending on what you want:</p>
-<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb3"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="ex">quarto</span> preview    <span class="co"># live-reloading local server (good for writing)</span></span>
-<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a><span class="ex">quarto</span> render     <span class="co"># one-shot build into docs/</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb2"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="ex">quarto</span> preview    <span class="co"># live-reloading local server (good for writing)</span></span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a><span class="ex">quarto</span> render <span class="at">--profile</span> verify  <span class="co"># fresh execution and build into docs/</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <p>To render a single lab without touching the rest of the site:</p>
-<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb4"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="ex">quarto</span> render course1_foundations/labs/lab_week1_session1.qmd</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb3"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="ex">quarto</span> render course1_foundations/labs/lab_week1_session1.qmd</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <p>This will produce both the HTML article and the Reveal.js slide deck, because each lab declares both formats in its front matter.</p>
 </section>
 <section id="render-only-articles-or-only-slides" class="level2">
 <h2 class="anchored" data-anchor-id="render-only-articles-or-only-slides">Render only articles or only slides</h2>
 <p>Occasionally you want just one of the two outputs:</p>
-<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb5"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="ex">quarto</span> render course1_foundations/labs/lab_week1_session1.qmd <span class="at">--to</span> html</span>
-<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a><span class="ex">quarto</span> render course1_foundations/labs/lab_week1_session1.qmd <span class="at">--to</span> revealjs</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb4"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="ex">quarto</span> render course1_foundations/labs/lab_week1_session1.qmd <span class="at">--to</span> html</span>
+<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a><span class="ex">quarto</span> render course1_foundations/labs/lab_week1_session1.qmd <span class="at">--to</span> revealjs</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <p>The <code>--to</code> flag selects one of the formats declared in the front matter and skips the other.</p>
+<p>For routine prose edits, <code>quarto render</code> may reuse locally frozen calculations. The <code>_freeze/</code> cache is not distributed with the source. Before release, use the verification commands in the README, including the standalone script and complete-site checks.</p>
 </section>
 <section id="folder-tour" class="level2">
 <h2 class="anchored" data-anchor-id="folder-tour">Folder tour</h2>
-<pre><code>biostats_curriculum/
+<pre><code>courses/
 ├── _quarto.yml                  site configuration
 ├── index.qmd                    home
 ├── about.qmd                    philosophy and licence
 ├── get_started.qmd              you are here
 ├── schedule.qmd                 linked index of every artefact
 ├── references.qmd               sources and teaching ecosystems
-├── styles.css / custom.scss     site-wide look and feel
+├── css/ and assets/*.scss       site-wide look and feel
 ├── assets/slides.scss           Reveal.js theme
-├── setup_check.R                one-time environment audit
+├── setup_check.R                read-only environment check
 ├── renv.lock                    pinned package versions
 ├── appendices/                  research workflow, decision tree, glossary, …
 ├── shared/                      data notes and site-wide images
@@ -928,7 +928,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <footer class="footer">
   <div class="nav-footer">
     <div class="nav-footer-left">
-<p>#courses · MIT</p>
+<p>Prose: CC BY 4.0 · Code: MIT</p>
 </div>   
     <div class="nav-footer-center">
 <p><a href="./get_started.html">Get Started</a> · <a href="./overview.html">Overview</a> · <a href="./schedule.html">Schedule</a> · <a href="./cheatsheets.html">Cheatsheets</a> · <a href="./shiny.html">Interactive apps</a> · <a href="./appendices/research_workflow.html">Research workflow</a> · <a href="./appendices/decision_tree.html">Decision tree</a> · <a href="./appendices/glossary.html">Glossary</a> · <a href="./appendices/common_errors.html">Common errors</a> · <a href="./appendices/writing_a_report.html">Writing a report</a> · <a href="./references.html">References</a> · <a href="./acknowledgements.html">Acknowledgements</a> · <strong><a href="./impressum.html">Impressum</a></strong> · <a href="mailto:58561665+r-heller@users.noreply.github.com">Kontakt</a></p>

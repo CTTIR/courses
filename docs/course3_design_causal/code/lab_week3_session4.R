@@ -11,7 +11,7 @@ set.seed(42)
 theme_set(theme_minimal(base_size = 12))
 
 # --- 1. Hypothesis / Goal --------------------------------------
-# Compare naive regression, nearest-neighbour matching, and IPTW
+# Compare covariate-adjusted regression, nearest-neighbour matching, and IPTW
 # against a known simulated treatment effect of -1.5.
 
 # --- 2. Data ---------------------------------------------------
@@ -36,19 +36,21 @@ print(p)
 # Conditional exchangeability, positivity, correct propensity model.
 
 # --- 5. Conduct / Fit ------------------------------------------
-fit_naive <- lm(y ~ trt + age + sev + sex, data = dat)
+fit_adjusted <- lm(y ~ trt + age + sev + sex, data = dat)
 m         <- matchit(trt ~ age + sev + sex, data = dat,
                      method = "nearest", ratio = 1)
 matched   <- match.data(m)
 fit_match <- lm(y ~ trt, data = matched, weights = matched$weights)
 
-dat <- dat |> mutate(w = if_else(trt == 1, 1 / ps, 1 / (1 - ps)))
+ps_fit <- glm(trt ~ age + sev + sex, data = dat, family = binomial())
+dat$ps_hat <- fitted(ps_fit)
+dat <- dat |> mutate(w = if_else(trt == 1, 1 / ps_hat, 1 / (1 - ps_hat)))
 fit_iptw  <- lm(y ~ trt, data = dat, weights = w)
 
 print(love.plot(m, thresholds = c(m = 0.1), abs = TRUE))
 
 # --- 6. Report -------------------------------------------------
 cat(sprintf(
-  "True: -1.50; naive: %.2f; match: %.2f; IPTW: %.2f\n",
-  coef(fit_naive)["trt"], coef(fit_match)["trt"], coef(fit_iptw)["trt"]
+  "True: -1.50; adjusted: %.2f; match: %.2f; IPTW: %.2f\n",
+  coef(fit_adjusted)["trt"], coef(fit_match)["trt"], coef(fit_iptw)["trt"]
 ))

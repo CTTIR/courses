@@ -2,7 +2,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
 
 <meta charset="utf-8">
-<meta name="generator" content="quarto-1.9.37">
+<meta name="generator" content="quarto-1.10.19">
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
@@ -13,10 +13,13 @@
 /* Default styles provided by pandoc.
 ** See https://pandoc.org/MANUAL.html#variables-for-html for config info.
 */
-code{white-space: pre-wrap;}
 span.smallcaps{font-variant: small-caps;}
-div.columns{display: flex; gap: min(4vw, 1.5em);}
-div.column{flex: auto; overflow-x: auto;}
+div.columns{display: flex; gap: 1.5em;}
+div.column{flex: auto;}
+@media screen {
+div.columns{gap: min(4vw, 1.5em);}
+div.column{overflow-x: auto;}
+}
 div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
 ul.task-list{list-style: none;}
 ul.task-list li input[type="checkbox"] {
@@ -71,12 +74,12 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <script src="../../site_libs/quarto-html/tippy.umd.min.js"></script>
 <script src="../../site_libs/quarto-html/anchor.min.js"></script>
 <link href="../../site_libs/quarto-html/tippy.css" rel="stylesheet">
-<link href="../../site_libs/quarto-html/quarto-syntax-highlighting-2065f9e58f6345017599ef1c45dc3d4f.css" rel="stylesheet" class="quarto-color-scheme" id="quarto-text-highlighting-styles">
-<link href="../../site_libs/quarto-html/quarto-syntax-highlighting-dark-ced54966b0e53f059c291d5781927a30.css" rel="stylesheet" class="quarto-color-scheme quarto-color-alternate" id="quarto-text-highlighting-styles">
+<link href="../../site_libs/quarto-html/quarto-syntax-highlighting-9f3547545508946eee83ef8b606cbadf.css" rel="stylesheet" class="quarto-color-scheme" id="quarto-text-highlighting-styles">
+<link href="../../site_libs/quarto-html/quarto-syntax-highlighting-dark-8d43248e80c6749424940840481457b2.css" rel="stylesheet" class="quarto-color-scheme quarto-color-alternate" id="quarto-text-highlighting-styles">
 <script src="../../site_libs/bootstrap/bootstrap.min.js"></script>
 <link href="../../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
-<link href="../../site_libs/bootstrap/bootstrap-e6d3843e299d450790cfb48988d4232e.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme" id="quarto-bootstrap" data-mode="light">
-<link href="../../site_libs/bootstrap/bootstrap-dark-a84e9e0d3bdc903e291dd8ca38ce98a5.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme quarto-color-alternate" id="quarto-bootstrap" data-mode="dark">
+<link href="../../site_libs/bootstrap/bootstrap-0c1962fc29c4e87f8b37717c07588c31.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme" id="quarto-bootstrap" data-mode="light">
+<link href="../../site_libs/bootstrap/bootstrap-dark-33ee418c30da5be27be819967c4cb66e.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme quarto-color-alternate" id="quarto-bootstrap" data-mode="dark">
 <script id="quarto-search-options" type="application/json">{
   "language": {
     "search-no-results-text": "No results",
@@ -93,9 +96,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   }
 }</script>
 <script defer="" data-domain="cttir.github.io/courses" src="https://analytics.hellebo.de/js/script.file-downloads.outbound-links.js"></script>
-
 <script>window.plausible = window.plausible || function() { (window.plausible.q = window.plausible.q || []).push(arguments) }</script>
-
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin="">
 <link href="https://fonts.googleapis.com/css2?family=Source+Sans+3:wght@300;400;500;600;700&amp;family=JetBrains+Mono:wght@400;500&amp;display=swap" rel="stylesheet">
@@ -460,9 +461,10 @@ Note
 <span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a>trt <span class="ot">&lt;-</span> <span class="fu">rnorm</span>(n, <span class="at">mean =</span> <span class="dv">135</span>, <span class="at">sd =</span> <span class="dv">12</span>)</span>
 <span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a>pla <span class="ot">&lt;-</span> <span class="fu">rnorm</span>(n, <span class="at">mean =</span> <span class="dv">142</span>, <span class="at">sd =</span> <span class="dv">12</span>)</span>
 <span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a>df_ind <span class="ot">&lt;-</span> <span class="fu">tibble</span>(</span>
-<span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a>  <span class="at">arm =</span> <span class="fu">rep</span>(<span class="fu">c</span>(<span class="st">"placebo"</span>, <span class="st">"treatment"</span>), <span class="at">each =</span> n),</span>
-<span id="cb2-6"><a href="#cb2-6" aria-hidden="true" tabindex="-1"></a>  <span class="at">sbp =</span> <span class="fu">c</span>(pla, trt)</span>
-<span id="cb2-7"><a href="#cb2-7" aria-hidden="true" tabindex="-1"></a>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a>  <span class="at">arm =</span> <span class="fu">factor</span>(<span class="fu">rep</span>(<span class="fu">c</span>(<span class="st">"placebo"</span>, <span class="st">"treatment"</span>), <span class="at">each =</span> n),</span>
+<span id="cb2-6"><a href="#cb2-6" aria-hidden="true" tabindex="-1"></a>                              <span class="at">levels =</span> <span class="fu">c</span>(<span class="st">"treatment"</span>, <span class="st">"placebo"</span>)),</span>
+<span id="cb2-7"><a href="#cb2-7" aria-hidden="true" tabindex="-1"></a>  <span class="at">sbp =</span> <span class="fu">c</span>(pla, trt)</span>
+<span id="cb2-8"><a href="#cb2-8" aria-hidden="true" tabindex="-1"></a>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 <div class="cell">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb3"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a>df_ind <span class="sc">|&gt;</span></span>
@@ -531,13 +533,13 @@ Note
     Welch Two Sample t-test
 
 data:  sbp by arm
-t = 2.9095, df = 72.3, p-value = 0.004807
-alternative hypothesis: true difference in means between group placebo and group treatment is not equal to 0
+t = -2.9095, df = 72.3, p-value = 0.004807
+alternative hypothesis: true difference in means between group treatment and group placebo is not equal to 0
 95 percent confidence interval:
-  2.655371 14.209770
+ -14.209770  -2.655371
 sample estimates:
-  mean in group placebo mean in group treatment 
-               142.9581                134.5256 </code></pre>
+mean in group treatment   mean in group placebo 
+               134.5256                142.9581 </code></pre>
 </div>
 </div>
 </section>
@@ -551,13 +553,13 @@ sample estimates:
     Two Sample t-test
 
 data:  sbp by arm
-t = 2.9095, df = 78, p-value = 0.004715
-alternative hypothesis: true difference in means between group placebo and group treatment is not equal to 0
+t = -2.9095, df = 78, p-value = 0.004715
+alternative hypothesis: true difference in means between group treatment and group placebo is not equal to 0
 95 percent confidence interval:
-  2.662545 14.202597
+ -14.202597  -2.662545
 sample estimates:
-  mean in group placebo mean in group treatment 
-               142.9581                134.5256 </code></pre>
+mean in group treatment   mean in group placebo 
+               134.5256                142.9581 </code></pre>
 </div>
 </div>
 </section>
@@ -590,15 +592,15 @@ mean difference
 <span id="cb13-4"><a href="#cb13-4" aria-hidden="true" tabindex="-1"></a><span class="fu">list</span>(<span class="at">d_ind =</span> d_ind, <span class="at">g_ind =</span> g_ind, <span class="at">d_paired =</span> d_paired)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>$d_ind
-Cohen's d |       95% CI
-------------------------
-0.65      | [0.20, 1.10]
+Cohen's d |         95% CI
+--------------------------
+-0.65     | [-1.10, -0.20]
 
 - Estimated using pooled SD.
 $g_ind
-Hedges' g |       95% CI
-------------------------
-0.64      | [0.20, 1.09]
+Hedges' g |         95% CI
+--------------------------
+-0.64     | [-1.09, -0.20]
 
 - Estimated using pooled SD.
 $d_paired
@@ -612,7 +614,7 @@ Cohen's d |         95% CI
 <section id="concluding-statement" class="level2">
 <h2 class="anchored" data-anchor-id="concluding-statement">5. Concluding statement</h2>
 <blockquote class="blockquote">
-<p><strong>Independent comparison.</strong> Mean SBP was 134.5 mmHg (SD 14.7) in the treatment arm and 143 (SD 11) in placebo. A Welch’s <em>t</em>-test gave <em>t</em>(72.3) = 2.91, <em>p</em> = 0.0048, mean difference 8.4 mmHg (95% CI -14.2 to -2.7). Cohen’s <em>d</em> = 0.65 (Hedges’ <em>g</em> = 0.64), a small-to-medium effect.</p>
+<p><strong>Independent comparison.</strong> Mean SBP was 134.5 mmHg (SD 14.7) in the treatment arm and 143 (SD 11) in placebo. A Welch’s <em>t</em>-test gave <em>t</em>(72.3) = -2.91, <em>p</em> = 0.0048, mean difference (treatment − placebo) -8.4 mmHg (95% CI -14.2 to -2.7). Cohen’s <em>d</em> = -0.65 (Hedges’ <em>g</em> = -0.64).</p>
 </blockquote>
 <blockquote class="blockquote">
 <p><strong>Paired comparison.</strong> The within-subject change (post − pre) had mean -3.2 mmHg (SD 7); paired <em>t</em>-test <em>t</em>(29) = -2.47, <em>p</em> = 0.019, 95% CI -5.8 to -0.6.</p>
@@ -643,17 +645,16 @@ Cohen's d |         95% CI
 <div class="cell">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb15"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a><span class="fu">sessionInfo</span>()</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stdout">
-<pre><code>R version 4.5.2 (2025-10-31 ucrt)
-Platform: x86_64-w64-mingw32/x64
-Running under: Windows 11 x64 (build 26200)
+<pre><code>R version 4.6.1 (2026-06-24)
+Platform: aarch64-apple-darwin27.0.0
+Running under: macOS Golden Gate 27.0.1
 
 Matrix products: default
-  LAPACK version 3.12.1
+BLAS:   /opt/homebrew/Cellar/openblas/0.3.34/lib/libopenblasp-r0.3.34.dylib 
+LAPACK: /opt/homebrew/Cellar/r/4.6.1_1/lib/R/lib/libRlapack.dylib;  LAPACK version 3.12.1
 
 locale:
-[1] LC_COLLATE=English_Germany.utf8  LC_CTYPE=English_Germany.utf8   
-[3] LC_MONETARY=English_Germany.utf8 LC_NUMERIC=C                    
-[5] LC_TIME=English_Germany.utf8    
+[1] C.UTF-8/C.UTF-8/C.UTF-8/C/C.UTF-8/C.UTF-8
 
 time zone: Europe/Berlin
 tzcode source: internal
@@ -662,25 +663,23 @@ attached base packages:
 [1] stats     graphics  grDevices utils     datasets  methods   base     
 
 other attached packages:
- [1] effectsize_1.0.2 lubridate_1.9.5  forcats_1.0.1    stringr_1.6.0   
+ [1] effectsize_1.0.3 lubridate_1.9.5  forcats_1.0.1    stringr_1.6.0   
  [5] dplyr_1.2.1      purrr_1.2.2      readr_2.2.0      tidyr_1.3.2     
  [9] tibble_3.3.1     ggplot2_4.0.3    tidyverse_2.0.0 
 
 loaded via a namespace (and not attached):
- [1] sandwich_3.1-1     generics_0.1.4     stringi_1.8.7      lattice_0.22-9    
- [5] hms_1.1.4          digest_0.6.39      magrittr_2.0.4     evaluate_1.0.5    
- [9] grid_4.5.2         timechange_0.4.0   estimability_1.5.1 RColorBrewer_1.1-3
-[13] mvtnorm_1.3-7      fastmap_1.2.0      Matrix_1.7-5       jsonlite_2.0.0    
-[17] survival_3.8-6     multcomp_1.4-30    scales_1.4.0       TH.data_1.1-5     
-[21] codetools_0.2-20   cli_3.6.6          rlang_1.2.0        splines_4.5.2     
-[25] withr_3.0.2        yaml_2.3.12        otel_0.2.0         tools_4.5.2       
-[29] datawizard_1.3.1   tzdb_0.5.0         coda_0.19-4.1      bayestestR_0.17.0 
-[33] vctrs_0.7.3        R6_2.6.1           zoo_1.8-15         lifecycle_1.0.5   
-[37] emmeans_2.0.3      htmlwidgets_1.6.4  MASS_7.3-65        insight_1.5.0     
-[41] pkgconfig_2.0.3    pillar_1.11.1      gtable_0.3.6       glue_1.8.1        
-[45] xfun_0.57          tidyselect_1.2.1   parameters_0.28.3  knitr_1.51        
-[49] xtable_1.8-8       farver_2.1.2       htmltools_0.5.9    labeling_0.4.3    
-[53] rmarkdown_2.31     compiler_4.5.2     S7_0.2.2          </code></pre>
+ [1] generics_0.1.4     stringi_1.8.9      lattice_0.22-9     hms_1.1.4         
+ [5] digest_0.6.39      magrittr_2.0.5     evaluate_1.0.5     grid_4.6.1        
+ [9] timechange_0.4.0   estimability_2.0.0 RColorBrewer_1.1-3 mvtnorm_1.4-2     
+[13] fastmap_1.2.0      jsonlite_2.0.0     scales_1.4.0       cli_3.6.6         
+[17] rlang_1.3.0        withr_3.0.3        yaml_2.3.12        otel_0.2.0        
+[21] tools_4.6.1        datawizard_1.4.1   tzdb_0.5.0         coda_0.19-4.1     
+[25] bayestestR_0.20.0  vctrs_0.7.3        R6_2.6.1           lifecycle_1.0.5   
+[29] emmeans_2.0.4      htmlwidgets_1.6.4  insight_1.6.1      pkgconfig_2.0.3   
+[33] pillar_1.11.1      gtable_0.3.6       glue_1.8.1         xfun_0.62         
+[37] tidyselect_1.2.1   parameters_0.30.0  knitr_1.52         farver_2.1.2      
+[41] xtable_1.8-8       htmltools_0.5.9    labeling_0.4.3     rmarkdown_2.32    
+[45] compiler_4.6.1     S7_0.2.2          </code></pre>
 </div>
 </div>
 
@@ -688,17 +687,11 @@ loaded via a namespace (and not attached):
 <!-- -->
 
 <section class="related-tutorials" data-render="static">
-
 <h2 class="anchored">Related labs</h2>
-
 <p class="related-blurb">Closest matches by shared tags (hypothesis-testing, inference, t-test).</p>
-
 <div class="related-list"><div class="related-item"><span class="topic">Course 1 — Foundations</span><a href="../../course1_foundations/labs/lab_week3_session4.html">One-sample t and one-proportion</a><div class="related-desc">Shared: hypothesis-testing, inference, t-test</div></div><div class="related-item"><span class="topic">Course 1 — Foundations</span><a href="../../course1_foundations/labs/lab_week3_session5.html">Hypothesis testing philosophy</a><div class="related-desc">Shared: hypothesis-testing, inference</div></div><div class="related-item"><span class="topic">Course 1 — Foundations</span><a href="../../course1_foundations/labs/lab_week4_session2.html">Two proportions and goodness-of-fit</a><div class="related-desc">Shared: hypothesis-testing, inference</div></div></div>
-
 <p class="network-link"><a href="../../overview.html">Explore the full label network →</a></p>
-
 </section>
-
 
 </section>
 
@@ -808,16 +801,16 @@ loaded via a namespace (and not attached):
     }
     function toggleCodeHandler(show) {
       return function(e) {
-        const detailsSrc = window.document.querySelectorAll(".cell > details > .sourceCode");
-        for (let i=0; i<detailsSrc.length; i++) {
-          const details = detailsSrc[i].parentElement;
+        const cellDetails = window.document.querySelectorAll(".cell details.code-fold");
+        for (let i=0; i<cellDetails.length; i++) {
+          const details = cellDetails[i];
           if (show) {
             details.open = true;
           } else {
             details.removeAttribute("open");
           }
         }
-        const cellCodeDivs = window.document.querySelectorAll(".cell > .sourceCode");
+        const cellCodeDivs = window.document.querySelectorAll(".cell div.sourceCode.cell-code");
         const fromCls = show ? "hidden" : "unhidden";
         const toCls = show ? "unhidden" : "hidden";
         for (let i=0; i<cellCodeDivs.length; i++) {
@@ -1261,145 +1254,146 @@ loaded via a namespace (and not attached):
 <span id="cb17-91"><a href="#cb17-91" aria-hidden="true" tabindex="-1"></a>trt <span class="ot">&lt;-</span> <span class="fu">rnorm</span>(n, <span class="at">mean =</span> <span class="dv">135</span>, <span class="at">sd =</span> <span class="dv">12</span>)</span>
 <span id="cb17-92"><a href="#cb17-92" aria-hidden="true" tabindex="-1"></a>pla <span class="ot">&lt;-</span> <span class="fu">rnorm</span>(n, <span class="at">mean =</span> <span class="dv">142</span>, <span class="at">sd =</span> <span class="dv">12</span>)</span>
 <span id="cb17-93"><a href="#cb17-93" aria-hidden="true" tabindex="-1"></a>df_ind <span class="ot">&lt;-</span> <span class="fu">tibble</span>(</span>
-<span id="cb17-94"><a href="#cb17-94" aria-hidden="true" tabindex="-1"></a>  <span class="at">arm =</span> <span class="fu">rep</span>(<span class="fu">c</span>(<span class="st">"placebo"</span>, <span class="st">"treatment"</span>), <span class="at">each =</span> n),</span>
-<span id="cb17-95"><a href="#cb17-95" aria-hidden="true" tabindex="-1"></a>  <span class="at">sbp =</span> <span class="fu">c</span>(pla, trt)</span>
-<span id="cb17-96"><a href="#cb17-96" aria-hidden="true" tabindex="-1"></a>)</span>
-<span id="cb17-97"><a href="#cb17-97" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
-<span id="cb17-98"><a href="#cb17-98" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb17-101"><a href="#cb17-101" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
-<span id="cb17-102"><a href="#cb17-102" aria-hidden="true" tabindex="-1"></a><span class="co">#| fig-width: 6</span></span>
-<span id="cb17-103"><a href="#cb17-103" aria-hidden="true" tabindex="-1"></a><span class="co">#| fig-height: 3.5</span></span>
-<span id="cb17-104"><a href="#cb17-104" aria-hidden="true" tabindex="-1"></a>df_ind <span class="sc">|&gt;</span></span>
-<span id="cb17-105"><a href="#cb17-105" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ggplot</span>(<span class="fu">aes</span>(arm, sbp, <span class="at">fill =</span> arm)) <span class="sc">+</span></span>
-<span id="cb17-106"><a href="#cb17-106" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_boxplot</span>(<span class="at">alpha =</span> <span class="fl">0.6</span>, <span class="at">colour =</span> <span class="st">"grey30"</span>) <span class="sc">+</span></span>
-<span id="cb17-107"><a href="#cb17-107" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">x =</span> <span class="cn">NULL</span>, <span class="at">y =</span> <span class="st">"SBP (mmHg)"</span>) <span class="sc">+</span></span>
-<span id="cb17-108"><a href="#cb17-108" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme</span>(<span class="at">legend.position =</span> <span class="st">"none"</span>)</span>
-<span id="cb17-109"><a href="#cb17-109" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
-<span id="cb17-110"><a href="#cb17-110" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb17-113"><a href="#cb17-113" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
-<span id="cb17-114"><a href="#cb17-114" aria-hidden="true" tabindex="-1"></a>n2 <span class="ot">&lt;-</span> <span class="dv">30</span></span>
-<span id="cb17-115"><a href="#cb17-115" aria-hidden="true" tabindex="-1"></a>pre  <span class="ot">&lt;-</span> <span class="fu">rnorm</span>(n2, <span class="dv">148</span>, <span class="dv">10</span>)</span>
-<span id="cb17-116"><a href="#cb17-116" aria-hidden="true" tabindex="-1"></a>post <span class="ot">&lt;-</span> pre <span class="sc">-</span> <span class="fu">rnorm</span>(n2, <span class="dv">5</span>, <span class="dv">7</span>)  <span class="co"># true mean drop of 5</span></span>
-<span id="cb17-117"><a href="#cb17-117" aria-hidden="true" tabindex="-1"></a>df_pair <span class="ot">&lt;-</span> <span class="fu">tibble</span>(<span class="at">id =</span> <span class="fu">seq_len</span>(n2), <span class="at">pre =</span> pre, <span class="at">post =</span> post) <span class="sc">|&gt;</span></span>
-<span id="cb17-118"><a href="#cb17-118" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">delta =</span> post <span class="sc">-</span> pre)</span>
-<span id="cb17-119"><a href="#cb17-119" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
-<span id="cb17-120"><a href="#cb17-120" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb17-123"><a href="#cb17-123" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
-<span id="cb17-124"><a href="#cb17-124" aria-hidden="true" tabindex="-1"></a><span class="co">#| fig-width: 6</span></span>
-<span id="cb17-125"><a href="#cb17-125" aria-hidden="true" tabindex="-1"></a><span class="co">#| fig-height: 3.5</span></span>
-<span id="cb17-126"><a href="#cb17-126" aria-hidden="true" tabindex="-1"></a>df_pair <span class="sc">|&gt;</span></span>
-<span id="cb17-127"><a href="#cb17-127" aria-hidden="true" tabindex="-1"></a>  <span class="fu">pivot_longer</span>(<span class="fu">c</span>(pre, post), <span class="at">names_to =</span> <span class="st">"time"</span>, <span class="at">values_to =</span> <span class="st">"sbp"</span>) <span class="sc">|&gt;</span></span>
-<span id="cb17-128"><a href="#cb17-128" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">time =</span> <span class="fu">factor</span>(time, <span class="at">levels =</span> <span class="fu">c</span>(<span class="st">"pre"</span>, <span class="st">"post"</span>))) <span class="sc">|&gt;</span></span>
-<span id="cb17-129"><a href="#cb17-129" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ggplot</span>(<span class="fu">aes</span>(time, sbp, <span class="at">group =</span> id)) <span class="sc">+</span></span>
-<span id="cb17-130"><a href="#cb17-130" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_line</span>(<span class="at">alpha =</span> <span class="fl">0.4</span>) <span class="sc">+</span></span>
-<span id="cb17-131"><a href="#cb17-131" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_point</span>(<span class="at">alpha =</span> <span class="fl">0.6</span>) <span class="sc">+</span></span>
-<span id="cb17-132"><a href="#cb17-132" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">x =</span> <span class="cn">NULL</span>, <span class="at">y =</span> <span class="st">"SBP (mmHg)"</span>)</span>
-<span id="cb17-133"><a href="#cb17-133" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
-<span id="cb17-134"><a href="#cb17-134" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb17-135"><a href="#cb17-135" aria-hidden="true" tabindex="-1"></a><span class="fu">## 3. Assumptions</span></span>
-<span id="cb17-136"><a href="#cb17-136" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb17-137"><a href="#cb17-137" aria-hidden="true" tabindex="-1"></a>Independent *t*: approximate normality of the sample means; Welch's</span>
-<span id="cb17-138"><a href="#cb17-138" aria-hidden="true" tabindex="-1"></a>does not require equal variances. Paired *t*: approximate normality</span>
-<span id="cb17-139"><a href="#cb17-139" aria-hidden="true" tabindex="-1"></a>of the within-subject differences.</span>
-<span id="cb17-140"><a href="#cb17-140" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb17-143"><a href="#cb17-143" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
-<span id="cb17-144"><a href="#cb17-144" aria-hidden="true" tabindex="-1"></a><span class="co">#| fig-width: 5</span></span>
-<span id="cb17-145"><a href="#cb17-145" aria-hidden="true" tabindex="-1"></a><span class="co">#| fig-height: 3</span></span>
-<span id="cb17-146"><a href="#cb17-146" aria-hidden="true" tabindex="-1"></a>df_pair <span class="sc">|&gt;</span></span>
-<span id="cb17-147"><a href="#cb17-147" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ggplot</span>(<span class="fu">aes</span>(<span class="at">sample =</span> delta)) <span class="sc">+</span></span>
-<span id="cb17-148"><a href="#cb17-148" aria-hidden="true" tabindex="-1"></a>  <span class="fu">stat_qq</span>() <span class="sc">+</span> <span class="fu">stat_qq_line</span>(<span class="at">colour =</span> <span class="st">"firebrick"</span>) <span class="sc">+</span></span>
-<span id="cb17-149"><a href="#cb17-149" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">x =</span> <span class="st">"Theoretical"</span>, <span class="at">y =</span> <span class="st">"Sample (pair differences)"</span>)</span>
-<span id="cb17-150"><a href="#cb17-150" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
-<span id="cb17-151"><a href="#cb17-151" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb17-152"><a href="#cb17-152" aria-hidden="true" tabindex="-1"></a><span class="fu">## 4. Conduct</span></span>
-<span id="cb17-153"><a href="#cb17-153" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb17-154"><a href="#cb17-154" aria-hidden="true" tabindex="-1"></a><span class="fu">### Two-sample (Welch)</span></span>
-<span id="cb17-155"><a href="#cb17-155" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb17-158"><a href="#cb17-158" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
-<span id="cb17-159"><a href="#cb17-159" aria-hidden="true" tabindex="-1"></a>tt_welch <span class="ot">&lt;-</span> <span class="fu">t.test</span>(sbp <span class="sc">~</span> arm, <span class="at">data =</span> df_ind, <span class="at">var.equal =</span> <span class="cn">FALSE</span>)</span>
-<span id="cb17-160"><a href="#cb17-160" aria-hidden="true" tabindex="-1"></a>tt_welch</span>
-<span id="cb17-161"><a href="#cb17-161" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
-<span id="cb17-162"><a href="#cb17-162" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb17-163"><a href="#cb17-163" aria-hidden="true" tabindex="-1"></a><span class="fu">### Two-sample Student (for comparison)</span></span>
-<span id="cb17-164"><a href="#cb17-164" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb17-167"><a href="#cb17-167" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
-<span id="cb17-168"><a href="#cb17-168" aria-hidden="true" tabindex="-1"></a>tt_student <span class="ot">&lt;-</span> <span class="fu">t.test</span>(sbp <span class="sc">~</span> arm, <span class="at">data =</span> df_ind, <span class="at">var.equal =</span> <span class="cn">TRUE</span>)</span>
-<span id="cb17-169"><a href="#cb17-169" aria-hidden="true" tabindex="-1"></a>tt_student</span>
-<span id="cb17-170"><a href="#cb17-170" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
-<span id="cb17-171"><a href="#cb17-171" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb17-172"><a href="#cb17-172" aria-hidden="true" tabindex="-1"></a><span class="fu">### Paired</span></span>
-<span id="cb17-173"><a href="#cb17-173" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb17-176"><a href="#cb17-176" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
-<span id="cb17-177"><a href="#cb17-177" aria-hidden="true" tabindex="-1"></a>tt_paired <span class="ot">&lt;-</span> <span class="fu">t.test</span>(df_pair<span class="sc">$</span>post, df_pair<span class="sc">$</span>pre, <span class="at">paired =</span> <span class="cn">TRUE</span>)</span>
-<span id="cb17-178"><a href="#cb17-178" aria-hidden="true" tabindex="-1"></a>tt_paired</span>
-<span id="cb17-179"><a href="#cb17-179" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
-<span id="cb17-180"><a href="#cb17-180" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb17-181"><a href="#cb17-181" aria-hidden="true" tabindex="-1"></a><span class="fu">### Effect size</span></span>
-<span id="cb17-182"><a href="#cb17-182" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb17-185"><a href="#cb17-185" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
-<span id="cb17-186"><a href="#cb17-186" aria-hidden="true" tabindex="-1"></a>d_ind    <span class="ot">&lt;-</span> <span class="fu">cohens_d</span>(sbp <span class="sc">~</span> arm, <span class="at">data =</span> df_ind)</span>
-<span id="cb17-187"><a href="#cb17-187" aria-hidden="true" tabindex="-1"></a>g_ind    <span class="ot">&lt;-</span> <span class="fu">hedges_g</span>(sbp <span class="sc">~</span> arm, <span class="at">data =</span> df_ind)</span>
-<span id="cb17-188"><a href="#cb17-188" aria-hidden="true" tabindex="-1"></a>d_paired <span class="ot">&lt;-</span> <span class="fu">cohens_d</span>(df_pair<span class="sc">$</span>post, df_pair<span class="sc">$</span>pre, <span class="at">paired =</span> <span class="cn">TRUE</span>)</span>
-<span id="cb17-189"><a href="#cb17-189" aria-hidden="true" tabindex="-1"></a><span class="fu">list</span>(<span class="at">d_ind =</span> d_ind, <span class="at">g_ind =</span> g_ind, <span class="at">d_paired =</span> d_paired)</span>
-<span id="cb17-190"><a href="#cb17-190" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
-<span id="cb17-191"><a href="#cb17-191" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb17-192"><a href="#cb17-192" aria-hidden="true" tabindex="-1"></a><span class="fu">## 5. Concluding statement</span></span>
-<span id="cb17-193"><a href="#cb17-193" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb17-194"><a href="#cb17-194" aria-hidden="true" tabindex="-1"></a><span class="at">&gt; **Independent comparison.** Mean SBP was</span></span>
-<span id="cb17-195"><a href="#cb17-195" aria-hidden="true" tabindex="-1"></a><span class="at">&gt; </span><span class="in">`r round(mean(trt), 1)`</span><span class="at"> mmHg (SD </span><span class="in">`r round(sd(trt), 1)`</span><span class="at">) in the</span></span>
-<span id="cb17-196"><a href="#cb17-196" aria-hidden="true" tabindex="-1"></a><span class="at">&gt; treatment arm and </span><span class="in">`r round(mean(pla), 1)`</span><span class="at"> (SD</span></span>
-<span id="cb17-197"><a href="#cb17-197" aria-hidden="true" tabindex="-1"></a><span class="at">&gt; </span><span class="in">`r round(sd(pla), 1)`</span><span class="at">) in placebo. A Welch's *t*-test gave</span></span>
-<span id="cb17-198"><a href="#cb17-198" aria-hidden="true" tabindex="-1"></a><span class="at">&gt; *t*(</span><span class="in">`r round(tt_welch$parameter, 1)`</span><span class="at">) =</span></span>
-<span id="cb17-199"><a href="#cb17-199" aria-hidden="true" tabindex="-1"></a><span class="at">&gt; </span><span class="in">`r round(tt_welch$statistic, 2)`</span><span class="at">, *p* =</span></span>
-<span id="cb17-200"><a href="#cb17-200" aria-hidden="true" tabindex="-1"></a><span class="at">&gt; </span><span class="in">`r signif(tt_welch$p.value, 2)`</span><span class="at">, mean difference</span></span>
-<span id="cb17-201"><a href="#cb17-201" aria-hidden="true" tabindex="-1"></a><span class="at">&gt; </span><span class="in">`r round(diff(rev(tt_welch$estimate)), 1)`</span><span class="at"> mmHg (95% CI</span></span>
-<span id="cb17-202"><a href="#cb17-202" aria-hidden="true" tabindex="-1"></a><span class="at">&gt; </span><span class="in">`r round(-tt_welch$conf.int[2], 1)`</span><span class="at"> to</span></span>
-<span id="cb17-203"><a href="#cb17-203" aria-hidden="true" tabindex="-1"></a><span class="at">&gt; </span><span class="in">`r round(-tt_welch$conf.int[1], 1)`</span><span class="at">). Cohen's *d* =</span></span>
-<span id="cb17-204"><a href="#cb17-204" aria-hidden="true" tabindex="-1"></a><span class="at">&gt; </span><span class="in">`r round(d_ind$Cohens_d, 2)`</span><span class="at"> (Hedges' *g* =</span></span>
-<span id="cb17-205"><a href="#cb17-205" aria-hidden="true" tabindex="-1"></a><span class="at">&gt; </span><span class="in">`r round(g_ind$Hedges_g, 2)`</span><span class="at">), a small-to-medium effect.</span></span>
-<span id="cb17-206"><a href="#cb17-206" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb17-207"><a href="#cb17-207" aria-hidden="true" tabindex="-1"></a><span class="at">&gt; **Paired comparison.** The within-subject change</span></span>
-<span id="cb17-208"><a href="#cb17-208" aria-hidden="true" tabindex="-1"></a><span class="at">&gt; (post − pre) had mean </span><span class="in">`r round(mean(df_pair$delta), 1)`</span><span class="at"> mmHg (SD</span></span>
-<span id="cb17-209"><a href="#cb17-209" aria-hidden="true" tabindex="-1"></a><span class="at">&gt; </span><span class="in">`r round(sd(df_pair$delta), 1)`</span><span class="at">); paired *t*-test *t*(</span><span class="in">`r tt_paired$parameter`</span><span class="at">)</span></span>
-<span id="cb17-210"><a href="#cb17-210" aria-hidden="true" tabindex="-1"></a><span class="at">&gt; = </span><span class="in">`r round(tt_paired$statistic, 2)`</span><span class="at">, *p* =</span></span>
-<span id="cb17-211"><a href="#cb17-211" aria-hidden="true" tabindex="-1"></a><span class="at">&gt; </span><span class="in">`r signif(tt_paired$p.value, 2)`</span><span class="at">, 95% CI</span></span>
-<span id="cb17-212"><a href="#cb17-212" aria-hidden="true" tabindex="-1"></a><span class="at">&gt; </span><span class="in">`r round(tt_paired$conf.int[1], 1)`</span><span class="at"> to</span></span>
-<span id="cb17-213"><a href="#cb17-213" aria-hidden="true" tabindex="-1"></a><span class="at">&gt; </span><span class="in">`r round(tt_paired$conf.int[2], 1)`</span><span class="at">.</span></span>
-<span id="cb17-214"><a href="#cb17-214" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb17-215"><a href="#cb17-215" aria-hidden="true" tabindex="-1"></a>The effect size is the number that generalises. A *p*-value tells</span>
-<span id="cb17-216"><a href="#cb17-216" aria-hidden="true" tabindex="-1"></a>you whether to reject; *d* and its CI tell you how much.</span>
-<span id="cb17-217"><a href="#cb17-217" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb17-218"><a href="#cb17-218" aria-hidden="true" tabindex="-1"></a>::: {.notes}</span>
-<span id="cb17-219"><a href="#cb17-219" aria-hidden="true" tabindex="-1"></a>Insist that students always look at the paired-difference Q-Q plot.</span>
-<span id="cb17-220"><a href="#cb17-220" aria-hidden="true" tabindex="-1"></a>The before/after line plot is pretty; the Q-Q plot is diagnostic.</span>
-<span id="cb17-221"><a href="#cb17-221" aria-hidden="true" tabindex="-1"></a>:::</span>
-<span id="cb17-222"><a href="#cb17-222" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb17-223"><a href="#cb17-223" aria-hidden="true" tabindex="-1"></a><span class="fu">## Common pitfalls</span></span>
-<span id="cb17-224"><a href="#cb17-224" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb17-225"><a href="#cb17-225" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>Running an independent-samples *t* on paired data and losing power.</span>
-<span id="cb17-226"><a href="#cb17-226" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>Reporting Student's *t* in the era of Welch; there is rarely a good</span>
-<span id="cb17-227"><a href="#cb17-227" aria-hidden="true" tabindex="-1"></a>  reason.</span>
-<span id="cb17-228"><a href="#cb17-228" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>Reporting *p* without *d* (or an equivalent effect size).</span>
-<span id="cb17-229"><a href="#cb17-229" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>Confusing effect size with statistical significance.</span>
-<span id="cb17-230"><a href="#cb17-230" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb17-231"><a href="#cb17-231" aria-hidden="true" tabindex="-1"></a><span class="fu">## Further reading</span></span>
-<span id="cb17-232"><a href="#cb17-232" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb17-233"><a href="#cb17-233" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>Delacre M et al. (2017). *Why psychologists should by default use</span>
-<span id="cb17-234"><a href="#cb17-234" aria-hidden="true" tabindex="-1"></a>  Welch's t-test*.</span>
-<span id="cb17-235"><a href="#cb17-235" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>Cohen J. *Statistical Power Analysis for the Behavioral Sciences*.</span>
-<span id="cb17-236"><a href="#cb17-236" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb17-237"><a href="#cb17-237" aria-hidden="true" tabindex="-1"></a><span class="fu">## Session info</span></span>
-<span id="cb17-238"><a href="#cb17-238" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb17-241"><a href="#cb17-241" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
-<span id="cb17-242"><a href="#cb17-242" aria-hidden="true" tabindex="-1"></a><span class="fu">sessionInfo</span>()</span>
-<span id="cb17-243"><a href="#cb17-243" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb17-94"><a href="#cb17-94" aria-hidden="true" tabindex="-1"></a>  <span class="at">arm =</span> <span class="fu">factor</span>(<span class="fu">rep</span>(<span class="fu">c</span>(<span class="st">"placebo"</span>, <span class="st">"treatment"</span>), <span class="at">each =</span> n),</span>
+<span id="cb17-95"><a href="#cb17-95" aria-hidden="true" tabindex="-1"></a>                              <span class="at">levels =</span> <span class="fu">c</span>(<span class="st">"treatment"</span>, <span class="st">"placebo"</span>)),</span>
+<span id="cb17-96"><a href="#cb17-96" aria-hidden="true" tabindex="-1"></a>  <span class="at">sbp =</span> <span class="fu">c</span>(pla, trt)</span>
+<span id="cb17-97"><a href="#cb17-97" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb17-98"><a href="#cb17-98" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb17-99"><a href="#cb17-99" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb17-102"><a href="#cb17-102" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
+<span id="cb17-103"><a href="#cb17-103" aria-hidden="true" tabindex="-1"></a><span class="co">#| fig-width: 6</span></span>
+<span id="cb17-104"><a href="#cb17-104" aria-hidden="true" tabindex="-1"></a><span class="co">#| fig-height: 3.5</span></span>
+<span id="cb17-105"><a href="#cb17-105" aria-hidden="true" tabindex="-1"></a>df_ind <span class="sc">|&gt;</span></span>
+<span id="cb17-106"><a href="#cb17-106" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ggplot</span>(<span class="fu">aes</span>(arm, sbp, <span class="at">fill =</span> arm)) <span class="sc">+</span></span>
+<span id="cb17-107"><a href="#cb17-107" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_boxplot</span>(<span class="at">alpha =</span> <span class="fl">0.6</span>, <span class="at">colour =</span> <span class="st">"grey30"</span>) <span class="sc">+</span></span>
+<span id="cb17-108"><a href="#cb17-108" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">x =</span> <span class="cn">NULL</span>, <span class="at">y =</span> <span class="st">"SBP (mmHg)"</span>) <span class="sc">+</span></span>
+<span id="cb17-109"><a href="#cb17-109" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme</span>(<span class="at">legend.position =</span> <span class="st">"none"</span>)</span>
+<span id="cb17-110"><a href="#cb17-110" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb17-111"><a href="#cb17-111" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb17-114"><a href="#cb17-114" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
+<span id="cb17-115"><a href="#cb17-115" aria-hidden="true" tabindex="-1"></a>n2 <span class="ot">&lt;-</span> <span class="dv">30</span></span>
+<span id="cb17-116"><a href="#cb17-116" aria-hidden="true" tabindex="-1"></a>pre  <span class="ot">&lt;-</span> <span class="fu">rnorm</span>(n2, <span class="dv">148</span>, <span class="dv">10</span>)</span>
+<span id="cb17-117"><a href="#cb17-117" aria-hidden="true" tabindex="-1"></a>post <span class="ot">&lt;-</span> pre <span class="sc">-</span> <span class="fu">rnorm</span>(n2, <span class="dv">5</span>, <span class="dv">7</span>)  <span class="co"># true mean drop of 5</span></span>
+<span id="cb17-118"><a href="#cb17-118" aria-hidden="true" tabindex="-1"></a>df_pair <span class="ot">&lt;-</span> <span class="fu">tibble</span>(<span class="at">id =</span> <span class="fu">seq_len</span>(n2), <span class="at">pre =</span> pre, <span class="at">post =</span> post) <span class="sc">|&gt;</span></span>
+<span id="cb17-119"><a href="#cb17-119" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">delta =</span> post <span class="sc">-</span> pre)</span>
+<span id="cb17-120"><a href="#cb17-120" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb17-121"><a href="#cb17-121" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb17-124"><a href="#cb17-124" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
+<span id="cb17-125"><a href="#cb17-125" aria-hidden="true" tabindex="-1"></a><span class="co">#| fig-width: 6</span></span>
+<span id="cb17-126"><a href="#cb17-126" aria-hidden="true" tabindex="-1"></a><span class="co">#| fig-height: 3.5</span></span>
+<span id="cb17-127"><a href="#cb17-127" aria-hidden="true" tabindex="-1"></a>df_pair <span class="sc">|&gt;</span></span>
+<span id="cb17-128"><a href="#cb17-128" aria-hidden="true" tabindex="-1"></a>  <span class="fu">pivot_longer</span>(<span class="fu">c</span>(pre, post), <span class="at">names_to =</span> <span class="st">"time"</span>, <span class="at">values_to =</span> <span class="st">"sbp"</span>) <span class="sc">|&gt;</span></span>
+<span id="cb17-129"><a href="#cb17-129" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">time =</span> <span class="fu">factor</span>(time, <span class="at">levels =</span> <span class="fu">c</span>(<span class="st">"pre"</span>, <span class="st">"post"</span>))) <span class="sc">|&gt;</span></span>
+<span id="cb17-130"><a href="#cb17-130" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ggplot</span>(<span class="fu">aes</span>(time, sbp, <span class="at">group =</span> id)) <span class="sc">+</span></span>
+<span id="cb17-131"><a href="#cb17-131" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_line</span>(<span class="at">alpha =</span> <span class="fl">0.4</span>) <span class="sc">+</span></span>
+<span id="cb17-132"><a href="#cb17-132" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_point</span>(<span class="at">alpha =</span> <span class="fl">0.6</span>) <span class="sc">+</span></span>
+<span id="cb17-133"><a href="#cb17-133" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">x =</span> <span class="cn">NULL</span>, <span class="at">y =</span> <span class="st">"SBP (mmHg)"</span>)</span>
+<span id="cb17-134"><a href="#cb17-134" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb17-135"><a href="#cb17-135" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb17-136"><a href="#cb17-136" aria-hidden="true" tabindex="-1"></a><span class="fu">## 3. Assumptions</span></span>
+<span id="cb17-137"><a href="#cb17-137" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb17-138"><a href="#cb17-138" aria-hidden="true" tabindex="-1"></a>Independent *t*: approximate normality of the sample means; Welch's</span>
+<span id="cb17-139"><a href="#cb17-139" aria-hidden="true" tabindex="-1"></a>does not require equal variances. Paired *t*: approximate normality</span>
+<span id="cb17-140"><a href="#cb17-140" aria-hidden="true" tabindex="-1"></a>of the within-subject differences.</span>
+<span id="cb17-141"><a href="#cb17-141" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb17-144"><a href="#cb17-144" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
+<span id="cb17-145"><a href="#cb17-145" aria-hidden="true" tabindex="-1"></a><span class="co">#| fig-width: 5</span></span>
+<span id="cb17-146"><a href="#cb17-146" aria-hidden="true" tabindex="-1"></a><span class="co">#| fig-height: 3</span></span>
+<span id="cb17-147"><a href="#cb17-147" aria-hidden="true" tabindex="-1"></a>df_pair <span class="sc">|&gt;</span></span>
+<span id="cb17-148"><a href="#cb17-148" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ggplot</span>(<span class="fu">aes</span>(<span class="at">sample =</span> delta)) <span class="sc">+</span></span>
+<span id="cb17-149"><a href="#cb17-149" aria-hidden="true" tabindex="-1"></a>  <span class="fu">stat_qq</span>() <span class="sc">+</span> <span class="fu">stat_qq_line</span>(<span class="at">colour =</span> <span class="st">"firebrick"</span>) <span class="sc">+</span></span>
+<span id="cb17-150"><a href="#cb17-150" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">x =</span> <span class="st">"Theoretical"</span>, <span class="at">y =</span> <span class="st">"Sample (pair differences)"</span>)</span>
+<span id="cb17-151"><a href="#cb17-151" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb17-152"><a href="#cb17-152" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb17-153"><a href="#cb17-153" aria-hidden="true" tabindex="-1"></a><span class="fu">## 4. Conduct</span></span>
+<span id="cb17-154"><a href="#cb17-154" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb17-155"><a href="#cb17-155" aria-hidden="true" tabindex="-1"></a><span class="fu">### Two-sample (Welch)</span></span>
+<span id="cb17-156"><a href="#cb17-156" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb17-159"><a href="#cb17-159" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
+<span id="cb17-160"><a href="#cb17-160" aria-hidden="true" tabindex="-1"></a>tt_welch <span class="ot">&lt;-</span> <span class="fu">t.test</span>(sbp <span class="sc">~</span> arm, <span class="at">data =</span> df_ind, <span class="at">var.equal =</span> <span class="cn">FALSE</span>)</span>
+<span id="cb17-161"><a href="#cb17-161" aria-hidden="true" tabindex="-1"></a>tt_welch</span>
+<span id="cb17-162"><a href="#cb17-162" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb17-163"><a href="#cb17-163" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb17-164"><a href="#cb17-164" aria-hidden="true" tabindex="-1"></a><span class="fu">### Two-sample Student (for comparison)</span></span>
+<span id="cb17-165"><a href="#cb17-165" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb17-168"><a href="#cb17-168" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
+<span id="cb17-169"><a href="#cb17-169" aria-hidden="true" tabindex="-1"></a>tt_student <span class="ot">&lt;-</span> <span class="fu">t.test</span>(sbp <span class="sc">~</span> arm, <span class="at">data =</span> df_ind, <span class="at">var.equal =</span> <span class="cn">TRUE</span>)</span>
+<span id="cb17-170"><a href="#cb17-170" aria-hidden="true" tabindex="-1"></a>tt_student</span>
+<span id="cb17-171"><a href="#cb17-171" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb17-172"><a href="#cb17-172" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb17-173"><a href="#cb17-173" aria-hidden="true" tabindex="-1"></a><span class="fu">### Paired</span></span>
+<span id="cb17-174"><a href="#cb17-174" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb17-177"><a href="#cb17-177" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
+<span id="cb17-178"><a href="#cb17-178" aria-hidden="true" tabindex="-1"></a>tt_paired <span class="ot">&lt;-</span> <span class="fu">t.test</span>(df_pair<span class="sc">$</span>post, df_pair<span class="sc">$</span>pre, <span class="at">paired =</span> <span class="cn">TRUE</span>)</span>
+<span id="cb17-179"><a href="#cb17-179" aria-hidden="true" tabindex="-1"></a>tt_paired</span>
+<span id="cb17-180"><a href="#cb17-180" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb17-181"><a href="#cb17-181" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb17-182"><a href="#cb17-182" aria-hidden="true" tabindex="-1"></a><span class="fu">### Effect size</span></span>
+<span id="cb17-183"><a href="#cb17-183" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb17-186"><a href="#cb17-186" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
+<span id="cb17-187"><a href="#cb17-187" aria-hidden="true" tabindex="-1"></a>d_ind    <span class="ot">&lt;-</span> <span class="fu">cohens_d</span>(sbp <span class="sc">~</span> arm, <span class="at">data =</span> df_ind)</span>
+<span id="cb17-188"><a href="#cb17-188" aria-hidden="true" tabindex="-1"></a>g_ind    <span class="ot">&lt;-</span> <span class="fu">hedges_g</span>(sbp <span class="sc">~</span> arm, <span class="at">data =</span> df_ind)</span>
+<span id="cb17-189"><a href="#cb17-189" aria-hidden="true" tabindex="-1"></a>d_paired <span class="ot">&lt;-</span> <span class="fu">cohens_d</span>(df_pair<span class="sc">$</span>post, df_pair<span class="sc">$</span>pre, <span class="at">paired =</span> <span class="cn">TRUE</span>)</span>
+<span id="cb17-190"><a href="#cb17-190" aria-hidden="true" tabindex="-1"></a><span class="fu">list</span>(<span class="at">d_ind =</span> d_ind, <span class="at">g_ind =</span> g_ind, <span class="at">d_paired =</span> d_paired)</span>
+<span id="cb17-191"><a href="#cb17-191" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb17-192"><a href="#cb17-192" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb17-193"><a href="#cb17-193" aria-hidden="true" tabindex="-1"></a><span class="fu">## 5. Concluding statement</span></span>
+<span id="cb17-194"><a href="#cb17-194" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb17-195"><a href="#cb17-195" aria-hidden="true" tabindex="-1"></a><span class="at">&gt; **Independent comparison.** Mean SBP was</span></span>
+<span id="cb17-196"><a href="#cb17-196" aria-hidden="true" tabindex="-1"></a><span class="at">&gt; </span><span class="in">`r round(mean(trt), 1)`</span><span class="at"> mmHg (SD </span><span class="in">`r round(sd(trt), 1)`</span><span class="at">) in the</span></span>
+<span id="cb17-197"><a href="#cb17-197" aria-hidden="true" tabindex="-1"></a><span class="at">&gt; treatment arm and </span><span class="in">`r round(mean(pla), 1)`</span><span class="at"> (SD</span></span>
+<span id="cb17-198"><a href="#cb17-198" aria-hidden="true" tabindex="-1"></a><span class="at">&gt; </span><span class="in">`r round(sd(pla), 1)`</span><span class="at">) in placebo. A Welch's *t*-test gave</span></span>
+<span id="cb17-199"><a href="#cb17-199" aria-hidden="true" tabindex="-1"></a><span class="at">&gt; *t*(</span><span class="in">`r round(tt_welch$parameter, 1)`</span><span class="at">) =</span></span>
+<span id="cb17-200"><a href="#cb17-200" aria-hidden="true" tabindex="-1"></a><span class="at">&gt; </span><span class="in">`r round(tt_welch$statistic, 2)`</span><span class="at">, *p* =</span></span>
+<span id="cb17-201"><a href="#cb17-201" aria-hidden="true" tabindex="-1"></a><span class="at">&gt; </span><span class="in">`r signif(tt_welch$p.value, 2)`</span><span class="at">, mean difference (treatment − placebo)</span></span>
+<span id="cb17-202"><a href="#cb17-202" aria-hidden="true" tabindex="-1"></a><span class="at">&gt; </span><span class="in">`r round(unname(tt_welch$estimate[1] - tt_welch$estimate[2]), 1)`</span><span class="at"> mmHg (95% CI</span></span>
+<span id="cb17-203"><a href="#cb17-203" aria-hidden="true" tabindex="-1"></a><span class="at">&gt; </span><span class="in">`r round(tt_welch$conf.int[1], 1)`</span><span class="at"> to</span></span>
+<span id="cb17-204"><a href="#cb17-204" aria-hidden="true" tabindex="-1"></a><span class="at">&gt; </span><span class="in">`r round(tt_welch$conf.int[2], 1)`</span><span class="at">). Cohen's *d* =</span></span>
+<span id="cb17-205"><a href="#cb17-205" aria-hidden="true" tabindex="-1"></a><span class="at">&gt; </span><span class="in">`r round(d_ind$Cohens_d, 2)`</span><span class="at"> (Hedges' *g* =</span></span>
+<span id="cb17-206"><a href="#cb17-206" aria-hidden="true" tabindex="-1"></a><span class="at">&gt; </span><span class="in">`r round(g_ind$Hedges_g, 2)`</span><span class="at">).</span></span>
+<span id="cb17-207"><a href="#cb17-207" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb17-208"><a href="#cb17-208" aria-hidden="true" tabindex="-1"></a><span class="at">&gt; **Paired comparison.** The within-subject change</span></span>
+<span id="cb17-209"><a href="#cb17-209" aria-hidden="true" tabindex="-1"></a><span class="at">&gt; (post − pre) had mean </span><span class="in">`r round(mean(df_pair$delta), 1)`</span><span class="at"> mmHg (SD</span></span>
+<span id="cb17-210"><a href="#cb17-210" aria-hidden="true" tabindex="-1"></a><span class="at">&gt; </span><span class="in">`r round(sd(df_pair$delta), 1)`</span><span class="at">); paired *t*-test *t*(</span><span class="in">`r tt_paired$parameter`</span><span class="at">)</span></span>
+<span id="cb17-211"><a href="#cb17-211" aria-hidden="true" tabindex="-1"></a><span class="at">&gt; = </span><span class="in">`r round(tt_paired$statistic, 2)`</span><span class="at">, *p* =</span></span>
+<span id="cb17-212"><a href="#cb17-212" aria-hidden="true" tabindex="-1"></a><span class="at">&gt; </span><span class="in">`r signif(tt_paired$p.value, 2)`</span><span class="at">, 95% CI</span></span>
+<span id="cb17-213"><a href="#cb17-213" aria-hidden="true" tabindex="-1"></a><span class="at">&gt; </span><span class="in">`r round(tt_paired$conf.int[1], 1)`</span><span class="at"> to</span></span>
+<span id="cb17-214"><a href="#cb17-214" aria-hidden="true" tabindex="-1"></a><span class="at">&gt; </span><span class="in">`r round(tt_paired$conf.int[2], 1)`</span><span class="at">.</span></span>
+<span id="cb17-215"><a href="#cb17-215" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb17-216"><a href="#cb17-216" aria-hidden="true" tabindex="-1"></a>The effect size is the number that generalises. A *p*-value tells</span>
+<span id="cb17-217"><a href="#cb17-217" aria-hidden="true" tabindex="-1"></a>you whether to reject; *d* and its CI tell you how much.</span>
+<span id="cb17-218"><a href="#cb17-218" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb17-219"><a href="#cb17-219" aria-hidden="true" tabindex="-1"></a>::: {.notes}</span>
+<span id="cb17-220"><a href="#cb17-220" aria-hidden="true" tabindex="-1"></a>Insist that students always look at the paired-difference Q-Q plot.</span>
+<span id="cb17-221"><a href="#cb17-221" aria-hidden="true" tabindex="-1"></a>The before/after line plot is pretty; the Q-Q plot is diagnostic.</span>
+<span id="cb17-222"><a href="#cb17-222" aria-hidden="true" tabindex="-1"></a>:::</span>
+<span id="cb17-223"><a href="#cb17-223" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb17-224"><a href="#cb17-224" aria-hidden="true" tabindex="-1"></a><span class="fu">## Common pitfalls</span></span>
+<span id="cb17-225"><a href="#cb17-225" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb17-226"><a href="#cb17-226" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>Running an independent-samples *t* on paired data and losing power.</span>
+<span id="cb17-227"><a href="#cb17-227" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>Reporting Student's *t* in the era of Welch; there is rarely a good</span>
+<span id="cb17-228"><a href="#cb17-228" aria-hidden="true" tabindex="-1"></a>  reason.</span>
+<span id="cb17-229"><a href="#cb17-229" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>Reporting *p* without *d* (or an equivalent effect size).</span>
+<span id="cb17-230"><a href="#cb17-230" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>Confusing effect size with statistical significance.</span>
+<span id="cb17-231"><a href="#cb17-231" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb17-232"><a href="#cb17-232" aria-hidden="true" tabindex="-1"></a><span class="fu">## Further reading</span></span>
+<span id="cb17-233"><a href="#cb17-233" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb17-234"><a href="#cb17-234" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>Delacre M et al. (2017). *Why psychologists should by default use</span>
+<span id="cb17-235"><a href="#cb17-235" aria-hidden="true" tabindex="-1"></a>  Welch's t-test*.</span>
+<span id="cb17-236"><a href="#cb17-236" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>Cohen J. *Statistical Power Analysis for the Behavioral Sciences*.</span>
+<span id="cb17-237"><a href="#cb17-237" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb17-238"><a href="#cb17-238" aria-hidden="true" tabindex="-1"></a><span class="fu">## Session info</span></span>
+<span id="cb17-239"><a href="#cb17-239" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb17-242"><a href="#cb17-242" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
+<span id="cb17-243"><a href="#cb17-243" aria-hidden="true" tabindex="-1"></a><span class="fu">sessionInfo</span>()</span>
+<span id="cb17-244"><a href="#cb17-244" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
 </code></pre></div><button title="Copy to Clipboard" class="code-copy-button" data-in-quarto-modal=""><i class="bi"></i></button></div>
 </div></div></div></div></div>
 </div> <!-- /content -->
 <footer class="footer">
   <div class="nav-footer">
     <div class="nav-footer-left">
-<p>#courses · MIT</p>
+<p>Prose: CC BY 4.0 · Code: MIT</p>
 </div>   
     <div class="nav-footer-center">
 <p><a href="../../get_started.html">Get Started</a> · <a href="../../overview.html">Overview</a> · <a href="../../schedule.html">Schedule</a> · <a href="../../cheatsheets.html">Cheatsheets</a> · <a href="../../shiny.html">Interactive apps</a> · <a href="../../appendices/research_workflow.html">Research workflow</a> · <a href="../../appendices/decision_tree.html">Decision tree</a> · <a href="../../appendices/glossary.html">Glossary</a> · <a href="../../appendices/common_errors.html">Common errors</a> · <a href="../../appendices/writing_a_report.html">Writing a report</a> · <a href="../../references.html">References</a> · <a href="../../acknowledgements.html">Acknowledgements</a> · <strong><a href="../../impressum.html">Impressum</a></strong> · <a href="mailto:58561665+r-heller@users.noreply.github.com">Kontakt</a></p>

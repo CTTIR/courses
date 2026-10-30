@@ -6,8 +6,8 @@
 <script src="../../site_libs/quarto-html/tippy.umd.min.js"></script>
 <link href="../../site_libs/quarto-html/tippy.css" rel="stylesheet">
 <link href="../../site_libs/quarto-html/light-border.css" rel="stylesheet">
-<link href="../../site_libs/quarto-html/quarto-syntax-highlighting-dark-d0ae9245876894da5ac7e18953ecc5cc.css" rel="stylesheet" id="quarto-text-highlighting-styles"><meta charset="utf-8">
-  <meta name="generator" content="quarto-1.9.37">
+<link href="../../site_libs/quarto-html/quarto-syntax-highlighting-dark-b626d73c4c936ccc3cb08be7d45d1df6.css" rel="stylesheet" id="quarto-text-highlighting-styles"><meta charset="utf-8">
+  <meta name="generator" content="quarto-1.10.19">
 
   <meta name="author" content="R. Heller">
   <title>#courses – Week 3, Session 2 — Competing risks and multistate models</title>
@@ -20,10 +20,13 @@
     /* Default styles provided by pandoc.
     ** See https://pandoc.org/MANUAL.html#variables-for-html for config info.
     */
-    code{white-space: pre-wrap;}
     span.smallcaps{font-variant: small-caps;}
-    div.columns{display: flex; gap: min(4vw, 1.5em);}
-    div.column{flex: auto; overflow-x: auto;}
+    div.columns{display: flex; gap: 1.5em;}
+    div.column{flex: auto;}
+    @media screen {
+    div.columns{gap: min(4vw, 1.5em);}
+    div.column{overflow-x: auto;}
+    }
     div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
     ul.task-list{list-style: none;}
     ul.task-list li input[type="checkbox"] {
@@ -31,72 +34,6 @@
       margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
       vertical-align: middle;
     }
-    /* CSS for syntax highlighting */
-    html { -webkit-text-size-adjust: 100%; }
-    pre > code.sourceCode { white-space: pre; position: relative; }
-    pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
-    pre > code.sourceCode > span:empty { height: 1.2em; }
-    .sourceCode { overflow: visible; }
-    code.sourceCode > span { color: inherit; text-decoration: inherit; }
-    div.sourceCode { margin: 1em 0; }
-    pre.sourceCode { margin: 0; }
-    @media screen {
-    div.sourceCode { overflow: auto; }
-    }
-    @media print {
-    pre > code.sourceCode { white-space: pre-wrap; }
-    pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
-    }
-    pre.numberSource code
-      { counter-reset: source-line 0; }
-    pre.numberSource code > span
-      { position: relative; left: -4em; counter-increment: source-line; }
-    pre.numberSource code > span > a:first-child::before
-      { content: counter(source-line);
-        position: relative; left: -1em; text-align: right; vertical-align: baseline;
-        border: none; display: inline-block;
-        -webkit-touch-callout: none; -webkit-user-select: none;
-        -khtml-user-select: none; -moz-user-select: none;
-        -ms-user-select: none; user-select: none;
-        padding: 0 4px; width: 4em;
-      }
-    pre.numberSource { margin-left: 3em;  padding-left: 4px; }
-    div.sourceCode
-      { color: #f8f8f2;  }
-    @media screen {
-    pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
-    }
-    code span { color: #f8f8f2; } /* Normal */
-    code span.al { color: #f07178; } /* Alert */
-    code span.an { color: #d4d0ab; } /* Annotation */
-    code span.at { color: #00e0e0; } /* Attribute */
-    code span.bn { color: #d4d0ab; } /* BaseN */
-    code span.bu { color: #abe338; } /* BuiltIn */
-    code span.cf { color: #ffa07a; font-weight: bold; } /* ControlFlow */
-    code span.ch { color: #abe338; } /* Char */
-    code span.cn { color: #ffd700; } /* Constant */
-    code span.co { color: #f8f8f2; font-style: italic; } /* Comment */
-    code span.cv { color: #ffd700; } /* CommentVar */
-    code span.do { color: #f8f8f2; } /* Documentation */
-    code span.dt { color: #ffa07a; } /* DataType */
-    code span.dv { color: #d4d0ab; } /* DecVal */
-    code span.er { color: #f07178; text-decoration: underline; } /* Error */
-    code span.ex { color: #00e0e0; font-weight: bold; } /* Extension */
-    code span.fl { color: #d4d0ab; } /* Float */
-    code span.fu { color: #ffa07a; } /* Function */
-    code span.im { color: #abe338; } /* Import */
-    code span.in { color: #d4d0ab; } /* Information */
-    code span.kw { color: #ffa07a; font-weight: bold; } /* Keyword */
-    code span.op { color: #ffa07a; } /* Operator */
-    code span.ot { color: #00e0e0; } /* Other */
-    code span.pp { color: #dcc6e0; } /* Preprocessor */
-    code span.re { color: #00e0e0; background-color: #f8f8f2; } /* RegionMarker */
-    code span.sc { color: #abe338; } /* SpecialChar */
-    code span.ss { color: #abe338; } /* SpecialString */
-    code span.st { color: #abe338; } /* String */
-    code span.va { color: #00e0e0; } /* Variable */
-    code span.vs { color: #abe338; } /* VerbatimString */
-    code span.wa { color: #dcc6e0; } /* Warning */
   </style>
   <link rel="stylesheet" href="../../site_libs/revealjs/dist/theme/quarto-95712503ec230d592661dbfa35434f1f.css">
   <link href="../../site_libs/revealjs/plugin/quarto-line-highlight/line-highlight.css" rel="stylesheet">
@@ -205,7 +142,7 @@
 <div class="quarto-title-authors">
 <div class="quarto-title-author">
 <div class="quarto-title-author-name">
-R. Heller 
+R. Heller
 </div>
 </div>
 </div>
@@ -248,15 +185,6 @@ R. Heller
 </section>
 <section id="setup" class="slide level2">
 <h2>Setup</h2>
-<div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb1"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a></a><span class="fu">library</span>(tidyverse)</span>
-<span id="cb1-2"><a></a><span class="fu">library</span>(survival)</span>
-<span id="cb1-3"><a></a><span class="fu">library</span>(tidycmprsk)</span>
-<span id="cb1-4"><a></a><span class="fu">library</span>(ggsurvfit)</span>
-<span id="cb1-5"><a></a><span class="fu">library</span>(mstate)</span>
-<span id="cb1-6"><a></a><span class="fu">set.seed</span>(<span class="dv">42</span>)</span>
-<span id="cb1-7"><a></a><span class="fu">theme_set</span>(<span class="fu">theme_minimal</span>(<span class="at">base_size =</span> <span class="dv">12</span>))</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
-</div>
 </section>
 <section id="hypothesis" class="slide level2">
 <h2>1. Hypothesis</h2>
@@ -264,38 +192,8 @@ R. Heller
 </section>
 <section id="visualise" class="slide level2">
 <h2>2. Visualise</h2>
-<div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb2"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb2-1"><a></a><span class="fu">data</span>(colon, <span class="at">package =</span> <span class="st">"survival"</span>)</span>
-<span id="cb2-2"><a></a><span class="co"># Keep death records (etype == 2) + recurrence merged; for teaching</span></span>
-<span id="cb2-3"><a></a><span class="co"># we build a two-event dataset:</span></span>
-<span id="cb2-4"><a></a>dat <span class="ot">&lt;-</span> colon <span class="sc">|&gt;</span></span>
-<span id="cb2-5"><a></a>  <span class="fu">filter</span>(etype <span class="sc">==</span> <span class="dv">1</span>) <span class="sc">|&gt;</span>                       <span class="co"># recurrence row per subject</span></span>
-<span id="cb2-6"><a></a>  <span class="fu">transmute</span>(id, time, <span class="at">status_rec =</span> status,</span>
-<span id="cb2-7"><a></a>            rx, age, sex) <span class="sc">|&gt;</span></span>
-<span id="cb2-8"><a></a>  <span class="fu">left_join</span>(</span>
-<span id="cb2-9"><a></a>    colon <span class="sc">|&gt;</span> <span class="fu">filter</span>(etype <span class="sc">==</span> <span class="dv">2</span>) <span class="sc">|&gt;</span></span>
-<span id="cb2-10"><a></a>      <span class="fu">transmute</span>(id, <span class="at">time_d =</span> time, <span class="at">status_d =</span> status),</span>
-<span id="cb2-11"><a></a>    <span class="at">by =</span> <span class="st">"id"</span></span>
-<span id="cb2-12"><a></a>  ) <span class="sc">|&gt;</span></span>
-<span id="cb2-13"><a></a>  <span class="fu">mutate</span>(</span>
-<span id="cb2-14"><a></a>    <span class="co"># event type: 0 censored, 1 recurrence, 2 death without recurrence</span></span>
-<span id="cb2-15"><a></a>    <span class="at">etype =</span> <span class="fu">case_when</span>(</span>
-<span id="cb2-16"><a></a>      status_rec <span class="sc">==</span> <span class="dv">1</span> <span class="sc">~</span> <span class="dv">1</span>L,</span>
-<span id="cb2-17"><a></a>      status_d   <span class="sc">==</span> <span class="dv">1</span> <span class="sc">~</span> <span class="dv">2</span>L,</span>
-<span id="cb2-18"><a></a>      <span class="cn">TRUE</span>            <span class="sc">~</span> <span class="dv">0</span>L</span>
-<span id="cb2-19"><a></a>    ),</span>
-<span id="cb2-20"><a></a>    <span class="at">etime =</span> <span class="fu">pmin</span>(time, time_d, <span class="at">na.rm =</span> <span class="cn">TRUE</span>),</span>
-<span id="cb2-21"><a></a>    <span class="at">etype_f =</span> <span class="fu">factor</span>(etype, <span class="at">levels =</span> <span class="dv">0</span><span class="sc">:</span><span class="dv">2</span>,</span>
-<span id="cb2-22"><a></a>                     <span class="at">labels =</span> <span class="fu">c</span>(<span class="st">"censored"</span>, <span class="st">"recurrence"</span>, <span class="st">"death"</span>))</span>
-<span id="cb2-23"><a></a>  ) <span class="sc">|&gt;</span></span>
-<span id="cb2-24"><a></a>  <span class="fu">drop_na</span>(etime, etype_f, rx)</span>
-<span id="cb2-25"><a></a></span>
-<span id="cb2-26"><a></a><span class="fu">ggplot</span>(dat, <span class="fu">aes</span>(etime, <span class="at">fill =</span> etype_f)) <span class="sc">+</span></span>
-<span id="cb2-27"><a></a>  <span class="fu">geom_histogram</span>(<span class="at">bins =</span> <span class="dv">40</span>, <span class="at">alpha =</span> <span class="fl">0.7</span>, <span class="at">position =</span> <span class="st">"identity"</span>) <span class="sc">+</span></span>
-<span id="cb2-28"><a></a>  <span class="fu">labs</span>(<span class="at">x =</span> <span class="st">"Time (days)"</span>, <span class="at">y =</span> <span class="st">"Count"</span>, <span class="at">fill =</span> <span class="cn">NULL</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 
-</div>
-<img data-src="lab_week3_session2_files/figure-html/unnamed-chunk-1-1.png" width="672" class="r-stretch"></section>
+<img data-src="lab_week3_session2_files/figure-revealjs/unnamed-chunk-1-1.png" width="960" class="r-stretch"></section>
 <section id="assumptions" class="slide level2">
 <h2>3. Assumptions</h2>
 <p>Non-informative censoring within cause; proportional hazards for Fine-Gray; for multistate, Markov transitions (future depends only on current state).</p>
@@ -303,8 +201,6 @@ R. Heller
 <section id="conduct" class="slide level2">
 <h2>4. Conduct</h2>
 <div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb3"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb3-1"><a></a>cif <span class="ot">&lt;-</span> <span class="fu">cuminc</span>(<span class="fu">Surv</span>(etime, etype_f) <span class="sc">~</span> rx, <span class="at">data =</span> dat)</span>
-<span id="cb3-2"><a></a>cif</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>strata    time    n.risk   estimate   std.error   95% CI          
 Obs       500     203      0.006      0.004       0.001, 0.021    
@@ -353,16 +249,8 @@ recurrence   23.7        2.00   &lt;0.001
 death        1.09        2.00   0.58       </code></pre>
 </div>
 </div>
-<div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb7"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb7-1"><a></a>ggsurvfit<span class="sc">::</span><span class="fu">ggcuminc</span>(cif, <span class="at">outcome =</span> <span class="fu">c</span>(<span class="st">"recurrence"</span>, <span class="st">"death"</span>)) <span class="sc">+</span></span>
-<span id="cb7-2"><a></a>  <span class="fu">labs</span>(<span class="at">x =</span> <span class="st">"Days"</span>, <span class="at">y =</span> <span class="st">"Cumulative incidence"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 
-</div>
-<img data-src="lab_week3_session2_files/figure-html/unnamed-chunk-3-1.png" width="576" class="r-stretch"><div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb8"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb8-1"><a></a><span class="co"># Fine-Gray subdistribution hazard for recurrence</span></span>
-<span id="cb8-2"><a></a>fg <span class="ot">&lt;-</span> <span class="fu">crr</span>(<span class="fu">Surv</span>(etime, etype_f) <span class="sc">~</span> rx <span class="sc">+</span> age <span class="sc">+</span> sex, <span class="at">data =</span> dat,</span>
-<span id="cb8-3"><a></a>          <span class="at">failcode =</span> <span class="st">"recurrence"</span>)</span>
-<span id="cb8-4"><a></a>fg</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<img data-src="lab_week3_session2_files/figure-revealjs/unnamed-chunk-3-1.png" width="576" class="r-stretch"><div class="cell">
 <div class="cell-output cell-output-stdout">
 <pre><code>
 Variable    Coef     SE      HR     95% CI       p-value    
@@ -373,22 +261,6 @@ sex         -0.113   0.093   0.89   0.75, 1.07   0.22       </code></pre>
 </div>
 </div>
 <div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb10"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb10-1"><a></a><span class="co"># Multistate: illness-death using mstate on a simple simulated dataset</span></span>
-<span id="cb10-2"><a></a>n <span class="ot">&lt;-</span> <span class="dv">300</span></span>
-<span id="cb10-3"><a></a>sim <span class="ot">&lt;-</span> <span class="fu">tibble</span>(</span>
-<span id="cb10-4"><a></a>  <span class="at">id =</span> <span class="fu">seq_len</span>(n),</span>
-<span id="cb10-5"><a></a>  <span class="at">t_ill   =</span> <span class="fu">rexp</span>(n, <span class="at">rate =</span> <span class="fl">0.02</span>),</span>
-<span id="cb10-6"><a></a>  <span class="at">t_death =</span> <span class="fu">rexp</span>(n, <span class="at">rate =</span> <span class="fl">0.01</span>)</span>
-<span id="cb10-7"><a></a>) <span class="sc">|&gt;</span></span>
-<span id="cb10-8"><a></a>  <span class="fu">mutate</span>(</span>
-<span id="cb10-9"><a></a>    <span class="at">t1 =</span> <span class="fu">pmin</span>(t_ill, t_death, <span class="dv">50</span>),</span>
-<span id="cb10-10"><a></a>    <span class="at">s1 =</span> <span class="fu">if_else</span>(t_ill <span class="sc">&lt;</span> t_death <span class="sc">&amp;</span> t_ill <span class="sc">&lt;=</span> <span class="dv">50</span>, <span class="dv">1</span>L, <span class="dv">0</span>L),</span>
-<span id="cb10-11"><a></a>    <span class="at">s2 =</span> <span class="fu">if_else</span>(t_death <span class="sc">&lt;=</span> <span class="dv">50</span> <span class="sc">&amp;</span> t_death <span class="sc">&lt;</span> t_ill, <span class="dv">1</span>L, <span class="dv">0</span>L)</span>
-<span id="cb10-12"><a></a>  )</span>
-<span id="cb10-13"><a></a></span>
-<span id="cb10-14"><a></a>tmat <span class="ot">&lt;-</span> <span class="fu">transMat</span>(<span class="at">x =</span> <span class="fu">list</span>(<span class="fu">c</span>(<span class="dv">2</span>, <span class="dv">3</span>), <span class="fu">c</span>(<span class="dv">3</span>), <span class="fu">c</span>()),</span>
-<span id="cb10-15"><a></a>                 <span class="at">names =</span> <span class="fu">c</span>(<span class="st">"healthy"</span>, <span class="st">"ill"</span>, <span class="st">"dead"</span>))</span>
-<span id="cb10-16"><a></a>tmat</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>         to
 from      healthy ill dead
@@ -437,19 +309,17 @@ from      healthy ill dead
 <section id="session-info" class="slide level2">
 <h2>Session info</h2>
 <div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb12"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb12-1"><a></a><span class="fu">sessionInfo</span>()</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stdout">
-<pre><code>R version 4.5.2 (2025-10-31 ucrt)
-Platform: x86_64-w64-mingw32/x64
-Running under: Windows 11 x64 (build 26200)
+<pre><code>R version 4.6.1 (2026-06-24)
+Platform: aarch64-apple-darwin27.0.0
+Running under: macOS Golden Gate 27.0.1
 
 Matrix products: default
-  LAPACK version 3.12.1
+BLAS:   /opt/homebrew/Cellar/openblas/0.3.34/lib/libopenblasp-r0.3.34.dylib 
+LAPACK: /opt/homebrew/Cellar/r/4.6.1_1/lib/R/lib/libRlapack.dylib;  LAPACK version 3.12.1
 
 locale:
-[1] LC_COLLATE=English_Germany.utf8  LC_CTYPE=English_Germany.utf8   
-[3] LC_MONETARY=English_Germany.utf8 LC_NUMERIC=C                    
-[5] LC_TIME=English_Germany.utf8    
+[1] C.UTF-8/C.UTF-8/C.UTF-8/C/C.UTF-8/C.UTF-8
 
 time zone: Europe/Berlin
 tzcode source: internal
@@ -458,28 +328,27 @@ attached base packages:
 [1] stats     graphics  grDevices utils     datasets  methods   base     
 
 other attached packages:
- [1] mstate_0.3.3     ggsurvfit_1.2.0  tidycmprsk_1.1.2 survival_3.8-6  
+ [1] mstate_0.3.3     ggsurvfit_1.2.1  tidycmprsk_1.1.2 survival_3.8-6  
  [5] lubridate_1.9.5  forcats_1.0.1    stringr_1.6.0    dplyr_1.2.1     
  [9] purrr_1.2.2      readr_2.2.0      tidyr_1.3.2      tibble_3.3.1    
 [13] ggplot2_4.0.3    tidyverse_2.0.0 
 
 loaded via a namespace (and not attached):
- [1] generics_0.1.4      gtsummary_2.5.0     stringi_1.8.7      
+ [1] generics_0.1.4      gtsummary_2.6.1     stringi_1.8.9      
  [4] lattice_0.22-9      hms_1.1.4           digest_0.6.39      
- [7] magrittr_2.0.4      evaluate_1.0.5      grid_4.5.2         
-[10] timechange_0.4.0    RColorBrewer_1.1-3  cards_0.7.1        
+ [7] magrittr_2.0.5      evaluate_1.0.5      grid_4.6.1         
+[10] timechange_0.4.0    RColorBrewer_1.1-3  cards_0.9.0        
 [13] fastmap_1.2.0       jsonlite_2.0.0      Matrix_1.7-5       
 [16] backports_1.5.1     scales_1.4.0        cli_3.6.6          
-[19] rlang_1.2.0         hardhat_1.4.3       splines_4.5.2      
-[22] withr_3.0.2         yaml_2.3.12         otel_0.2.0         
-[25] tools_4.5.2         tzdb_0.5.0          broom_1.0.12       
+[19] rlang_1.3.0         hardhat_1.4.3       splines_4.6.1      
+[22] withr_3.0.3         yaml_2.3.12         otel_0.2.0         
+[25] tools_4.6.1         tzdb_0.5.0          broom_1.0.13       
 [28] vctrs_0.7.3         R6_2.6.1            lifecycle_1.0.5    
-[31] htmlwidgets_1.6.4   pkgconfig_2.0.3     pillar_1.11.1      
-[34] gtable_0.3.6        glue_1.8.1          data.table_1.18.2.1
-[37] xfun_0.57           tidyselect_1.2.1    knitr_1.51         
-[40] farver_2.1.2        cmprsk_2.2-12       htmltools_0.5.9    
-[43] labeling_0.4.3      rmarkdown_2.31      compiler_4.5.2     
-[46] S7_0.2.2           </code></pre>
+[31] pkgconfig_2.0.3     pillar_1.11.1       gtable_0.3.6       
+[34] glue_1.8.1          data.table_1.18.6.1 xfun_0.62          
+[37] tidyselect_1.2.1    knitr_1.52          farver_2.1.2       
+[40] cmprsk_2.2-12       htmltools_0.5.9     labeling_0.4.3     
+[43] rmarkdown_2.32      compiler_4.6.1      S7_0.2.2           </code></pre>
 </div>
 </div>
 
@@ -700,6 +569,44 @@ loaded via a namespace (and not attached):
         ]
       });
     </script>
+    
+    <script>
+      // htmlwidgets need to know to resize themselves when slides are shown/hidden.
+      // Fire the "slideenter" event (handled by htmlwidgets.js) when the current
+      // slide changes (different for each slide format).
+      (function () {
+        // dispatch for htmlwidgets
+        function fireSlideEnter() {
+          const event = window.document.createEvent("Event");
+          event.initEvent("slideenter", true, true);
+          window.document.dispatchEvent(event);
+        }
+
+        function fireSlideChanged(previousSlide, currentSlide) {
+          fireSlideEnter();
+
+          // dispatch for shiny
+          if (window.jQuery) {
+            if (previousSlide) {
+              window.jQuery(previousSlide).trigger("hidden");
+            }
+            if (currentSlide) {
+              window.jQuery(currentSlide).trigger("shown");
+            }
+          }
+        }
+
+        // hookup for slidy
+        if (window.w3c_slidy) {
+          window.w3c_slidy.add_observer(function (slide_num) {
+            // slide_num starts at position 1
+            fireSlideChanged(null, w3c_slidy.slides[slide_num - 1]);
+          });
+        }
+
+      })();
+    </script>
+
     <script id="quarto-html-after-body" type="application/javascript">
       window.document.addEventListener("DOMContentLoaded", function (event) {
         const tabsets =  window.document.querySelectorAll(".panel-tabset-tabby")

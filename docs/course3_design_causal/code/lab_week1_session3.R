@@ -31,12 +31,13 @@ print(p)
 # normal residuals within arm.
 
 # --- 5. Conduct / Fit ------------------------------------------
-fit <- t.test(y ~ arm, data = trial)
+fit <- with(trial, t.test(y[arm == "new"], y[arm == "comparator"],
+                          conf.level = 0.95))
 print(fit)
 
 delta <- 3
 ci <- fit$conf.int
-est <- diff(rev(fit$estimate))  # new - comparator
+est <- unname(fit$estimate[1] - fit$estimate[2])  # new - comparator
 ni_pass <- ci[1] > -delta
 
 # --- 6. Report -------------------------------------------------

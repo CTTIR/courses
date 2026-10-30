@@ -17,7 +17,7 @@ theme_set(theme_minimal(base_size = 12))
 # transition matrix.
 
 # --- 2. Data ---------------------------------------------------
-data(colon, package = "survival")
+colon <- survival::colon
 dat <- colon |>
   filter(etype == 1) |>
   transmute(id, time, status_rec = status, rx, age, sex) |>

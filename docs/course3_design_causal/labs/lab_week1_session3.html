@@ -2,7 +2,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
 
 <meta charset="utf-8">
-<meta name="generator" content="quarto-1.9.37">
+<meta name="generator" content="quarto-1.10.19">
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
@@ -13,10 +13,13 @@
 /* Default styles provided by pandoc.
 ** See https://pandoc.org/MANUAL.html#variables-for-html for config info.
 */
-code{white-space: pre-wrap;}
 span.smallcaps{font-variant: small-caps;}
-div.columns{display: flex; gap: min(4vw, 1.5em);}
-div.column{flex: auto; overflow-x: auto;}
+div.columns{display: flex; gap: 1.5em;}
+div.column{flex: auto;}
+@media screen {
+div.columns{gap: min(4vw, 1.5em);}
+div.column{overflow-x: auto;}
+}
 div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
 ul.task-list{list-style: none;}
 ul.task-list li input[type="checkbox"] {
@@ -71,12 +74,12 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <script src="../../site_libs/quarto-html/tippy.umd.min.js"></script>
 <script src="../../site_libs/quarto-html/anchor.min.js"></script>
 <link href="../../site_libs/quarto-html/tippy.css" rel="stylesheet">
-<link href="../../site_libs/quarto-html/quarto-syntax-highlighting-2065f9e58f6345017599ef1c45dc3d4f.css" rel="stylesheet" class="quarto-color-scheme" id="quarto-text-highlighting-styles">
-<link href="../../site_libs/quarto-html/quarto-syntax-highlighting-dark-ced54966b0e53f059c291d5781927a30.css" rel="stylesheet" class="quarto-color-scheme quarto-color-alternate" id="quarto-text-highlighting-styles">
+<link href="../../site_libs/quarto-html/quarto-syntax-highlighting-9f3547545508946eee83ef8b606cbadf.css" rel="stylesheet" class="quarto-color-scheme" id="quarto-text-highlighting-styles">
+<link href="../../site_libs/quarto-html/quarto-syntax-highlighting-dark-8d43248e80c6749424940840481457b2.css" rel="stylesheet" class="quarto-color-scheme quarto-color-alternate" id="quarto-text-highlighting-styles">
 <script src="../../site_libs/bootstrap/bootstrap.min.js"></script>
 <link href="../../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
-<link href="../../site_libs/bootstrap/bootstrap-e6d3843e299d450790cfb48988d4232e.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme" id="quarto-bootstrap" data-mode="light">
-<link href="../../site_libs/bootstrap/bootstrap-dark-a84e9e0d3bdc903e291dd8ca38ce98a5.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme quarto-color-alternate" id="quarto-bootstrap" data-mode="dark">
+<link href="../../site_libs/bootstrap/bootstrap-0c1962fc29c4e87f8b37717c07588c31.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme" id="quarto-bootstrap" data-mode="light">
+<link href="../../site_libs/bootstrap/bootstrap-dark-33ee418c30da5be27be819967c4cb66e.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme quarto-color-alternate" id="quarto-bootstrap" data-mode="dark">
 <script id="quarto-search-options" type="application/json">{
   "language": {
     "search-no-results-text": "No results",
@@ -93,9 +96,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   }
 }</script>
 <script defer="" data-domain="cttir.github.io/courses" src="https://analytics.hellebo.de/js/script.file-downloads.outbound-links.js"></script>
-
 <script>window.plausible = window.plausible || function() { (window.plausible.q = window.plausible.q || []).push(arguments) }</script>
-
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin="">
 <link href="https://fonts.googleapis.com/css2?family=Source+Sans+3:wght@300;400;500;600;700&amp;family=JetBrains+Mono:wght@400;500&amp;display=swap" rel="stylesheet">
@@ -441,7 +442,7 @@ Note
 </section>
 <section id="hypothesis" class="level2">
 <h2 class="anchored" data-anchor-id="hypothesis">1. Hypothesis</h2>
-<p>H0: the new treatment is worse than the comparator by more than Δ = 3 units on a continuous outcome. H1: the new treatment is not worse by more than Δ.</p>
+<p>Higher outcomes are better. H0: new − comparator ≤ −3. H1: new − comparator &gt; −3. The lower bound of a two-sided 95% interval implements a one-sided test at alpha = 0.025 for this pre-specified margin.</p>
 </section>
 <section id="visualise" class="level2">
 <h2 class="anchored" data-anchor-id="visualise">2. Visualise</h2>
@@ -473,33 +474,34 @@ Note
 <section id="conduct" class="level2">
 <h2 class="anchored" data-anchor-id="conduct">4. Conduct</h2>
 <div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb3"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a>fit <span class="ot">&lt;-</span> <span class="fu">t.test</span>(y <span class="sc">~</span> arm, <span class="at">data =</span> trial)</span>
-<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a>fit</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb3"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a>fit <span class="ot">&lt;-</span> <span class="fu">with</span>(trial, <span class="fu">t.test</span>(y[arm <span class="sc">==</span> <span class="st">"new"</span>], y[arm <span class="sc">==</span> <span class="st">"comparator"</span>],</span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a>                          <span class="at">conf.level =</span> <span class="fl">0.95</span>))</span>
+<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a>fit</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>
     Welch Two Sample t-test
 
-data:  y by arm
-t = 0.75382, df = 297.66, p-value = 0.4516
-alternative hypothesis: true difference in means between group comparator and group new is not equal to 0
+data:  y[arm == "new"] and y[arm == "comparator"]
+t = -0.75382, df = 297.66, p-value = 0.4516
+alternative hypothesis: true difference in means is not equal to 0
 95 percent confidence interval:
- -1.386395  3.107936
+ -3.107936  1.386395
 sample estimates:
-mean in group comparator        mean in group new 
-                69.71260                 68.85182 </code></pre>
+mean of x mean of y 
+ 68.85182  69.71260 </code></pre>
 </div>
 </div>
 <div class="cell">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb5"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a>delta <span class="ot">&lt;-</span> <span class="dv">3</span></span>
 <span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a>ci <span class="ot">&lt;-</span> fit<span class="sc">$</span>conf.int</span>
-<span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a>est <span class="ot">&lt;-</span> <span class="fu">diff</span>(<span class="fu">rev</span>(fit<span class="sc">$</span>estimate))  <span class="co"># new - comparator</span></span>
+<span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a>est <span class="ot">&lt;-</span> <span class="fu">unname</span>(fit<span class="sc">$</span>estimate[<span class="dv">1</span>] <span class="sc">-</span> fit<span class="sc">$</span>estimate[<span class="dv">2</span>])  <span class="co"># new - comparator</span></span>
 <span id="cb5-4"><a href="#cb5-4" aria-hidden="true" tabindex="-1"></a>ni_pass <span class="ot">&lt;-</span> ci[<span class="dv">1</span>] <span class="sc">&gt;</span> <span class="sc">-</span>delta</span>
 <span id="cb5-5"><a href="#cb5-5" aria-hidden="true" tabindex="-1"></a><span class="fu">tibble</span>(<span class="at">estimate =</span> est, <span class="at">low =</span> ci[<span class="dv">1</span>], <span class="at">high =</span> ci[<span class="dv">2</span>], <span class="at">margin =</span> <span class="sc">-</span>delta, ni_pass)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stdout">
 <pre><code># A tibble: 1 × 5
   estimate   low  high margin ni_pass
      &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt;  &lt;dbl&gt; &lt;lgl&gt;  
-1    0.861 -1.39  3.11     -3 TRUE   </code></pre>
+1   -0.861 -3.11  1.39     -3 FALSE  </code></pre>
 </div>
 </div>
 <div class="cell">
@@ -523,7 +525,7 @@ mean in group comparator        mean in group new
 <section id="concluding-statement" class="level2">
 <h2 class="anchored" data-anchor-id="concluding-statement">5. Concluding statement</h2>
 <blockquote class="blockquote">
-<p>The new treatment had a mean difference of 0.86 versus comparator (95% CI: -1.39 to 3.11). With a pre-specified non-inferiority margin of Δ = 3, the new treatment met the non-inferiority criterion because the lower bound exceeded −Δ.</p>
+<p>The new treatment had a mean difference of -0.86 versus comparator (95% CI: -3.11 to 1.39). With a pre-specified non-inferiority margin of Δ = 3, the new treatment did not meet the non-inferiority criterion because the lower bound fell below −Δ.</p>
 </blockquote>
 <section id="a-word-on-adaptive-designs" class="level3">
 <h3 class="anchored" data-anchor-id="a-word-on-adaptive-designs">A word on adaptive designs</h3>
@@ -555,17 +557,16 @@ mean in group comparator        mean in group new
 <div class="cell">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb8"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a><span class="fu">sessionInfo</span>()</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stdout">
-<pre><code>R version 4.5.2 (2025-10-31 ucrt)
-Platform: x86_64-w64-mingw32/x64
-Running under: Windows 11 x64 (build 26200)
+<pre><code>R version 4.6.1 (2026-06-24)
+Platform: aarch64-apple-darwin27.0.0
+Running under: macOS Golden Gate 27.0.1
 
 Matrix products: default
-  LAPACK version 3.12.1
+BLAS:   /opt/homebrew/Cellar/openblas/0.3.34/lib/libopenblasp-r0.3.34.dylib 
+LAPACK: /opt/homebrew/Cellar/r/4.6.1_1/lib/R/lib/libRlapack.dylib;  LAPACK version 3.12.1
 
 locale:
-[1] LC_COLLATE=English_Germany.utf8  LC_CTYPE=English_Germany.utf8   
-[3] LC_MONETARY=English_Germany.utf8 LC_NUMERIC=C                    
-[5] LC_TIME=English_Germany.utf8    
+[1] C.UTF-8/C.UTF-8/C.UTF-8/C/C.UTF-8/C.UTF-8
 
 time zone: Europe/Berlin
 tzcode source: internal
@@ -579,15 +580,15 @@ other attached packages:
  [9] ggplot2_4.0.3   tidyverse_2.0.0
 
 loaded via a namespace (and not attached):
- [1] gtable_0.3.6       jsonlite_2.0.0     compiler_4.5.2     tidyselect_1.2.1  
+ [1] gtable_0.3.6       jsonlite_2.0.0     compiler_4.6.1     tidyselect_1.2.1  
  [5] scales_1.4.0       yaml_2.3.12        fastmap_1.2.0      R6_2.6.1          
- [9] labeling_0.4.3     generics_0.1.4     knitr_1.51         htmlwidgets_1.6.4 
-[13] pillar_1.11.1      RColorBrewer_1.1-3 tzdb_0.5.0         rlang_1.2.0       
-[17] stringi_1.8.7      xfun_0.57          S7_0.2.2           otel_0.2.0        
-[21] timechange_0.4.0   cli_3.6.6          withr_3.0.2        magrittr_2.0.4    
-[25] digest_0.6.39      grid_4.5.2         hms_1.1.4          lifecycle_1.0.5   
+ [9] labeling_0.4.3     generics_0.1.4     knitr_1.52         htmlwidgets_1.6.4 
+[13] pillar_1.11.1      RColorBrewer_1.1-3 tzdb_0.5.0         rlang_1.3.0       
+[17] stringi_1.8.9      xfun_0.62          S7_0.2.2           otel_0.2.0        
+[21] timechange_0.4.0   cli_3.6.6          withr_3.0.3        magrittr_2.0.5    
+[25] digest_0.6.39      grid_4.6.1         hms_1.1.4          lifecycle_1.0.5   
 [29] vctrs_0.7.3        evaluate_1.0.5     glue_1.8.1         farver_2.1.2      
-[33] rmarkdown_2.31     tools_4.5.2        pkgconfig_2.0.3    htmltools_0.5.9   </code></pre>
+[33] rmarkdown_2.32     tools_4.6.1        pkgconfig_2.0.3    htmltools_0.5.9   </code></pre>
 </div>
 </div>
 
@@ -595,17 +596,11 @@ loaded via a namespace (and not attached):
 <!-- -->
 
 <section class="related-tutorials" data-render="static">
-
 <h2 class="anchored">Related labs</h2>
-
 <p class="related-blurb">Closest matches by shared tags (clinical-trials, rct).</p>
-
 <div class="related-list"><div class="related-item"><span class="topic">Course 3 — Design &amp; Causal</span><a href="../../course3_design_causal/labs/lab_week1_session2.html">Randomised controlled trials</a><div class="related-desc">Shared: clinical-trials, rct</div></div><div class="related-item"><span class="topic">Course 2 — Regression</span><a href="../../course2_regression/labs/lab_week3_session2.html">ANCOVA in RCTs</a><div class="related-desc">Shared: clinical-trials, rct</div></div></div>
-
 <p class="network-link"><a href="../../overview.html">Explore the full label network →</a></p>
-
 </section>
-
 
 </section>
 
@@ -715,16 +710,16 @@ loaded via a namespace (and not attached):
     }
     function toggleCodeHandler(show) {
       return function(e) {
-        const detailsSrc = window.document.querySelectorAll(".cell > details > .sourceCode");
-        for (let i=0; i<detailsSrc.length; i++) {
-          const details = detailsSrc[i].parentElement;
+        const cellDetails = window.document.querySelectorAll(".cell details.code-fold");
+        for (let i=0; i<cellDetails.length; i++) {
+          const details = cellDetails[i];
           if (show) {
             details.open = true;
           } else {
             details.removeAttribute("open");
           }
         }
-        const cellCodeDivs = window.document.querySelectorAll(".cell > .sourceCode");
+        const cellCodeDivs = window.document.querySelectorAll(".cell div.sourceCode.cell-code");
         const fromCls = show ? "hidden" : "unhidden";
         const toCls = show ? "unhidden" : "hidden";
         for (let i=0; i<cellCodeDivs.length; i++) {
@@ -1161,9 +1156,9 @@ loaded via a namespace (and not attached):
 <span id="cb10-82"><a href="#cb10-82" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb10-83"><a href="#cb10-83" aria-hidden="true" tabindex="-1"></a><span class="fu">## 1. Hypothesis</span></span>
 <span id="cb10-84"><a href="#cb10-84" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb10-85"><a href="#cb10-85" aria-hidden="true" tabindex="-1"></a>H0: the new treatment is worse than the comparator by more than Δ</span>
-<span id="cb10-86"><a href="#cb10-86" aria-hidden="true" tabindex="-1"></a>= 3 units on a continuous outcome.</span>
-<span id="cb10-87"><a href="#cb10-87" aria-hidden="true" tabindex="-1"></a>H1: the new treatment is not worse by more than Δ.</span>
+<span id="cb10-85"><a href="#cb10-85" aria-hidden="true" tabindex="-1"></a>Higher outcomes are better. H0: new − comparator ≤ −3.</span>
+<span id="cb10-86"><a href="#cb10-86" aria-hidden="true" tabindex="-1"></a>H1: new − comparator &gt; −3. The lower bound of a two-sided 95% interval</span>
+<span id="cb10-87"><a href="#cb10-87" aria-hidden="true" tabindex="-1"></a>implements a one-sided test at alpha = 0.025 for this pre-specified margin.</span>
 <span id="cb10-88"><a href="#cb10-88" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb10-89"><a href="#cb10-89" aria-hidden="true" tabindex="-1"></a><span class="fu">## 2. Visualise</span></span>
 <span id="cb10-90"><a href="#cb10-90" aria-hidden="true" tabindex="-1"></a></span>
@@ -1191,81 +1186,82 @@ loaded via a namespace (and not attached):
 <span id="cb10-114"><a href="#cb10-114" aria-hidden="true" tabindex="-1"></a><span class="fu">## 4. Conduct</span></span>
 <span id="cb10-115"><a href="#cb10-115" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb10-118"><a href="#cb10-118" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
-<span id="cb10-119"><a href="#cb10-119" aria-hidden="true" tabindex="-1"></a>fit <span class="ot">&lt;-</span> <span class="fu">t.test</span>(y <span class="sc">~</span> arm, <span class="at">data =</span> trial)</span>
-<span id="cb10-120"><a href="#cb10-120" aria-hidden="true" tabindex="-1"></a>fit</span>
-<span id="cb10-121"><a href="#cb10-121" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
-<span id="cb10-122"><a href="#cb10-122" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb10-125"><a href="#cb10-125" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
-<span id="cb10-126"><a href="#cb10-126" aria-hidden="true" tabindex="-1"></a>delta <span class="ot">&lt;-</span> <span class="dv">3</span></span>
-<span id="cb10-127"><a href="#cb10-127" aria-hidden="true" tabindex="-1"></a>ci <span class="ot">&lt;-</span> fit<span class="sc">$</span>conf.int</span>
-<span id="cb10-128"><a href="#cb10-128" aria-hidden="true" tabindex="-1"></a>est <span class="ot">&lt;-</span> <span class="fu">diff</span>(<span class="fu">rev</span>(fit<span class="sc">$</span>estimate))  <span class="co"># new - comparator</span></span>
-<span id="cb10-129"><a href="#cb10-129" aria-hidden="true" tabindex="-1"></a>ni_pass <span class="ot">&lt;-</span> ci[<span class="dv">1</span>] <span class="sc">&gt;</span> <span class="sc">-</span>delta</span>
-<span id="cb10-130"><a href="#cb10-130" aria-hidden="true" tabindex="-1"></a><span class="fu">tibble</span>(<span class="at">estimate =</span> est, <span class="at">low =</span> ci[<span class="dv">1</span>], <span class="at">high =</span> ci[<span class="dv">2</span>], <span class="at">margin =</span> <span class="sc">-</span>delta, ni_pass)</span>
-<span id="cb10-131"><a href="#cb10-131" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
-<span id="cb10-132"><a href="#cb10-132" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb10-135"><a href="#cb10-135" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
-<span id="cb10-136"><a href="#cb10-136" aria-hidden="true" tabindex="-1"></a><span class="co">#| fig-width: 5</span></span>
-<span id="cb10-137"><a href="#cb10-137" aria-hidden="true" tabindex="-1"></a><span class="co">#| fig-height: 2.5</span></span>
-<span id="cb10-138"><a href="#cb10-138" aria-hidden="true" tabindex="-1"></a><span class="fu">tibble</span>(<span class="at">estimate =</span> est, <span class="at">low =</span> ci[<span class="dv">1</span>], <span class="at">high =</span> ci[<span class="dv">2</span>]) <span class="sc">|&gt;</span></span>
-<span id="cb10-139"><a href="#cb10-139" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ggplot</span>(<span class="fu">aes</span>(<span class="at">x =</span> estimate, <span class="at">y =</span> <span class="dv">1</span>)) <span class="sc">+</span></span>
-<span id="cb10-140"><a href="#cb10-140" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_point</span>(<span class="at">size =</span> <span class="dv">3</span>) <span class="sc">+</span></span>
-<span id="cb10-141"><a href="#cb10-141" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_errorbarh</span>(<span class="fu">aes</span>(<span class="at">xmin =</span> low, <span class="at">xmax =</span> high), <span class="at">height =</span> <span class="fl">0.1</span>) <span class="sc">+</span></span>
-<span id="cb10-142"><a href="#cb10-142" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_vline</span>(<span class="at">xintercept =</span> <span class="dv">0</span>, <span class="at">linetype =</span> <span class="st">"dashed"</span>, <span class="at">colour =</span> <span class="st">"grey40"</span>) <span class="sc">+</span></span>
-<span id="cb10-143"><a href="#cb10-143" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_vline</span>(<span class="at">xintercept =</span> <span class="sc">-</span>delta, <span class="at">colour =</span> <span class="st">"firebrick"</span>) <span class="sc">+</span></span>
-<span id="cb10-144"><a href="#cb10-144" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">x =</span> <span class="st">"Mean difference (new - comparator)"</span>, <span class="at">y =</span> <span class="cn">NULL</span>) <span class="sc">+</span></span>
-<span id="cb10-145"><a href="#cb10-145" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme</span>(<span class="at">axis.text.y =</span> <span class="fu">element_blank</span>())</span>
-<span id="cb10-146"><a href="#cb10-146" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
-<span id="cb10-147"><a href="#cb10-147" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb10-148"><a href="#cb10-148" aria-hidden="true" tabindex="-1"></a><span class="fu">## 5. Concluding statement</span></span>
-<span id="cb10-149"><a href="#cb10-149" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb10-150"><a href="#cb10-150" aria-hidden="true" tabindex="-1"></a><span class="at">&gt; The new treatment had a mean difference of </span><span class="in">`r round(est, 2)`</span><span class="at"> versus</span></span>
-<span id="cb10-151"><a href="#cb10-151" aria-hidden="true" tabindex="-1"></a><span class="at">&gt; comparator (95% CI: </span><span class="in">`r round(ci[1], 2)`</span><span class="at"> to </span><span class="in">`r round(ci[2], 2)`</span><span class="at">).</span></span>
-<span id="cb10-152"><a href="#cb10-152" aria-hidden="true" tabindex="-1"></a><span class="at">&gt; With a pre-specified non-inferiority margin of Δ = 3, the new</span></span>
-<span id="cb10-153"><a href="#cb10-153" aria-hidden="true" tabindex="-1"></a><span class="at">&gt; treatment </span><span class="in">`r if (ni_pass) "met" else "did not meet"`</span><span class="at"> the</span></span>
-<span id="cb10-154"><a href="#cb10-154" aria-hidden="true" tabindex="-1"></a><span class="at">&gt; non-inferiority criterion because the lower bound</span></span>
-<span id="cb10-155"><a href="#cb10-155" aria-hidden="true" tabindex="-1"></a><span class="at">&gt; </span><span class="in">`r if (ni_pass) "exceeded" else "fell below"`</span><span class="at"> −Δ.</span></span>
-<span id="cb10-156"><a href="#cb10-156" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb10-157"><a href="#cb10-157" aria-hidden="true" tabindex="-1"></a><span class="fu">### A word on adaptive designs</span></span>
-<span id="cb10-158"><a href="#cb10-158" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb10-159"><a href="#cb10-159" aria-hidden="true" tabindex="-1"></a>Adaptive designs work when the adaptation rules and the alpha spent</span>
-<span id="cb10-160"><a href="#cb10-160" aria-hidden="true" tabindex="-1"></a>at each look are pre-specified. Running an interim analysis with the</span>
-<span id="cb10-161"><a href="#cb10-161" aria-hidden="true" tabindex="-1"></a>hope of extending the trial if it looks promising — without a pre-</span>
-<span id="cb10-162"><a href="#cb10-162" aria-hidden="true" tabindex="-1"></a>specified rule — inflates Type I error and destroys the trial's</span>
-<span id="cb10-163"><a href="#cb10-163" aria-hidden="true" tabindex="-1"></a>inferential warranty.</span>
-<span id="cb10-164"><a href="#cb10-164" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb10-165"><a href="#cb10-165" aria-hidden="true" tabindex="-1"></a>::: {.notes}</span>
-<span id="cb10-166"><a href="#cb10-166" aria-hidden="true" tabindex="-1"></a>A common exam trap is to confuse "fails to reject superiority" with</span>
-<span id="cb10-167"><a href="#cb10-167" aria-hidden="true" tabindex="-1"></a>"establishes non-inferiority". They are not the same thing.</span>
-<span id="cb10-168"><a href="#cb10-168" aria-hidden="true" tabindex="-1"></a>:::</span>
-<span id="cb10-169"><a href="#cb10-169" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb10-170"><a href="#cb10-170" aria-hidden="true" tabindex="-1"></a><span class="fu">## Common pitfalls</span></span>
-<span id="cb10-171"><a href="#cb10-171" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb10-172"><a href="#cb10-172" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>Picking the NI margin after seeing the data.</span>
-<span id="cb10-173"><a href="#cb10-173" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>Using a two-sided superiority test and claiming non-inferiority.</span>
-<span id="cb10-174"><a href="#cb10-174" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>Running an "interim look" without a pre-specified spending rule.</span>
-<span id="cb10-175"><a href="#cb10-175" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>Treating equivalence and non-inferiority as interchangeable.</span>
-<span id="cb10-176"><a href="#cb10-176" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb10-177"><a href="#cb10-177" aria-hidden="true" tabindex="-1"></a><span class="fu">## Further reading</span></span>
-<span id="cb10-178"><a href="#cb10-178" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb10-179"><a href="#cb10-179" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>Piaggio G et al. (2012), *CONSORT extension for non-inferiority</span>
-<span id="cb10-180"><a href="#cb10-180" aria-hidden="true" tabindex="-1"></a>  and equivalence trials*.</span>
-<span id="cb10-181"><a href="#cb10-181" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>Jennison C, Turnbull BW. *Group Sequential Methods with</span>
-<span id="cb10-182"><a href="#cb10-182" aria-hidden="true" tabindex="-1"></a>  Applications to Clinical Trials*.</span>
-<span id="cb10-183"><a href="#cb10-183" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>FDA (2016), *Non-Inferiority Clinical Trials to Establish</span>
-<span id="cb10-184"><a href="#cb10-184" aria-hidden="true" tabindex="-1"></a>  Effectiveness*.</span>
-<span id="cb10-185"><a href="#cb10-185" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb10-186"><a href="#cb10-186" aria-hidden="true" tabindex="-1"></a><span class="fu">## Session info</span></span>
-<span id="cb10-187"><a href="#cb10-187" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb10-190"><a href="#cb10-190" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
-<span id="cb10-191"><a href="#cb10-191" aria-hidden="true" tabindex="-1"></a><span class="fu">sessionInfo</span>()</span>
-<span id="cb10-192"><a href="#cb10-192" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb10-119"><a href="#cb10-119" aria-hidden="true" tabindex="-1"></a>fit <span class="ot">&lt;-</span> <span class="fu">with</span>(trial, <span class="fu">t.test</span>(y[arm <span class="sc">==</span> <span class="st">"new"</span>], y[arm <span class="sc">==</span> <span class="st">"comparator"</span>],</span>
+<span id="cb10-120"><a href="#cb10-120" aria-hidden="true" tabindex="-1"></a>                          <span class="at">conf.level =</span> <span class="fl">0.95</span>))</span>
+<span id="cb10-121"><a href="#cb10-121" aria-hidden="true" tabindex="-1"></a>fit</span>
+<span id="cb10-122"><a href="#cb10-122" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb10-123"><a href="#cb10-123" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb10-126"><a href="#cb10-126" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
+<span id="cb10-127"><a href="#cb10-127" aria-hidden="true" tabindex="-1"></a>delta <span class="ot">&lt;-</span> <span class="dv">3</span></span>
+<span id="cb10-128"><a href="#cb10-128" aria-hidden="true" tabindex="-1"></a>ci <span class="ot">&lt;-</span> fit<span class="sc">$</span>conf.int</span>
+<span id="cb10-129"><a href="#cb10-129" aria-hidden="true" tabindex="-1"></a>est <span class="ot">&lt;-</span> <span class="fu">unname</span>(fit<span class="sc">$</span>estimate[<span class="dv">1</span>] <span class="sc">-</span> fit<span class="sc">$</span>estimate[<span class="dv">2</span>])  <span class="co"># new - comparator</span></span>
+<span id="cb10-130"><a href="#cb10-130" aria-hidden="true" tabindex="-1"></a>ni_pass <span class="ot">&lt;-</span> ci[<span class="dv">1</span>] <span class="sc">&gt;</span> <span class="sc">-</span>delta</span>
+<span id="cb10-131"><a href="#cb10-131" aria-hidden="true" tabindex="-1"></a><span class="fu">tibble</span>(<span class="at">estimate =</span> est, <span class="at">low =</span> ci[<span class="dv">1</span>], <span class="at">high =</span> ci[<span class="dv">2</span>], <span class="at">margin =</span> <span class="sc">-</span>delta, ni_pass)</span>
+<span id="cb10-132"><a href="#cb10-132" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb10-133"><a href="#cb10-133" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb10-136"><a href="#cb10-136" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
+<span id="cb10-137"><a href="#cb10-137" aria-hidden="true" tabindex="-1"></a><span class="co">#| fig-width: 5</span></span>
+<span id="cb10-138"><a href="#cb10-138" aria-hidden="true" tabindex="-1"></a><span class="co">#| fig-height: 2.5</span></span>
+<span id="cb10-139"><a href="#cb10-139" aria-hidden="true" tabindex="-1"></a><span class="fu">tibble</span>(<span class="at">estimate =</span> est, <span class="at">low =</span> ci[<span class="dv">1</span>], <span class="at">high =</span> ci[<span class="dv">2</span>]) <span class="sc">|&gt;</span></span>
+<span id="cb10-140"><a href="#cb10-140" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ggplot</span>(<span class="fu">aes</span>(<span class="at">x =</span> estimate, <span class="at">y =</span> <span class="dv">1</span>)) <span class="sc">+</span></span>
+<span id="cb10-141"><a href="#cb10-141" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_point</span>(<span class="at">size =</span> <span class="dv">3</span>) <span class="sc">+</span></span>
+<span id="cb10-142"><a href="#cb10-142" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_errorbarh</span>(<span class="fu">aes</span>(<span class="at">xmin =</span> low, <span class="at">xmax =</span> high), <span class="at">height =</span> <span class="fl">0.1</span>) <span class="sc">+</span></span>
+<span id="cb10-143"><a href="#cb10-143" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_vline</span>(<span class="at">xintercept =</span> <span class="dv">0</span>, <span class="at">linetype =</span> <span class="st">"dashed"</span>, <span class="at">colour =</span> <span class="st">"grey40"</span>) <span class="sc">+</span></span>
+<span id="cb10-144"><a href="#cb10-144" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_vline</span>(<span class="at">xintercept =</span> <span class="sc">-</span>delta, <span class="at">colour =</span> <span class="st">"firebrick"</span>) <span class="sc">+</span></span>
+<span id="cb10-145"><a href="#cb10-145" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">x =</span> <span class="st">"Mean difference (new - comparator)"</span>, <span class="at">y =</span> <span class="cn">NULL</span>) <span class="sc">+</span></span>
+<span id="cb10-146"><a href="#cb10-146" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme</span>(<span class="at">axis.text.y =</span> <span class="fu">element_blank</span>())</span>
+<span id="cb10-147"><a href="#cb10-147" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb10-148"><a href="#cb10-148" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb10-149"><a href="#cb10-149" aria-hidden="true" tabindex="-1"></a><span class="fu">## 5. Concluding statement</span></span>
+<span id="cb10-150"><a href="#cb10-150" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb10-151"><a href="#cb10-151" aria-hidden="true" tabindex="-1"></a><span class="at">&gt; The new treatment had a mean difference of </span><span class="in">`r round(est, 2)`</span><span class="at"> versus</span></span>
+<span id="cb10-152"><a href="#cb10-152" aria-hidden="true" tabindex="-1"></a><span class="at">&gt; comparator (95% CI: </span><span class="in">`r round(ci[1], 2)`</span><span class="at"> to </span><span class="in">`r round(ci[2], 2)`</span><span class="at">).</span></span>
+<span id="cb10-153"><a href="#cb10-153" aria-hidden="true" tabindex="-1"></a><span class="at">&gt; With a pre-specified non-inferiority margin of Δ = 3, the new</span></span>
+<span id="cb10-154"><a href="#cb10-154" aria-hidden="true" tabindex="-1"></a><span class="at">&gt; treatment </span><span class="in">`r if (ni_pass) "met" else "did not meet"`</span><span class="at"> the</span></span>
+<span id="cb10-155"><a href="#cb10-155" aria-hidden="true" tabindex="-1"></a><span class="at">&gt; non-inferiority criterion because the lower bound</span></span>
+<span id="cb10-156"><a href="#cb10-156" aria-hidden="true" tabindex="-1"></a><span class="at">&gt; </span><span class="in">`r if (ni_pass) "exceeded" else "fell below"`</span><span class="at"> −Δ.</span></span>
+<span id="cb10-157"><a href="#cb10-157" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb10-158"><a href="#cb10-158" aria-hidden="true" tabindex="-1"></a><span class="fu">### A word on adaptive designs</span></span>
+<span id="cb10-159"><a href="#cb10-159" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb10-160"><a href="#cb10-160" aria-hidden="true" tabindex="-1"></a>Adaptive designs work when the adaptation rules and the alpha spent</span>
+<span id="cb10-161"><a href="#cb10-161" aria-hidden="true" tabindex="-1"></a>at each look are pre-specified. Running an interim analysis with the</span>
+<span id="cb10-162"><a href="#cb10-162" aria-hidden="true" tabindex="-1"></a>hope of extending the trial if it looks promising — without a pre-</span>
+<span id="cb10-163"><a href="#cb10-163" aria-hidden="true" tabindex="-1"></a>specified rule — inflates Type I error and destroys the trial's</span>
+<span id="cb10-164"><a href="#cb10-164" aria-hidden="true" tabindex="-1"></a>inferential warranty.</span>
+<span id="cb10-165"><a href="#cb10-165" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb10-166"><a href="#cb10-166" aria-hidden="true" tabindex="-1"></a>::: {.notes}</span>
+<span id="cb10-167"><a href="#cb10-167" aria-hidden="true" tabindex="-1"></a>A common exam trap is to confuse "fails to reject superiority" with</span>
+<span id="cb10-168"><a href="#cb10-168" aria-hidden="true" tabindex="-1"></a>"establishes non-inferiority". They are not the same thing.</span>
+<span id="cb10-169"><a href="#cb10-169" aria-hidden="true" tabindex="-1"></a>:::</span>
+<span id="cb10-170"><a href="#cb10-170" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb10-171"><a href="#cb10-171" aria-hidden="true" tabindex="-1"></a><span class="fu">## Common pitfalls</span></span>
+<span id="cb10-172"><a href="#cb10-172" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb10-173"><a href="#cb10-173" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>Picking the NI margin after seeing the data.</span>
+<span id="cb10-174"><a href="#cb10-174" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>Using a two-sided superiority test and claiming non-inferiority.</span>
+<span id="cb10-175"><a href="#cb10-175" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>Running an "interim look" without a pre-specified spending rule.</span>
+<span id="cb10-176"><a href="#cb10-176" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>Treating equivalence and non-inferiority as interchangeable.</span>
+<span id="cb10-177"><a href="#cb10-177" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb10-178"><a href="#cb10-178" aria-hidden="true" tabindex="-1"></a><span class="fu">## Further reading</span></span>
+<span id="cb10-179"><a href="#cb10-179" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb10-180"><a href="#cb10-180" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>Piaggio G et al. (2012), *CONSORT extension for non-inferiority</span>
+<span id="cb10-181"><a href="#cb10-181" aria-hidden="true" tabindex="-1"></a>  and equivalence trials*.</span>
+<span id="cb10-182"><a href="#cb10-182" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>Jennison C, Turnbull BW. *Group Sequential Methods with</span>
+<span id="cb10-183"><a href="#cb10-183" aria-hidden="true" tabindex="-1"></a>  Applications to Clinical Trials*.</span>
+<span id="cb10-184"><a href="#cb10-184" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>FDA (2016), *Non-Inferiority Clinical Trials to Establish</span>
+<span id="cb10-185"><a href="#cb10-185" aria-hidden="true" tabindex="-1"></a>  Effectiveness*.</span>
+<span id="cb10-186"><a href="#cb10-186" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb10-187"><a href="#cb10-187" aria-hidden="true" tabindex="-1"></a><span class="fu">## Session info</span></span>
+<span id="cb10-188"><a href="#cb10-188" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb10-191"><a href="#cb10-191" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
+<span id="cb10-192"><a href="#cb10-192" aria-hidden="true" tabindex="-1"></a><span class="fu">sessionInfo</span>()</span>
+<span id="cb10-193"><a href="#cb10-193" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
 </code></pre></div><button title="Copy to Clipboard" class="code-copy-button" data-in-quarto-modal=""><i class="bi"></i></button></div>
 </div></div></div></div></div>
 </div> <!-- /content -->
 <footer class="footer">
   <div class="nav-footer">
     <div class="nav-footer-left">
-<p>#courses · MIT</p>
+<p>Prose: CC BY 4.0 · Code: MIT</p>
 </div>   
     <div class="nav-footer-center">
 <p><a href="../../get_started.html">Get Started</a> · <a href="../../overview.html">Overview</a> · <a href="../../schedule.html">Schedule</a> · <a href="../../cheatsheets.html">Cheatsheets</a> · <a href="../../shiny.html">Interactive apps</a> · <a href="../../appendices/research_workflow.html">Research workflow</a> · <a href="../../appendices/decision_tree.html">Decision tree</a> · <a href="../../appendices/glossary.html">Glossary</a> · <a href="../../appendices/common_errors.html">Common errors</a> · <a href="../../appendices/writing_a_report.html">Writing a report</a> · <a href="../../references.html">References</a> · <a href="../../acknowledgements.html">Acknowledgements</a> · <strong><a href="../../impressum.html">Impressum</a></strong> · <a href="mailto:58561665+r-heller@users.noreply.github.com">Kontakt</a></p>

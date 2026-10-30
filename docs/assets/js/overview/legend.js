@@ -14,7 +14,7 @@ export function createLegend({ root, graph, controller, topicById }) {
   const topicBar = document.getElementById("topic-filter-bar");
   const tagBar = document.getElementById("tag-filter-bar");
   const labelBar = document.getElementById("label-filter-bar");
-  const summary = document.getElementById("filter-summary");
+  const summary = document.getElementById("filter-summary-text");
   const resetBtn = document.getElementById("filter-reset");
 
   const topicChips = new Map();
@@ -81,8 +81,8 @@ export function createLegend({ root, graph, controller, topicById }) {
     if (summary) {
       const matching = counts.totalMatching;
       summary.textContent = controller.isActive()
-        ? `Showing ${matching} of ${graph.nodes.length} tutorials.`
-        : `Browse all ${graph.nodes.length} tutorials.`;
+        ? `Showing ${matching} of ${graph.nodes.length} labs.`
+        : `Browse all ${graph.nodes.length} labs.`;
     }
     if (resetBtn) resetBtn.hidden = !controller.isActive();
   }

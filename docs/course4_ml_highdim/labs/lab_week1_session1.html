@@ -2,7 +2,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
 
 <meta charset="utf-8">
-<meta name="generator" content="quarto-1.9.37">
+<meta name="generator" content="quarto-1.10.19">
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
@@ -13,10 +13,13 @@
 /* Default styles provided by pandoc.
 ** See https://pandoc.org/MANUAL.html#variables-for-html for config info.
 */
-code{white-space: pre-wrap;}
 span.smallcaps{font-variant: small-caps;}
-div.columns{display: flex; gap: min(4vw, 1.5em);}
-div.column{flex: auto; overflow-x: auto;}
+div.columns{display: flex; gap: 1.5em;}
+div.column{flex: auto;}
+@media screen {
+div.columns{gap: min(4vw, 1.5em);}
+div.column{overflow-x: auto;}
+}
 div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
 ul.task-list{list-style: none;}
 ul.task-list li input[type="checkbox"] {
@@ -71,12 +74,12 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <script src="../../site_libs/quarto-html/tippy.umd.min.js"></script>
 <script src="../../site_libs/quarto-html/anchor.min.js"></script>
 <link href="../../site_libs/quarto-html/tippy.css" rel="stylesheet">
-<link href="../../site_libs/quarto-html/quarto-syntax-highlighting-2065f9e58f6345017599ef1c45dc3d4f.css" rel="stylesheet" class="quarto-color-scheme" id="quarto-text-highlighting-styles">
-<link href="../../site_libs/quarto-html/quarto-syntax-highlighting-dark-ced54966b0e53f059c291d5781927a30.css" rel="stylesheet" class="quarto-color-scheme quarto-color-alternate" id="quarto-text-highlighting-styles">
+<link href="../../site_libs/quarto-html/quarto-syntax-highlighting-9f3547545508946eee83ef8b606cbadf.css" rel="stylesheet" class="quarto-color-scheme" id="quarto-text-highlighting-styles">
+<link href="../../site_libs/quarto-html/quarto-syntax-highlighting-dark-8d43248e80c6749424940840481457b2.css" rel="stylesheet" class="quarto-color-scheme quarto-color-alternate" id="quarto-text-highlighting-styles">
 <script src="../../site_libs/bootstrap/bootstrap.min.js"></script>
 <link href="../../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
-<link href="../../site_libs/bootstrap/bootstrap-e6d3843e299d450790cfb48988d4232e.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme" id="quarto-bootstrap" data-mode="light">
-<link href="../../site_libs/bootstrap/bootstrap-dark-a84e9e0d3bdc903e291dd8ca38ce98a5.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme quarto-color-alternate" id="quarto-bootstrap" data-mode="dark">
+<link href="../../site_libs/bootstrap/bootstrap-0c1962fc29c4e87f8b37717c07588c31.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme" id="quarto-bootstrap" data-mode="light">
+<link href="../../site_libs/bootstrap/bootstrap-dark-33ee418c30da5be27be819967c4cb66e.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme quarto-color-alternate" id="quarto-bootstrap" data-mode="dark">
 <script id="quarto-search-options" type="application/json">{
   "language": {
     "search-no-results-text": "No results",
@@ -93,9 +96,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   }
 }</script>
 <script defer="" data-domain="cttir.github.io/courses" src="https://analytics.hellebo.de/js/script.file-downloads.outbound-links.js"></script>
-
 <script>window.plausible = window.plausible || function() { (window.plausible.q = window.plausible.q || []).push(arguments) }</script>
-
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin="">
 <link href="https://fonts.googleapis.com/css2?family=Source+Sans+3:wght@300;400;500;600;700&amp;family=JetBrains+Mono:wght@400;500&amp;display=swap" rel="stylesheet">
@@ -428,7 +429,7 @@ Note
 <h2 class="anchored" data-anchor-id="background">Background</h2>
 <p>Every predictive model reports an error on the data it was fit to. That number is almost always optimistic, because the fit has had a chance to memorise noise as well as signal. Cross-validation and the bootstrap are two resampling strategies that simulate the experience of scoring the model on data it has not seen. They are not interchangeable: they make different trade-offs between bias and variance, and they behave differently under high-dimensional settings.</p>
 <p>A particular failure mode that recurs in the applied literature is <em>double dipping</em>: using the same held-out fold both to choose a hyperparameter and to report the final error. The fold is then no longer held out, and the reported error slides back toward the training error. Nested cross-validation is the clean solution: the inner loop picks hyperparameters, the outer loop reports error.</p>
-<p>The bootstrap gives a different window onto generalisation. The plain bootstrap resamples with replacement; the .632 and .632+ variants weight the in-bag and out-of-bag errors to reduce bias when the learner overfits. In very small samples the .632+ estimator is often the most stable, and it is worth carrying in your toolbox alongside CV.</p>
+<p>The bootstrap gives a different window onto generalisation. The plain bootstrap resamples with replacement; the .632 and .632+ variants combine apparent and out-of-bag errors. The .632+ correction adapts to estimated overfitting. Its bias and variance depend on the learner, loss, and data-generating process; no estimator is uniformly best.</p>
 <p>A practical note: when you write up a modelling study, the generalisation error is the headline number. If you tuned, you must disclose how. If the inner tuning cost was hidden in the outer fold, a careful reader will notice that the reported error is too good and cannot be reproduced. Nested CV is not a cosmetic fix; it is the difference between a number that generalises and a number that does not.</p>
 </section>
 <section id="setup" class="level2">
@@ -501,33 +502,61 @@ Note
 <h2 class="anchored" data-anchor-id="check">4. Check</h2>
 <p>Bootstrap .632+ error as a cross-check.</p>
 <div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb7"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a>B <span class="ot">&lt;-</span> <span class="dv">50</span></span>
-<span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a>errs_in <span class="ot">&lt;-</span> errs_oob <span class="ot">&lt;-</span> <span class="fu">numeric</span>(B)</span>
-<span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> (b <span class="cf">in</span> <span class="dv">1</span><span class="sc">:</span>B) {</span>
-<span id="cb7-4"><a href="#cb7-4" aria-hidden="true" tabindex="-1"></a>  idx <span class="ot">&lt;-</span> <span class="fu">sample.int</span>(n, n, <span class="at">replace =</span> <span class="cn">TRUE</span>)</span>
-<span id="cb7-5"><a href="#cb7-5" aria-hidden="true" tabindex="-1"></a>  oob <span class="ot">&lt;-</span> <span class="fu">setdiff</span>(<span class="fu">seq_len</span>(n), <span class="fu">unique</span>(idx))</span>
-<span id="cb7-6"><a href="#cb7-6" aria-hidden="true" tabindex="-1"></a>  fit_b <span class="ot">&lt;-</span> <span class="fu">cv.glmnet</span>(X[idx, ], y[idx], <span class="at">alpha =</span> <span class="dv">1</span>, <span class="at">nfolds =</span> <span class="dv">5</span>)</span>
-<span id="cb7-7"><a href="#cb7-7" aria-hidden="true" tabindex="-1"></a>  yhat_in  <span class="ot">&lt;-</span> <span class="fu">as.numeric</span>(<span class="fu">predict</span>(fit_b, <span class="at">newx =</span> X[idx, ],  <span class="at">s =</span> <span class="st">"lambda.min"</span>))</span>
-<span id="cb7-8"><a href="#cb7-8" aria-hidden="true" tabindex="-1"></a>  yhat_oob <span class="ot">&lt;-</span> <span class="fu">as.numeric</span>(<span class="fu">predict</span>(fit_b, <span class="at">newx =</span> X[oob, ],  <span class="at">s =</span> <span class="st">"lambda.min"</span>))</span>
-<span id="cb7-9"><a href="#cb7-9" aria-hidden="true" tabindex="-1"></a>  errs_in[b]  <span class="ot">&lt;-</span> <span class="fu">mean</span>((y[idx] <span class="sc">-</span> yhat_in)<span class="sc">^</span><span class="dv">2</span>)</span>
-<span id="cb7-10"><a href="#cb7-10" aria-hidden="true" tabindex="-1"></a>  errs_oob[b] <span class="ot">&lt;-</span> <span class="fu">mean</span>((y[oob] <span class="sc">-</span> yhat_oob)<span class="sc">^</span><span class="dv">2</span>)</span>
-<span id="cb7-11"><a href="#cb7-11" aria-hidden="true" tabindex="-1"></a>}</span>
-<span id="cb7-12"><a href="#cb7-12" aria-hidden="true" tabindex="-1"></a>err_app <span class="ot">&lt;-</span> <span class="fu">mean</span>(errs_in); err_oob <span class="ot">&lt;-</span> <span class="fu">mean</span>(errs_oob)</span>
-<span id="cb7-13"><a href="#cb7-13" aria-hidden="true" tabindex="-1"></a>err_632 <span class="ot">&lt;-</span> <span class="fl">0.368</span> <span class="sc">*</span> err_app <span class="sc">+</span> <span class="fl">0.632</span> <span class="sc">*</span> err_oob</span>
-<span id="cb7-14"><a href="#cb7-14" aria-hidden="true" tabindex="-1"></a><span class="fu">c</span>(<span class="at">apparent =</span> err_app, <span class="at">oob =</span> err_oob, <span class="at">boot632 =</span> err_632,</span>
-<span id="cb7-15"><a href="#cb7-15" aria-hidden="true" tabindex="-1"></a>  <span class="at">nested =</span> nested_mse)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb7"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Apparent error uses the model trained on the original sample.</span></span>
+<span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a>yhat_full <span class="ot">&lt;-</span> <span class="fu">as.numeric</span>(<span class="fu">predict</span>(cv1, <span class="at">newx =</span> X, <span class="at">s =</span> <span class="st">"lambda.min"</span>))</span>
+<span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a>err_app <span class="ot">&lt;-</span> <span class="fu">mean</span>((y <span class="sc">-</span> yhat_full)<span class="sc">^</span><span class="dv">2</span>)</span>
+<span id="cb7-4"><a href="#cb7-4" aria-hidden="true" tabindex="-1"></a>B <span class="ot">&lt;-</span> <span class="dv">50</span></span>
+<span id="cb7-5"><a href="#cb7-5" aria-hidden="true" tabindex="-1"></a>oob_loss <span class="ot">&lt;-</span> <span class="fu">matrix</span>(<span class="cn">NA_real_</span>, <span class="at">nrow =</span> n, <span class="at">ncol =</span> B)</span>
+<span id="cb7-6"><a href="#cb7-6" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> (b <span class="cf">in</span> <span class="fu">seq_len</span>(B)) {</span>
+<span id="cb7-7"><a href="#cb7-7" aria-hidden="true" tabindex="-1"></a>  idx <span class="ot">&lt;-</span> <span class="fu">sample.int</span>(n, n, <span class="at">replace =</span> <span class="cn">TRUE</span>)</span>
+<span id="cb7-8"><a href="#cb7-8" aria-hidden="true" tabindex="-1"></a>  oob <span class="ot">&lt;-</span> <span class="fu">setdiff</span>(<span class="fu">seq_len</span>(n), <span class="fu">unique</span>(idx))</span>
+<span id="cb7-9"><a href="#cb7-9" aria-hidden="true" tabindex="-1"></a>  <span class="cf">if</span> (<span class="sc">!</span><span class="fu">length</span>(oob)) <span class="cf">next</span></span>
+<span id="cb7-10"><a href="#cb7-10" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Copies of the same observation stay together in the tuning folds.</span></span>
+<span id="cb7-11"><a href="#cb7-11" aria-hidden="true" tabindex="-1"></a>  unique_idx <span class="ot">&lt;-</span> <span class="fu">unique</span>(idx)</span>
+<span id="cb7-12"><a href="#cb7-12" aria-hidden="true" tabindex="-1"></a>  boot_folds <span class="ot">&lt;-</span> <span class="fu">sample</span>(<span class="fu">rep</span>(<span class="fu">seq_len</span>(<span class="dv">5</span>), <span class="at">length.out =</span> <span class="fu">length</span>(unique_idx)))</span>
+<span id="cb7-13"><a href="#cb7-13" aria-hidden="true" tabindex="-1"></a>  fit_b <span class="ot">&lt;-</span> <span class="fu">cv.glmnet</span>(X[idx, ], y[idx], <span class="at">alpha =</span> <span class="dv">1</span>,</span>
+<span id="cb7-14"><a href="#cb7-14" aria-hidden="true" tabindex="-1"></a>                     <span class="at">foldid =</span> boot_folds[<span class="fu">match</span>(idx, unique_idx)])</span>
+<span id="cb7-15"><a href="#cb7-15" aria-hidden="true" tabindex="-1"></a>  yhat_oob <span class="ot">&lt;-</span> <span class="fu">as.numeric</span>(<span class="fu">predict</span>(fit_b, <span class="at">newx =</span> X[oob, , <span class="at">drop =</span> <span class="cn">FALSE</span>],</span>
+<span id="cb7-16"><a href="#cb7-16" aria-hidden="true" tabindex="-1"></a>                                 <span class="at">s =</span> <span class="st">"lambda.min"</span>))</span>
+<span id="cb7-17"><a href="#cb7-17" aria-hidden="true" tabindex="-1"></a>  oob_loss[oob, b] <span class="ot">&lt;-</span> (y[oob] <span class="sc">-</span> yhat_oob)<span class="sc">^</span><span class="dv">2</span></span>
+<span id="cb7-18"><a href="#cb7-18" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb7-19"><a href="#cb7-19" aria-hidden="true" tabindex="-1"></a><span class="fu">stopifnot</span>(<span class="fu">all</span>(<span class="fu">rowSums</span>(<span class="sc">!</span><span class="fu">is.na</span>(oob_loss)) <span class="sc">&gt;</span> <span class="dv">0</span>))</span>
+<span id="cb7-20"><a href="#cb7-20" aria-hidden="true" tabindex="-1"></a><span class="co"># Average within observations first, so each observation has equal weight.</span></span>
+<span id="cb7-21"><a href="#cb7-21" aria-hidden="true" tabindex="-1"></a>err_oob <span class="ot">&lt;-</span> <span class="fu">mean</span>(<span class="fu">rowMeans</span>(oob_loss, <span class="at">na.rm =</span> <span class="cn">TRUE</span>))</span>
+<span id="cb7-22"><a href="#cb7-22" aria-hidden="true" tabindex="-1"></a><span class="co"># No-information loss: all pairings of observed responses and fitted predictions.</span></span>
+<span id="cb7-23"><a href="#cb7-23" aria-hidden="true" tabindex="-1"></a>gamma <span class="ot">&lt;-</span> <span class="fu">mean</span>(<span class="fu">outer</span>(y, yhat_full, <span class="st">"-"</span>)<span class="sc">^</span><span class="dv">2</span>)</span>
+<span id="cb7-24"><a href="#cb7-24" aria-hidden="true" tabindex="-1"></a>bootstrap_errors <span class="ot">&lt;-</span> <span class="cf">function</span>(apparent, oob, no_information) {</span>
+<span id="cb7-25"><a href="#cb7-25" aria-hidden="true" tabindex="-1"></a>  <span class="fu">stopifnot</span>(<span class="fu">all</span>(<span class="fu">is.finite</span>(<span class="fu">c</span>(apparent, oob, no_information))),</span>
+<span id="cb7-26"><a href="#cb7-26" aria-hidden="true" tabindex="-1"></a>            <span class="fu">all</span>(<span class="fu">c</span>(apparent, oob, no_information) <span class="sc">&gt;=</span> <span class="dv">0</span>))</span>
+<span id="cb7-27"><a href="#cb7-27" aria-hidden="true" tabindex="-1"></a>  base <span class="ot">&lt;-</span> <span class="fl">0.368</span> <span class="sc">*</span> apparent <span class="sc">+</span> <span class="fl">0.632</span> <span class="sc">*</span> oob</span>
+<span id="cb7-28"><a href="#cb7-28" aria-hidden="true" tabindex="-1"></a>  bounded_oob <span class="ot">&lt;-</span> <span class="fu">min</span>(oob, no_information)</span>
+<span id="cb7-29"><a href="#cb7-29" aria-hidden="true" tabindex="-1"></a>  relative <span class="ot">&lt;-</span> <span class="cf">if</span> (oob <span class="sc">&gt;</span> apparent <span class="sc">&amp;&amp;</span> no_information <span class="sc">&gt;</span> apparent) {</span>
+<span id="cb7-30"><a href="#cb7-30" aria-hidden="true" tabindex="-1"></a>    (bounded_oob <span class="sc">-</span> apparent) <span class="sc">/</span> (no_information <span class="sc">-</span> apparent)</span>
+<span id="cb7-31"><a href="#cb7-31" aria-hidden="true" tabindex="-1"></a>  } <span class="cf">else</span> <span class="dv">0</span></span>
+<span id="cb7-32"><a href="#cb7-32" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Efron &amp; Tibshirani (1997), equations 31-32: bounded correction.</span></span>
+<span id="cb7-33"><a href="#cb7-33" aria-hidden="true" tabindex="-1"></a>  plus <span class="ot">&lt;-</span> base <span class="sc">+</span> (bounded_oob <span class="sc">-</span> apparent) <span class="sc">*</span></span>
+<span id="cb7-34"><a href="#cb7-34" aria-hidden="true" tabindex="-1"></a>    <span class="fl">0.368</span> <span class="sc">*</span> <span class="fl">0.632</span> <span class="sc">*</span> relative <span class="sc">/</span> (<span class="dv">1</span> <span class="sc">-</span> <span class="fl">0.368</span> <span class="sc">*</span> relative)</span>
+<span id="cb7-35"><a href="#cb7-35" aria-hidden="true" tabindex="-1"></a>  <span class="fu">c</span>(<span class="at">boot632 =</span> base, <span class="at">boot632plus =</span> plus, <span class="at">relative_overfit =</span> relative)</span>
+<span id="cb7-36"><a href="#cb7-36" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb7-37"><a href="#cb7-37" aria-hidden="true" tabindex="-1"></a>boot_errors <span class="ot">&lt;-</span> <span class="fu">bootstrap_errors</span>(err_app, err_oob, gamma)</span>
+<span id="cb7-38"><a href="#cb7-38" aria-hidden="true" tabindex="-1"></a>err_632 <span class="ot">&lt;-</span> <span class="fu">unname</span>(boot_errors[<span class="st">"boot632"</span>])</span>
+<span id="cb7-39"><a href="#cb7-39" aria-hidden="true" tabindex="-1"></a>err_632plus <span class="ot">&lt;-</span> <span class="fu">unname</span>(boot_errors[<span class="st">"boot632plus"</span>])</span>
+<span id="cb7-40"><a href="#cb7-40" aria-hidden="true" tabindex="-1"></a><span class="fu">c</span>(<span class="at">apparent =</span> err_app, <span class="at">oob =</span> err_oob, boot_errors, <span class="at">nested =</span> nested_mse)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stdout">
-<pre><code> apparent       oob   boot632    nested 
-0.5199837 1.2632623 0.9897358 1.0481752 </code></pre>
+<pre><code>        apparent              oob          boot632      boot632plus 
+      0.73569350       1.22831749       1.04703186       1.05010707 
+relative_overfit           nested 
+      0.02657819       1.04817523 </code></pre>
 </div>
 </div>
 </section>
 <section id="report" class="level2">
 <h2 class="anchored" data-anchor-id="report">5. Report</h2>
 <blockquote class="blockquote">
-<p>On simulated data (<em>n</em> = 120, <em>p</em> = 40, five true signals), a lasso with tuning parameter chosen by 5-fold CV achieved an out-of-sample MSE of 1.05 under nested 5 × 5 CV. The naive single-layer CV understated the error at 1.21; the bootstrap .632 estimator gave 0.99, which bracketed the nested estimate.</p>
+<p>On simulated data (<em>n</em> = 120, <em>p</em> = 40, five true signals), a lasso with tuning parameter chosen by 5-fold CV achieved an estimated MSE of 1.05 under nested 5 × 5 CV. The minimum single-layer CV estimate was 1.21; bootstrap .632 and .632+ estimates were 1.05 and 1.05, respectively.</p>
 </blockquote>
-<p>The naive number looks tighter, but it reflects the choice of <code>lambda</code> as well as the fit. Only the nested number is a fair estimate of what this procedure — tune-then-fit — will do on new data.</p>
+<p>The minimum inner-CV error is subject to selection optimism; its ordering relative to the outer estimate can vary in a single simulation. Outer CV keeps tuning separate from evaluation, but remains subject to sampling and fold variability. Here <code>B = 50</code> keeps the demonstration small; assess Monte Carlo stability with more replicates before using bootstrap results in a study.</p>
+<p>The .632+ calculation uses squared-error loss and the bounded correction in Efron and Tibshirani (1997), equations 26 and 31–32. Original observations are weighted equally in the out-of-bag estimate, and bootstrap duplicates are grouped in the inner tuning folds.</p>
 <div class="notes">
 <p>Emphasise that “naive CV” is still useful: it is the inner loop in a nested scheme. The crime is reporting it as the final error.</p>
 </div>
@@ -537,7 +566,7 @@ Note
 <ul>
 <li>Tuning on the test fold and reporting the resulting error.</li>
 <li>Using a single 80/20 split in high dimensions; variance across splits can exceed the effect of interest.</li>
-<li>Bootstrapping without tracking in-bag vs out-of-bag, which inflates the estimate back to the apparent error.</li>
+<li>Evaluating a bootstrap fit on its own training observations and calling that an out-of-sample error.</li>
 </ul>
 </section>
 <section id="further-reading" class="level2">
@@ -553,17 +582,16 @@ Note
 <div class="cell">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb9"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a><span class="fu">sessionInfo</span>()</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stdout">
-<pre><code>R version 4.5.2 (2025-10-31 ucrt)
-Platform: x86_64-w64-mingw32/x64
-Running under: Windows 11 x64 (build 26200)
+<pre><code>R version 4.6.1 (2026-06-24)
+Platform: aarch64-apple-darwin27.0.0
+Running under: macOS Golden Gate 27.0.1
 
 Matrix products: default
-  LAPACK version 3.12.1
+BLAS:   /opt/homebrew/Cellar/openblas/0.3.34/lib/libopenblasp-r0.3.34.dylib 
+LAPACK: /opt/homebrew/Cellar/r/4.6.1_1/lib/R/lib/libRlapack.dylib;  LAPACK version 3.12.1
 
 locale:
-[1] LC_COLLATE=English_Germany.utf8  LC_CTYPE=English_Germany.utf8   
-[3] LC_MONETARY=English_Germany.utf8 LC_NUMERIC=C                    
-[5] LC_TIME=English_Germany.utf8    
+[1] C.UTF-8/C.UTF-8/C.UTF-8/C/C.UTF-8/C.UTF-8
 
 time zone: Europe/Berlin
 tzcode source: internal
@@ -572,22 +600,22 @@ attached base packages:
 [1] stats     graphics  grDevices utils     datasets  methods   base     
 
 other attached packages:
- [1] glmnet_5.0      Matrix_1.7-5    lubridate_1.9.5 forcats_1.0.1  
+ [1] glmnet_5.2      Matrix_1.7-5    lubridate_1.9.5 forcats_1.0.1  
  [5] stringr_1.6.0   dplyr_1.2.1     purrr_1.2.2     readr_2.2.0    
  [9] tidyr_1.3.2     tibble_3.3.1    ggplot2_4.0.3   tidyverse_2.0.0
 
 loaded via a namespace (and not attached):
- [1] generics_0.1.4     shape_1.4.6.1      stringi_1.8.7      lattice_0.22-9    
- [5] hms_1.1.4          digest_0.6.39      magrittr_2.0.4     evaluate_1.0.5    
- [9] grid_4.5.2         timechange_0.4.0   RColorBrewer_1.1-3 iterators_1.0.14  
+ [1] generics_0.1.4     shape_1.4.6.1      stringi_1.8.9      lattice_0.22-9    
+ [5] hms_1.1.4          digest_0.6.39      magrittr_2.0.5     evaluate_1.0.5    
+ [9] grid_4.6.1         timechange_0.4.0   RColorBrewer_1.1-3 iterators_1.0.14  
 [13] fastmap_1.2.0      foreach_1.5.2      jsonlite_2.0.0     survival_3.8-6    
-[17] scales_1.4.0       codetools_0.2-20   cli_3.6.6          rlang_1.2.0       
-[21] splines_4.5.2      withr_3.0.2        yaml_2.3.12        otel_0.2.0        
-[25] tools_4.5.2        tzdb_0.5.0         vctrs_0.7.3        R6_2.6.1          
+[17] scales_1.4.0       codetools_0.2-20   cli_3.6.6          rlang_1.3.0       
+[21] splines_4.6.1      withr_3.0.3        yaml_2.3.12        otel_0.2.0        
+[25] tools_4.6.1        tzdb_0.5.0         vctrs_0.7.3        R6_2.6.1          
 [29] lifecycle_1.0.5    htmlwidgets_1.6.4  pkgconfig_2.0.3    pillar_1.11.1     
-[33] gtable_0.3.6       glue_1.8.1         Rcpp_1.1.1-1.1     xfun_0.57         
-[37] tidyselect_1.2.1   knitr_1.51         farver_2.1.2       htmltools_0.5.9   
-[41] rmarkdown_2.31     labeling_0.4.3     compiler_4.5.2     S7_0.2.2          </code></pre>
+[33] gtable_0.3.6       glue_1.8.1         Rcpp_1.1.2         xfun_0.62         
+[37] tidyselect_1.2.1   knitr_1.52         farver_2.1.2       htmltools_0.5.9   
+[41] rmarkdown_2.32     labeling_0.4.3     compiler_4.6.1     S7_0.2.2          </code></pre>
 </div>
 </div>
 
@@ -595,17 +623,11 @@ loaded via a namespace (and not attached):
 <!-- -->
 
 <section class="related-tutorials" data-render="static">
-
 <h2 class="anchored">Related labs</h2>
-
 <p class="related-blurb">Closest matches by shared tags (machine-learning-methods, ml).</p>
-
 <div class="related-list"><div class="related-item"><span class="topic">Course 4 — ML &amp; High-Dim</span><a href="../../course4_ml_highdim/labs/lab_week1_session2.html">Regularisation: ridge, lasso, elastic net</a><div class="related-desc">Shared: machine-learning-methods, ml</div></div><div class="related-item"><span class="topic">Course 4 — ML &amp; High-Dim</span><a href="../../course4_ml_highdim/labs/lab_week2_session1.html">Trees, random forests, boosting</a><div class="related-desc">Shared: machine-learning-methods, ml</div></div><div class="related-item"><span class="topic">Course 4 — ML &amp; High-Dim</span><a href="../../course4_ml_highdim/labs/lab_week2_session2.html">Interpretability and SHAP</a><div class="related-desc">Shared: machine-learning-methods, ml</div></div></div>
-
 <p class="network-link"><a href="../../overview.html">Explore the full label network →</a></p>
-
 </section>
-
 
 </section>
 
@@ -715,16 +737,16 @@ loaded via a namespace (and not attached):
     }
     function toggleCodeHandler(show) {
       return function(e) {
-        const detailsSrc = window.document.querySelectorAll(".cell > details > .sourceCode");
-        for (let i=0; i<detailsSrc.length; i++) {
-          const details = detailsSrc[i].parentElement;
+        const cellDetails = window.document.querySelectorAll(".cell details.code-fold");
+        for (let i=0; i<cellDetails.length; i++) {
+          const details = cellDetails[i];
           if (show) {
             details.open = true;
           } else {
             details.removeAttribute("open");
           }
         }
-        const cellCodeDivs = window.document.querySelectorAll(".cell > .sourceCode");
+        const cellCodeDivs = window.document.querySelectorAll(".cell div.sourceCode.cell-code");
         const fromCls = show ? "hidden" : "unhidden";
         const toCls = show ? "unhidden" : "hidden";
         for (let i=0; i<cellCodeDivs.length; i++) {
@@ -1139,9 +1161,9 @@ loaded via a namespace (and not attached):
 <span id="cb11-58"><a href="#cb11-58" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb11-59"><a href="#cb11-59" aria-hidden="true" tabindex="-1"></a>The bootstrap gives a different window onto generalisation. The plain</span>
 <span id="cb11-60"><a href="#cb11-60" aria-hidden="true" tabindex="-1"></a>bootstrap resamples with replacement; the .632 and .632+ variants</span>
-<span id="cb11-61"><a href="#cb11-61" aria-hidden="true" tabindex="-1"></a>weight the in-bag and out-of-bag errors to reduce bias when the learner</span>
-<span id="cb11-62"><a href="#cb11-62" aria-hidden="true" tabindex="-1"></a>overfits. In very small samples the .632+ estimator is often the most</span>
-<span id="cb11-63"><a href="#cb11-63" aria-hidden="true" tabindex="-1"></a>stable, and it is worth carrying in your toolbox alongside CV.</span>
+<span id="cb11-61"><a href="#cb11-61" aria-hidden="true" tabindex="-1"></a>combine apparent and out-of-bag errors. The .632+ correction adapts to</span>
+<span id="cb11-62"><a href="#cb11-62" aria-hidden="true" tabindex="-1"></a>estimated overfitting. Its bias and variance depend on the learner, loss,</span>
+<span id="cb11-63"><a href="#cb11-63" aria-hidden="true" tabindex="-1"></a>and data-generating process; no estimator is uniformly best.</span>
 <span id="cb11-64"><a href="#cb11-64" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb11-65"><a href="#cb11-65" aria-hidden="true" tabindex="-1"></a>::: {.content-visible when-format="html"}</span>
 <span id="cb11-66"><a href="#cb11-66" aria-hidden="true" tabindex="-1"></a>A practical note: when you write up a modelling study, the</span>
@@ -1221,70 +1243,101 @@ loaded via a namespace (and not attached):
 <span id="cb11-148"><a href="#cb11-148" aria-hidden="true" tabindex="-1"></a>Bootstrap .632+ error as a cross-check.</span>
 <span id="cb11-149"><a href="#cb11-149" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb11-152"><a href="#cb11-152" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
-<span id="cb11-153"><a href="#cb11-153" aria-hidden="true" tabindex="-1"></a>B <span class="ot">&lt;-</span> <span class="dv">50</span></span>
-<span id="cb11-154"><a href="#cb11-154" aria-hidden="true" tabindex="-1"></a>errs_in <span class="ot">&lt;-</span> errs_oob <span class="ot">&lt;-</span> <span class="fu">numeric</span>(B)</span>
-<span id="cb11-155"><a href="#cb11-155" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> (b <span class="cf">in</span> <span class="dv">1</span><span class="sc">:</span>B) {</span>
-<span id="cb11-156"><a href="#cb11-156" aria-hidden="true" tabindex="-1"></a>  idx <span class="ot">&lt;-</span> <span class="fu">sample.int</span>(n, n, <span class="at">replace =</span> <span class="cn">TRUE</span>)</span>
-<span id="cb11-157"><a href="#cb11-157" aria-hidden="true" tabindex="-1"></a>  oob <span class="ot">&lt;-</span> <span class="fu">setdiff</span>(<span class="fu">seq_len</span>(n), <span class="fu">unique</span>(idx))</span>
-<span id="cb11-158"><a href="#cb11-158" aria-hidden="true" tabindex="-1"></a>  fit_b <span class="ot">&lt;-</span> <span class="fu">cv.glmnet</span>(X[idx, ], y[idx], <span class="at">alpha =</span> <span class="dv">1</span>, <span class="at">nfolds =</span> <span class="dv">5</span>)</span>
-<span id="cb11-159"><a href="#cb11-159" aria-hidden="true" tabindex="-1"></a>  yhat_in  <span class="ot">&lt;-</span> <span class="fu">as.numeric</span>(<span class="fu">predict</span>(fit_b, <span class="at">newx =</span> X[idx, ],  <span class="at">s =</span> <span class="st">"lambda.min"</span>))</span>
-<span id="cb11-160"><a href="#cb11-160" aria-hidden="true" tabindex="-1"></a>  yhat_oob <span class="ot">&lt;-</span> <span class="fu">as.numeric</span>(<span class="fu">predict</span>(fit_b, <span class="at">newx =</span> X[oob, ],  <span class="at">s =</span> <span class="st">"lambda.min"</span>))</span>
-<span id="cb11-161"><a href="#cb11-161" aria-hidden="true" tabindex="-1"></a>  errs_in[b]  <span class="ot">&lt;-</span> <span class="fu">mean</span>((y[idx] <span class="sc">-</span> yhat_in)<span class="sc">^</span><span class="dv">2</span>)</span>
-<span id="cb11-162"><a href="#cb11-162" aria-hidden="true" tabindex="-1"></a>  errs_oob[b] <span class="ot">&lt;-</span> <span class="fu">mean</span>((y[oob] <span class="sc">-</span> yhat_oob)<span class="sc">^</span><span class="dv">2</span>)</span>
-<span id="cb11-163"><a href="#cb11-163" aria-hidden="true" tabindex="-1"></a>}</span>
-<span id="cb11-164"><a href="#cb11-164" aria-hidden="true" tabindex="-1"></a>err_app <span class="ot">&lt;-</span> <span class="fu">mean</span>(errs_in); err_oob <span class="ot">&lt;-</span> <span class="fu">mean</span>(errs_oob)</span>
-<span id="cb11-165"><a href="#cb11-165" aria-hidden="true" tabindex="-1"></a>err_632 <span class="ot">&lt;-</span> <span class="fl">0.368</span> <span class="sc">*</span> err_app <span class="sc">+</span> <span class="fl">0.632</span> <span class="sc">*</span> err_oob</span>
-<span id="cb11-166"><a href="#cb11-166" aria-hidden="true" tabindex="-1"></a><span class="fu">c</span>(<span class="at">apparent =</span> err_app, <span class="at">oob =</span> err_oob, <span class="at">boot632 =</span> err_632,</span>
-<span id="cb11-167"><a href="#cb11-167" aria-hidden="true" tabindex="-1"></a>  <span class="at">nested =</span> nested_mse)</span>
-<span id="cb11-168"><a href="#cb11-168" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
-<span id="cb11-169"><a href="#cb11-169" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb11-170"><a href="#cb11-170" aria-hidden="true" tabindex="-1"></a><span class="fu">## 5. Report</span></span>
-<span id="cb11-171"><a href="#cb11-171" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb11-172"><a href="#cb11-172" aria-hidden="true" tabindex="-1"></a><span class="at">&gt; On simulated data (*n* = 120, *p* = 40, five true signals), a lasso</span></span>
-<span id="cb11-173"><a href="#cb11-173" aria-hidden="true" tabindex="-1"></a><span class="at">&gt; with tuning parameter chosen by 5-fold CV achieved an out-of-sample</span></span>
-<span id="cb11-174"><a href="#cb11-174" aria-hidden="true" tabindex="-1"></a><span class="at">&gt; MSE of </span><span class="in">`r round(nested_mse, 2)`</span><span class="at"> under nested 5 × 5 CV. The naive</span></span>
-<span id="cb11-175"><a href="#cb11-175" aria-hidden="true" tabindex="-1"></a><span class="at">&gt; single-layer CV understated the error at</span></span>
-<span id="cb11-176"><a href="#cb11-176" aria-hidden="true" tabindex="-1"></a><span class="at">&gt; </span><span class="in">`r round(naive_mse, 2)`</span><span class="at">; the bootstrap .632 estimator gave</span></span>
-<span id="cb11-177"><a href="#cb11-177" aria-hidden="true" tabindex="-1"></a><span class="at">&gt; </span><span class="in">`r round(err_632, 2)`</span><span class="at">, which bracketed the nested estimate.</span></span>
-<span id="cb11-178"><a href="#cb11-178" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb11-179"><a href="#cb11-179" aria-hidden="true" tabindex="-1"></a>The naive number looks tighter, but it reflects the choice of <span class="in">`lambda`</span></span>
-<span id="cb11-180"><a href="#cb11-180" aria-hidden="true" tabindex="-1"></a>as well as the fit. Only the nested number is a fair estimate of what</span>
-<span id="cb11-181"><a href="#cb11-181" aria-hidden="true" tabindex="-1"></a>this procedure — tune-then-fit — will do on new data.</span>
-<span id="cb11-182"><a href="#cb11-182" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb11-183"><a href="#cb11-183" aria-hidden="true" tabindex="-1"></a>::: {.notes}</span>
-<span id="cb11-184"><a href="#cb11-184" aria-hidden="true" tabindex="-1"></a>Emphasise that "naive CV" is still useful: it is the inner loop in a</span>
-<span id="cb11-185"><a href="#cb11-185" aria-hidden="true" tabindex="-1"></a>nested scheme. The crime is reporting it as the final error.</span>
-<span id="cb11-186"><a href="#cb11-186" aria-hidden="true" tabindex="-1"></a>:::</span>
-<span id="cb11-187"><a href="#cb11-187" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb11-188"><a href="#cb11-188" aria-hidden="true" tabindex="-1"></a><span class="fu">## Common pitfalls</span></span>
-<span id="cb11-189"><a href="#cb11-189" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb11-190"><a href="#cb11-190" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>Tuning on the test fold and reporting the resulting error.</span>
-<span id="cb11-191"><a href="#cb11-191" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>Using a single 80/20 split in high dimensions; variance across splits</span>
-<span id="cb11-192"><a href="#cb11-192" aria-hidden="true" tabindex="-1"></a>  can exceed the effect of interest.</span>
-<span id="cb11-193"><a href="#cb11-193" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>Bootstrapping without tracking in-bag vs out-of-bag, which inflates</span>
-<span id="cb11-194"><a href="#cb11-194" aria-hidden="true" tabindex="-1"></a>  the estimate back to the apparent error.</span>
-<span id="cb11-195"><a href="#cb11-195" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb11-196"><a href="#cb11-196" aria-hidden="true" tabindex="-1"></a><span class="fu">## Further reading</span></span>
-<span id="cb11-197"><a href="#cb11-197" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb11-198"><a href="#cb11-198" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>Hastie, Tibshirani, Friedman, *Elements of Statistical Learning*,</span>
-<span id="cb11-199"><a href="#cb11-199" aria-hidden="true" tabindex="-1"></a>  §7.10–7.11.</span>
-<span id="cb11-200"><a href="#cb11-200" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>Varma S, Simon R (2006), *Bias in error estimation when using</span>
-<span id="cb11-201"><a href="#cb11-201" aria-hidden="true" tabindex="-1"></a>  cross-validation for model selection*.</span>
-<span id="cb11-202"><a href="#cb11-202" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>Efron B, Tibshirani R (1997), *Improvements on cross-validation: the</span>
-<span id="cb11-203"><a href="#cb11-203" aria-hidden="true" tabindex="-1"></a>  .632+ bootstrap method*.</span>
-<span id="cb11-204"><a href="#cb11-204" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb11-205"><a href="#cb11-205" aria-hidden="true" tabindex="-1"></a><span class="fu">## Session info</span></span>
-<span id="cb11-206"><a href="#cb11-206" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb11-209"><a href="#cb11-209" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
-<span id="cb11-210"><a href="#cb11-210" aria-hidden="true" tabindex="-1"></a><span class="fu">sessionInfo</span>()</span>
-<span id="cb11-211"><a href="#cb11-211" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb11-153"><a href="#cb11-153" aria-hidden="true" tabindex="-1"></a><span class="co"># Apparent error uses the model trained on the original sample.</span></span>
+<span id="cb11-154"><a href="#cb11-154" aria-hidden="true" tabindex="-1"></a>yhat_full <span class="ot">&lt;-</span> <span class="fu">as.numeric</span>(<span class="fu">predict</span>(cv1, <span class="at">newx =</span> X, <span class="at">s =</span> <span class="st">"lambda.min"</span>))</span>
+<span id="cb11-155"><a href="#cb11-155" aria-hidden="true" tabindex="-1"></a>err_app <span class="ot">&lt;-</span> <span class="fu">mean</span>((y <span class="sc">-</span> yhat_full)<span class="sc">^</span><span class="dv">2</span>)</span>
+<span id="cb11-156"><a href="#cb11-156" aria-hidden="true" tabindex="-1"></a>B <span class="ot">&lt;-</span> <span class="dv">50</span></span>
+<span id="cb11-157"><a href="#cb11-157" aria-hidden="true" tabindex="-1"></a>oob_loss <span class="ot">&lt;-</span> <span class="fu">matrix</span>(<span class="cn">NA_real_</span>, <span class="at">nrow =</span> n, <span class="at">ncol =</span> B)</span>
+<span id="cb11-158"><a href="#cb11-158" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> (b <span class="cf">in</span> <span class="fu">seq_len</span>(B)) {</span>
+<span id="cb11-159"><a href="#cb11-159" aria-hidden="true" tabindex="-1"></a>  idx <span class="ot">&lt;-</span> <span class="fu">sample.int</span>(n, n, <span class="at">replace =</span> <span class="cn">TRUE</span>)</span>
+<span id="cb11-160"><a href="#cb11-160" aria-hidden="true" tabindex="-1"></a>  oob <span class="ot">&lt;-</span> <span class="fu">setdiff</span>(<span class="fu">seq_len</span>(n), <span class="fu">unique</span>(idx))</span>
+<span id="cb11-161"><a href="#cb11-161" aria-hidden="true" tabindex="-1"></a>  <span class="cf">if</span> (<span class="sc">!</span><span class="fu">length</span>(oob)) <span class="cf">next</span></span>
+<span id="cb11-162"><a href="#cb11-162" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Copies of the same observation stay together in the tuning folds.</span></span>
+<span id="cb11-163"><a href="#cb11-163" aria-hidden="true" tabindex="-1"></a>  unique_idx <span class="ot">&lt;-</span> <span class="fu">unique</span>(idx)</span>
+<span id="cb11-164"><a href="#cb11-164" aria-hidden="true" tabindex="-1"></a>  boot_folds <span class="ot">&lt;-</span> <span class="fu">sample</span>(<span class="fu">rep</span>(<span class="fu">seq_len</span>(<span class="dv">5</span>), <span class="at">length.out =</span> <span class="fu">length</span>(unique_idx)))</span>
+<span id="cb11-165"><a href="#cb11-165" aria-hidden="true" tabindex="-1"></a>  fit_b <span class="ot">&lt;-</span> <span class="fu">cv.glmnet</span>(X[idx, ], y[idx], <span class="at">alpha =</span> <span class="dv">1</span>,</span>
+<span id="cb11-166"><a href="#cb11-166" aria-hidden="true" tabindex="-1"></a>                     <span class="at">foldid =</span> boot_folds[<span class="fu">match</span>(idx, unique_idx)])</span>
+<span id="cb11-167"><a href="#cb11-167" aria-hidden="true" tabindex="-1"></a>  yhat_oob <span class="ot">&lt;-</span> <span class="fu">as.numeric</span>(<span class="fu">predict</span>(fit_b, <span class="at">newx =</span> X[oob, , <span class="at">drop =</span> <span class="cn">FALSE</span>],</span>
+<span id="cb11-168"><a href="#cb11-168" aria-hidden="true" tabindex="-1"></a>                                 <span class="at">s =</span> <span class="st">"lambda.min"</span>))</span>
+<span id="cb11-169"><a href="#cb11-169" aria-hidden="true" tabindex="-1"></a>  oob_loss[oob, b] <span class="ot">&lt;-</span> (y[oob] <span class="sc">-</span> yhat_oob)<span class="sc">^</span><span class="dv">2</span></span>
+<span id="cb11-170"><a href="#cb11-170" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb11-171"><a href="#cb11-171" aria-hidden="true" tabindex="-1"></a><span class="fu">stopifnot</span>(<span class="fu">all</span>(<span class="fu">rowSums</span>(<span class="sc">!</span><span class="fu">is.na</span>(oob_loss)) <span class="sc">&gt;</span> <span class="dv">0</span>))</span>
+<span id="cb11-172"><a href="#cb11-172" aria-hidden="true" tabindex="-1"></a><span class="co"># Average within observations first, so each observation has equal weight.</span></span>
+<span id="cb11-173"><a href="#cb11-173" aria-hidden="true" tabindex="-1"></a>err_oob <span class="ot">&lt;-</span> <span class="fu">mean</span>(<span class="fu">rowMeans</span>(oob_loss, <span class="at">na.rm =</span> <span class="cn">TRUE</span>))</span>
+<span id="cb11-174"><a href="#cb11-174" aria-hidden="true" tabindex="-1"></a><span class="co"># No-information loss: all pairings of observed responses and fitted predictions.</span></span>
+<span id="cb11-175"><a href="#cb11-175" aria-hidden="true" tabindex="-1"></a>gamma <span class="ot">&lt;-</span> <span class="fu">mean</span>(<span class="fu">outer</span>(y, yhat_full, <span class="st">"-"</span>)<span class="sc">^</span><span class="dv">2</span>)</span>
+<span id="cb11-176"><a href="#cb11-176" aria-hidden="true" tabindex="-1"></a>bootstrap_errors <span class="ot">&lt;-</span> <span class="cf">function</span>(apparent, oob, no_information) {</span>
+<span id="cb11-177"><a href="#cb11-177" aria-hidden="true" tabindex="-1"></a>  <span class="fu">stopifnot</span>(<span class="fu">all</span>(<span class="fu">is.finite</span>(<span class="fu">c</span>(apparent, oob, no_information))),</span>
+<span id="cb11-178"><a href="#cb11-178" aria-hidden="true" tabindex="-1"></a>            <span class="fu">all</span>(<span class="fu">c</span>(apparent, oob, no_information) <span class="sc">&gt;=</span> <span class="dv">0</span>))</span>
+<span id="cb11-179"><a href="#cb11-179" aria-hidden="true" tabindex="-1"></a>  base <span class="ot">&lt;-</span> <span class="fl">0.368</span> <span class="sc">*</span> apparent <span class="sc">+</span> <span class="fl">0.632</span> <span class="sc">*</span> oob</span>
+<span id="cb11-180"><a href="#cb11-180" aria-hidden="true" tabindex="-1"></a>  bounded_oob <span class="ot">&lt;-</span> <span class="fu">min</span>(oob, no_information)</span>
+<span id="cb11-181"><a href="#cb11-181" aria-hidden="true" tabindex="-1"></a>  relative <span class="ot">&lt;-</span> <span class="cf">if</span> (oob <span class="sc">&gt;</span> apparent <span class="sc">&amp;&amp;</span> no_information <span class="sc">&gt;</span> apparent) {</span>
+<span id="cb11-182"><a href="#cb11-182" aria-hidden="true" tabindex="-1"></a>    (bounded_oob <span class="sc">-</span> apparent) <span class="sc">/</span> (no_information <span class="sc">-</span> apparent)</span>
+<span id="cb11-183"><a href="#cb11-183" aria-hidden="true" tabindex="-1"></a>  } <span class="cf">else</span> <span class="dv">0</span></span>
+<span id="cb11-184"><a href="#cb11-184" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Efron &amp; Tibshirani (1997), equations 31-32: bounded correction.</span></span>
+<span id="cb11-185"><a href="#cb11-185" aria-hidden="true" tabindex="-1"></a>  plus <span class="ot">&lt;-</span> base <span class="sc">+</span> (bounded_oob <span class="sc">-</span> apparent) <span class="sc">*</span></span>
+<span id="cb11-186"><a href="#cb11-186" aria-hidden="true" tabindex="-1"></a>    <span class="fl">0.368</span> <span class="sc">*</span> <span class="fl">0.632</span> <span class="sc">*</span> relative <span class="sc">/</span> (<span class="dv">1</span> <span class="sc">-</span> <span class="fl">0.368</span> <span class="sc">*</span> relative)</span>
+<span id="cb11-187"><a href="#cb11-187" aria-hidden="true" tabindex="-1"></a>  <span class="fu">c</span>(<span class="at">boot632 =</span> base, <span class="at">boot632plus =</span> plus, <span class="at">relative_overfit =</span> relative)</span>
+<span id="cb11-188"><a href="#cb11-188" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb11-189"><a href="#cb11-189" aria-hidden="true" tabindex="-1"></a>boot_errors <span class="ot">&lt;-</span> <span class="fu">bootstrap_errors</span>(err_app, err_oob, gamma)</span>
+<span id="cb11-190"><a href="#cb11-190" aria-hidden="true" tabindex="-1"></a>err_632 <span class="ot">&lt;-</span> <span class="fu">unname</span>(boot_errors[<span class="st">"boot632"</span>])</span>
+<span id="cb11-191"><a href="#cb11-191" aria-hidden="true" tabindex="-1"></a>err_632plus <span class="ot">&lt;-</span> <span class="fu">unname</span>(boot_errors[<span class="st">"boot632plus"</span>])</span>
+<span id="cb11-192"><a href="#cb11-192" aria-hidden="true" tabindex="-1"></a><span class="fu">c</span>(<span class="at">apparent =</span> err_app, <span class="at">oob =</span> err_oob, boot_errors, <span class="at">nested =</span> nested_mse)</span>
+<span id="cb11-193"><a href="#cb11-193" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb11-194"><a href="#cb11-194" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb11-195"><a href="#cb11-195" aria-hidden="true" tabindex="-1"></a><span class="fu">## 5. Report</span></span>
+<span id="cb11-196"><a href="#cb11-196" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb11-197"><a href="#cb11-197" aria-hidden="true" tabindex="-1"></a><span class="at">&gt; On simulated data (*n* = 120, *p* = 40, five true signals), a lasso</span></span>
+<span id="cb11-198"><a href="#cb11-198" aria-hidden="true" tabindex="-1"></a><span class="at">&gt; with tuning parameter chosen by 5-fold CV achieved an estimated MSE of</span></span>
+<span id="cb11-199"><a href="#cb11-199" aria-hidden="true" tabindex="-1"></a><span class="at">&gt; </span><span class="in">`r round(nested_mse, 2)`</span><span class="at"> under nested 5 × 5 CV. The minimum single-layer</span></span>
+<span id="cb11-200"><a href="#cb11-200" aria-hidden="true" tabindex="-1"></a><span class="at">&gt; CV estimate was </span><span class="in">`r round(naive_mse, 2)`</span><span class="at">; bootstrap .632 and .632+ estimates</span></span>
+<span id="cb11-201"><a href="#cb11-201" aria-hidden="true" tabindex="-1"></a><span class="at">&gt; were </span><span class="in">`r round(err_632, 2)`</span><span class="at"> and </span><span class="in">`r round(err_632plus, 2)`</span><span class="at">, respectively.</span></span>
+<span id="cb11-202"><a href="#cb11-202" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb11-203"><a href="#cb11-203" aria-hidden="true" tabindex="-1"></a>The minimum inner-CV error is subject to selection optimism; its ordering</span>
+<span id="cb11-204"><a href="#cb11-204" aria-hidden="true" tabindex="-1"></a>relative to the outer estimate can vary in a single simulation. Outer CV</span>
+<span id="cb11-205"><a href="#cb11-205" aria-hidden="true" tabindex="-1"></a>keeps tuning separate from evaluation, but remains subject to sampling and</span>
+<span id="cb11-206"><a href="#cb11-206" aria-hidden="true" tabindex="-1"></a>fold variability. Here <span class="in">`B = 50`</span> keeps the demonstration small; assess Monte</span>
+<span id="cb11-207"><a href="#cb11-207" aria-hidden="true" tabindex="-1"></a>Carlo stability with more replicates before using bootstrap results in a study.</span>
+<span id="cb11-208"><a href="#cb11-208" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb11-209"><a href="#cb11-209" aria-hidden="true" tabindex="-1"></a>The .632+ calculation uses squared-error loss and the bounded correction in</span>
+<span id="cb11-210"><a href="#cb11-210" aria-hidden="true" tabindex="-1"></a>Efron and Tibshirani (1997), equations 26 and 31–32. Original observations</span>
+<span id="cb11-211"><a href="#cb11-211" aria-hidden="true" tabindex="-1"></a>are weighted equally in the out-of-bag estimate, and bootstrap duplicates</span>
+<span id="cb11-212"><a href="#cb11-212" aria-hidden="true" tabindex="-1"></a>are grouped in the inner tuning folds.</span>
+<span id="cb11-213"><a href="#cb11-213" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb11-214"><a href="#cb11-214" aria-hidden="true" tabindex="-1"></a>::: {.notes}</span>
+<span id="cb11-215"><a href="#cb11-215" aria-hidden="true" tabindex="-1"></a>Emphasise that "naive CV" is still useful: it is the inner loop in a</span>
+<span id="cb11-216"><a href="#cb11-216" aria-hidden="true" tabindex="-1"></a>nested scheme. The crime is reporting it as the final error.</span>
+<span id="cb11-217"><a href="#cb11-217" aria-hidden="true" tabindex="-1"></a>:::</span>
+<span id="cb11-218"><a href="#cb11-218" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb11-219"><a href="#cb11-219" aria-hidden="true" tabindex="-1"></a><span class="fu">## Common pitfalls</span></span>
+<span id="cb11-220"><a href="#cb11-220" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb11-221"><a href="#cb11-221" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>Tuning on the test fold and reporting the resulting error.</span>
+<span id="cb11-222"><a href="#cb11-222" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>Using a single 80/20 split in high dimensions; variance across splits</span>
+<span id="cb11-223"><a href="#cb11-223" aria-hidden="true" tabindex="-1"></a>  can exceed the effect of interest.</span>
+<span id="cb11-224"><a href="#cb11-224" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>Evaluating a bootstrap fit on its own training observations and calling</span>
+<span id="cb11-225"><a href="#cb11-225" aria-hidden="true" tabindex="-1"></a>  that an out-of-sample error.</span>
+<span id="cb11-226"><a href="#cb11-226" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb11-227"><a href="#cb11-227" aria-hidden="true" tabindex="-1"></a><span class="fu">## Further reading</span></span>
+<span id="cb11-228"><a href="#cb11-228" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb11-229"><a href="#cb11-229" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>Hastie, Tibshirani, Friedman, *Elements of Statistical Learning*,</span>
+<span id="cb11-230"><a href="#cb11-230" aria-hidden="true" tabindex="-1"></a>  §7.10–7.11.</span>
+<span id="cb11-231"><a href="#cb11-231" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>Varma S, Simon R (2006), *Bias in error estimation when using</span>
+<span id="cb11-232"><a href="#cb11-232" aria-hidden="true" tabindex="-1"></a>  cross-validation for model selection*.</span>
+<span id="cb11-233"><a href="#cb11-233" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>Efron B, Tibshirani R (1997), *Improvements on cross-validation: the</span>
+<span id="cb11-234"><a href="#cb11-234" aria-hidden="true" tabindex="-1"></a>  .632+ bootstrap method*.</span>
+<span id="cb11-235"><a href="#cb11-235" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb11-236"><a href="#cb11-236" aria-hidden="true" tabindex="-1"></a><span class="fu">## Session info</span></span>
+<span id="cb11-237"><a href="#cb11-237" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb11-240"><a href="#cb11-240" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
+<span id="cb11-241"><a href="#cb11-241" aria-hidden="true" tabindex="-1"></a><span class="fu">sessionInfo</span>()</span>
+<span id="cb11-242"><a href="#cb11-242" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
 </code></pre></div><button title="Copy to Clipboard" class="code-copy-button" data-in-quarto-modal=""><i class="bi"></i></button></div>
 </div></div></div></div></div>
 </div> <!-- /content -->
 <footer class="footer">
   <div class="nav-footer">
     <div class="nav-footer-left">
-<p>#courses · MIT</p>
+<p>Prose: CC BY 4.0 · Code: MIT</p>
 </div>   
     <div class="nav-footer-center">
 <p><a href="../../get_started.html">Get Started</a> · <a href="../../overview.html">Overview</a> · <a href="../../schedule.html">Schedule</a> · <a href="../../cheatsheets.html">Cheatsheets</a> · <a href="../../shiny.html">Interactive apps</a> · <a href="../../appendices/research_workflow.html">Research workflow</a> · <a href="../../appendices/decision_tree.html">Decision tree</a> · <a href="../../appendices/glossary.html">Glossary</a> · <a href="../../appendices/common_errors.html">Common errors</a> · <a href="../../appendices/writing_a_report.html">Writing a report</a> · <a href="../../references.html">References</a> · <a href="../../acknowledgements.html">Acknowledgements</a> · <strong><a href="../../impressum.html">Impressum</a></strong> · <a href="mailto:58561665+r-heller@users.noreply.github.com">Kontakt</a></p>

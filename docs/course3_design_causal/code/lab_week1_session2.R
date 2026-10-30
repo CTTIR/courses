@@ -10,8 +10,7 @@ theme_set(theme_minimal(base_size = 12))
 
 # --- 1. Hypothesis / Goal --------------------------------------
 # Treatment reduces symptom score versus placebo in a parallel-group
-# RCT. Contrast ITT with per-protocol analyses when non-adherence is
-# informative.
+# RCT. Contrast ITT with per-protocol analyses with independent simulated non-adherence.
 
 # --- 2. Data ---------------------------------------------------
 n <- 200
@@ -36,13 +35,19 @@ print(p)
 print(trial |> group_by(arm) |> summarise(mean = mean(y), sd = sd(y), n = n()))
 
 # --- 5. Conduct / Fit ------------------------------------------
-itt <- t.test(y ~ arm, data = trial)
-pp  <- t.test(y ~ received, data = trial)
+itt <- with(trial, t.test(y[arm == "treatment"], y[arm == "placebo"]))
+pp <- with(subset(trial, !crossed),
+           t.test(y[arm == "treatment"], y[arm == "placebo"]))
+as_treated <- with(trial,
+                   t.test(y[received == "treatment"], y[received == "placebo"]))
+itt_diff <- unname(itt$estimate[1] - itt$estimate[2])
+pp_diff <- unname(pp$estimate[1] - pp$estimate[2])
+at_diff <- unname(as_treated$estimate[1] - as_treated$estimate[2])
 print(itt)
 print(pp)
 
 # --- 6. Report -------------------------------------------------
 cat(sprintf(
-  "ITT diff: %.2f; PP diff: %.2f\n",
-  diff(itt$estimate) * -1, diff(pp$estimate) * -1
+  "Treatment minus placebo: ITT %.2f; PP %.2f; as-treated %.2f\n",
+  itt_diff, pp_diff, at_diff
 ))

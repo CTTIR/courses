@@ -15,8 +15,8 @@ theme_set(theme_minimal(base_size = 12))
 # --- 2. Data ---------------------------------------------------
 n_per_cell <- 10
 fact <- expand_grid(
-  drug = c("no", "yes"),
-  diet = c("standard", "modified"),
+  drug = factor(c("no", "yes"), levels = c("no", "yes")),
+  diet = factor(c("standard", "modified"), levels = c("standard", "modified")),
   rep  = seq_len(n_per_cell)
 ) |>
   mutate(

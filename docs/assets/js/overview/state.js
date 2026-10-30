@@ -33,15 +33,22 @@ export function createState({ minYear, maxYear }) {
   function readURL() {
     const p = new URLSearchParams(location.search);
     for (const cat of ["topics", "tags", "labels"]) {
+      s[cat].clear();
       const raw = p.get(cat);
       if (raw) for (const v of raw.split(",").filter(Boolean)) s[cat].add(v);
     }
-    const q = p.get("q");
-    if (q) s.query = q;
+    s.query = p.get("q") || "";
     const f = parseInt(p.get("from"), 10);
     const t = parseInt(p.get("to"), 10);
-    if (Number.isFinite(f)) s.dateFrom = Math.max(minYear, f);
-    if (Number.isFinite(t)) s.dateTo = Math.min(maxYear, t);
+    setBounds(f, t);
+  }
+
+  function setBounds(from, to) {
+    const clamp = (value, fallback) => Number.isFinite(value)
+      ? Math.min(maxYear, Math.max(minYear, value)) : fallback;
+    const a = clamp(from, minYear), b = clamp(to, maxYear);
+    s.dateFrom = Math.min(a, b);
+    s.dateTo = Math.max(a, b);
   }
 
   function writeURL() {
@@ -77,7 +84,7 @@ export function createState({ minYear, maxYear }) {
       notify();
     },
     setQuery(q) { s.query = q || ""; notify(); },
-    setRange(from, to) { s.dateFrom = from; s.dateTo = to; notify(); },
+    setRange(from, to) { setBounds(from, to); notify(); },
     reset() {
       s.topics.clear(); s.tags.clear(); s.labels.clear();
       s.query = "";

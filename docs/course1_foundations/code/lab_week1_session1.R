@@ -36,7 +36,7 @@ print(fit)
 
 # --- 5. Report -------------------------------------------------
 cat(sprintf(
-  "Mean change difference: %.1f mmHg (95%% CI: %.1f, %.1f), p = %.3f\n",
-  diff(tapply(df$sbp_1 - df$sbp_0, df$arm, mean)),
+  "Mean change difference (drug - placebo): %.1f mmHg (95%% CI: %.1f, %.1f), p = %.3f\n",
+  unname(fit$estimate[1] - fit$estimate[2]),
   fit$conf.int[1], fit$conf.int[2], fit$p.value
 ))

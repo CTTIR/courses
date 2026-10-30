@@ -6,8 +6,8 @@
 <script src="../../site_libs/quarto-html/tippy.umd.min.js"></script>
 <link href="../../site_libs/quarto-html/tippy.css" rel="stylesheet">
 <link href="../../site_libs/quarto-html/light-border.css" rel="stylesheet">
-<link href="../../site_libs/quarto-html/quarto-syntax-highlighting-dark-d0ae9245876894da5ac7e18953ecc5cc.css" rel="stylesheet" id="quarto-text-highlighting-styles"><meta charset="utf-8">
-  <meta name="generator" content="quarto-1.9.37">
+<link href="../../site_libs/quarto-html/quarto-syntax-highlighting-dark-b626d73c4c936ccc3cb08be7d45d1df6.css" rel="stylesheet" id="quarto-text-highlighting-styles"><meta charset="utf-8">
+  <meta name="generator" content="quarto-1.10.19">
 
   <meta name="author" content="R. Heller">
   <title>#courses – Week 1, Session 1 — Cross-validation, nested CV, bootstrap .632+</title>
@@ -20,10 +20,13 @@
     /* Default styles provided by pandoc.
     ** See https://pandoc.org/MANUAL.html#variables-for-html for config info.
     */
-    code{white-space: pre-wrap;}
     span.smallcaps{font-variant: small-caps;}
-    div.columns{display: flex; gap: min(4vw, 1.5em);}
-    div.column{flex: auto; overflow-x: auto;}
+    div.columns{display: flex; gap: 1.5em;}
+    div.column{flex: auto;}
+    @media screen {
+    div.columns{gap: min(4vw, 1.5em);}
+    div.column{overflow-x: auto;}
+    }
     div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
     ul.task-list{list-style: none;}
     ul.task-list li input[type="checkbox"] {
@@ -31,72 +34,6 @@
       margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
       vertical-align: middle;
     }
-    /* CSS for syntax highlighting */
-    html { -webkit-text-size-adjust: 100%; }
-    pre > code.sourceCode { white-space: pre; position: relative; }
-    pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
-    pre > code.sourceCode > span:empty { height: 1.2em; }
-    .sourceCode { overflow: visible; }
-    code.sourceCode > span { color: inherit; text-decoration: inherit; }
-    div.sourceCode { margin: 1em 0; }
-    pre.sourceCode { margin: 0; }
-    @media screen {
-    div.sourceCode { overflow: auto; }
-    }
-    @media print {
-    pre > code.sourceCode { white-space: pre-wrap; }
-    pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
-    }
-    pre.numberSource code
-      { counter-reset: source-line 0; }
-    pre.numberSource code > span
-      { position: relative; left: -4em; counter-increment: source-line; }
-    pre.numberSource code > span > a:first-child::before
-      { content: counter(source-line);
-        position: relative; left: -1em; text-align: right; vertical-align: baseline;
-        border: none; display: inline-block;
-        -webkit-touch-callout: none; -webkit-user-select: none;
-        -khtml-user-select: none; -moz-user-select: none;
-        -ms-user-select: none; user-select: none;
-        padding: 0 4px; width: 4em;
-      }
-    pre.numberSource { margin-left: 3em;  padding-left: 4px; }
-    div.sourceCode
-      { color: #f8f8f2;  }
-    @media screen {
-    pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
-    }
-    code span { color: #f8f8f2; } /* Normal */
-    code span.al { color: #f07178; } /* Alert */
-    code span.an { color: #d4d0ab; } /* Annotation */
-    code span.at { color: #00e0e0; } /* Attribute */
-    code span.bn { color: #d4d0ab; } /* BaseN */
-    code span.bu { color: #abe338; } /* BuiltIn */
-    code span.cf { color: #ffa07a; font-weight: bold; } /* ControlFlow */
-    code span.ch { color: #abe338; } /* Char */
-    code span.cn { color: #ffd700; } /* Constant */
-    code span.co { color: #f8f8f2; font-style: italic; } /* Comment */
-    code span.cv { color: #ffd700; } /* CommentVar */
-    code span.do { color: #f8f8f2; } /* Documentation */
-    code span.dt { color: #ffa07a; } /* DataType */
-    code span.dv { color: #d4d0ab; } /* DecVal */
-    code span.er { color: #f07178; text-decoration: underline; } /* Error */
-    code span.ex { color: #00e0e0; font-weight: bold; } /* Extension */
-    code span.fl { color: #d4d0ab; } /* Float */
-    code span.fu { color: #ffa07a; } /* Function */
-    code span.im { color: #abe338; } /* Import */
-    code span.in { color: #d4d0ab; } /* Information */
-    code span.kw { color: #ffa07a; font-weight: bold; } /* Keyword */
-    code span.op { color: #ffa07a; } /* Operator */
-    code span.ot { color: #00e0e0; } /* Other */
-    code span.pp { color: #dcc6e0; } /* Preprocessor */
-    code span.re { color: #00e0e0; background-color: #f8f8f2; } /* RegionMarker */
-    code span.sc { color: #abe338; } /* SpecialChar */
-    code span.ss { color: #abe338; } /* SpecialString */
-    code span.st { color: #abe338; } /* String */
-    code span.va { color: #00e0e0; } /* Variable */
-    code span.vs { color: #abe338; } /* VerbatimString */
-    code span.wa { color: #dcc6e0; } /* Warning */
   </style>
   <link rel="stylesheet" href="../../site_libs/revealjs/dist/theme/quarto-95712503ec230d592661dbfa35434f1f.css">
   <link href="../../site_libs/revealjs/plugin/quarto-line-highlight/line-highlight.css" rel="stylesheet">
@@ -205,7 +142,7 @@
 <div class="quarto-title-authors">
 <div class="quarto-title-author">
 <div class="quarto-title-author-name">
-R. Heller 
+R. Heller
 </div>
 </div>
 </div>
@@ -246,17 +183,11 @@ R. Heller
 <h2>Background</h2>
 <p>Every predictive model reports an error on the data it was fit to. That number is almost always optimistic, because the fit has had a chance to memorise noise as well as signal. Cross-validation and the bootstrap are two resampling strategies that simulate the experience of scoring the model on data it has not seen. They are not interchangeable: they make different trade-offs between bias and variance, and they behave differently under high-dimensional settings.</p>
 <p>A particular failure mode that recurs in the applied literature is <em>double dipping</em>: using the same held-out fold both to choose a hyperparameter and to report the final error. The fold is then no longer held out, and the reported error slides back toward the training error. Nested cross-validation is the clean solution: the inner loop picks hyperparameters, the outer loop reports error.</p>
-<p>The bootstrap gives a different window onto generalisation. The plain bootstrap resamples with replacement; the .632 and .632+ variants weight the in-bag and out-of-bag errors to reduce bias when the learner overfits. In very small samples the .632+ estimator is often the most stable, and it is worth carrying in your toolbox alongside CV.</p>
+<p>The bootstrap gives a different window onto generalisation. The plain bootstrap resamples with replacement; the .632 and .632+ variants combine apparent and out-of-bag errors. The .632+ correction adapts to estimated overfitting. Its bias and variance depend on the learner, loss, and data-generating process; no estimator is uniformly best.</p>
 <p>A practical note: when you write up a modelling study, the generalisation error is the headline number. If you tuned, you must disclose how. If the inner tuning cost was hidden in the outer fold, a careful reader will notice that the reported error is too good and cannot be reproduced. Nested CV is not a cosmetic fix; it is the difference between a number that generalises and a number that does not.</p>
 </section>
 <section id="setup" class="slide level2">
 <h2>Setup</h2>
-<div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb1"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a></a><span class="fu">library</span>(tidyverse)</span>
-<span id="cb1-2"><a></a><span class="fu">library</span>(glmnet)</span>
-<span id="cb1-3"><a></a><span class="fu">set.seed</span>(<span class="dv">42</span>)</span>
-<span id="cb1-4"><a></a><span class="fu">theme_set</span>(<span class="fu">theme_minimal</span>(<span class="at">base_size =</span> <span class="dv">12</span>))</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
-</div>
 </section>
 <section id="goal" class="slide level2">
 <h2>1. Goal</h2>
@@ -265,44 +196,18 @@ R. Heller
 <section id="approach" class="slide level2">
 <h2>2. Approach</h2>
 <p>We simulate <code>n = 120</code> observations with <code>p = 40</code> features, of which only 5 are true signal. We will (i) fit a single <code>cv.glmnet</code>, (ii) report the CV-minimising error, then (iii) wrap that in an outer 5-fold loop to show that the inner CV error is optimistic.</p>
-<div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb2"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb2-1"><a></a>n <span class="ot">&lt;-</span> <span class="dv">120</span>; p <span class="ot">&lt;-</span> <span class="dv">40</span></span>
-<span id="cb2-2"><a></a>X <span class="ot">&lt;-</span> <span class="fu">matrix</span>(<span class="fu">rnorm</span>(n <span class="sc">*</span> p), n, p)</span>
-<span id="cb2-3"><a></a>beta <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="fu">rep</span>(<span class="fl">1.5</span>, <span class="dv">5</span>), <span class="fu">rep</span>(<span class="dv">0</span>, p <span class="sc">-</span> <span class="dv">5</span>))</span>
-<span id="cb2-4"><a></a>y <span class="ot">&lt;-</span> <span class="fu">as.numeric</span>(X <span class="sc">%*%</span> beta <span class="sc">+</span> <span class="fu">rnorm</span>(n, <span class="at">sd =</span> <span class="fl">1.0</span>))</span>
-<span id="cb2-5"><a></a></span>
-<span id="cb2-6"><a></a><span class="fu">tibble</span>(<span class="at">yhat_naive =</span> <span class="fu">as.numeric</span>(X <span class="sc">%*%</span> beta), <span class="at">y =</span> y) <span class="sc">|&gt;</span></span>
-<span id="cb2-7"><a></a>  <span class="fu">ggplot</span>(<span class="fu">aes</span>(yhat_naive, y)) <span class="sc">+</span></span>
-<span id="cb2-8"><a></a>  <span class="fu">geom_point</span>(<span class="at">alpha =</span> <span class="fl">0.6</span>) <span class="sc">+</span></span>
-<span id="cb2-9"><a></a>  <span class="fu">geom_abline</span>(<span class="at">slope =</span> <span class="dv">1</span>, <span class="at">intercept =</span> <span class="dv">0</span>, <span class="at">colour =</span> <span class="st">"grey50"</span>) <span class="sc">+</span></span>
-<span id="cb2-10"><a></a>  <span class="fu">labs</span>(<span class="at">x =</span> <span class="st">"True linear predictor"</span>, <span class="at">y =</span> <span class="st">"Observed y"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 
-</div>
-<img data-src="lab_week1_session1_files/figure-html/unnamed-chunk-1-1.png" width="672" class="r-stretch"></section>
+<img data-src="lab_week1_session1_files/figure-revealjs/unnamed-chunk-1-1.png" width="960" class="r-stretch"></section>
 <section id="execution" class="slide level2">
 <h2>3. Execution</h2>
 <p><strong>Naive single-layer CV.</strong></p>
 <div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb3"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb3-1"><a></a>cv1 <span class="ot">&lt;-</span> <span class="fu">cv.glmnet</span>(X, y, <span class="at">alpha =</span> <span class="dv">1</span>, <span class="at">nfolds =</span> <span class="dv">5</span>)</span>
-<span id="cb3-2"><a></a>naive_mse <span class="ot">&lt;-</span> <span class="fu">min</span>(cv1<span class="sc">$</span>cvm)</span>
-<span id="cb3-3"><a></a>naive_mse</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>[1] 1.206876</code></pre>
 </div>
 </div>
 <p><strong>Nested CV.</strong> The inner <code>cv.glmnet</code> picks <code>lambda</code>; the outer 5 folds produce the reported MSE.</p>
 <div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb5"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb5-1"><a></a>K <span class="ot">&lt;-</span> <span class="dv">5</span></span>
-<span id="cb5-2"><a></a>folds <span class="ot">&lt;-</span> <span class="fu">sample</span>(<span class="fu">rep</span>(<span class="dv">1</span><span class="sc">:</span>K, <span class="at">length.out =</span> n))</span>
-<span id="cb5-3"><a></a>outer_mse <span class="ot">&lt;-</span> <span class="fu">numeric</span>(K)</span>
-<span id="cb5-4"><a></a><span class="cf">for</span> (k <span class="cf">in</span> <span class="dv">1</span><span class="sc">:</span>K) {</span>
-<span id="cb5-5"><a></a>  tr <span class="ot">&lt;-</span> folds <span class="sc">!=</span> k; te <span class="ot">&lt;-</span> folds <span class="sc">==</span> k</span>
-<span id="cb5-6"><a></a>  fit_k <span class="ot">&lt;-</span> <span class="fu">cv.glmnet</span>(X[tr, ], y[tr], <span class="at">alpha =</span> <span class="dv">1</span>, <span class="at">nfolds =</span> <span class="dv">5</span>)</span>
-<span id="cb5-7"><a></a>  yhat  <span class="ot">&lt;-</span> <span class="fu">as.numeric</span>(<span class="fu">predict</span>(fit_k, <span class="at">newx =</span> X[te, ], <span class="at">s =</span> <span class="st">"lambda.min"</span>))</span>
-<span id="cb5-8"><a></a>  outer_mse[k] <span class="ot">&lt;-</span> <span class="fu">mean</span>((y[te] <span class="sc">-</span> yhat)<span class="sc">^</span><span class="dv">2</span>)</span>
-<span id="cb5-9"><a></a>}</span>
-<span id="cb5-10"><a></a>nested_mse <span class="ot">&lt;-</span> <span class="fu">mean</span>(outer_mse)</span>
-<span id="cb5-11"><a></a><span class="fu">c</span>(<span class="at">naive =</span> naive_mse, <span class="at">nested =</span> nested_mse)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>   naive   nested 
 1.206876 1.048175 </code></pre>
@@ -313,33 +218,21 @@ R. Heller
 <h2>4. Check</h2>
 <p>Bootstrap .632+ error as a cross-check.</p>
 <div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb7"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb7-1"><a></a>B <span class="ot">&lt;-</span> <span class="dv">50</span></span>
-<span id="cb7-2"><a></a>errs_in <span class="ot">&lt;-</span> errs_oob <span class="ot">&lt;-</span> <span class="fu">numeric</span>(B)</span>
-<span id="cb7-3"><a></a><span class="cf">for</span> (b <span class="cf">in</span> <span class="dv">1</span><span class="sc">:</span>B) {</span>
-<span id="cb7-4"><a></a>  idx <span class="ot">&lt;-</span> <span class="fu">sample.int</span>(n, n, <span class="at">replace =</span> <span class="cn">TRUE</span>)</span>
-<span id="cb7-5"><a></a>  oob <span class="ot">&lt;-</span> <span class="fu">setdiff</span>(<span class="fu">seq_len</span>(n), <span class="fu">unique</span>(idx))</span>
-<span id="cb7-6"><a></a>  fit_b <span class="ot">&lt;-</span> <span class="fu">cv.glmnet</span>(X[idx, ], y[idx], <span class="at">alpha =</span> <span class="dv">1</span>, <span class="at">nfolds =</span> <span class="dv">5</span>)</span>
-<span id="cb7-7"><a></a>  yhat_in  <span class="ot">&lt;-</span> <span class="fu">as.numeric</span>(<span class="fu">predict</span>(fit_b, <span class="at">newx =</span> X[idx, ],  <span class="at">s =</span> <span class="st">"lambda.min"</span>))</span>
-<span id="cb7-8"><a></a>  yhat_oob <span class="ot">&lt;-</span> <span class="fu">as.numeric</span>(<span class="fu">predict</span>(fit_b, <span class="at">newx =</span> X[oob, ],  <span class="at">s =</span> <span class="st">"lambda.min"</span>))</span>
-<span id="cb7-9"><a></a>  errs_in[b]  <span class="ot">&lt;-</span> <span class="fu">mean</span>((y[idx] <span class="sc">-</span> yhat_in)<span class="sc">^</span><span class="dv">2</span>)</span>
-<span id="cb7-10"><a></a>  errs_oob[b] <span class="ot">&lt;-</span> <span class="fu">mean</span>((y[oob] <span class="sc">-</span> yhat_oob)<span class="sc">^</span><span class="dv">2</span>)</span>
-<span id="cb7-11"><a></a>}</span>
-<span id="cb7-12"><a></a>err_app <span class="ot">&lt;-</span> <span class="fu">mean</span>(errs_in); err_oob <span class="ot">&lt;-</span> <span class="fu">mean</span>(errs_oob)</span>
-<span id="cb7-13"><a></a>err_632 <span class="ot">&lt;-</span> <span class="fl">0.368</span> <span class="sc">*</span> err_app <span class="sc">+</span> <span class="fl">0.632</span> <span class="sc">*</span> err_oob</span>
-<span id="cb7-14"><a></a><span class="fu">c</span>(<span class="at">apparent =</span> err_app, <span class="at">oob =</span> err_oob, <span class="at">boot632 =</span> err_632,</span>
-<span id="cb7-15"><a></a>  <span class="at">nested =</span> nested_mse)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stdout">
-<pre><code> apparent       oob   boot632    nested 
-0.5199837 1.2632623 0.9897358 1.0481752 </code></pre>
+<pre><code>        apparent              oob          boot632      boot632plus 
+      0.73569350       1.22831749       1.04703186       1.05010707 
+relative_overfit           nested 
+      0.02657819       1.04817523 </code></pre>
 </div>
 </div>
 </section>
 <section id="report" class="slide level2">
 <h2>5. Report</h2>
 <blockquote>
-<p>On simulated data (<em>n</em> = 120, <em>p</em> = 40, five true signals), a lasso with tuning parameter chosen by 5-fold CV achieved an out-of-sample MSE of 1.05 under nested 5 × 5 CV. The naive single-layer CV understated the error at 1.21; the bootstrap .632 estimator gave 0.99, which bracketed the nested estimate.</p>
+<p>On simulated data (<em>n</em> = 120, <em>p</em> = 40, five true signals), a lasso with tuning parameter chosen by 5-fold CV achieved an estimated MSE of 1.05 under nested 5 × 5 CV. The minimum single-layer CV estimate was 1.21; bootstrap .632 and .632+ estimates were 1.05 and 1.05, respectively.</p>
 </blockquote>
-<p>The naive number looks tighter, but it reflects the choice of <code>lambda</code> as well as the fit. Only the nested number is a fair estimate of what this procedure — tune-then-fit — will do on new data.</p>
+<p>The minimum inner-CV error is subject to selection optimism; its ordering relative to the outer estimate can vary in a single simulation. Outer CV keeps tuning separate from evaluation, but remains subject to sampling and fold variability. Here <code>B = 50</code> keeps the demonstration small; assess Monte Carlo stability with more replicates before using bootstrap results in a study.</p>
+<p>The .632+ calculation uses squared-error loss and the bounded correction in Efron and Tibshirani (1997), equations 26 and 31–32. Original observations are weighted equally in the out-of-bag estimate, and bootstrap duplicates are grouped in the inner tuning folds.</p>
 <aside class="notes">
 <p>Emphasise that “naive CV” is still useful: it is the inner loop in a nested scheme. The crime is reporting it as the final error.</p>
 <style type="text/css">
@@ -359,7 +252,7 @@ R. Heller
 <ul>
 <li>Tuning on the test fold and reporting the resulting error.</li>
 <li>Using a single 80/20 split in high dimensions; variance across splits can exceed the effect of interest.</li>
-<li>Bootstrapping without tracking in-bag vs out-of-bag, which inflates the estimate back to the apparent error.</li>
+<li>Evaluating a bootstrap fit on its own training observations and calling that an out-of-sample error.</li>
 </ul>
 </section>
 <section id="further-reading" class="slide level2">
@@ -373,19 +266,17 @@ R. Heller
 <section id="session-info" class="slide level2">
 <h2>Session info</h2>
 <div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb9"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb9-1"><a></a><span class="fu">sessionInfo</span>()</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stdout">
-<pre><code>R version 4.5.2 (2025-10-31 ucrt)
-Platform: x86_64-w64-mingw32/x64
-Running under: Windows 11 x64 (build 26200)
+<pre><code>R version 4.6.1 (2026-06-24)
+Platform: aarch64-apple-darwin27.0.0
+Running under: macOS Golden Gate 27.0.1
 
 Matrix products: default
-  LAPACK version 3.12.1
+BLAS:   /opt/homebrew/Cellar/openblas/0.3.34/lib/libopenblasp-r0.3.34.dylib 
+LAPACK: /opt/homebrew/Cellar/r/4.6.1_1/lib/R/lib/libRlapack.dylib;  LAPACK version 3.12.1
 
 locale:
-[1] LC_COLLATE=English_Germany.utf8  LC_CTYPE=English_Germany.utf8   
-[3] LC_MONETARY=English_Germany.utf8 LC_NUMERIC=C                    
-[5] LC_TIME=English_Germany.utf8    
+[1] C.UTF-8/C.UTF-8/C.UTF-8/C/C.UTF-8/C.UTF-8
 
 time zone: Europe/Berlin
 tzcode source: internal
@@ -394,22 +285,22 @@ attached base packages:
 [1] stats     graphics  grDevices utils     datasets  methods   base     
 
 other attached packages:
- [1] glmnet_5.0      Matrix_1.7-5    lubridate_1.9.5 forcats_1.0.1  
+ [1] glmnet_5.2      Matrix_1.7-5    lubridate_1.9.5 forcats_1.0.1  
  [5] stringr_1.6.0   dplyr_1.2.1     purrr_1.2.2     readr_2.2.0    
  [9] tidyr_1.3.2     tibble_3.3.1    ggplot2_4.0.3   tidyverse_2.0.0
 
 loaded via a namespace (and not attached):
- [1] generics_0.1.4     shape_1.4.6.1      stringi_1.8.7      lattice_0.22-9    
- [5] hms_1.1.4          digest_0.6.39      magrittr_2.0.4     evaluate_1.0.5    
- [9] grid_4.5.2         timechange_0.4.0   RColorBrewer_1.1-3 iterators_1.0.14  
+ [1] generics_0.1.4     shape_1.4.6.1      stringi_1.8.9      lattice_0.22-9    
+ [5] hms_1.1.4          digest_0.6.39      magrittr_2.0.5     evaluate_1.0.5    
+ [9] grid_4.6.1         timechange_0.4.0   RColorBrewer_1.1-3 iterators_1.0.14  
 [13] fastmap_1.2.0      foreach_1.5.2      jsonlite_2.0.0     survival_3.8-6    
-[17] scales_1.4.0       codetools_0.2-20   cli_3.6.6          rlang_1.2.0       
-[21] splines_4.5.2      withr_3.0.2        yaml_2.3.12        otel_0.2.0        
-[25] tools_4.5.2        tzdb_0.5.0         vctrs_0.7.3        R6_2.6.1          
-[29] lifecycle_1.0.5    htmlwidgets_1.6.4  pkgconfig_2.0.3    pillar_1.11.1     
-[33] gtable_0.3.6       glue_1.8.1         Rcpp_1.1.1-1.1     xfun_0.57         
-[37] tidyselect_1.2.1   knitr_1.51         farver_2.1.2       htmltools_0.5.9   
-[41] rmarkdown_2.31     labeling_0.4.3     compiler_4.5.2     S7_0.2.2          </code></pre>
+[17] scales_1.4.0       codetools_0.2-20   cli_3.6.6          rlang_1.3.0       
+[21] splines_4.6.1      withr_3.0.3        yaml_2.3.12        otel_0.2.0        
+[25] tools_4.6.1        tzdb_0.5.0         vctrs_0.7.3        R6_2.6.1          
+[29] lifecycle_1.0.5    pkgconfig_2.0.3    pillar_1.11.1      gtable_0.3.6      
+[33] glue_1.8.1         Rcpp_1.1.2         xfun_0.62          tidyselect_1.2.1  
+[37] knitr_1.52         farver_2.1.2       htmltools_0.5.9    rmarkdown_2.32    
+[41] labeling_0.4.3     compiler_4.6.1     S7_0.2.2          </code></pre>
 </div>
 </div>
 
@@ -630,6 +521,44 @@ loaded via a namespace (and not attached):
         ]
       });
     </script>
+    
+    <script>
+      // htmlwidgets need to know to resize themselves when slides are shown/hidden.
+      // Fire the "slideenter" event (handled by htmlwidgets.js) when the current
+      // slide changes (different for each slide format).
+      (function () {
+        // dispatch for htmlwidgets
+        function fireSlideEnter() {
+          const event = window.document.createEvent("Event");
+          event.initEvent("slideenter", true, true);
+          window.document.dispatchEvent(event);
+        }
+
+        function fireSlideChanged(previousSlide, currentSlide) {
+          fireSlideEnter();
+
+          // dispatch for shiny
+          if (window.jQuery) {
+            if (previousSlide) {
+              window.jQuery(previousSlide).trigger("hidden");
+            }
+            if (currentSlide) {
+              window.jQuery(currentSlide).trigger("shown");
+            }
+          }
+        }
+
+        // hookup for slidy
+        if (window.w3c_slidy) {
+          window.w3c_slidy.add_observer(function (slide_num) {
+            // slide_num starts at position 1
+            fireSlideChanged(null, w3c_slidy.slides[slide_num - 1]);
+          });
+        }
+
+      })();
+    </script>
+
     <script id="quarto-html-after-body" type="application/javascript">
       window.document.addEventListener("DOMContentLoaded", function (event) {
         const tabsets =  window.document.querySelectorAll(".panel-tabset-tabby")

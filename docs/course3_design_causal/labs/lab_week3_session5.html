@@ -2,7 +2,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
 
 <meta charset="utf-8">
-<meta name="generator" content="quarto-1.9.37">
+<meta name="generator" content="quarto-1.10.19">
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
@@ -13,10 +13,13 @@
 /* Default styles provided by pandoc.
 ** See https://pandoc.org/MANUAL.html#variables-for-html for config info.
 */
-code{white-space: pre-wrap;}
 span.smallcaps{font-variant: small-caps;}
-div.columns{display: flex; gap: min(4vw, 1.5em);}
-div.column{flex: auto; overflow-x: auto;}
+div.columns{display: flex; gap: 1.5em;}
+div.column{flex: auto;}
+@media screen {
+div.columns{gap: min(4vw, 1.5em);}
+div.column{overflow-x: auto;}
+}
 div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
 ul.task-list{list-style: none;}
 ul.task-list li input[type="checkbox"] {
@@ -71,12 +74,12 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <script src="../../site_libs/quarto-html/tippy.umd.min.js"></script>
 <script src="../../site_libs/quarto-html/anchor.min.js"></script>
 <link href="../../site_libs/quarto-html/tippy.css" rel="stylesheet">
-<link href="../../site_libs/quarto-html/quarto-syntax-highlighting-2065f9e58f6345017599ef1c45dc3d4f.css" rel="stylesheet" class="quarto-color-scheme" id="quarto-text-highlighting-styles">
-<link href="../../site_libs/quarto-html/quarto-syntax-highlighting-dark-ced54966b0e53f059c291d5781927a30.css" rel="stylesheet" class="quarto-color-scheme quarto-color-alternate" id="quarto-text-highlighting-styles">
+<link href="../../site_libs/quarto-html/quarto-syntax-highlighting-9f3547545508946eee83ef8b606cbadf.css" rel="stylesheet" class="quarto-color-scheme" id="quarto-text-highlighting-styles">
+<link href="../../site_libs/quarto-html/quarto-syntax-highlighting-dark-8d43248e80c6749424940840481457b2.css" rel="stylesheet" class="quarto-color-scheme quarto-color-alternate" id="quarto-text-highlighting-styles">
 <script src="../../site_libs/bootstrap/bootstrap.min.js"></script>
 <link href="../../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
-<link href="../../site_libs/bootstrap/bootstrap-e6d3843e299d450790cfb48988d4232e.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme" id="quarto-bootstrap" data-mode="light">
-<link href="../../site_libs/bootstrap/bootstrap-dark-a84e9e0d3bdc903e291dd8ca38ce98a5.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme quarto-color-alternate" id="quarto-bootstrap" data-mode="dark">
+<link href="../../site_libs/bootstrap/bootstrap-0c1962fc29c4e87f8b37717c07588c31.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme" id="quarto-bootstrap" data-mode="light">
+<link href="../../site_libs/bootstrap/bootstrap-dark-33ee418c30da5be27be819967c4cb66e.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme quarto-color-alternate" id="quarto-bootstrap" data-mode="dark">
 <script id="quarto-search-options" type="application/json">{
   "language": {
     "search-no-results-text": "No results",
@@ -93,9 +96,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   }
 }</script>
 <script defer="" data-domain="cttir.github.io/courses" src="https://analytics.hellebo.de/js/script.file-downloads.outbound-links.js"></script>
-
 <script>window.plausible = window.plausible || function() { (window.plausible.q = window.plausible.q || []).push(arguments) }</script>
-
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin="">
 <link href="https://fonts.googleapis.com/css2?family=Source+Sans+3:wght@300;400;500;600;700&amp;family=JetBrains+Mono:wght@400;500&amp;display=swap" rel="stylesheet">
@@ -440,7 +441,7 @@ Note
 </section>
 <section id="goal" class="level2">
 <h2 class="anchored" data-anchor-id="goal">1. Goal</h2>
-<p>Simulate a time-varying-confounding scenario, estimate the causal effect naively and then with IPTW (a marginal structural model), and finish with a simple HTE estimate.</p>
+<p>Simulate a time-varying-confounding scenario, estimate the causal effect naively and then with IPTW (a marginal structural model), and finish with brief conceptual sketches of other identification strategies.</p>
 </section>
 <section id="approach" class="level2">
 <h2 class="anchored" data-anchor-id="approach">2. Approach</h2>
@@ -454,7 +455,7 @@ Note
 <span id="cb2-7"><a href="#cb2-7" aria-hidden="true" tabindex="-1"></a>  <span class="at">y  =</span> <span class="fl">1.0</span> <span class="sc">*</span> a0 <span class="sc">+</span> <span class="fl">0.8</span> <span class="sc">*</span> a1 <span class="sc">+</span> <span class="fl">0.5</span> <span class="sc">*</span> l0 <span class="sc">+</span> <span class="fl">0.5</span> <span class="sc">*</span> l1 <span class="sc">+</span> <span class="fu">rnorm</span>(n)</span>
 <span id="cb2-8"><a href="#cb2-8" aria-hidden="true" tabindex="-1"></a>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
-<p>The true effect of each treatment is positive and additive. <code>l1</code> is a time-varying confounder because it is affected by <code>a0</code> and predicts both <code>a1</code> and <code>y</code>.</p>
+<p>The intervention contrast for <code>a0</code>, holding <code>a1</code> fixed, is 1.25: its direct effect 1 plus the pathway through <code>l1</code> (0.5 × 0.5). The intervention effect of <code>a1</code> is 0.8. <code>l1</code> is a time-varying confounder because it is affected by <code>a0</code> and predicts both <code>a1</code> and <code>y</code>.</p>
 </section>
 <section id="execution" class="level2">
 <h2 class="anchored" data-anchor-id="execution">3. Execution</h2>
@@ -485,14 +486,14 @@ Note
 <span id="cb5-10"><a href="#cb5-10" aria-hidden="true" tabindex="-1"></a>df<span class="sc">$</span>sw <span class="ot">&lt;-</span> w0 <span class="sc">*</span> w1</span>
 <span id="cb5-11"><a href="#cb5-11" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb5-12"><a href="#cb5-12" aria-hidden="true" tabindex="-1"></a>msm <span class="ot">&lt;-</span> <span class="fu">lm</span>(y <span class="sc">~</span> a0 <span class="sc">+</span> a1, <span class="at">data =</span> df, <span class="at">weights =</span> sw)</span>
-<span id="cb5-13"><a href="#cb5-13" aria-hidden="true" tabindex="-1"></a><span class="fu">tidy</span>(msm, <span class="at">conf.int =</span> <span class="cn">TRUE</span>) <span class="sc">|&gt;</span></span>
+<span id="cb5-13"><a href="#cb5-13" aria-hidden="true" tabindex="-1"></a><span class="fu">tibble</span>(<span class="at">term =</span> <span class="fu">names</span>(<span class="fu">coef</span>(msm)), <span class="at">estimate =</span> <span class="fu">unname</span>(<span class="fu">coef</span>(msm))) <span class="sc">|&gt;</span></span>
 <span id="cb5-14"><a href="#cb5-14" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(term <span class="sc">%in%</span> <span class="fu">c</span>(<span class="st">"a0"</span>, <span class="st">"a1"</span>))</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stdout">
-<pre><code># A tibble: 2 × 7
-  term  estimate std.error statistic  p.value conf.low conf.high
-  &lt;chr&gt;    &lt;dbl&gt;     &lt;dbl&gt;     &lt;dbl&gt;    &lt;dbl&gt;    &lt;dbl&gt;     &lt;dbl&gt;
-1 a0       1.23     0.0585      21.1 2.51e-89    1.12      1.35 
-2 a1       0.806    0.0587      13.7 4.19e-41    0.691     0.921</code></pre>
+<pre><code># A tibble: 2 × 2
+  term  estimate
+  &lt;chr&gt;    &lt;dbl&gt;
+1 a0       1.23 
+2 a1       0.806</code></pre>
 </div>
 </div>
 </section>
@@ -506,12 +507,12 @@ Note
  0.5802  0.8982  0.9813  0.9997  1.0849  1.9544 </code></pre>
 </div>
 </div>
-<p>Stabilised weights should centre on 1 with no extreme tail. If they do not, a term in the treatment model is likely misspecified.</p>
+<p>Inspect the weight distribution and covariate balance. Extreme weights can reflect limited overlap, model misspecification, or sampling variability. Only weighted point estimates are shown: ordinary weighted-least-squares standard errors do not account for this weighting procedure. For uncertainty, bootstrap whole subjects and refit both propensity models and the outcome model in every replicate, or use an appropriate estimating-equation method.</p>
 </section>
 <section id="report" class="level2">
 <h2 class="anchored" data-anchor-id="report">5. Report</h2>
 <blockquote class="blockquote">
-<p>In a simulated cohort with time-varying confounding (<em>n</em> = 2000), naive regression underestimated the effect of initial treatment. An inverse-probability-weighted marginal structural model recovered effects close to the true data-generating values. Instrumental variable, difference-in-differences, and regression-discontinuity designs exploit alternative identification strategies, each with its own assumptions. Heterogeneity of treatment effect can be explored with causal forests or meta-learners.</p>
+<p>In a simulated cohort with time-varying confounding (<em>n</em> = 2000), the adjusted conditional coefficient for initial treatment was 0.96, while the weighted marginal estimate was 1.23 (intervention target 1.25). The weighted estimate for later treatment was 0.81 (target 0.8). Instrumental variable, difference-in-differences, and regression-discontinuity designs exploit alternative identification strategies, each with its own assumptions. Heterogeneity of treatment effect can be explored with causal forests or meta-learners.</p>
 </blockquote>
 <section id="brief-sketches" class="level3">
 <h3 class="anchored" data-anchor-id="brief-sketches">Brief sketches</h3>
@@ -545,17 +546,16 @@ Note
 <div class="cell">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb9"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a><span class="fu">sessionInfo</span>()</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stdout">
-<pre><code>R version 4.5.2 (2025-10-31 ucrt)
-Platform: x86_64-w64-mingw32/x64
-Running under: Windows 11 x64 (build 26200)
+<pre><code>R version 4.6.1 (2026-06-24)
+Platform: aarch64-apple-darwin27.0.0
+Running under: macOS Golden Gate 27.0.1
 
 Matrix products: default
-  LAPACK version 3.12.1
+BLAS:   /opt/homebrew/Cellar/openblas/0.3.34/lib/libopenblasp-r0.3.34.dylib 
+LAPACK: /opt/homebrew/Cellar/r/4.6.1_1/lib/R/lib/libRlapack.dylib;  LAPACK version 3.12.1
 
 locale:
-[1] LC_COLLATE=English_Germany.utf8  LC_CTYPE=English_Germany.utf8   
-[3] LC_MONETARY=English_Germany.utf8 LC_NUMERIC=C                    
-[5] LC_TIME=English_Germany.utf8    
+[1] C.UTF-8/C.UTF-8/C.UTF-8/C/C.UTF-8/C.UTF-8
 
 time zone: Europe/Berlin
 tzcode source: internal
@@ -564,20 +564,20 @@ attached base packages:
 [1] stats     graphics  grDevices utils     datasets  methods   base     
 
 other attached packages:
- [1] broom_1.0.12    lubridate_1.9.5 forcats_1.0.1   stringr_1.6.0  
+ [1] broom_1.0.13    lubridate_1.9.5 forcats_1.0.1   stringr_1.6.0  
  [5] dplyr_1.2.1     purrr_1.2.2     readr_2.2.0     tidyr_1.3.2    
  [9] tibble_3.3.1    ggplot2_4.0.3   tidyverse_2.0.0
 
 loaded via a namespace (and not attached):
- [1] gtable_0.3.6       jsonlite_2.0.0     compiler_4.5.2     tidyselect_1.2.1  
+ [1] gtable_0.3.6       jsonlite_2.0.0     compiler_4.6.1     tidyselect_1.2.1  
  [5] scales_1.4.0       yaml_2.3.12        fastmap_1.2.0      R6_2.6.1          
- [9] generics_0.1.4     knitr_1.51         backports_1.5.1    htmlwidgets_1.6.4 
-[13] pillar_1.11.1      RColorBrewer_1.1-3 tzdb_0.5.0         rlang_1.2.0       
-[17] utf8_1.2.6         stringi_1.8.7      xfun_0.57          S7_0.2.2          
-[21] otel_0.2.0         timechange_0.4.0   cli_3.6.6          withr_3.0.2       
-[25] magrittr_2.0.4     digest_0.6.39      grid_4.5.2         hms_1.1.4         
+ [9] generics_0.1.4     knitr_1.52         backports_1.5.1    htmlwidgets_1.6.4 
+[13] pillar_1.11.1      RColorBrewer_1.1-3 tzdb_0.5.0         rlang_1.3.0       
+[17] utf8_1.2.6         stringi_1.8.9      xfun_0.62          S7_0.2.2          
+[21] otel_0.2.0         timechange_0.4.0   cli_3.6.6          withr_3.0.3       
+[25] magrittr_2.0.5     digest_0.6.39      grid_4.6.1         hms_1.1.4         
 [29] lifecycle_1.0.5    vctrs_0.7.3        evaluate_1.0.5     glue_1.8.1        
-[33] farver_2.1.2       rmarkdown_2.31     tools_4.5.2        pkgconfig_2.0.3   
+[33] farver_2.1.2       rmarkdown_2.32     tools_4.6.1        pkgconfig_2.0.3   
 [37] htmltools_0.5.9   </code></pre>
 </div>
 </div>
@@ -586,17 +586,11 @@ loaded via a namespace (and not attached):
 <!-- -->
 
 <section class="related-tutorials" data-render="static">
-
 <h2 class="anchored">Related labs</h2>
-
 <p class="related-blurb">Closest matches by shared tags (causal-inference).</p>
-
 <div class="related-list"><div class="related-item"><span class="topic">Course 3 — Design &amp; Causal</span><a href="../../course3_design_causal/labs/lab_week3_session3.html">DAGs with dagitty</a><div class="related-desc">Shared: causal-inference</div></div><div class="related-item"><span class="topic">Course 3 — Design &amp; Causal</span><a href="../../course3_design_causal/labs/lab_week3_session4.html">Propensity scores and IPTW</a><div class="related-desc">Shared: causal-inference</div></div></div>
-
 <p class="network-link"><a href="../../overview.html">Explore the full label network →</a></p>
-
 </section>
-
 
 </section>
 
@@ -706,16 +700,16 @@ loaded via a namespace (and not attached):
     }
     function toggleCodeHandler(show) {
       return function(e) {
-        const detailsSrc = window.document.querySelectorAll(".cell > details > .sourceCode");
-        for (let i=0; i<detailsSrc.length; i++) {
-          const details = detailsSrc[i].parentElement;
+        const cellDetails = window.document.querySelectorAll(".cell details.code-fold");
+        for (let i=0; i<cellDetails.length; i++) {
+          const details = cellDetails[i];
           if (show) {
             details.open = true;
           } else {
             details.removeAttribute("open");
           }
         }
-        const cellCodeDivs = window.document.querySelectorAll(".cell > .sourceCode");
+        const cellCodeDivs = window.document.querySelectorAll(".cell div.sourceCode.cell-code");
         const fromCls = show ? "hidden" : "unhidden";
         const toCls = show ? "unhidden" : "hidden";
         for (let i=0; i<cellCodeDivs.length; i++) {
@@ -1143,7 +1137,7 @@ loaded via a namespace (and not attached):
 <span id="cb11-73"><a href="#cb11-73" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb11-74"><a href="#cb11-74" aria-hidden="true" tabindex="-1"></a>Simulate a time-varying-confounding scenario, estimate the causal effect</span>
 <span id="cb11-75"><a href="#cb11-75" aria-hidden="true" tabindex="-1"></a>naively and then with IPTW (a marginal structural model), and finish</span>
-<span id="cb11-76"><a href="#cb11-76" aria-hidden="true" tabindex="-1"></a>with a simple HTE estimate.</span>
+<span id="cb11-76"><a href="#cb11-76" aria-hidden="true" tabindex="-1"></a>with brief conceptual sketches of other identification strategies.</span>
 <span id="cb11-77"><a href="#cb11-77" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb11-78"><a href="#cb11-78" aria-hidden="true" tabindex="-1"></a><span class="fu">## 2. Approach</span></span>
 <span id="cb11-79"><a href="#cb11-79" aria-hidden="true" tabindex="-1"></a></span>
@@ -1158,96 +1152,104 @@ loaded via a namespace (and not attached):
 <span id="cb11-90"><a href="#cb11-90" aria-hidden="true" tabindex="-1"></a>)</span>
 <span id="cb11-91"><a href="#cb11-91" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
 <span id="cb11-92"><a href="#cb11-92" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb11-93"><a href="#cb11-93" aria-hidden="true" tabindex="-1"></a>The true effect of each treatment is positive and additive. <span class="in">`l1`</span> is a</span>
-<span id="cb11-94"><a href="#cb11-94" aria-hidden="true" tabindex="-1"></a>time-varying confounder because it is affected by <span class="in">`a0`</span> and predicts</span>
-<span id="cb11-95"><a href="#cb11-95" aria-hidden="true" tabindex="-1"></a>both <span class="in">`a1`</span> and <span class="in">`y`</span>.</span>
-<span id="cb11-96"><a href="#cb11-96" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb11-97"><a href="#cb11-97" aria-hidden="true" tabindex="-1"></a><span class="fu">## 3. Execution</span></span>
+<span id="cb11-93"><a href="#cb11-93" aria-hidden="true" tabindex="-1"></a>The intervention contrast for <span class="in">`a0`</span>, holding <span class="in">`a1`</span> fixed, is 1.25:</span>
+<span id="cb11-94"><a href="#cb11-94" aria-hidden="true" tabindex="-1"></a>its direct effect 1 plus the pathway through <span class="in">`l1`</span> (0.5 × 0.5). The</span>
+<span id="cb11-95"><a href="#cb11-95" aria-hidden="true" tabindex="-1"></a>intervention effect of <span class="in">`a1`</span> is 0.8. <span class="in">`l1`</span> is a</span>
+<span id="cb11-96"><a href="#cb11-96" aria-hidden="true" tabindex="-1"></a>time-varying confounder because it is affected by <span class="in">`a0`</span> and predicts</span>
+<span id="cb11-97"><a href="#cb11-97" aria-hidden="true" tabindex="-1"></a>both <span class="in">`a1`</span> and <span class="in">`y`</span>.</span>
 <span id="cb11-98"><a href="#cb11-98" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb11-99"><a href="#cb11-99" aria-hidden="true" tabindex="-1"></a>Naive regression adjusting for <span class="in">`l1`</span> blocks part of the <span class="in">`a0`</span> effect.</span>
+<span id="cb11-99"><a href="#cb11-99" aria-hidden="true" tabindex="-1"></a><span class="fu">## 3. Execution</span></span>
 <span id="cb11-100"><a href="#cb11-100" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb11-103"><a href="#cb11-103" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
-<span id="cb11-104"><a href="#cb11-104" aria-hidden="true" tabindex="-1"></a>naive <span class="ot">&lt;-</span> <span class="fu">lm</span>(y <span class="sc">~</span> a0 <span class="sc">+</span> a1 <span class="sc">+</span> l0 <span class="sc">+</span> l1, <span class="at">data =</span> df)</span>
-<span id="cb11-105"><a href="#cb11-105" aria-hidden="true" tabindex="-1"></a><span class="fu">tidy</span>(naive, <span class="at">conf.int =</span> <span class="cn">TRUE</span>) <span class="sc">|&gt;</span></span>
-<span id="cb11-106"><a href="#cb11-106" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(term <span class="sc">%in%</span> <span class="fu">c</span>(<span class="st">"a0"</span>, <span class="st">"a1"</span>))</span>
-<span id="cb11-107"><a href="#cb11-107" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
-<span id="cb11-108"><a href="#cb11-108" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb11-109"><a href="#cb11-109" aria-hidden="true" tabindex="-1"></a>IPTW with stabilised weights:</span>
+<span id="cb11-101"><a href="#cb11-101" aria-hidden="true" tabindex="-1"></a>Naive regression adjusting for <span class="in">`l1`</span> blocks part of the <span class="in">`a0`</span> effect.</span>
+<span id="cb11-102"><a href="#cb11-102" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb11-105"><a href="#cb11-105" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
+<span id="cb11-106"><a href="#cb11-106" aria-hidden="true" tabindex="-1"></a>naive <span class="ot">&lt;-</span> <span class="fu">lm</span>(y <span class="sc">~</span> a0 <span class="sc">+</span> a1 <span class="sc">+</span> l0 <span class="sc">+</span> l1, <span class="at">data =</span> df)</span>
+<span id="cb11-107"><a href="#cb11-107" aria-hidden="true" tabindex="-1"></a><span class="fu">tidy</span>(naive, <span class="at">conf.int =</span> <span class="cn">TRUE</span>) <span class="sc">|&gt;</span></span>
+<span id="cb11-108"><a href="#cb11-108" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(term <span class="sc">%in%</span> <span class="fu">c</span>(<span class="st">"a0"</span>, <span class="st">"a1"</span>))</span>
+<span id="cb11-109"><a href="#cb11-109" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
 <span id="cb11-110"><a href="#cb11-110" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb11-113"><a href="#cb11-113" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
-<span id="cb11-114"><a href="#cb11-114" aria-hidden="true" tabindex="-1"></a>num0 <span class="ot">&lt;-</span> <span class="fu">glm</span>(a0 <span class="sc">~</span> <span class="dv">1</span>, <span class="at">data =</span> df, <span class="at">family =</span> binomial)</span>
-<span id="cb11-115"><a href="#cb11-115" aria-hidden="true" tabindex="-1"></a>den0 <span class="ot">&lt;-</span> <span class="fu">glm</span>(a0 <span class="sc">~</span> l0, <span class="at">data =</span> df, <span class="at">family =</span> binomial)</span>
-<span id="cb11-116"><a href="#cb11-116" aria-hidden="true" tabindex="-1"></a>num1 <span class="ot">&lt;-</span> <span class="fu">glm</span>(a1 <span class="sc">~</span> a0, <span class="at">data =</span> df, <span class="at">family =</span> binomial)</span>
-<span id="cb11-117"><a href="#cb11-117" aria-hidden="true" tabindex="-1"></a>den1 <span class="ot">&lt;-</span> <span class="fu">glm</span>(a1 <span class="sc">~</span> a0 <span class="sc">+</span> l0 <span class="sc">+</span> l1, <span class="at">data =</span> df, <span class="at">family =</span> binomial)</span>
-<span id="cb11-118"><a href="#cb11-118" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb11-119"><a href="#cb11-119" aria-hidden="true" tabindex="-1"></a>w0 <span class="ot">&lt;-</span> <span class="fu">ifelse</span>(df<span class="sc">$</span>a0 <span class="sc">==</span> <span class="dv">1</span>, <span class="fu">fitted</span>(num0), <span class="dv">1</span> <span class="sc">-</span> <span class="fu">fitted</span>(num0)) <span class="sc">/</span></span>
-<span id="cb11-120"><a href="#cb11-120" aria-hidden="true" tabindex="-1"></a>      <span class="fu">ifelse</span>(df<span class="sc">$</span>a0 <span class="sc">==</span> <span class="dv">1</span>, <span class="fu">fitted</span>(den0), <span class="dv">1</span> <span class="sc">-</span> <span class="fu">fitted</span>(den0))</span>
-<span id="cb11-121"><a href="#cb11-121" aria-hidden="true" tabindex="-1"></a>w1 <span class="ot">&lt;-</span> <span class="fu">ifelse</span>(df<span class="sc">$</span>a1 <span class="sc">==</span> <span class="dv">1</span>, <span class="fu">fitted</span>(num1), <span class="dv">1</span> <span class="sc">-</span> <span class="fu">fitted</span>(num1)) <span class="sc">/</span></span>
-<span id="cb11-122"><a href="#cb11-122" aria-hidden="true" tabindex="-1"></a>      <span class="fu">ifelse</span>(df<span class="sc">$</span>a1 <span class="sc">==</span> <span class="dv">1</span>, <span class="fu">fitted</span>(den1), <span class="dv">1</span> <span class="sc">-</span> <span class="fu">fitted</span>(den1))</span>
-<span id="cb11-123"><a href="#cb11-123" aria-hidden="true" tabindex="-1"></a>df<span class="sc">$</span>sw <span class="ot">&lt;-</span> w0 <span class="sc">*</span> w1</span>
-<span id="cb11-124"><a href="#cb11-124" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb11-125"><a href="#cb11-125" aria-hidden="true" tabindex="-1"></a>msm <span class="ot">&lt;-</span> <span class="fu">lm</span>(y <span class="sc">~</span> a0 <span class="sc">+</span> a1, <span class="at">data =</span> df, <span class="at">weights =</span> sw)</span>
-<span id="cb11-126"><a href="#cb11-126" aria-hidden="true" tabindex="-1"></a><span class="fu">tidy</span>(msm, <span class="at">conf.int =</span> <span class="cn">TRUE</span>) <span class="sc">|&gt;</span></span>
-<span id="cb11-127"><a href="#cb11-127" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(term <span class="sc">%in%</span> <span class="fu">c</span>(<span class="st">"a0"</span>, <span class="st">"a1"</span>))</span>
-<span id="cb11-128"><a href="#cb11-128" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
-<span id="cb11-129"><a href="#cb11-129" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb11-130"><a href="#cb11-130" aria-hidden="true" tabindex="-1"></a><span class="fu">## 4. Check</span></span>
+<span id="cb11-111"><a href="#cb11-111" aria-hidden="true" tabindex="-1"></a>IPTW with stabilised weights:</span>
+<span id="cb11-112"><a href="#cb11-112" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb11-115"><a href="#cb11-115" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
+<span id="cb11-116"><a href="#cb11-116" aria-hidden="true" tabindex="-1"></a>num0 <span class="ot">&lt;-</span> <span class="fu">glm</span>(a0 <span class="sc">~</span> <span class="dv">1</span>, <span class="at">data =</span> df, <span class="at">family =</span> binomial)</span>
+<span id="cb11-117"><a href="#cb11-117" aria-hidden="true" tabindex="-1"></a>den0 <span class="ot">&lt;-</span> <span class="fu">glm</span>(a0 <span class="sc">~</span> l0, <span class="at">data =</span> df, <span class="at">family =</span> binomial)</span>
+<span id="cb11-118"><a href="#cb11-118" aria-hidden="true" tabindex="-1"></a>num1 <span class="ot">&lt;-</span> <span class="fu">glm</span>(a1 <span class="sc">~</span> a0, <span class="at">data =</span> df, <span class="at">family =</span> binomial)</span>
+<span id="cb11-119"><a href="#cb11-119" aria-hidden="true" tabindex="-1"></a>den1 <span class="ot">&lt;-</span> <span class="fu">glm</span>(a1 <span class="sc">~</span> a0 <span class="sc">+</span> l0 <span class="sc">+</span> l1, <span class="at">data =</span> df, <span class="at">family =</span> binomial)</span>
+<span id="cb11-120"><a href="#cb11-120" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb11-121"><a href="#cb11-121" aria-hidden="true" tabindex="-1"></a>w0 <span class="ot">&lt;-</span> <span class="fu">ifelse</span>(df<span class="sc">$</span>a0 <span class="sc">==</span> <span class="dv">1</span>, <span class="fu">fitted</span>(num0), <span class="dv">1</span> <span class="sc">-</span> <span class="fu">fitted</span>(num0)) <span class="sc">/</span></span>
+<span id="cb11-122"><a href="#cb11-122" aria-hidden="true" tabindex="-1"></a>      <span class="fu">ifelse</span>(df<span class="sc">$</span>a0 <span class="sc">==</span> <span class="dv">1</span>, <span class="fu">fitted</span>(den0), <span class="dv">1</span> <span class="sc">-</span> <span class="fu">fitted</span>(den0))</span>
+<span id="cb11-123"><a href="#cb11-123" aria-hidden="true" tabindex="-1"></a>w1 <span class="ot">&lt;-</span> <span class="fu">ifelse</span>(df<span class="sc">$</span>a1 <span class="sc">==</span> <span class="dv">1</span>, <span class="fu">fitted</span>(num1), <span class="dv">1</span> <span class="sc">-</span> <span class="fu">fitted</span>(num1)) <span class="sc">/</span></span>
+<span id="cb11-124"><a href="#cb11-124" aria-hidden="true" tabindex="-1"></a>      <span class="fu">ifelse</span>(df<span class="sc">$</span>a1 <span class="sc">==</span> <span class="dv">1</span>, <span class="fu">fitted</span>(den1), <span class="dv">1</span> <span class="sc">-</span> <span class="fu">fitted</span>(den1))</span>
+<span id="cb11-125"><a href="#cb11-125" aria-hidden="true" tabindex="-1"></a>df<span class="sc">$</span>sw <span class="ot">&lt;-</span> w0 <span class="sc">*</span> w1</span>
+<span id="cb11-126"><a href="#cb11-126" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb11-127"><a href="#cb11-127" aria-hidden="true" tabindex="-1"></a>msm <span class="ot">&lt;-</span> <span class="fu">lm</span>(y <span class="sc">~</span> a0 <span class="sc">+</span> a1, <span class="at">data =</span> df, <span class="at">weights =</span> sw)</span>
+<span id="cb11-128"><a href="#cb11-128" aria-hidden="true" tabindex="-1"></a><span class="fu">tibble</span>(<span class="at">term =</span> <span class="fu">names</span>(<span class="fu">coef</span>(msm)), <span class="at">estimate =</span> <span class="fu">unname</span>(<span class="fu">coef</span>(msm))) <span class="sc">|&gt;</span></span>
+<span id="cb11-129"><a href="#cb11-129" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(term <span class="sc">%in%</span> <span class="fu">c</span>(<span class="st">"a0"</span>, <span class="st">"a1"</span>))</span>
+<span id="cb11-130"><a href="#cb11-130" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
 <span id="cb11-131"><a href="#cb11-131" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb11-132"><a href="#cb11-132" aria-hidden="true" tabindex="-1"></a>Balance and weight sanity:</span>
+<span id="cb11-132"><a href="#cb11-132" aria-hidden="true" tabindex="-1"></a><span class="fu">## 4. Check</span></span>
 <span id="cb11-133"><a href="#cb11-133" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb11-136"><a href="#cb11-136" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
-<span id="cb11-137"><a href="#cb11-137" aria-hidden="true" tabindex="-1"></a><span class="fu">summary</span>(df<span class="sc">$</span>sw)</span>
-<span id="cb11-138"><a href="#cb11-138" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
-<span id="cb11-139"><a href="#cb11-139" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb11-140"><a href="#cb11-140" aria-hidden="true" tabindex="-1"></a>Stabilised weights should centre on 1 with no extreme tail. If they do</span>
-<span id="cb11-141"><a href="#cb11-141" aria-hidden="true" tabindex="-1"></a>not, a term in the treatment model is likely misspecified.</span>
-<span id="cb11-142"><a href="#cb11-142" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb11-143"><a href="#cb11-143" aria-hidden="true" tabindex="-1"></a><span class="fu">## 5. Report</span></span>
-<span id="cb11-144"><a href="#cb11-144" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb11-145"><a href="#cb11-145" aria-hidden="true" tabindex="-1"></a><span class="at">&gt; In a simulated cohort with time-varying confounding (*n* = 2000),</span></span>
-<span id="cb11-146"><a href="#cb11-146" aria-hidden="true" tabindex="-1"></a><span class="at">&gt; naive regression underestimated the effect of initial treatment. An</span></span>
-<span id="cb11-147"><a href="#cb11-147" aria-hidden="true" tabindex="-1"></a><span class="at">&gt; inverse-probability-weighted marginal structural model recovered</span></span>
-<span id="cb11-148"><a href="#cb11-148" aria-hidden="true" tabindex="-1"></a><span class="at">&gt; effects close to the true data-generating values. Instrumental</span></span>
-<span id="cb11-149"><a href="#cb11-149" aria-hidden="true" tabindex="-1"></a><span class="at">&gt; variable, difference-in-differences, and regression-discontinuity</span></span>
-<span id="cb11-150"><a href="#cb11-150" aria-hidden="true" tabindex="-1"></a><span class="at">&gt; designs exploit alternative identification strategies, each with</span></span>
-<span id="cb11-151"><a href="#cb11-151" aria-hidden="true" tabindex="-1"></a><span class="at">&gt; its own assumptions. Heterogeneity of treatment effect can be</span></span>
-<span id="cb11-152"><a href="#cb11-152" aria-hidden="true" tabindex="-1"></a><span class="at">&gt; explored with causal forests or meta-learners.</span></span>
-<span id="cb11-153"><a href="#cb11-153" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb11-154"><a href="#cb11-154" aria-hidden="true" tabindex="-1"></a><span class="fu">### Brief sketches</span></span>
-<span id="cb11-155"><a href="#cb11-155" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb11-156"><a href="#cb11-156" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>**IV:** regress <span class="in">`y`</span> on an instrument <span class="in">`z`</span> to recover <span class="in">`β = cov(y,z)/cov(a,z)`</span>.</span>
-<span id="cb11-157"><a href="#cb11-157" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>**DiD:** fit <span class="in">`lm(y ~ time*group)`</span> on repeated measures.</span>
-<span id="cb11-158"><a href="#cb11-158" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>**RDD:** fit local linear regression on each side of the assignment cutoff.</span>
-<span id="cb11-159"><a href="#cb11-159" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb11-160"><a href="#cb11-160" aria-hidden="true" tabindex="-1"></a>::: {.notes}</span>
-<span id="cb11-161"><a href="#cb11-161" aria-hidden="true" tabindex="-1"></a>Flag the identifying assumption for each method — IV: exclusion</span>
-<span id="cb11-162"><a href="#cb11-162" aria-hidden="true" tabindex="-1"></a>restriction; DiD: parallel trends; RDD: continuity at the cutoff.</span>
-<span id="cb11-163"><a href="#cb11-163" aria-hidden="true" tabindex="-1"></a>:::</span>
-<span id="cb11-164"><a href="#cb11-164" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb11-165"><a href="#cb11-165" aria-hidden="true" tabindex="-1"></a><span class="fu">## Common pitfalls</span></span>
-<span id="cb11-166"><a href="#cb11-166" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb11-167"><a href="#cb11-167" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>Using ordinary regression adjustment for time-varying confounders.</span>
-<span id="cb11-168"><a href="#cb11-168" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>Trimming extreme weights silently, hiding model misspecification.</span>
-<span id="cb11-169"><a href="#cb11-169" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>Reporting subgroup p-values without multiplicity control as HTE</span>
-<span id="cb11-170"><a href="#cb11-170" aria-hidden="true" tabindex="-1"></a>  evidence.</span>
-<span id="cb11-171"><a href="#cb11-171" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb11-172"><a href="#cb11-172" aria-hidden="true" tabindex="-1"></a><span class="fu">## Further reading</span></span>
-<span id="cb11-173"><a href="#cb11-173" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb11-174"><a href="#cb11-174" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>Hernán MA, Robins JM. *Causal Inference: What If.*</span>
-<span id="cb11-175"><a href="#cb11-175" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>Athey S, Imbens GW. (2019). *Machine Learning Methods That Economists Should Know About.*</span>
-<span id="cb11-176"><a href="#cb11-176" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb11-177"><a href="#cb11-177" aria-hidden="true" tabindex="-1"></a><span class="fu">## Session info</span></span>
-<span id="cb11-178"><a href="#cb11-178" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb11-181"><a href="#cb11-181" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
-<span id="cb11-182"><a href="#cb11-182" aria-hidden="true" tabindex="-1"></a><span class="fu">sessionInfo</span>()</span>
-<span id="cb11-183"><a href="#cb11-183" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb11-134"><a href="#cb11-134" aria-hidden="true" tabindex="-1"></a>Balance and weight sanity:</span>
+<span id="cb11-135"><a href="#cb11-135" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb11-138"><a href="#cb11-138" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
+<span id="cb11-139"><a href="#cb11-139" aria-hidden="true" tabindex="-1"></a><span class="fu">summary</span>(df<span class="sc">$</span>sw)</span>
+<span id="cb11-140"><a href="#cb11-140" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb11-141"><a href="#cb11-141" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb11-142"><a href="#cb11-142" aria-hidden="true" tabindex="-1"></a>Inspect the weight distribution and covariate balance. Extreme weights can</span>
+<span id="cb11-143"><a href="#cb11-143" aria-hidden="true" tabindex="-1"></a>reflect limited overlap, model misspecification, or sampling variability.</span>
+<span id="cb11-144"><a href="#cb11-144" aria-hidden="true" tabindex="-1"></a>Only weighted point estimates are shown: ordinary weighted-least-squares</span>
+<span id="cb11-145"><a href="#cb11-145" aria-hidden="true" tabindex="-1"></a>standard errors do not account for this weighting procedure. For uncertainty,</span>
+<span id="cb11-146"><a href="#cb11-146" aria-hidden="true" tabindex="-1"></a>bootstrap whole subjects and refit both propensity models and the outcome model</span>
+<span id="cb11-147"><a href="#cb11-147" aria-hidden="true" tabindex="-1"></a>in every replicate, or use an appropriate estimating-equation method.</span>
+<span id="cb11-148"><a href="#cb11-148" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb11-149"><a href="#cb11-149" aria-hidden="true" tabindex="-1"></a><span class="fu">## 5. Report</span></span>
+<span id="cb11-150"><a href="#cb11-150" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb11-151"><a href="#cb11-151" aria-hidden="true" tabindex="-1"></a><span class="at">&gt; In a simulated cohort with time-varying confounding (*n* = 2000),</span></span>
+<span id="cb11-152"><a href="#cb11-152" aria-hidden="true" tabindex="-1"></a><span class="at">&gt; the adjusted conditional coefficient for initial treatment was</span></span>
+<span id="cb11-153"><a href="#cb11-153" aria-hidden="true" tabindex="-1"></a><span class="at">&gt; </span><span class="in">`r round(coef(naive)["a0"], 2)`</span><span class="at">, while the weighted marginal estimate</span></span>
+<span id="cb11-154"><a href="#cb11-154" aria-hidden="true" tabindex="-1"></a><span class="at">&gt; was </span><span class="in">`r round(coef(msm)["a0"], 2)`</span><span class="at"> (intervention target 1.25). The</span></span>
+<span id="cb11-155"><a href="#cb11-155" aria-hidden="true" tabindex="-1"></a><span class="at">&gt; weighted estimate for later treatment was </span><span class="in">`r round(coef(msm)["a1"], 2)`</span></span>
+<span id="cb11-156"><a href="#cb11-156" aria-hidden="true" tabindex="-1"></a><span class="at">&gt; (target 0.8). Instrumental</span></span>
+<span id="cb11-157"><a href="#cb11-157" aria-hidden="true" tabindex="-1"></a><span class="at">&gt; variable, difference-in-differences, and regression-discontinuity</span></span>
+<span id="cb11-158"><a href="#cb11-158" aria-hidden="true" tabindex="-1"></a><span class="at">&gt; designs exploit alternative identification strategies, each with</span></span>
+<span id="cb11-159"><a href="#cb11-159" aria-hidden="true" tabindex="-1"></a><span class="at">&gt; its own assumptions. Heterogeneity of treatment effect can be</span></span>
+<span id="cb11-160"><a href="#cb11-160" aria-hidden="true" tabindex="-1"></a><span class="at">&gt; explored with causal forests or meta-learners.</span></span>
+<span id="cb11-161"><a href="#cb11-161" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb11-162"><a href="#cb11-162" aria-hidden="true" tabindex="-1"></a><span class="fu">### Brief sketches</span></span>
+<span id="cb11-163"><a href="#cb11-163" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb11-164"><a href="#cb11-164" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>**IV:** regress <span class="in">`y`</span> on an instrument <span class="in">`z`</span> to recover <span class="in">`β = cov(y,z)/cov(a,z)`</span>.</span>
+<span id="cb11-165"><a href="#cb11-165" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>**DiD:** fit <span class="in">`lm(y ~ time*group)`</span> on repeated measures.</span>
+<span id="cb11-166"><a href="#cb11-166" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>**RDD:** fit local linear regression on each side of the assignment cutoff.</span>
+<span id="cb11-167"><a href="#cb11-167" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb11-168"><a href="#cb11-168" aria-hidden="true" tabindex="-1"></a>::: {.notes}</span>
+<span id="cb11-169"><a href="#cb11-169" aria-hidden="true" tabindex="-1"></a>Flag the identifying assumption for each method — IV: exclusion</span>
+<span id="cb11-170"><a href="#cb11-170" aria-hidden="true" tabindex="-1"></a>restriction; DiD: parallel trends; RDD: continuity at the cutoff.</span>
+<span id="cb11-171"><a href="#cb11-171" aria-hidden="true" tabindex="-1"></a>:::</span>
+<span id="cb11-172"><a href="#cb11-172" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb11-173"><a href="#cb11-173" aria-hidden="true" tabindex="-1"></a><span class="fu">## Common pitfalls</span></span>
+<span id="cb11-174"><a href="#cb11-174" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb11-175"><a href="#cb11-175" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>Using ordinary regression adjustment for time-varying confounders.</span>
+<span id="cb11-176"><a href="#cb11-176" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>Trimming extreme weights silently, hiding model misspecification.</span>
+<span id="cb11-177"><a href="#cb11-177" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>Reporting subgroup p-values without multiplicity control as HTE</span>
+<span id="cb11-178"><a href="#cb11-178" aria-hidden="true" tabindex="-1"></a>  evidence.</span>
+<span id="cb11-179"><a href="#cb11-179" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb11-180"><a href="#cb11-180" aria-hidden="true" tabindex="-1"></a><span class="fu">## Further reading</span></span>
+<span id="cb11-181"><a href="#cb11-181" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb11-182"><a href="#cb11-182" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>Hernán MA, Robins JM. *Causal Inference: What If.*</span>
+<span id="cb11-183"><a href="#cb11-183" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>Athey S, Imbens GW. (2019). *Machine Learning Methods That Economists Should Know About.*</span>
+<span id="cb11-184"><a href="#cb11-184" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb11-185"><a href="#cb11-185" aria-hidden="true" tabindex="-1"></a><span class="fu">## Session info</span></span>
+<span id="cb11-186"><a href="#cb11-186" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb11-189"><a href="#cb11-189" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
+<span id="cb11-190"><a href="#cb11-190" aria-hidden="true" tabindex="-1"></a><span class="fu">sessionInfo</span>()</span>
+<span id="cb11-191"><a href="#cb11-191" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
 </code></pre></div><button title="Copy to Clipboard" class="code-copy-button" data-in-quarto-modal=""><i class="bi"></i></button></div>
 </div></div></div></div></div>
 </div> <!-- /content -->
 <footer class="footer">
   <div class="nav-footer">
     <div class="nav-footer-left">
-<p>#courses · MIT</p>
+<p>Prose: CC BY 4.0 · Code: MIT</p>
 </div>   
     <div class="nav-footer-center">
 <p><a href="../../get_started.html">Get Started</a> · <a href="../../overview.html">Overview</a> · <a href="../../schedule.html">Schedule</a> · <a href="../../cheatsheets.html">Cheatsheets</a> · <a href="../../shiny.html">Interactive apps</a> · <a href="../../appendices/research_workflow.html">Research workflow</a> · <a href="../../appendices/decision_tree.html">Decision tree</a> · <a href="../../appendices/glossary.html">Glossary</a> · <a href="../../appendices/common_errors.html">Common errors</a> · <a href="../../appendices/writing_a_report.html">Writing a report</a> · <a href="../../references.html">References</a> · <a href="../../acknowledgements.html">Acknowledgements</a> · <strong><a href="../../impressum.html">Impressum</a></strong> · <a href="mailto:58561665+r-heller@users.noreply.github.com">Kontakt</a></p>

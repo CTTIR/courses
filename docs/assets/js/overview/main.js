@@ -104,7 +104,11 @@ async function bootstrap() {
 
   const search = createSearch({
     root, graph, controller,
-    onResults(result) { searchResult = result; fanOut(controller.state); },
+    onResults(result) {
+      searchResult = result;
+      document.getElementById("search-status").textContent = result.error || "";
+      fanOut(controller.state);
+    },
   });
 
   let lastQuery = null;

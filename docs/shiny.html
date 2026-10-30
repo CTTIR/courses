@@ -2,7 +2,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
 
 <meta charset="utf-8">
-<meta name="generator" content="quarto-1.9.37">
+<meta name="generator" content="quarto-1.10.19">
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
@@ -12,10 +12,13 @@
 /* Default styles provided by pandoc.
 ** See https://pandoc.org/MANUAL.html#variables-for-html for config info.
 */
-code{white-space: pre-wrap;}
 span.smallcaps{font-variant: small-caps;}
-div.columns{display: flex; gap: min(4vw, 1.5em);}
-div.column{flex: auto; overflow-x: auto;}
+div.columns{display: flex; gap: 1.5em;}
+div.column{flex: auto;}
+@media screen {
+div.columns{gap: min(4vw, 1.5em);}
+div.column{overflow-x: auto;}
+}
 div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
 ul.task-list{list-style: none;}
 ul.task-list li input[type="checkbox"] {
@@ -70,12 +73,12 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <script src="site_libs/quarto-html/tippy.umd.min.js"></script>
 <script src="site_libs/quarto-html/anchor.min.js"></script>
 <link href="site_libs/quarto-html/tippy.css" rel="stylesheet">
-<link href="site_libs/quarto-html/quarto-syntax-highlighting-2065f9e58f6345017599ef1c45dc3d4f.css" rel="stylesheet" class="quarto-color-scheme" id="quarto-text-highlighting-styles">
-<link href="site_libs/quarto-html/quarto-syntax-highlighting-dark-ced54966b0e53f059c291d5781927a30.css" rel="stylesheet" class="quarto-color-scheme quarto-color-alternate" id="quarto-text-highlighting-styles">
+<link href="site_libs/quarto-html/quarto-syntax-highlighting-9f3547545508946eee83ef8b606cbadf.css" rel="stylesheet" class="quarto-color-scheme" id="quarto-text-highlighting-styles">
+<link href="site_libs/quarto-html/quarto-syntax-highlighting-dark-8d43248e80c6749424940840481457b2.css" rel="stylesheet" class="quarto-color-scheme quarto-color-alternate" id="quarto-text-highlighting-styles">
 <script src="site_libs/bootstrap/bootstrap.min.js"></script>
 <link href="site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
-<link href="site_libs/bootstrap/bootstrap-e6d3843e299d450790cfb48988d4232e.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme" id="quarto-bootstrap" data-mode="light">
-<link href="site_libs/bootstrap/bootstrap-dark-a84e9e0d3bdc903e291dd8ca38ce98a5.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme quarto-color-alternate" id="quarto-bootstrap" data-mode="dark">
+<link href="site_libs/bootstrap/bootstrap-0c1962fc29c4e87f8b37717c07588c31.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme" id="quarto-bootstrap" data-mode="light">
+<link href="site_libs/bootstrap/bootstrap-dark-33ee418c30da5be27be819967c4cb66e.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme quarto-color-alternate" id="quarto-bootstrap" data-mode="dark">
 <script id="quarto-search-options" type="application/json">{
   "language": {
     "search-no-results-text": "No results",
@@ -92,9 +95,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   }
 }</script>
 <script defer="" data-domain="cttir.github.io/courses" src="https://analytics.hellebo.de/js/script.file-downloads.outbound-links.js"></script>
-
 <script>window.plausible = window.plausible || function() { (window.plausible.q = window.plausible.q || []).push(arguments) }</script>
-
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin="">
 <link href="https://fonts.googleapis.com/css2?family=Source+Sans+3:wght@300;400;500;600;700&amp;family=JetBrains+Mono:wght@400;500&amp;display=swap" rel="stylesheet">
@@ -355,7 +356,6 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   <li><a href="#course-3-design-causal" id="toc-course-3-design-causal" class="nav-link" data-scroll-target="#course-3-design-causal">Course 3 — Design &amp; Causal</a></li>
   <li><a href="#course-4-ml-high-dimensional" id="toc-course-4-ml-high-dimensional" class="nav-link" data-scroll-target="#course-4-ml-high-dimensional">Course 4 — ML &amp; High-dimensional</a></li>
   <li><a href="#deploying-to-your-shiny-server" id="toc-deploying-to-your-shiny-server" class="nav-link" data-scroll-target="#deploying-to-your-shiny-server">Deploying to your Shiny Server</a></li>
-  <li><a href="#embedding-an-app-inside-a-lab" id="toc-embedding-an-app-inside-a-lab" class="nav-link" data-scroll-target="#embedding-an-app-inside-a-lab">Embedding an app inside a lab</a></li>
   </ul>
 </nav>
     </div>
@@ -408,7 +408,7 @@ Tip
 <div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb1"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="ex">R</span> <span class="at">-e</span> <span class="st">'shiny::runApp("shiny/clt-explorer", launch.browser = TRUE)'</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 </div>
-<p>The links below point at the deployed apps on the curriculum’s Shiny host. Replace <code>https://shiny.example.org</code> in <code>_quarto.yml</code> (or in this file) with your own host once the server is up.</p>
+<p>The links below open each app’s source and instructions. No public Shiny host is configured here. Restore the project environment as described in <a href="./get_started.html">Get started</a>, then replace <code>clt-explorer</code> in the command above with the desired app folder. GitHub Pages cannot execute R apps.</p>
 <section id="course-1-foundations" class="level2">
 <h2 class="anchored" data-anchor-id="course-1-foundations">Course 1 — Foundations</h2>
 <div class="card-grid">
@@ -417,7 +417,7 @@ Tip
 <p>WEEK 3 · SESSION 1</p>
 </div>
 <section id="clt-explorer" class="level3">
-<h3 class="anchored" data-anchor-id="clt-explorer"><a href="https://shiny.example.org/clt-explorer/">CLT explorer</a></h3>
+<h3 class="anchored" data-anchor-id="clt-explorer"><a href="https://github.com/CTTIR/courses/tree/main/shiny/clt-explorer/">CLT explorer</a></h3>
 <p>Pick a parent distribution and a sample size; watch the sampling distribution of the mean tighten and turn Gaussian as <em>n</em> grows.</p>
 </section>
 </div>
@@ -426,7 +426,7 @@ Tip
 <p>WEEK 3 · SESSION 2</p>
 </div>
 <section id="bootstrap-ci-explorer" class="level3">
-<h3 class="anchored" data-anchor-id="bootstrap-ci-explorer"><a href="https://shiny.example.org/bootstrap-ci/">Bootstrap CI explorer</a></h3>
+<h3 class="anchored" data-anchor-id="bootstrap-ci-explorer"><a href="https://github.com/CTTIR/courses/tree/main/shiny/bootstrap-ci/">Bootstrap CI explorer</a></h3>
 <p>Pick a statistic, a population, n, and B. The app draws one sample, resamples it B times, and gives a percentile CI you can compare to the true value.</p>
 </section>
 </div>
@@ -435,7 +435,7 @@ Tip
 <p>WEEK 2 · SESSION 3</p>
 </div>
 <section id="diagnostic-test-calculator" class="level3">
-<h3 class="anchored" data-anchor-id="diagnostic-test-calculator"><a href="https://shiny.example.org/diagnostic-test/">Diagnostic-test calculator</a></h3>
+<h3 class="anchored" data-anchor-id="diagnostic-test-calculator"><a href="https://github.com/CTTIR/courses/tree/main/shiny/diagnostic-test/">Diagnostic-test calculator</a></h3>
 <p>Sliders for sensitivity, specificity, and prevalence; outputs the 2×2 table, PPV/NPV, likelihood ratios, and the PPV-vs-prevalence curve.</p>
 </section>
 </div>
@@ -449,7 +449,7 @@ Tip
 <p>WEEK 1 · SESSION 4</p>
 </div>
 <section id="linear-model-diagnostics" class="level3">
-<h3 class="anchored" data-anchor-id="linear-model-diagnostics"><a href="https://shiny.example.org/lm-diagnostics/">Linear-model diagnostics</a></h3>
+<h3 class="anchored" data-anchor-id="linear-model-diagnostics"><a href="https://github.com/CTTIR/courses/tree/main/shiny/lm-diagnostics/">Linear-model diagnostics</a></h3>
 <p>Generate data with chosen slope and noise (and optional heteroscedasticity / outliers); inspect the four diagnostic plots side-by-side.</p>
 </section>
 </div>
@@ -458,8 +458,8 @@ Tip
 <p>WEEK 3 · SESSIONS 1 &amp; 5</p>
 </div>
 <section id="logistic-regression-explorer" class="level3">
-<h3 class="anchored" data-anchor-id="logistic-regression-explorer"><a href="https://shiny.example.org/logistic-explorer/">Logistic regression explorer</a></h3>
-<p>Pick intercept and slope; the app simulates, fits, and shows the fitted curve, ROC, decile-binned calibration, and Brier score.</p>
+<h3 class="anchored" data-anchor-id="logistic-regression-explorer"><a href="https://github.com/CTTIR/courses/tree/main/shiny/logistic-explorer/">Logistic regression explorer</a></h3>
+<p>Pick intercept and slope; the app simulates, fits, and shows the fitted curve, ROC, apparent calibration in probability intervals, and Brier score.</p>
 </section>
 </div>
 <div class="card">
@@ -467,7 +467,7 @@ Tip
 <p>WEEK 2 · SESSION 1</p>
 </div>
 <section id="one-way-anova-contrasts" class="level3">
-<h3 class="anchored" data-anchor-id="one-way-anova-contrasts"><a href="https://shiny.example.org/anova-contrasts/">One-way ANOVA + contrasts</a></h3>
+<h3 class="anchored" data-anchor-id="one-way-anova-contrasts"><a href="https://github.com/CTTIR/courses/tree/main/shiny/anova-contrasts/">One-way ANOVA + contrasts</a></h3>
 <p>Pick the number of groups and within-group noise; the app shows the boxplot, ANOVA table, and Tukey HSD pairwise comparisons.</p>
 </section>
 </div>
@@ -481,7 +481,7 @@ Tip
 <p>WEEK 3 · SESSION 3</p>
 </div>
 <section id="dag-explorer" class="level3">
-<h3 class="anchored" data-anchor-id="dag-explorer"><a href="https://shiny.example.org/dag-explorer/">DAG explorer</a></h3>
+<h3 class="anchored" data-anchor-id="dag-explorer"><a href="https://github.com/CTTIR/courses/tree/main/shiny/dag-explorer/">DAG explorer</a></h3>
 <p>Pick a pre-built DAG (confounder, mediator, collider, M-bias) or paste your own. The app computes minimal sufficient adjustment sets via <code>dagitty</code>.</p>
 </section>
 </div>
@@ -490,7 +490,7 @@ Tip
 <p>WEEK 2 · SESSION 1</p>
 </div>
 <section id="missing-data-simulator" class="level3">
-<h3 class="anchored" data-anchor-id="missing-data-simulator"><a href="https://shiny.example.org/missing-data-sim/">Missing-data simulator</a></h3>
+<h3 class="anchored" data-anchor-id="missing-data-simulator"><a href="https://github.com/CTTIR/courses/tree/main/shiny/missing-data-sim/">Missing-data simulator</a></h3>
 <p>Compare the bias of complete-case analysis under MCAR, MAR, and MNAR mechanisms over many replications.</p>
 </section>
 </div>
@@ -499,8 +499,8 @@ Tip
 <p>WEEK 4 · SESSION 4</p>
 </div>
 <section id="sir-seir-simulator" class="level3">
-<h3 class="anchored" data-anchor-id="sir-seir-simulator"><a href="https://shiny.example.org/sir-simulator/">SIR / SEIR simulator</a></h3>
-<p>Pick R0, infectious period, population size, and initial infected. The app integrates the ODEs and reports peak prevalence and final attack rate.</p>
+<h3 class="anchored" data-anchor-id="sir-seir-simulator"><a href="https://github.com/CTTIR/courses/tree/main/shiny/sir-simulator/">SIR / SEIR simulator</a></h3>
+<p>Pick R0, infectious period, population size, and initial infected. The app integrates the ODEs and reports peak prevalence and the removed fraction at the end of the simulation.</p>
 </section>
 </div>
 </div>
@@ -513,8 +513,8 @@ Tip
 <p>WEEK 1 · SESSION 1</p>
 </div>
 <section id="cv-vs-nested-cv" class="level3">
-<h3 class="anchored" data-anchor-id="cv-vs-nested-cv"><a href="https://shiny.example.org/cv-vs-nested/">CV vs nested CV</a></h3>
-<p>With pure noise data, naive CV looks confident but is wrong; nested CV recovers the honest MSE. A 30-second illustration of the selection-bias trap.</p>
+<h3 class="anchored" data-anchor-id="cv-vs-nested-cv"><a href="https://github.com/CTTIR/courses/tree/main/shiny/cv-vs-nested/">CV vs nested CV</a></h3>
+<p>Compare selection and evaluation on the same folds with inner/outer CV, using paired noise datasets and an exact conditional test-error reference.</p>
 </section>
 </div>
 <div class="card">
@@ -522,7 +522,7 @@ Tip
 <p>WEEK 1 · SESSION 2</p>
 </div>
 <section id="regularisation-path" class="level3">
-<h3 class="anchored" data-anchor-id="regularisation-path"><a href="https://shiny.example.org/regularization-path/">Regularisation path</a></h3>
+<h3 class="anchored" data-anchor-id="regularisation-path"><a href="https://github.com/CTTIR/courses/tree/main/shiny/regularization-path/">Regularisation path</a></h3>
 <p>Pick n, p, sparsity, SNR, and elastic-net alpha; see the full coefficient path with the truly non-zero predictors highlighted, and the CV curve with <code>lambda.min</code> and <code>lambda.1se</code> marked.</p>
 </section>
 </div>
@@ -531,7 +531,7 @@ Tip
 <p>WEEK 3 · SESSION 5</p>
 </div>
 <section id="decision-curves" class="level3">
-<h3 class="anchored" data-anchor-id="decision-curves"><a href="https://shiny.example.org/decision-curves/">Decision curves</a></h3>
+<h3 class="anchored" data-anchor-id="decision-curves"><a href="https://github.com/CTTIR/courses/tree/main/shiny/decision-curves/">Decision curves</a></h3>
 <p>Pick prevalence and the AUC of two prediction models; compare net benefit across thresholds against treat-all and treat-none.</p>
 </section>
 </div>
@@ -542,20 +542,8 @@ Tip
 <p>The apps assume a stock self-hosted Shiny Server with each app folder served at a route matching its name. To deploy them all:</p>
 <div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb2"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="fu">rsync</span> <span class="at">-avz</span> <span class="at">--exclude</span> README.md shiny/ user@your-host:/srv/shiny-server/</span>
 <span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a><span class="fu">sudo</span> systemctl restart shiny-server</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
-<p>To install the R packages they depend on, on the server:</p>
-<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb3"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="fu">install.packages</span>(<span class="fu">c</span>(</span>
-<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a>  <span class="st">"shiny"</span>, <span class="st">"ggplot2"</span>, <span class="st">"dplyr"</span>, <span class="st">"tidyr"</span>, <span class="st">"broom"</span>,</span>
-<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a>  <span class="st">"dagitty"</span>, <span class="st">"ggdag"</span>, <span class="st">"deSolve"</span>, <span class="st">"glmnet"</span>, <span class="st">"pROC"</span>, <span class="st">"MASS"</span></span>
-<span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a>))</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
-<p>Once your apps are live, edit the URLs above (or use a global <code>?var:shiny_host</code> variable in <code>_quarto.yml</code>) so they point at your host instead of the placeholder.</p>
-</section>
-<section id="embedding-an-app-inside-a-lab" class="level2">
-<h2 class="anchored" data-anchor-id="embedding-an-app-inside-a-lab">Embedding an app inside a lab</h2>
-<p>To embed an app on a lab page rather than link to it, drop in an iframe:</p>
-<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb4"><pre class="sourceCode html code-with-copy"><code class="sourceCode html"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="dt">&lt;</span><span class="kw">iframe</span><span class="ot"> src</span><span class="op">=</span><span class="st">"https://shiny.example.org/clt-explorer/"</span></span>
-<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a><span class="ot">        width</span><span class="op">=</span><span class="st">"100%"</span><span class="ot"> height</span><span class="op">=</span><span class="st">"650"</span><span class="ot"> frameborder</span><span class="op">=</span><span class="st">"0"</span><span class="dt">&gt;</span></span>
-<span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a><span class="dt">&lt;/</span><span class="kw">iframe</span><span class="dt">&gt;</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
-<p>This works in any lab <code>.qmd</code> and renders identically in both the HTML article and the Reveal.js deck.</p>
+<p>Restore the versions recorded in <code>renv.lock</code> in the server environment and configure the service to use that library. Verify each app, HTTPS, process limits, logs, and the reverse proxy before exposing a server to users. The static-site checks do not deploy or qualify a Shiny service.</p>
+<p>Once a server is available, replace the source links with its actual app URLs. An iframe can embed a verified app endpoint in a lesson, subject to the host’s frame policy. Test its sizing and keyboard access in both articles and slides.</p>
 
 
 </section>
@@ -983,7 +971,7 @@ Tip
 <footer class="footer">
   <div class="nav-footer">
     <div class="nav-footer-left">
-<p>#courses · MIT</p>
+<p>Prose: CC BY 4.0 · Code: MIT</p>
 </div>   
     <div class="nav-footer-center">
 <p><a href="./get_started.html">Get Started</a> · <a href="./overview.html">Overview</a> · <a href="./schedule.html">Schedule</a> · <a href="./cheatsheets.html">Cheatsheets</a> · <a href="./shiny.html">Interactive apps</a> · <a href="./appendices/research_workflow.html">Research workflow</a> · <a href="./appendices/decision_tree.html">Decision tree</a> · <a href="./appendices/glossary.html">Glossary</a> · <a href="./appendices/common_errors.html">Common errors</a> · <a href="./appendices/writing_a_report.html">Writing a report</a> · <a href="./references.html">References</a> · <a href="./acknowledgements.html">Acknowledgements</a> · <strong><a href="./impressum.html">Impressum</a></strong> · <a href="mailto:58561665+r-heller@users.noreply.github.com">Kontakt</a></p>
