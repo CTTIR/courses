@@ -80,9 +80,9 @@ theme_set(theme_minimal(base_size = 12))
 
 ## 1. Hypothesis
 
-H0: the new treatment is worse than the comparator by more than Δ
-= 3 units on a continuous outcome.
-H1: the new treatment is not worse by more than Δ.
+Higher outcomes are better. H0: new − comparator ≤ −3.
+H1: new − comparator > −3. The lower bound of a two-sided 95% interval
+implements a one-sided test at alpha = 0.025 for this pre-specified margin.
 
 ## 2. Visualise
 
@@ -110,14 +110,15 @@ the mean difference (new − comparator) is above −Δ.
 ## 4. Conduct
 
 ```{r}
-fit <- t.test(y ~ arm, data = trial)
+fit <- with(trial, t.test(y[arm == "new"], y[arm == "comparator"],
+                          conf.level = 0.95))
 fit
 ```
 
 ```{r}
 delta <- 3
 ci <- fit$conf.int
-est <- diff(rev(fit$estimate))  # new - comparator
+est <- unname(fit$estimate[1] - fit$estimate[2])  # new - comparator
 ni_pass <- ci[1] > -delta
 tibble(estimate = est, low = ci[1], high = ci[2], margin = -delta, ni_pass)
 ```

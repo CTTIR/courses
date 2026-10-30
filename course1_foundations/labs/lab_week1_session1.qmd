@@ -118,8 +118,8 @@ compatible with a clinically meaningful effect.
 ## 5. Report
 
 > In a simulated two-arm trial (*n* = 120), mean change in systolic
-> blood pressure was `r round(diff(tapply(df$sbp_1 - df$sbp_0, df$arm, mean)), 1)` mmHg lower in the drug arm than in
-> placebo (95% CI: `r round(fit$conf.int[1], 1)` to
+> blood pressure differed by `r round(unname(fit$estimate[1] - fit$estimate[2]), 1)` mmHg
+> (drug − placebo) (95% CI: `r round(fit$conf.int[1], 1)` to
 > `r round(fit$conf.int[2], 1)`; *p* = `r signif(fit$p.value, 2)`).
 
 Note the three pieces every report needs: direction and magnitude, an

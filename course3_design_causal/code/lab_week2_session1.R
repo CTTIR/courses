@@ -41,7 +41,8 @@ p <- all |>
 print(p)
 
 # --- 4. Assumptions --------------------------------------------
-# Complete-case unbiased only under MCAR.
+# This unadjusted marginal mean is unbiased under MCAR; validity under
+# other mechanisms depends on the estimand and analysis model.
 
 # --- 5. Conduct / Fit ------------------------------------------
 results <- all |>

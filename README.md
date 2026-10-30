@@ -20,16 +20,56 @@ Heartfelt thanks to **Chi Zhang** and the OCBE team at the University of Oslo
 (https://ocbe-uio.github.io/teaching_mf9130e/) for the direct structural
 inspiration. See `references.qmd` for the full list of sources.
 
-## Build
+## Build and first use
+
+Verified toolchain: R 4.6.1, Quarto 1.10.19, Python 3.9 or newer, Node.js
+24 or newer, and Git. RStudio/Positron is optional. Native R dependencies
+need a compiler and the system libraries described in [Get started](get_started.qmd).
+The full dependency restore can take substantially longer than the site render.
 
 ```bash
 git clone https://github.com/CTTIR/courses.git
 cd courses
+Rscript -e 'renv::restore(prompt=FALSE)'
+npm ci
 Rscript setup_check.R
-Rscript -e 'renv::restore()'
-quarto render        # builds articles + slides
 quarto preview
 ```
+
+`renv` activates a project library; `setup_check.R` only checks prerequisites
+and exits nonzero on missing or mismatched requirements. It installs nothing.
+The lockfile covers executable lessons and apps. Clearly marked, unevaluated
+sketches (for example external omics data or optional Bayesian software) require
+additional setup described in those lessons.
+
+For a complete qualification build, recompute every article and slide:
+
+```bash
+npm test
+python3 -m unittest discover -s tests -p 'test_*.py'
+Rscript -e 'testthat::test_dir("tests", stop_on_failure=TRUE, stop_on_warning=TRUE)'
+python3 scripts/check_labs.py --log-dir /tmp/courses-lab-checks
+quarto render --profile verify
+python3 scripts/check_site.py
+bash scripts/check-legal-placeholders.sh
+npx playwright install chromium  # add --with-deps on Linux when needed
+npm run test:browser
+```
+
+Frozen execution results are a local cache and are not distributed in Git.
+Ordinary `quarto render` can reuse locally frozen results; it is useful for editing but
+is not fresh verification of the R calculations. Each lab produces both an
+article and a Reveal.js deck. The output is `docs/`.
+
+Run an interactive companion locally:
+
+```bash
+Rscript -e 'shiny::runApp("shiny/clt-explorer", host="127.0.0.1", launch.browser=TRUE)'
+```
+
+GitHub Pages serves the static lessons; Shiny apps require an R process or a
+separately configured server. See [the maintenance record](MAINTENANCE.md) for
+observed results and remaining release steps.
 
 ## URL
 https://cttir.github.io/courses/
@@ -52,7 +92,7 @@ BibTeX:
   title        = {Biostatistics Courses: A Four-Course Programme in R and Quarto},
   year         = {2026},
   howpublished = {\url{https://cttir.github.io/courses/}},
-  note         = {CTTIR/courses, MIT licence}
+  note         = {CTTIR/courses; prose CC BY 4.0, code MIT}
 }
 ```
 

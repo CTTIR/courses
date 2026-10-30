@@ -33,11 +33,16 @@ ui <- fluidPage(
 )
 
 server <- function(input, output, session) {
+  observeEvent(input$p, {
+    updateSliderInput(session, "s", max = min(50, input$p),
+                      value = min(input$s, input$p))
+  })
   trigger <- reactive({ input$go; Sys.time() })
 
   d <- reactive({
     invisible(trigger())
     n <- input$n; p <- input$p; s <- input$s
+    validate(need(s <= p, "The number of signals must not exceed the predictors."))
     X <- matrix(rnorm(n * p), nrow = n)
     beta <- numeric(p)
     beta[seq_len(s)] <- runif(s, 0.5, 1.5) *
@@ -56,7 +61,7 @@ server <- function(input, output, session) {
     long$var <- factor(seq_len(nrow(long)))
     long_l <- pivot_longer(long, -var, names_to = "step",
                            values_to = "coef")
-    long_l$lambda <- a$fit$lambda[as.integer(long_l$step) + 1]
+    long_l$lambda <- a$fit$lambda[match(long_l$step, colnames(coefs))]
     long_l$true_nonzero <- long_l$var %in%
       as.character(seq_len(input$s))
     ggplot(long_l, aes(log(lambda), coef,

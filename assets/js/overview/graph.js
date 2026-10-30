@@ -10,7 +10,7 @@ export function createGraph({ container, graph, controller, root, topicById }) {
   /* eslint-disable no-undef */
   if (typeof vis === "undefined") {
     container.textContent = "Network library failed to load.";
-    return { update() {} };
+    return { update() {}, fit() {} };
   }
 
   const idToIndex = new Map();

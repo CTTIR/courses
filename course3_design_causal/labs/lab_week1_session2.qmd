@@ -118,25 +118,32 @@ trial |>
 ## 4. Conduct
 
 ```{r}
-itt <- t.test(y ~ arm, data = trial)
-pp  <- t.test(y ~ received, data = trial)
+itt <- with(trial, t.test(y[arm == "treatment"], y[arm == "placebo"]))
+pp <- with(subset(trial, !crossed),
+           t.test(y[arm == "treatment"], y[arm == "placebo"]))
+as_treated <- with(trial,
+                   t.test(y[received == "treatment"], y[received == "placebo"]))
+itt_diff <- unname(itt$estimate[1] - itt$estimate[2])
+pp_diff <- unname(pp$estimate[1] - pp$estimate[2])
+at_diff <- unname(as_treated$estimate[1] - as_treated$estimate[2])
 itt
 pp
 ```
 
-The ITT estimate is closer to zero than the PP estimate because the
-crossed-over patients pull the treatment arm mean toward placebo.
+ITT retains everyone in the randomised arm. The per-protocol subset excludes
+crossovers; the as-treated comparison groups everyone by treatment received.
+The latter two generally sacrifice the protection of randomisation. In this
+simulation crossover is independent of prognosis, so it does not demonstrate
+bias from *informative* non-adherence.
 
 ## 5. Concluding statement
 
-> In a simulated parallel-group RCT (*n* = 200), the ITT analysis
-> showed a mean difference of
-> `r round(diff(itt$estimate) * -1, 1)` (95% CI:
-> `r round(-itt$conf.int[2], 1)` to `r round(-itt$conf.int[1], 1)`)
-> on the symptom score; a per-protocol analysis gave a larger
-> estimated benefit of
-> `r round(diff(pp$estimate) * -1, 1)`, illustrating the usual
-> direction of disagreement when non-adherence is informative.
+> In the simulated RCT (*n* = 200), the treatment-minus-placebo symptom
+> difference was `r round(itt_diff, 1)` under ITT (95% CI:
+> `r round(itt$conf.int[1], 1)` to `r round(itt$conf.int[2], 1)`). The
+> per-protocol difference was `r round(pp_diff, 1)` and the as-treated
+> difference was `r round(at_diff, 1)`. Negative differences favour treatment.
+> These estimates target different comparisons; their ordering can vary.
 
 ::: {.notes}
 The practical takeaway is that ITT protects the randomisation, PP

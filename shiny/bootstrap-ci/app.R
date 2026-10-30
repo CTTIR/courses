@@ -42,7 +42,7 @@ draw <- function(dist, n) {
     norm  = rnorm(n),
     lnorm = rlnorm(n, 0, 1),
     exp   = rexp(n),
-    mix   = c(rnorm(round(0.9 * n)), rnorm(n - round(0.9 * n), 5, 1)))
+    mix   = rnorm(n, mean = 5 * rbinom(n, 1, 0.1), sd = 1))
 }
 
 stat_fun <- function(stat) {

@@ -51,7 +51,10 @@ w1 <- ifelse(df$a1 == 1, fitted(num1), 1 - fitted(num1)) /
       ifelse(df$a1 == 1, fitted(den1), 1 - fitted(den1))
 df$sw <- w0 * w1
 msm <- lm(y ~ a0 + a1, data = df, weights = sw)
-print(tidy(msm, conf.int = TRUE) |> filter(term %in% c("a0", "a1")))
+print(tibble(term = names(coef(msm)), estimate = unname(coef(msm))) |> filter(term %in% c("a0", "a1")))
+
+# These are point estimates; ordinary WLS intervals are not IPTW inference.
+# Bootstrap subjects and refit all models for uncertainty.
 
 # --- 6. Report -------------------------------------------------
 cat("Summary of stabilised weights:\n")

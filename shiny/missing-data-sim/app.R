@@ -34,10 +34,17 @@ ui <- fluidPage(
 simulate_one <- function(n, rho, mech, p_miss) {
   X <- rnorm(n)
   Y <- rho * X + sqrt(1 - rho^2) * rnorm(n)
+  # Choose the intercept so the sample-average missingness probability
+  # equals the requested rate; qlogis(p_miss) alone does not do this.
+  calibrated <- function(z) {
+    intercept <- uniroot(function(a) mean(plogis(a + z)) - p_miss,
+                         c(-30, 30))$root
+    plogis(intercept + z)
+  }
   miss <- switch(mech,
     mcar = rbinom(n, 1, p_miss),
-    mar  = rbinom(n, 1, plogis(qlogis(p_miss) + 1.0 * X)),
-    mnar = rbinom(n, 1, plogis(qlogis(p_miss) + 1.0 * Y))
+    mar  = rbinom(n, 1, calibrated(X)),
+    mnar = rbinom(n, 1, calibrated(Y))
   )
   list(X = X, Y = Y, miss = as.logical(miss))
 }
@@ -72,11 +79,11 @@ server <- function(input, output, session) {
 
   output$metrics <- renderPrint({
     df <- sim_runs()
-    cat(sprintf("True mean of Y               : %.4f\n",
+    cat(sprintf("Mean full-data estimate      : %.4f\n",
                 mean(df$full)))
     cat(sprintf("Mean of complete-case estimate: %.4f\n",
                 mean(df$obs)))
-    cat(sprintf("Bias (CC - true)             : %.4f\n",
+    cat(sprintf("Mean CC minus full-data estimate: %.4f\n",
                 mean(df$obs - df$full)))
     cat(sprintf("SE of complete-case estimate : %.4f\n", sd(df$obs)))
   })

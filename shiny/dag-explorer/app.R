@@ -47,7 +47,7 @@ dag_text <- function(choice) {
     confounder = "dag { X -> Y; Z -> X; Z -> Y }",
     mediator   = "dag { X -> M -> Y; X -> Y }",
     collider   = "dag { X -> C; Y -> C }",
-    mbias      = "dag { U1 -> X; U1 -> Z; U2 -> Z; U2 -> Y; X -> Y }"
+    mbias      = "dag { U1 [unobserved]; U2 [unobserved]; U1 -> X; U1 -> Z; U2 -> Z; U2 -> Y; X -> Y }"
   )
 }
 
@@ -62,7 +62,13 @@ server <- function(input, output, session) {
   dag <- reactive({
     txt <- if (input$dag_choice == "custom") input$dag_text
            else dag_text(input$dag_choice)
-    tryCatch(dagitty(txt), error = function(e) NULL)
+    g <- tryCatch(dagitty(txt), error = function(e) NULL)
+    validate(need(!is.null(g), "Invalid DAG syntax. Check the graph text."))
+    validate(need(isAcyclic(g), "The graph contains a cycle; use an acyclic DAG."))
+    validate(need(input$exposure %in% names(g), "Exposure must name a node in the DAG."))
+    validate(need(input$outcome %in% names(g), "Outcome must name a node in the DAG."))
+    validate(need(input$exposure != input$outcome, "Exposure and outcome must differ."))
+    g
   })
 
   output$dag_plot <- renderPlot({
@@ -76,8 +82,9 @@ server <- function(input, output, session) {
     sets <- adjustmentSets(g, exposure = input$exposure,
                            outcome = input$outcome)
     if (length(sets) == 0) {
-      cat("No adjustment set required, or the effect is not ",
-          "identifiable from the DAG.\n", sep = "")
+      cat("No sufficient adjustment set exists under this graph.\n")
+    } else if (any(lengths(sets) == 0)) {
+      cat("The empty adjustment set is sufficient: no covariates are required.\n")
     } else {
       print(sets)
     }

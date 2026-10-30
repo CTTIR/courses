@@ -23,7 +23,7 @@ ui <- fluidPage(
               "PPV = P(disease | test+); NPV = P(no disease | test-).")
     ),
     mainPanel(
-      h4("Per-1000 outcome table"),
+      h4("Expected outcomes per 1,000 people"),
       tableOutput("table"),
       h4("Predictive values"),
       verbatimTextOutput("vals"),
@@ -50,12 +50,12 @@ server <- function(input, output, session) {
     FP <- ND * (1 - Sp); TN <- ND - FP
     data.frame(
       ` ` = c("Test +", "Test -", "Total"),
-      Disease = round(c(TP, FN, D)),
-      `No disease` = round(c(FP, TN, ND)),
-      Total = round(c(TP + FP, FN + TN, N)),
+      Disease = c(TP, FN, D),
+      `No disease` = c(FP, TN, ND),
+      Total = c(TP + FP, FN + TN, N),
       check.names = FALSE
     )
-  }, digits = 0)
+  }, digits = 2)
 
   output$vals <- renderPrint({
     v <- vals()

@@ -48,12 +48,13 @@ missing value itself, even after conditioning on everything
 observed. Each is a property of the process, not the data, and you
 can rarely decide between MAR and MNAR from the data alone.
 
-Complete-case analysis drops any row with a missing value. It is
-unbiased under MCAR, usually biased under MAR, and always suspect
-under MNAR. Multiple imputation handles MAR correctly if the
-imputation model is compatible with the analysis model, but cannot
-rescue MNAR without explicit modelling of the missingness
-mechanism.
+Complete-case analysis drops rows with missing values. For the unadjusted
+marginal mean in this example, MCAR gives unbiased estimation in repeated
+sampling. Under MAR, validity depends on the estimand and model: a correctly
+specified outcome regression can remain valid when missingness depends only
+on observed predictors. MNAR requires additional identifying assumptions and sensitivity analysis.
+Multiple imputation under MAR also needs a correctly specified imputation
+model compatible with the analysis; it does not resolve MNAR automatically.
 
 ::: {.content-visible when-format="html"}
 Auxiliary variables — things that correlate with both the outcome
@@ -142,12 +143,15 @@ results |>
 
 ## 5. Concluding statement
 
-> Complete-case estimation of the mean of Y was unbiased under MCAR
-> (bias ≈ `r round(results$bias[results$mech == "MCAR"], 2)`) and
-> meaningfully biased under MAR
-> (`r round(results$bias[results$mech == "MAR"], 2)`) and MNAR
-> (`r round(results$bias[results$mech == "MNAR"], 2)`), despite the
-> same true mean and similar missingness proportions.
+> In this single simulation, complete-case minus full-data mean was
+> `r round(results$bias[results$mech == "MCAR"], 2)` under MCAR,
+> `r round(results$bias[results$mech == "MAR"], 2)` under MAR, and
+> `r round(results$bias[results$mech == "MNAR"], 2)` under MNAR.
+> These are observed differences in one sample, not repeated-simulation
+> estimates of bias. The missingness fractions also differ by mechanism.
+
+To estimate bias, repeat the simulation and average the estimation error
+against the known population mean. The companion app provides repeated draws.
 
 ::: {.notes}
 Students often ask how to test for MCAR. Little's test exists but

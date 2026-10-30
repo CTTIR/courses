@@ -19,8 +19,9 @@ execute: {echo: true, warning: false, message: false}
 | Grouped / blocked    | correlated units (patients, sites) |
 | Nested               | honest evaluation of tuned models |
 
-Nested CV is the only defensible way to estimate generalisation error
-when you are also tuning hyperparameters.
+Keep evaluation data independent of model selection. Nested CV does this
+within resampling; an untouched test set or independent external cohort
+can also evaluate a tuned model.
 
 ## Regularisation
 
@@ -81,7 +82,7 @@ downstream stats. Global geometry is often distorted.
 - Lots of predictors, small n → lasso; report `lambda.1se`.
 - Exploring structure → PCA + UMAP on scaled data.
 - Clustering for biology → model-based + sensitivity to k.
-- Tuning anything → nested CV.
+- Tuning models → separate selection and evaluation (nested CV or an untouched test set).
 
 ## Common pitfalls
 

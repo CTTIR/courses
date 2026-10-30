@@ -87,7 +87,8 @@ n <- 40
 trt <- rnorm(n, mean = 135, sd = 12)
 pla <- rnorm(n, mean = 142, sd = 12)
 df_ind <- tibble(
-  arm = rep(c("placebo", "treatment"), each = n),
+  arm = factor(rep(c("placebo", "treatment"), each = n),
+                              levels = c("treatment", "placebo")),
   sbp = c(pla, trt)
 )
 ```
@@ -177,12 +178,12 @@ list(d_ind = d_ind, g_ind = g_ind, d_paired = d_paired)
 > `r round(sd(pla), 1)`) in placebo. A Welch's *t*-test gave
 > *t*(`r round(tt_welch$parameter, 1)`) =
 > `r round(tt_welch$statistic, 2)`, *p* =
-> `r signif(tt_welch$p.value, 2)`, mean difference
-> `r round(diff(rev(tt_welch$estimate)), 1)` mmHg (95% CI
-> `r round(-tt_welch$conf.int[2], 1)` to
-> `r round(-tt_welch$conf.int[1], 1)`). Cohen's *d* =
+> `r signif(tt_welch$p.value, 2)`, mean difference (treatment − placebo)
+> `r round(unname(tt_welch$estimate[1] - tt_welch$estimate[2]), 1)` mmHg (95% CI
+> `r round(tt_welch$conf.int[1], 1)` to
+> `r round(tt_welch$conf.int[2], 1)`). Cohen's *d* =
 > `r round(d_ind$Cohens_d, 2)` (Hedges' *g* =
-> `r round(g_ind$Hedges_g, 2)`), a small-to-medium effect.
+> `r round(g_ind$Hedges_g, 2)`).
 
 > **Paired comparison.** The within-subject change
 > (post − pre) had mean `r round(mean(df_pair$delta), 1)` mmHg (SD

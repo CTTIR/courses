@@ -95,15 +95,25 @@ predictors (or handled explicitly with a smooth/transformation).
 
 ```{r}
 fit <- glm(type ~ glu, data = pima, family = binomial)
-# residuals are less informative in GLMs; check for linearity on the logit scale
-pima |>
-  mutate(p = fitted(fit),
-         logit = qlogis(p)) |>
-  ggplot(aes(glu, logit)) +
-  geom_point(alpha = 0.5) +
-  geom_smooth(method = "loess", se = FALSE, colour = "steelblue") +
-  labs(x = "Plasma glucose", y = "Fitted logit")
+fit_spline <- glm(type ~ splines::ns(glu, df = 3), data = pima, family = binomial)
+# Compare a flexible specification; plotting fitted logits from the linear
+# model alone cannot check linearity, because they are linear by construction.
+print(anova(fit, fit_spline, test = "LRT"))
+binned <- pima |>
+  mutate(y = as.integer(type == "Yes"), bin = ntile(glu, 8)) |>
+  group_by(bin) |>
+  summarise(glu = mean(glu), successes = sum(y), n = n(), .groups = "drop") |>
+  mutate(empirical_logit = log((successes + .5) / (n - successes + .5)))
+p2 <- ggplot(binned, aes(glu, empirical_logit)) +
+  geom_point() +
+  geom_abline(intercept = coef(fit)[1], slope = coef(fit)[2], colour = "steelblue") +
+  labs(x = "Plasma glucose", y = "Binned empirical logit (0.5 correction)")
+print(p2)
 ```
+
+The binned empirical logits use observed outcomes rather than fitted probabilities.
+The spline comparison and this descriptive plot can reveal departures from a
+linear logit, but a nonsignificant test does not establish that assumption.
 
 ## 4. Conduct
 
@@ -125,7 +135,7 @@ table(pred_class, truth = pima$type)
 > `r round(exp(10 * coef(fit)["glu"]), 2)` (95% CI from profile:
 > `r round(exp(10 * confint(fit)["glu", 1]), 2)` to
 > `r round(exp(10 * confint(fit)["glu", 2]), 2)`). At a 0.5 threshold
-> the classifier had
+> the classifier had apparent training-sample
 > `r round(100 * mean(pred_class == pima$type), 1)`% accuracy; a
 > threshold-free assessment appears in Week 3 Session 5.
 

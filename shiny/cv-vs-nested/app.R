@@ -32,34 +32,45 @@ ui <- fluidPage(
   )
 )
 
-cv_naive <- function(n, p, k) {
-  X <- matrix(rnorm(n * p), nrow = n)
-  y <- rnorm(n)
-  cors <- abs(cor(X, y))
-  best <- which.max(cors)
-  folds <- sample(rep(1:k, length.out = n))
-  errs <- sapply(1:k, function(i) {
-    tr <- folds != i; te <- folds == i
-    fit <- lm(y[tr] ~ X[tr, best])
-    pred <- coef(fit)[1] + coef(fit)[2] * X[te, best]
-    mean((y[te] - pred)^2)
-  })
-  mean(errs)
+# Fit every univariate candidate on training rows, then predict held-out rows.
+# This is vectorised ordinary least squares with an intercept.
+candidate_predictions <- function(X, y, newx) {
+  xbar <- colMeans(X)
+  centered <- sweep(X, 2, xbar)
+  variance <- colSums(centered^2)
+  slope <- as.numeric(crossprod(centered, y - mean(y))) /
+    ifelse(variance > 0, variance, Inf)
+  sweep(sweep(newx, 2, xbar), 2, slope, "*") + mean(y)
 }
 
-cv_nested <- function(n, p, k) {
-  X <- matrix(rnorm(n * p), nrow = n)
-  y <- rnorm(n)
-  outer <- sample(rep(1:k, length.out = n))
-  errs <- sapply(1:k, function(i) {
-    tr_idx <- which(outer != i); te_idx <- which(outer == i)
-    cors_in <- abs(cor(X[tr_idx, ], y[tr_idx]))
-    best <- which.max(cors_in)
-    fit  <- lm(y[tr_idx] ~ X[tr_idx, best])
-    pred <- coef(fit)[1] + coef(fit)[2] * X[te_idx, best]
-    mean((y[te_idx] - pred)^2)
-  })
-  mean(errs)
+candidate_cv <- function(X, y, folds) {
+  errors <- matrix(NA_real_, nrow(X), ncol(X))
+  for (i in sort(unique(folds))) {
+    tr <- folds != i; te <- !tr
+    pred <- candidate_predictions(X[tr, , drop = FALSE], y[tr],
+                                  X[te, , drop = FALSE])
+    errors[te, ] <- (y[te] - pred)^2
+  }
+  colMeans(errors)
+}
+
+compare_cv <- function(X, y, k) {
+  folds <- sample(rep(seq_len(k), length.out = nrow(X)))
+  # Choosing and reporting the minimum from these same folds leaks selection.
+  naive <- min(candidate_cv(X, y, folds))
+  squared_error <- numeric(length(y))
+  oracle_error <- numeric(length(y))
+  for (i in seq_len(k)) {
+    tr <- folds != i; te <- !tr
+    inner <- sample(rep(seq_len(k), length.out = sum(tr)))
+    best <- which.min(candidate_cv(X[tr, , drop = FALSE], y[tr], inner))
+    fit <- lm(y[tr] ~ X[tr, best])
+    pred <- coef(fit)[1] + coef(fit)[2] * X[te, best]
+    squared_error[te] <- (y[te] - pred)^2
+    # Exact future MSE under independent N(0,1) predictors and responses.
+    oracle_error[te] <- 1 + sum(coef(fit)^2)
+  }
+  c(naive = naive, nested = mean(squared_error), oracle = mean(oracle_error))
 }
 
 server <- function(input, output, session) {
@@ -68,13 +79,16 @@ server <- function(input, output, session) {
   res <- reactive({
     invisible(trigger())
     n <- input$n; p <- input$p; k <- input$k
-    naive_v  <- replicate(input$reps, cv_naive(n, p, k))
-    nested_v <- replicate(input$reps, cv_nested(n, p, k))
+    results <- replicate(input$reps, {
+      X <- matrix(rnorm(n * p), nrow = n)
+      y <- rnorm(n)
+      compare_cv(X, y, k)
+    })
     data.frame(
-      method = rep(c("Naive CV (selection on full data)",
-                     "Nested CV"),
+      method = rep(c("CV minimum (selection and evaluation together)",
+                     "Nested CV", "True error of outer fitted models"),
                    each = input$reps),
-      mse = c(naive_v, nested_v)
+      mse = c(results["naive", ], results["nested", ], results["oracle", ])
     )
   })
 
@@ -83,9 +97,9 @@ server <- function(input, output, session) {
     ggplot(df, aes(method, mse, fill = method)) +
       geom_boxplot(alpha = 0.7, colour = "grey30") +
       geom_hline(yintercept = 1, linetype = 2, colour = "grey50") +
-      scale_fill_manual(values = c(ACCENT, "grey60")) +
+      scale_fill_manual(values = c(ACCENT, "grey60", "#238b45")) +
       labs(x = NULL, y = "Estimated MSE",
-           subtitle = "Dashed line: true MSE (= Var(y) = 1) under no signal") +
+           subtitle = "Dashed line: irreducible noise variance = 1 (not fitted-model error)") +
       theme_minimal(base_size = 12) +
       theme(legend.position = "none")
   })
@@ -94,10 +108,12 @@ server <- function(input, output, session) {
     df <- res()
     cat(sprintf("Mean naive CV MSE  : %.3f\n",
                 mean(df$mse[df$method ==
-                              "Naive CV (selection on full data)"])))
+                              "CV minimum (selection and evaluation together)"])))
     cat(sprintf("Mean nested CV MSE : %.3f\n",
                 mean(df$mse[df$method == "Nested CV"])))
-    cat("True MSE under no signal : 1.000\n")
+    cat(sprintf("Mean true error of outer fits: %.3f\n",
+                mean(df$mse[df$method == "True error of outer fitted models"])))
+    cat("Irreducible noise variance: 1.000\n")
   })
 }
 

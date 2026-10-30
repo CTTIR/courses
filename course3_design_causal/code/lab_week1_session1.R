@@ -10,7 +10,7 @@ theme_set(theme_minimal(base_size = 12))
 
 # --- 1. Hypothesis / Goal --------------------------------------
 # Compare exposure-outcome association recovered by a full cohort
-# analysis and a nested case-control sample from the same source.
+# analysis and a cumulative case-control sample from the same source.
 
 # --- 2. Data ---------------------------------------------------
 n_pop <- 5000
@@ -28,7 +28,7 @@ cases    <- pop |> filter(outcome == 1)
 controls <- pop |>
   filter(outcome == 0) |>
   slice_sample(n = 4 * nrow(cases))
-ncc <- bind_rows(cases, controls)
+cc <- bind_rows(cases, controls)
 
 # --- 3. Visualise ----------------------------------------------
 p <- pop |>
@@ -48,13 +48,13 @@ print(p)
 
 # --- 5. Conduct / Fit ------------------------------------------
 fit_cohort <- glm(outcome ~ exposure + age, data = pop, family = binomial)
-fit_ncc    <- glm(outcome ~ exposure + age, data = ncc, family = binomial)
+fit_cc    <- glm(outcome ~ exposure + age, data = cc, family = binomial)
 print(broom::tidy(fit_cohort, conf.int = TRUE, exponentiate = TRUE))
-print(broom::tidy(fit_ncc,    conf.int = TRUE, exponentiate = TRUE))
+print(broom::tidy(fit_cc,    conf.int = TRUE, exponentiate = TRUE))
 
 # --- 6. Report -------------------------------------------------
 cat(sprintf(
-  "Cohort OR: %.2f; NCC OR: %.2f\n",
+  "Cohort OR: %.2f; Case-control OR: %.2f\n",
   exp(coef(fit_cohort))["exposure"],
-  exp(coef(fit_ncc))["exposure"]
+  exp(coef(fit_cc))["exposure"]
 ))

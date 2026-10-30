@@ -93,9 +93,9 @@ tree_fit <- rpart(mpg ~ ., data = d, cp = 0.01)
 rf_fit   <- ranger(mpg ~ ., data = d, importance = "permutation",
                    num.trees = 500)
 xg_fit   <- xgboost(
-  data = as.matrix(d[, -1]), label = d$mpg,
-  nrounds = 100, eta = 0.05, max_depth = 3,
-  objective = "reg:squarederror", verbose = 0
+  x = as.matrix(d[, -1]), y = d$mpg,
+  nrounds = 100, learning_rate = 0.05, max_depth = 3,
+  objective = "reg:squarederror", verbosity = 0, nthreads = 2
 )
 ```
 
@@ -116,9 +116,9 @@ get_err <- function() {
     t1 <- rpart(mpg ~ ., data = f_tr, cp = 0.01)
     r1 <- ranger(mpg ~ ., data = f_tr, num.trees = 500)
     x1 <- xgboost(
-      data = as.matrix(f_tr[, -1]), label = f_tr$mpg,
-      nrounds = 100, eta = 0.05, max_depth = 3,
-      objective = "reg:squarederror", verbose = 0
+      x = as.matrix(f_tr[, -1]), y = f_tr$mpg,
+      nrounds = 100, learning_rate = 0.05, max_depth = 3,
+      objective = "reg:squarederror", verbosity = 0, nthreads = 2
     )
     err_tree[k] <- mse(f_te$mpg, predict(t1, f_te))
     err_rf[k]   <- mse(f_te$mpg, predict(r1, f_te)$predictions)

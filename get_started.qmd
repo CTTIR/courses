@@ -9,65 +9,59 @@ SETUP · CLONE · RENDER
 :::
 # From a fresh laptop to a local site
 ::: {.lead}
-From a fresh laptop to a locally rendered version of this site in about
-twenty minutes.
+Install the tools, restore the recorded environment, and render the curriculum.
+Initial package compilation can take considerably longer than a routine rebuild.
 :::
 :::
 
 ## Before you start
 
-You need four things installed on your machine:
+Install these tools before restoring the project:
 
-- **R**, version 4.3 or newer — <https://cloud.r-project.org>
-- **RStudio Desktop** (or Positron) — <https://posit.co/download/rstudio-desktop/>
-- **Quarto**, version 1.4 or newer — <https://quarto.org/docs/get-started/>
+- **R**, version 4.6.1 for the recorded environment — <https://cloud.r-project.org>
+- **RStudio Desktop** (or Positron, optional) — <https://posit.co/download/rstudio-desktop/>
+- **Quarto**, version 1.10.19 — <https://quarto.org/docs/get-started/>
 - **Git** — <https://git-scm.com/downloads>
+- **Python 3**, version 3.9 or newer, available as `python3`
+- **Node.js**, version 24 or newer, including npm
 
-If you would rather not install anything locally, every lab also runs on
-[**Posit Cloud**](https://posit.cloud): create a new project, clone the
-repository, and use the in-browser RStudio.
+A remote R environment such as [Posit Cloud](https://posit.cloud) may also be
+used, provided it has these prerequisites and enough memory and installation
+time. That hosted environment is not part of the local qualification.
 
 A few OS-specific notes:
 
 - On **macOS**, install the Xcode command-line tools once with
-  `xcode-select --install` so R can build packages from source.
+  `xcode-select --install` so R can build packages from source. Homebrew
+  users also need `brew install cmake fftw pkg-config` for native dependencies.
 - On **Windows**, install [Rtools](https://cran.r-project.org/bin/windows/Rtools/)
   matching your R version; some packages in the `renv` lock file build from
   source on first use.
 - On **Linux**, install the development headers listed by `sudo apt install`
   — most commonly `libcurl4-openssl-dev`, `libssl-dev`, `libxml2-dev`,
   `libfontconfig1-dev`, `libfreetype6-dev`, `libharfbuzz-dev`, `libfribidi-dev`,
-  and `libgit2-dev`.
+  and `libgit2-dev`, `libfftw3-dev`, and `cmake`.
 
-## Clone and check
+## Clone and restore
 
 ```bash
 git clone https://github.com/CTTIR/courses.git
 cd courses
+Rscript -e 'renv::restore(prompt=FALSE)'
+npm ci
 Rscript setup_check.R
 ```
 
-`setup_check.R` prints your R version and platform, walks through the
-list of required packages, attempts to install anything missing from
-CRAN, and reports how many succeeded and how many failed. If a package
-fails, the most common cause is a missing system library — the error
-message usually names the header file, and the appendix on
-[Common errors](appendices/common_errors.qmd) collects the fixes we see
-most often.
+[`renv`](https://rstudio.github.io/renv/) restores the versioned package records
+into the project library. Native packages may require additional system headers;
+read the first installation error if restoration fails. The R version itself and
+system libraries are not installed by `renv`.
 
-## Restore the environment
-
-The project is pinned with [`renv`](https://rstudio.github.io/renv/).
-To install the exact package versions listed in `renv.lock`:
-
-```bash
-Rscript -e 'renv::restore()'
-```
-
-`renv` keeps each project's packages in a private library, so installing
-packages for this curriculum will not interfere with anything else on your
-machine. On first run it prints a list of packages it intends to install
-and asks for confirmation — answer `y`.
+`setup_check.R` is read-only. It reports missing packages, version mismatches, or
+missing command-line tools and exits with a failure status until they are fixed.
+It never silently installs or upgrades packages. The lockfile covers executable
+lessons and the local Shiny apps; optional chunks marked `eval: false` describe
+additional workflows and do not claim to have run without their data or tools.
 
 ## Render the site locally
 
@@ -75,7 +69,7 @@ Two commands, depending on what you want:
 
 ```bash
 quarto preview    # live-reloading local server (good for writing)
-quarto render     # one-shot build into docs/
+quarto render --profile verify  # fresh execution and build into docs/
 ```
 
 To render a single lab without touching the rest of the site:
@@ -99,19 +93,24 @@ quarto render course1_foundations/labs/lab_week1_session1.qmd --to revealjs
 The `--to` flag selects one of the formats declared in the front matter
 and skips the other.
 
+For routine prose edits, `quarto render` may reuse locally frozen calculations.
+The `_freeze/` cache is not distributed with the source. Before
+release, use the verification commands in the README, including the standalone
+script and complete-site checks.
+
 ## Folder tour
 
 ```
-biostats_curriculum/
+courses/
 ├── _quarto.yml                  site configuration
 ├── index.qmd                    home
 ├── about.qmd                    philosophy and licence
 ├── get_started.qmd              you are here
 ├── schedule.qmd                 linked index of every artefact
 ├── references.qmd               sources and teaching ecosystems
-├── styles.css / custom.scss     site-wide look and feel
+├── css/ and assets/*.scss       site-wide look and feel
 ├── assets/slides.scss           Reveal.js theme
-├── setup_check.R                one-time environment audit
+├── setup_check.R                read-only environment check
 ├── renv.lock                    pinned package versions
 ├── appendices/                  research workflow, decision tree, glossary, …
 ├── shared/                      data notes and site-wide images

@@ -1,0 +1,5 @@
+# Qualification builds recompute every example, including unchanged sources.
+execute:
+  freeze: false
+  cache: false
+  error: false

@@ -30,7 +30,7 @@ Goal → Approach → Execution → Check → Report.
 - Distinguish cohort, case-control, and cross-sectional designs and
   say when each is the right tool.
 - Simulate a source population and draw both a cohort sample and a
-  nested case-control sample from it.
+  cumulative case-control sample from it.
 - Map a study report to the STROBE checklist.
 
 ## Prerequisites
@@ -56,12 +56,13 @@ branches for the three main designs. You do not need to memorise it;
 you need to know that reviewers will check it.
 
 ::: {.content-visible when-format="html"}
-A nested case-control sampled from a defined cohort behaves
-statistically like the full cohort for odds ratios that approximate
-risk ratios when the outcome is rare. This is the trick behind most
-large pharmacoepidemiology studies: a full-cohort analysis is
-wasteful when measurement on every unexposed person is expensive, so
-analysts sample controls from the risk set instead.
+This example samples controls from people without the outcome at the end
+of follow-up. It is cumulative case-control sampling: logistic slopes estimate
+the cohort odds ratios under the stated sampling design. A rare outcome is
+needed only if interpreting those odds ratios as approximate risk ratios.
+Risk-set nested case-control sampling is a different design: controls are
+sampled from people at risk at each event time, and its analysis must respect
+those matched risk sets. No risk-set sampling is implemented in this lab.
 :::
 
 ## Setup
@@ -75,7 +76,7 @@ theme_set(theme_minimal(base_size = 12))
 
 ## 1. Goal
 
-Simulate a source population, carve a cohort study and a nested
+Simulate a source population, carve a cohort study and a cumulative
 case-control study out of it, and compare the exposure–outcome
 association recovered by each.
 
@@ -127,10 +128,10 @@ cases    <- pop |> filter(outcome == 1)
 controls <- pop |>
   filter(outcome == 0) |>
   slice_sample(n = 4 * nrow(cases))
-ncc <- bind_rows(cases, controls)
-fit_ncc <- glm(outcome ~ exposure + age, data = ncc, family = binomial)
-coef_ncc <- broom::tidy(fit_ncc, conf.int = TRUE, exponentiate = TRUE)
-coef_ncc
+cc <- bind_rows(cases, controls)
+fit_cc <- glm(outcome ~ exposure + age, data = cc, family = binomial)
+coef_cc <- broom::tidy(fit_cc, conf.int = TRUE, exponentiate = TRUE)
+coef_cc
 ```
 
 ## 4. Check
@@ -143,7 +144,7 @@ biased by the sampling scheme.
 ```{r}
 bind_rows(
   cohort = coef_cohort |> filter(term == "exposure"),
-  ncc    = coef_ncc    |> filter(term == "exposure"),
+  cc    = coef_cc    |> filter(term == "exposure"),
   .id = "design"
 ) |>
   select(design, estimate, conf.low, conf.high)
@@ -156,9 +157,9 @@ bind_rows(
 > `r round(coef_cohort$estimate[2], 2)` (95% CI:
 > `r round(coef_cohort$conf.low[2], 2)` to
 > `r round(coef_cohort$conf.high[2], 2)`) in a full-cohort analysis,
-> and `r round(coef_ncc$estimate[2], 2)` (95% CI:
-> `r round(coef_ncc$conf.low[2], 2)` to
-> `r round(coef_ncc$conf.high[2], 2)`) in a 1:4 nested case-control
+> and `r round(coef_cc$estimate[2], 2)` (95% CI:
+> `r round(coef_cc$conf.low[2], 2)` to
+> `r round(coef_cc$conf.high[2], 2)`) in a 1:4 nested case-control
 > sample.
 
 ### STROBE in one paragraph

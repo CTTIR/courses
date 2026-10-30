@@ -1,0 +1,16 @@
+{
+  "name": "cttir-courses",
+  "private": true,
+  "type": "module",
+  "engines": {
+    "node": ">=24"
+  },
+  "scripts": {
+    "test": "node --test tests/*.test.mjs",
+    "test:browser": "node tests/browser.mjs"
+  },
+  "devDependencies": {
+    "pagefind": "1.5.2",
+    "playwright": "1.64.1"
+  }
+}

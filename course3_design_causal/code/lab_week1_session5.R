@@ -22,7 +22,7 @@ nj  <- 10
 dat <- tibble(
   cluster = factor(rep(seq_len(J), each = nj)),
   arm     = rep(rep(c(0, 1), each = nj), length.out = J * nj),
-  y       = NA_real_
+  y       = rnorm(J * nj)  # placeholder response; simr generates each replicate
 )
 
 # --- 3. Visualise ----------------------------------------------

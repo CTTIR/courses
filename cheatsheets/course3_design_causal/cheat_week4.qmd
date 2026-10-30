@@ -46,7 +46,7 @@ library(netmeta)
 net <- netmeta(TE, seTE, treat1, treat2, studlab,
                data = dat, sm = "MD", random = TRUE)
 netgraph(net)
-netrank(net, small.values = "good")    # SUCRA ranking
+netrank(net, small.values = "good", method = "SUCRA", nsim = 10000)
 decomp.design(net)                     # inconsistency
 ```
 

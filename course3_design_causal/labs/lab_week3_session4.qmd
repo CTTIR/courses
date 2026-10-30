@@ -79,7 +79,7 @@ theme_set(theme_minimal(base_size = 12))
 ## 1. Hypothesis
 
 Treatment reduces the outcome by a known amount. We will estimate
-the effect with naive regression, matching, and IPTW, and compare
+the effect with covariate-adjusted regression, matching, and IPTW, and compare
 with the simulated truth.
 
 ## 2. Visualise
@@ -110,9 +110,9 @@ specification of the propensity model.
 ## 4. Conduct
 
 ```{r}
-# Naive regression
-fit_naive <- lm(y ~ trt + age + sev + sex, data = dat)
-coef(fit_naive)["trt"]
+# Covariate-adjusted regression
+fit_adjusted <- lm(y ~ trt + age + sev + sex, data = dat)
+coef(fit_adjusted)["trt"]
 ```
 
 ```{r}
@@ -128,9 +128,11 @@ coef(fit_match)["trt"]
 ```
 
 ```{r}
-# IPTW
+# IPTW with estimated propensity scores
+ps_fit <- glm(trt ~ age + sev + sex, data = dat, family = binomial())
+dat$ps_hat <- fitted(ps_fit)
 dat <- dat |>
-  mutate(w = if_else(trt == 1, 1 / ps, 1 / (1 - ps)))
+  mutate(w = if_else(trt == 1, 1 / ps_hat, 1 / (1 - ps_hat)))
 fit_iptw <- lm(y ~ trt, data = dat, weights = w)
 coef(fit_iptw)["trt"]
 ```
@@ -143,11 +145,11 @@ love.plot(m, thresholds = c(m = 0.1), abs = TRUE)
 
 ## 5. Concluding statement
 
-> The simulated treatment effect was −1.5. The naive regression
-> gave `r round(coef(fit_naive)["trt"], 2)`; nearest-neighbour
+> The simulated treatment effect was −1.5. The covariate-adjusted regression
+> gave `r round(coef(fit_adjusted)["trt"], 2)`; nearest-neighbour
 > matching gave `r round(coef(fit_match)["trt"], 2)`; IPTW gave
-> `r round(coef(fit_iptw)["trt"], 2)`. Balance plots showed that
-> matching reduced all SMDs below 0.1.
+> `r round(coef(fit_iptw)["trt"], 2)`. Inspect the balance plot before accepting the matched comparison;
+> matching need not reduce every standardised difference below 0.1.
 
 ::: {.notes}
 Make sure students understand that a well-balanced sample is a

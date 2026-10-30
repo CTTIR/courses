@@ -28,7 +28,7 @@ print(decomp.design(net))
 
 # --- 5. Conduct / Fit ------------------------------------------
 print(summary(net))
-rank_df <- netrank(net, small.values = "good")
+rank_df <- netrank(net, small.values = "good", method = "SUCRA", nsim = 10000)
 print(rank_df)
 
 # --- 6. Report -------------------------------------------------

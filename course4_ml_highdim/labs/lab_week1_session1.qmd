@@ -58,9 +58,9 @@ hyperparameters, the outer loop reports error.
 
 The bootstrap gives a different window onto generalisation. The plain
 bootstrap resamples with replacement; the .632 and .632+ variants
-weight the in-bag and out-of-bag errors to reduce bias when the learner
-overfits. In very small samples the .632+ estimator is often the most
-stable, and it is worth carrying in your toolbox alongside CV.
+combine apparent and out-of-bag errors. The .632+ correction adapts to
+estimated overfitting. Its bias and variance depend on the learner, loss,
+and data-generating process; no estimator is uniformly best.
 
 ::: {.content-visible when-format="html"}
 A practical note: when you write up a modelling study, the
@@ -140,35 +140,66 @@ c(naive = naive_mse, nested = nested_mse)
 Bootstrap .632+ error as a cross-check.
 
 ```{r}
+# Apparent error uses the model trained on the original sample.
+yhat_full <- as.numeric(predict(cv1, newx = X, s = "lambda.min"))
+err_app <- mean((y - yhat_full)^2)
 B <- 50
-errs_in <- errs_oob <- numeric(B)
-for (b in 1:B) {
+oob_loss <- matrix(NA_real_, nrow = n, ncol = B)
+for (b in seq_len(B)) {
   idx <- sample.int(n, n, replace = TRUE)
   oob <- setdiff(seq_len(n), unique(idx))
-  fit_b <- cv.glmnet(X[idx, ], y[idx], alpha = 1, nfolds = 5)
-  yhat_in  <- as.numeric(predict(fit_b, newx = X[idx, ],  s = "lambda.min"))
-  yhat_oob <- as.numeric(predict(fit_b, newx = X[oob, ],  s = "lambda.min"))
-  errs_in[b]  <- mean((y[idx] - yhat_in)^2)
-  errs_oob[b] <- mean((y[oob] - yhat_oob)^2)
+  if (!length(oob)) next
+  # Copies of the same observation stay together in the tuning folds.
+  unique_idx <- unique(idx)
+  boot_folds <- sample(rep(seq_len(5), length.out = length(unique_idx)))
+  fit_b <- cv.glmnet(X[idx, ], y[idx], alpha = 1,
+                     foldid = boot_folds[match(idx, unique_idx)])
+  yhat_oob <- as.numeric(predict(fit_b, newx = X[oob, , drop = FALSE],
+                                 s = "lambda.min"))
+  oob_loss[oob, b] <- (y[oob] - yhat_oob)^2
 }
-err_app <- mean(errs_in); err_oob <- mean(errs_oob)
-err_632 <- 0.368 * err_app + 0.632 * err_oob
-c(apparent = err_app, oob = err_oob, boot632 = err_632,
-  nested = nested_mse)
+stopifnot(all(rowSums(!is.na(oob_loss)) > 0))
+# Average within observations first, so each observation has equal weight.
+err_oob <- mean(rowMeans(oob_loss, na.rm = TRUE))
+# No-information loss: all pairings of observed responses and fitted predictions.
+gamma <- mean(outer(y, yhat_full, "-")^2)
+bootstrap_errors <- function(apparent, oob, no_information) {
+  stopifnot(all(is.finite(c(apparent, oob, no_information))),
+            all(c(apparent, oob, no_information) >= 0))
+  base <- 0.368 * apparent + 0.632 * oob
+  bounded_oob <- min(oob, no_information)
+  relative <- if (oob > apparent && no_information > apparent) {
+    (bounded_oob - apparent) / (no_information - apparent)
+  } else 0
+  # Efron & Tibshirani (1997), equations 31-32: bounded correction.
+  plus <- base + (bounded_oob - apparent) *
+    0.368 * 0.632 * relative / (1 - 0.368 * relative)
+  c(boot632 = base, boot632plus = plus, relative_overfit = relative)
+}
+boot_errors <- bootstrap_errors(err_app, err_oob, gamma)
+err_632 <- unname(boot_errors["boot632"])
+err_632plus <- unname(boot_errors["boot632plus"])
+c(apparent = err_app, oob = err_oob, boot_errors, nested = nested_mse)
 ```
 
 ## 5. Report
 
 > On simulated data (*n* = 120, *p* = 40, five true signals), a lasso
-> with tuning parameter chosen by 5-fold CV achieved an out-of-sample
-> MSE of `r round(nested_mse, 2)` under nested 5 × 5 CV. The naive
-> single-layer CV understated the error at
-> `r round(naive_mse, 2)`; the bootstrap .632 estimator gave
-> `r round(err_632, 2)`, which bracketed the nested estimate.
+> with tuning parameter chosen by 5-fold CV achieved an estimated MSE of
+> `r round(nested_mse, 2)` under nested 5 × 5 CV. The minimum single-layer
+> CV estimate was `r round(naive_mse, 2)`; bootstrap .632 and .632+ estimates
+> were `r round(err_632, 2)` and `r round(err_632plus, 2)`, respectively.
 
-The naive number looks tighter, but it reflects the choice of `lambda`
-as well as the fit. Only the nested number is a fair estimate of what
-this procedure — tune-then-fit — will do on new data.
+The minimum inner-CV error is subject to selection optimism; its ordering
+relative to the outer estimate can vary in a single simulation. Outer CV
+keeps tuning separate from evaluation, but remains subject to sampling and
+fold variability. Here `B = 50` keeps the demonstration small; assess Monte
+Carlo stability with more replicates before using bootstrap results in a study.
+
+The .632+ calculation uses squared-error loss and the bounded correction in
+Efron and Tibshirani (1997), equations 26 and 31–32. Original observations
+are weighted equally in the out-of-bag estimate, and bootstrap duplicates
+are grouped in the inner tuning folds.
 
 ::: {.notes}
 Emphasise that "naive CV" is still useful: it is the inner loop in a
@@ -180,8 +211,8 @@ nested scheme. The crime is reporting it as the final error.
 - Tuning on the test fold and reporting the resulting error.
 - Using a single 80/20 split in high dimensions; variance across splits
   can exceed the effect of interest.
-- Bootstrapping without tracking in-bag vs out-of-bag, which inflates
-  the estimate back to the apparent error.
+- Evaluating a bootstrap fit on its own training observations and calling
+  that an out-of-sample error.
 
 ## Further reading
 

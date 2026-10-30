@@ -20,9 +20,9 @@ dat <- tibble(
   id = seq_len(n),
   t_event = rexp(n, rate = 0.02),
   t_drug  = rexp(n, rate = 0.05),
-  ever_drug = t_drug < t_event,
-  t_drug_obs = pmin(t_drug, t_event),
-  t_obs   = pmin(t_event, 100),
+  t_obs   = pmin(t_event, 100),          # observed follow-up
+  ever_drug = t_drug < t_obs,           # treatment started during follow-up
+  t_drug_obs = pmin(t_drug, t_obs),
   event   = as.integer(t_event <= 100)
 )
 

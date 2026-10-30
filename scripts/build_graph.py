@@ -248,13 +248,18 @@ def main() -> int:
         if not labs:
             raise BuildError("labs.yml parsed empty")
 
-        topic_by_slug = {t["slug"]: t for t in topics}
         for t in topics:
             for k in ("slug", "display", "color", "order"):
                 if k not in t:
                     raise BuildError(f"topic missing key '{k}': {t!r}")
+        topic_by_slug = {t["slug"]: t for t in topics}
+        if len(topic_by_slug) != len(topics):
+            raise BuildError("duplicate course slug")
+        if set(topic_by_slug) != set(COURSE_DIR):
+            raise BuildError("courses.yml must declare the four supported courses")
 
         nodes = []
+        seen_ids = set()
         seen_courses: set[str] = set()
         for L in labs:
             cid = L.get("course")
@@ -264,10 +269,20 @@ def main() -> int:
                 raise BuildError(f"lab {L.get('id')!r} missing title")
             seen_courses.add(cid)
             tags = L.get("tags") or []
-            if isinstance(tags, str):
-                tags = [tags]
-            slug = L["id"]
+            if not isinstance(tags, list) or not all(isinstance(t, str) for t in tags):
+                raise BuildError(f"lab {L.get('id')!r} tags must be a list of strings")
+            slug = L.get("id", "")
+            expected = f"{cid}/lab_week{L.get('week')}_session{L.get('session')}"
+            if slug != expected or not re.fullmatch(r"course[1-4]/lab_week[1-4]_session[1-5]", slug):
+                raise BuildError(f"invalid lab id/week/session: {slug!r}")
+            if slug in seen_ids:
+                raise BuildError(f"duplicate lab id: {slug}")
+            seen_ids.add(slug)
             stem = slug.split("/", 1)[1]
+            for relative in (f"{COURSE_DIR[cid]}/labs/{stem}.qmd",
+                             f"{COURSE_DIR[cid]}/code/{stem}.R"):
+                if not (ROOT / relative).is_file():
+                    raise BuildError(f"missing lab source: {relative}")
             url = f"{COURSE_DIR[cid]}/labs/{stem}.html"
 
             # Enrich the hand-curated tags with cross-course method-family
@@ -301,6 +316,8 @@ def main() -> int:
         empty = set(topic_by_slug) - seen_courses
         if empty:
             raise BuildError(f"courses with zero labs: {sorted(empty)}")
+        if len(nodes) != 80:
+            raise BuildError(f"expected 80 labs, found {len(nodes)}")
 
         # Edges: ≥2 shared tags. Inverted index for speed.
         idx_for_tag: dict[str, list[int]] = defaultdict(list)

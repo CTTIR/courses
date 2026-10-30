@@ -88,7 +88,7 @@ cumulative incidence of each.
 ## 2. Visualise
 
 ```{r}
-data(colon, package = "survival")
+colon <- survival::colon
 # Keep death records (etype == 2) + recurrence merged; for teaching
 # we build a two-event dataset:
 dat <- colon |>

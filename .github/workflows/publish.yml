@@ -1,177 +1,90 @@
-name: Render and deploy
+name: Validate and deploy
 
 on:
+  pull_request:
   push:
     branches: [main]
   workflow_dispatch:
 
 permissions:
   contents: read
-  pages: write
-  id-token: write
 
 concurrency:
-  group: pages
+  group: courses-${{ github.ref }}
   cancel-in-progress: false
 
 jobs:
   build:
     runs-on: ubuntu-latest
     env:
-      # Opt every JavaScript action into Node.js 24 ahead of the
-      # Sept 16 2026 cutoff. Reverse with
-      # ACTIONS_ALLOW_USE_UNSECURE_NODE_VERSION=true if anything breaks.
       FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: "true"
     steps:
-      - name: Check out repository
-        uses: actions/checkout@v4
-
-      # Pre-render scripts (build_graph.py, build_related.py) and the
-      # Pagefind post-render run on Python; Pagefind itself is invoked
-      # via npx pagefind, so Node must be on PATH too.
+      - uses: actions/checkout@v4
       - uses: actions/setup-python@v5
         with:
           python-version: "3.12"
       - uses: actions/setup-node@v4
         with:
-          node-version: "20"
-
-      - name: Set up Quarto
-        uses: quarto-dev/quarto-actions/setup@v2
-
-      - name: Set up R
-        uses: r-lib/actions/setup-r@v2
+          node-version: "24"
+          cache: npm
+      - uses: quarto-dev/quarto-actions/setup@v2
         with:
-          r-version: "release"
+          version: "1.10.19"
+      - uses: r-lib/actions/setup-r@v2
+        with:
+          r-version: "4.6.1"
           use-public-rspm: true
-
-      - name: Install R packages needed to render the site
-        uses: r-lib/actions/setup-r-dependencies@v2
-        with:
-          packages: |
-            any::tidyverse
-            any::gtsummary
-            any::broom
-            any::broom.mixed
-            any::patchwork
-            any::knitr
-            any::rmarkdown
-            any::palmerpenguins
-            any::pwr
-            any::effectsize
-            any::performance
-            any::MASS
-            any::car
-            any::emmeans
-            any::mgcv
-            any::gratia
-            any::nnet
-            any::VGAM
-            any::pROC
-            any::DHARMa
-            any::survival
-            any::ggsurvfit
-            any::lme4
-            any::lmerTest
-            any::glmmTMB
-            any::geepack
-            any::mice
-            any::metafor
-            any::netmeta
-            any::deSolve
-            any::glmnet
-            any::tidymodels
-            any::ranger
-            any::xgboost
-            any::DALEX
-            any::iml
-            any::FactoMineR
-            any::factoextra
-            any::mclust
-            any::uwot
-            any::MatchIt
-            any::cobalt
-            any::dagitty
-            any::ggdag
-            any::forecast
-            any::changepoint
-            any::tidycmprsk
-            any::mstate
-            any::Rtsne
-            any::sandwich
-            any::lmtest
-            any::datasauRus
-            any::simr
-            any::psych
-            any::irr
-            any::randomForestSRC
-            any::see
-            any::qqplotr
-            any::broom.helpers
-            any::cards
-            any::gt
-            any::ggrepel
-
-      - name: Restore Quarto freeze cache
-        uses: actions/cache@v4
-        with:
-          path: _freeze
-          key: ${{ runner.os }}-quarto-freeze-${{ hashFiles('**/*.qmd') }}
-          restore-keys: ${{ runner.os }}-quarto-freeze-
-
-      - name: Render site
-        run: quarto render
-
-      # Phase 9a CI gates — front-matter / data-file integrity is enforced
-      # inside build_graph.py (pre-render), so a metadata error already
-      # aborts the render. These gates verify the *outputs* exist.
-      - name: Verify graph artifact
+      - name: Install native build requirements
         run: |
-          test -s artifacts/graph.json || {
-            echo "artifacts/graph.json missing or empty"
-            exit 1
-          }
-          python - <<'PY'
-          import json, sys
-          g = json.load(open("artifacts/graph.json", encoding="utf-8"))
-          assert g["nodes"], "graph.json has zero nodes"
-          assert g["edges"], "graph.json has zero edges"
-          assert g["topics"], "graph.json has zero courses"
-          for t in g["topics"]:
-              if t["count"] == 0:
-                  print(f"FAIL: course {t['id']!r} has zero labs", file=sys.stderr)
-                  sys.exit(1)
-          print(f"graph OK: {len(g['nodes'])} labs, {len(g['edges'])} edges, "
-                f"{len(g['topics'])} courses")
-          PY
-
-      - name: Verify Pagefind index built
+          sudo apt-get update
+          sudo apt-get install -y cmake pkg-config libfftw3-dev libcurl4-openssl-dev \
+            libssl-dev libxml2-dev libfontconfig1-dev libfreetype6-dev \
+            libharfbuzz-dev libfribidi-dev libpng-dev libtiff-dev libjpeg-dev \
+            libwebp-dev libuv1-dev zlib1g-dev
+      - uses: r-lib/actions/setup-renv@v2
+      - run: npm ci
+      - name: Check prerequisites and regression tests
         run: |
-          test -f docs/pagefind/pagefind.js || {
-            echo "Pagefind index missing — post-render did not produce docs/pagefind/pagefind.js"
-            exit 1
-          }
-          test -s docs/pagefind/pagefind-entry.json || {
-            echo "Pagefind entry index empty"
-            exit 1
-          }
-
-      - name: Configure Pages
-        uses: actions/configure-pages@v5
-
+          Rscript setup_check.R
+          npm test
+          python3 -m unittest discover -s tests -p 'test_*.py'
+          Rscript -e 'testthat::test_dir("tests", stop_on_failure = TRUE, stop_on_warning = TRUE)'
+      - name: Exercise standalone lab scripts
+        run: python3 scripts/check_labs.py --log-dir "$RUNNER_TEMP/lab-checks"
+      - name: Recompute and render every article and slide
+        run: quarto render --profile verify
+      - name: Verify deliverables
+        run: |
+          python3 scripts/check_site.py
+          bash scripts/check-legal-placeholders.sh
+      - name: Verify browser journeys
+        run: |
+          npx playwright install --with-deps chromium
+          npm run test:browser
+      - name: Preserve validation logs
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: lab-validation
+          path: ${{ runner.temp }}/lab-checks
       - name: Upload Pages artifact
+        if: github.ref == 'refs/heads/main' && github.event_name != 'pull_request'
         uses: actions/upload-pages-artifact@v3
         with:
           path: docs
 
   deploy:
+    if: github.ref == 'refs/heads/main' && github.event_name != 'pull_request'
     needs: build
     runs-on: ubuntu-latest
+    permissions:
+      pages: write
+      id-token: write
     environment:
       name: github-pages
       url: ${{ steps.deployment.outputs.page_url }}
     steps:
+      - uses: actions/configure-pages@v5
       - name: Deploy to GitHub Pages
         id: deployment
         uses: actions/deploy-pages@v4
-

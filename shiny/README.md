@@ -21,7 +21,7 @@ shiny/
 ├── sir-simulator/               # Course 3: SIR compartmental model
 ├── cv-vs-nested/                # Course 4: nested CV vs k-fold
 ├── regularization-path/         # Course 4: glmnet path explorer
-└── decision-curves/             # Course 4: decision-curve / NRI
+└── decision-curves/             # Course 4: decision-curve net benefit
 ```
 
 ## Deploying to a Shiny Server
@@ -49,17 +49,12 @@ The apps will then be live at:
 - `https://<your-host>/bootstrap-ci/`
 - ...etc.
 
-## R packages required on the server
+## R environment
 
-Install once with:
-
-```r
-install.packages(c(
-  "shiny", "shinyWidgets", "ggplot2", "dplyr", "tidyr", "broom",
-  "DT", "scales",
-  "dagitty", "ggdag", "deSolve", "glmnet", "pROC", "MASS"
-))
-```
+Restore the repository's `renv.lock` as described in the root README before
+running an app locally. A separate Shiny server needs the same recorded package
+versions and its own deployment configuration; no server deployment is verified
+by this repository's static Pages build.
 
 ## Embedding into the courses website
 

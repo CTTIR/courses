@@ -60,6 +60,8 @@ pROC::roc(y, biomarker) |>
 
 Evaluate with **time-dependent AUC**, **integrated Brier score**, and
 **IPA** (index of prediction accuracy = 1 − Brier(model) / Brier(null)).
+Account for censoring, for example with IPCW, and state the supported time
+horizon and censoring assumptions. Use a cohort-appropriate null risk.
 
 ```r
 library(timeROC)
@@ -77,10 +79,13 @@ r <- timeROC(T = df$time, delta = df$event,
 
 ## Decision rule for Week 3
 
-- Rare outcome with need for uncertainty → Bayesian, not bootstrap of MLE.
-- New biomarker → NRI + decision curve, not just ΔAUC.
+- Sparse outcomes → assess separation and small-sample uncertainty; consider
+  penalisation or a model with justified weakly informative priors.
+- New biomarker → assess calibration, discrimination, and decision benefit
+  on data independent of model development.
 - Survival prediction → time-dependent Brier / IPA, not global AUC.
-- Any clinical claim → external validation before publication.
+- Distinguish model development from external validation; evaluate transport
+  to the intended setting before clinical adoption.
 
 ## Common pitfalls
 

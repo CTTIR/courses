@@ -26,9 +26,19 @@ print(p)
 
 # --- 4. Assumptions --------------------------------------------
 fit <- glm(type ~ glu, data = pima, family = binomial)
-p2 <- pima |> mutate(p = fitted(fit), logit = qlogis(p)) |>
-  ggplot(aes(glu, logit)) + geom_point(alpha = 0.5) +
-  geom_smooth(method = "loess", se = FALSE, colour = "steelblue")
+fit_spline <- glm(type ~ splines::ns(glu, df = 3), data = pima, family = binomial)
+# Compare a flexible specification; plotting fitted logits from the linear
+# model alone cannot check linearity, because they are linear by construction.
+print(anova(fit, fit_spline, test = "LRT"))
+binned <- pima |>
+  mutate(y = as.integer(type == "Yes"), bin = ntile(glu, 8)) |>
+  group_by(bin) |>
+  summarise(glu = mean(glu), successes = sum(y), n = n(), .groups = "drop") |>
+  mutate(empirical_logit = log((successes + .5) / (n - successes + .5)))
+p2 <- ggplot(binned, aes(glu, empirical_logit)) +
+  geom_point() +
+  geom_abline(intercept = coef(fit)[1], slope = coef(fit)[2], colour = "steelblue") +
+  labs(x = "Plasma glucose", y = "Binned empirical logit (0.5 correction)")
 print(p2)
 
 # --- 5. Conduct / Fit ------------------------------------------

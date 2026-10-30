@@ -98,7 +98,7 @@ server <- function(input, output, session) {
       cat(sprintf("Peak infectious : %.0f on day %d\n",
                   df$I[i_peak], df$time[i_peak]))
     }
-    cat(sprintf("Final attack rate (R/N) at end: %.1f%%\n",
+    cat(sprintf("Removed fraction (R/N) at end: %.1f%%\n",
                 100 * df$R[nrow(df)] / input$N))
   })
 }

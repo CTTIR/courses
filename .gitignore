@@ -25,3 +25,10 @@ renv/python/
 *~
 *.bak
 *.orig
+
+node_modules/
+__pycache__/
+Rplots.pdf
+
+# Local execution cache; releases must recompute with the verify profile.
+/_freeze/

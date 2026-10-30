@@ -87,7 +87,7 @@ group <- rep(c("A", "B"), each = 5)
 mu <- 2 * runif(n_gene, 1, 10)   # baseline mean per gene
 lfc <- c(rep(log(3), 10), rep(0, n_gene - 10))
 counts <- sapply(seq_len(n_samp), function(j) {
-  rate <- mu * exp(ifelse(group[j] == "B", lfc, 0))
+  rate <- mu * exp(if (group[j] == "B") lfc else rep(0, n_gene))
   rnbinom(n_gene, mu = rate, size = 5)
 })
 rownames(counts) <- paste0("g", seq_len(n_gene))
@@ -134,17 +134,32 @@ topTags(qlf)
 A per-gene negative-binomial GLM that runs.
 
 ```{r}
-pvals <- numeric(n_gene)
-logfcs <- numeric(n_gene)
+pvals <- logfcs <- rep(NA_real_, n_gene)
+fit_problems <- rep("", n_gene)
 for (g in seq_len(n_gene)) {
   y <- counts[g, ]
-  fit <- try(glm.nb(y ~ group), silent = TRUE)
-  if (inherits(fit, "try-error")) { pvals[g] <- NA; next }
-  s <- summary(fit)
-  pvals[g]  <- s$coefficients[2, 4]
-  logfcs[g] <- s$coefficients[2, 1]
+  problems <- character()
+  fit <- tryCatch(withCallingHandlers(
+    glm.nb(y ~ group),
+    warning = function(w) problems <<- c(problems, conditionMessage(w))
+  ), error = function(e) {
+    problems <<- c(problems, conditionMessage(e)); NULL
+  })
+  if (is.null(fit) || length(problems) || !isTRUE(fit$converged)) {
+    fit_problems[g] <- paste(c(problems, "fit not used for inference"), collapse = "; ")
+    next
+  }
+  estimates <- summary(fit)$coefficients
+  pvals[g] <- estimates[2, 4]
+  logfcs[g] <- estimates[2, 1]
 }
-padj <- p.adjust(pvals, method = "BH")
+padj <- p.adjust(pvals, method = "BH", n = n_gene)
+discovered <- !is.na(padj) & padj < .05
+recovery <- mean(discovered[1:10])
+null_flagged <- mean(discovered[11:n_gene])
+fdp <- sum(discovered[11:n_gene]) / max(sum(discovered), 1)
+cat("Genes with failed or warned fits (excluded):", sum(nzchar(fit_problems)), "\n")
+print(head(data.frame(gene = rownames(counts), reason = fit_problems)[nzchar(fit_problems), ]))
 ```
 
 ## 4. Check
@@ -161,8 +176,8 @@ tibble(lfc = logfcs, padj = padj, truth = truth) |>
 ```
 
 ```{r}
-mean(padj[1:10] < 0.05, na.rm = TRUE)
-mean(padj[11:n_gene] < 0.05, na.rm = TRUE)
+recovery
+null_flagged
 ```
 
 ## 5. Report
@@ -171,14 +186,19 @@ mean(padj[11:n_gene] < 0.05, na.rm = TRUE)
 > differentially expressed genes (log fold change ≈ 1.1),
 > per-gene negative-binomial GLMs followed by Benjamini–Hochberg
 > adjustment recovered
-> `r round(mean(padj[1:10] < 0.05, na.rm = TRUE) * 100, 0)`% of the
-> true DE genes at FDR < 0.05 and yielded a false-discovery rate
-> among null genes of
-> `r round(mean(padj[11:n_gene] < 0.05, na.rm = TRUE) * 100, 1)`%.
+> `r round(recovery * 100, 0)`% of the
+> true DE genes at BH-adjusted p < 0.05 and flagged
+> `r round(null_flagged * 100, 1)`% of null genes. The realised
+> false-discovery proportion among discoveries was `r round(fdp * 100, 1)`%.
+> `r sum(nzchar(fit_problems))` genes had failed or warned fits and were
+> excluded from inference; these genes count as unrecovered in the summaries.
 
-DESeq2 and edgeR would improve power by shrinking gene-wise
-dispersion across the experiment; the per-gene fit shown here is a
-transparent but low-power version of the same idea.
+The null-gene flagging proportion and the false-discovery proportion have
+different denominators; FDR is the expectation of the latter over repeated
+experiments. The small-sample, per-gene Wald tests here are an illustration,
+not a validated RNA-seq analysis pipeline. DESeq2 and edgeR estimate dispersion
+using information across genes; use their diagnostics and established workflows
+for real data. Do not silently discard fit warnings or failed genes.
 
 ::: {.notes}
 Mention that `vst` or `rlog` transformations are standard before

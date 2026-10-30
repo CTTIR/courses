@@ -99,7 +99,7 @@ variances are the key diagnostics.
 
 ```{r}
 summary(net)
-rank_df <- netrank(net, small.values = "good")
+rank_df <- netrank(net, small.values = "good", method = "SUCRA", nsim = 10000)
 rank_df
 ```
 

@@ -50,10 +50,9 @@ cost of a probabilistic prediction at a given horizon, combining
 discrimination and calibration into a single number per time.
 
 Real biomedical models routinely lose performance on external cohorts.
-Distribution shift (different age, comorbidities, measurement
-protocols) is the usual reason; miscalibration is the usual failure
-mode. This lab simulates both and shows the diagnostic signature each
-leaves behind.
+Changes in case mix, measurement, baseline risk, or predictor effects can
+affect performance in different ways. This lab changes the covariate
+distribution while keeping the conditional event model fixed.
 
 ::: {.content-visible when-format="html"}
 TRIPOD-AI asks you to report all three — discrimination, calibration,
@@ -101,8 +100,11 @@ bind_rows(dev |> mutate(cohort = "dev"),
 
 ## 3. Assumptions
 
-Independent right censoring; Cox proportional hazards in the
-development cohort; no time-varying covariates.
+Censoring is independent of both event time and covariates in this simulation.
+We use marginal inverse-probability-of-censoring weights (IPCW), require
+positive censoring survival at the horizon, assume Cox proportional hazards,
+and use no time-varying covariates. Subjects censored before the horizon
+have unknown outcomes and are not coded as event-free.
 
 ## 4. Conduct
 
@@ -112,67 +114,105 @@ Fit on dev; predict survival at a fixed horizon on both cohorts.
 fit <- coxph(Surv(time, event) ~ x, data = dev)
 horizon <- 3
 
+# Match the mean-centred baseline hazard to the same prediction reference.
+# This helper is for the unstratified, fixed-covariate model used in this lab.
 predict_surv <- function(fit, newdata, t) {
-  bh <- basehaz(fit, centered = FALSE)
-  H0 <- approx(bh$time, bh$hazard, xout = t, rule = 2)$y
-  lp <- predict(fit, newdata = newdata, type = "lp")
+  bh <- basehaz(fit, centered = TRUE)
+  stopifnot(length(t) == 1, is.finite(t), t >= 0, t <= max(bh$time))
+  H0 <- c(0, bh$hazard)[findInterval(t, bh$time) + 1L]
+  lp <- predict(fit, newdata = newdata, type = "lp", reference = "sample")
   exp(-H0 * exp(lp))
+}
+
+# Marginal IPCW is valid here because censoring is independent of X and T.
+# Censoring that depends on predictors needs a conditional censoring model.
+horizon_weights <- function(data, t) {
+  g <- survfit(Surv(time, 1 - event) ~ 1, data = data)
+  g_before <- c(1, g$surv)[findInterval(data$time, g$time, left.open = TRUE) + 1L]
+  g_at <- c(1, g$surv)[findInterval(t, g$time) + 1L]
+  cases <- data$event == 1 & data$time <= t
+  controls <- data$time > t
+  if (g_at <= 0 || any(g_before[cases] <= 0))
+    stop("Insufficient censoring support at this horizon")
+  weights <- numeric(nrow(data))
+  weights[cases] <- 1 / g_before[cases]
+  weights[controls] <- 1 / g_at
+  list(cases = cases, controls = controls, weights = weights)
+}
+
+score_horizon <- function(data, p_event, t) {
+  stopifnot(length(p_event) == nrow(data), all(is.finite(p_event)),
+            all(p_event >= 0 & p_event <= 1))
+  w <- horizon_weights(data, t)
+  brier <- mean(w$weights * (as.numeric(w$cases) - p_event)^2)
+  km <- survfit(Surv(time, event) ~ 1, data = data)
+  null_risk <- 1 - c(1, km$surv)[findInterval(t, km$time) + 1L]
+  null_brier <- mean(w$weights * (as.numeric(w$cases) - null_risk)^2)
+  # Cumulative/dynamic AUC: observed cases by t against survivors beyond t.
+  auc <- NA_real_
+  if (any(w$cases) && any(w$controls)) {
+    order_control <- order(p_event[w$controls])
+    control_risk <- p_event[w$controls][order_control]
+    cumulative_weight <- c(0, cumsum(w$weights[w$controls][order_control]))
+    below <- cumulative_weight[findInterval(p_event[w$cases], control_risk,
+                                           left.open = TRUE) + 1L]
+    at_or_below <- cumulative_weight[findInterval(p_event[w$cases], control_risk) + 1L]
+    auc <- sum(w$weights[w$cases] * (below + .5 * (at_or_below - below))) /
+      (sum(w$weights[w$cases]) * sum(w$weights[w$controls]))
+  }
+  c(auc = auc, brier = brier,
+    ipa = if (null_brier > 0) 1 - brier / null_brier else NA_real_)
 }
 
 s_dev <- predict_surv(fit, dev, horizon)
 s_ext <- predict_surv(fit, ext, horizon)
-
-# Observed indicator (for simple Brier w/out censoring at horizon)
-obs_dev <- dev$event == 1 & dev$time <= horizon
-obs_ext <- ext$event == 1 & ext$time <= horizon
-
-brier <- function(p_event, obs) mean((p_event - obs)^2)
-brier_null <- function(obs) mean((mean(obs) - obs)^2)
-b_dev <- brier(1 - s_dev, obs_dev); b0_dev <- brier_null(obs_dev)
-b_ext <- brier(1 - s_ext, obs_ext); b0_ext <- brier_null(obs_ext)
-ipa_dev <- 1 - b_dev / b0_dev
-ipa_ext <- 1 - b_ext / b0_ext
-
-auc_dev <- as.numeric(auc(roc(obs_dev, 1 - s_dev, quiet = TRUE)))
-auc_ext <- as.numeric(auc(roc(obs_ext, 1 - s_ext, quiet = TRUE)))
-
-tibble(cohort = c("dev", "ext"),
-       auc = c(auc_dev, auc_ext),
-       brier = c(b_dev, b_ext),
-       ipa  = c(ipa_dev, ipa_ext))
+metrics_dev <- score_horizon(dev, 1 - s_dev, horizon)
+metrics_ext <- score_horizon(ext, 1 - s_ext, horizon)
+b_dev <- unname(metrics_dev["brier"]); b_ext <- unname(metrics_ext["brier"])
+ipa_dev <- unname(metrics_dev["ipa"]); ipa_ext <- unname(metrics_ext["ipa"])
+auc_dev <- unname(metrics_dev["auc"]); auc_ext <- unname(metrics_ext["auc"])
+rbind(development_apparent = metrics_dev, external = metrics_ext)
 ```
 
 A calibration plot at the horizon.
 
 ```{r}
-mk_cal <- function(p, y, lab) {
-  tibble(p = p, y = y, cohort = lab) |>
-    mutate(bin = cut(p, quantile(p, seq(0, 1, by = 0.1)),
-                     include.lowest = TRUE)) |>
-    group_by(cohort, bin) |>
-    summarise(mean_pred = mean(p), obs = mean(y), .groups = "drop")
+mk_cal <- function(p, data, lab, t) {
+  breaks <- unique(quantile(p, seq(0, 1, by = .2)))
+  bin <- if (length(breaks) > 1) cut(p, breaks, include.lowest = TRUE) else factor(rep(1, length(p)))
+  bind_rows(lapply(split(seq_along(p), bin), function(i) {
+    km <- survfit(Surv(time, event) ~ 1, data = data[i, ])
+    # Do not extend a group's observed risk beyond its follow-up support.
+    observed <- if (max(data$time[i]) >= t) {
+      1 - c(1, km$surv)[findInterval(t, km$time) + 1L]
+    } else NA_real_
+    tibble(cohort = lab, mean_pred = mean(p[i]), obs = observed)
+  }))
 }
-bind_rows(mk_cal(1 - s_dev, obs_dev, "dev"),
-          mk_cal(1 - s_ext, obs_ext, "ext")) |>
+bind_rows(mk_cal(1 - s_dev, dev, "development (apparent)", horizon),
+          mk_cal(1 - s_ext, ext, "external", horizon)) |>
   ggplot(aes(mean_pred, obs, colour = cohort)) +
   geom_point() + geom_line() +
   geom_abline(slope = 1, intercept = 0, colour = "grey50") +
-  labs(x = "predicted event prob at horizon",
-       y = "observed event proportion")
+  labs(x = "Predicted event probability at horizon",
+       y = "Kaplan–Meier event probability within prediction groups")
 ```
 
 ## 5. Concluding statement
 
-> On a simulated external cohort with shifted covariate distribution,
-> a Cox model fit on the development cohort retained discrimination
-> (AUC `r round(auc_ext, 2)`) but lost calibration, with IPA falling
-> from `r round(ipa_dev, 2)` (development) to `r round(ipa_ext, 2)`
-> (external). The calibration plot showed systematic
-> over-prediction in the shifted cohort.
+> At horizon 3, the independent simulated external cohort had
+> cumulative/dynamic AUC `r round(auc_ext, 2)`, IPCW Brier score
+> `r round(b_ext, 3)`, and IPA `r round(ipa_ext, 2)`. Apparent development
+> values were AUC `r round(auc_dev, 2)`, Brier `r round(b_dev, 3)`, and
+> IPA `r round(ipa_dev, 2)`. Development estimates reuse training data and
+> therefore do not constitute internal validation.
 
-Distribution shift does not always show up in AUC; it often shows up
-first in calibration. Reporting Brier/IPA alongside AUC catches this
-failure mode.
+Only the distribution of X changes here; the conditional event-time model
+is unchanged. Such covariate shift need not cause miscalibration. Brier,
+AUC, and the cohort-specific null model used for IPA may change with case
+mix even when predictions remain calibrated. The grouped calibration plot
+is descriptive and has sampling uncertainty; it does not establish a
+systematic direction of error in every simulation.
 
 ::: {.notes}
 Mention that recalibration (update the baseline hazard or the
@@ -191,6 +231,8 @@ retraining the whole model.
 
 ## Further reading
 
+- Graf E, Schmoor C, Sauerbrei W, Schumacher M (1999),
+  [Assessment and comparison of prognostic classification schemes for survival data](https://pubmed.ncbi.nlm.nih.gov/10474158/).
 - Kattan MW, Gerds TA (2018), *The index of prediction accuracy: an
   intuitive measure useful for evaluating risk prediction models*.
 - Steyerberg EW, *Clinical Prediction Models*, ch. 15–17.

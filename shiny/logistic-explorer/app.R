@@ -37,7 +37,11 @@ server <- function(input, output, session) {
     x <- rnorm(input$n, 0, input$noise_sd)
     p <- plogis(input$b0 + input$b1 * x)
     y <- rbinom(input$n, 1, p)
+    validate(need(length(unique(y)) == 2,
+      "This sample has only one outcome class. Resample or increase the sample size."))
     fit <- glm(y ~ x, family = binomial)
+    validate(need(isTRUE(fit$converged) && !isTRUE(fit$boundary),
+      "This fit did not converge to an interior solution. Resample or increase the sample size."))
     phat <- fitted(fit)
     list(x = x, y = y, phat = phat, fit = fit)
   })
@@ -60,7 +64,7 @@ server <- function(input, output, session) {
 
   output$roc_plot <- renderPlot({
     a   <- d()
-    rc  <- pROC::roc(a$y, a$phat, quiet = TRUE)
+    rc  <- pROC::roc(a$y, a$phat, quiet = TRUE, levels = c(0, 1), direction = "<")
     dfr <- data.frame(spec = rev(rc$specificities),
                       sens = rev(rc$sensitivities))
     ggplot(dfr, aes(1 - spec, sens)) +
@@ -82,7 +86,7 @@ server <- function(input, output, session) {
       geom_point(colour = ACCENT, size = 3) +
       geom_line(colour = ACCENT) +
       coord_equal(xlim = c(0, 1), ylim = c(0, 1)) +
-      labs(title = "Calibration (decile bins)",
+      labs(title = "Apparent calibration (probability intervals of 0.1)",
            x = "Predicted P(y = 1)",
            y = "Observed P(y = 1)") +
       theme_minimal(base_size = 12)
@@ -90,7 +94,8 @@ server <- function(input, output, session) {
 
   output$metrics <- renderPrint({
     a    <- d()
-    rc   <- pROC::roc(a$y, a$phat, quiet = TRUE)
+    rc   <- pROC::roc(a$y, a$phat, quiet = TRUE, levels = c(0, 1), direction = "<")
+    cat("Apparent performance on the training sample:\n")
     brier <- mean((a$phat - a$y)^2)
     cat(sprintf("AUC          = %.3f\n", as.numeric(rc$auc)))
     cat(sprintf("Brier score  = %.3f\n", brier))

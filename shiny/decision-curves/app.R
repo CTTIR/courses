@@ -33,10 +33,12 @@ ui <- fluidPage(
 )
 
 # Simulate predicted probabilities to hit a target AUC under binormal
-simulate_pred <- function(y, target_auc) {
+simulate_pred <- function(y, target_auc, prevalence) {
   delta <- sqrt(2) * qnorm(target_auc)
   z <- ifelse(y == 1, rnorm(length(y), delta, 1), rnorm(length(y)))
-  pnorm(z - delta / 2)  # rough mapping to [0, 1]
+  # Bayes' rule for N(delta, 1) cases and N(0, 1) controls:
+  # posterior log odds = prior log odds + log density ratio.
+  plogis(qlogis(prevalence) + delta * z - delta^2 / 2)
 }
 
 net_benefit <- function(y, p, thr) {
@@ -52,8 +54,8 @@ server <- function(input, output, session) {
   d <- reactive({
     invisible(trigger())
     y     <- rbinom(input$n, 1, input$prev)
-    p_base <- simulate_pred(y, input$auc_base)
-    p_new  <- simulate_pred(y, input$auc_new)
+    p_base <- simulate_pred(y, input$auc_base, input$prev)
+    p_new  <- simulate_pred(y, input$auc_new, input$prev)
     list(y = y, p_base = p_base, p_new = p_new)
   })
 

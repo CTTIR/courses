@@ -71,7 +71,7 @@ theme_set(theme_minimal(base_size = 12))
 
 Simulate a time-varying-confounding scenario, estimate the causal effect
 naively and then with IPTW (a marginal structural model), and finish
-with a simple HTE estimate.
+with brief conceptual sketches of other identification strategies.
 
 ## 2. Approach
 
@@ -86,7 +86,9 @@ df <- tibble(
 )
 ```
 
-The true effect of each treatment is positive and additive. `l1` is a
+The intervention contrast for `a0`, holding `a1` fixed, is 1.25:
+its direct effect 1 plus the pathway through `l1` (0.5 × 0.5). The
+intervention effect of `a1` is 0.8. `l1` is a
 time-varying confounder because it is affected by `a0` and predicts
 both `a1` and `y`.
 
@@ -115,7 +117,7 @@ w1 <- ifelse(df$a1 == 1, fitted(num1), 1 - fitted(num1)) /
 df$sw <- w0 * w1
 
 msm <- lm(y ~ a0 + a1, data = df, weights = sw)
-tidy(msm, conf.int = TRUE) |>
+tibble(term = names(coef(msm)), estimate = unname(coef(msm))) |>
   filter(term %in% c("a0", "a1"))
 ```
 
@@ -127,15 +129,21 @@ Balance and weight sanity:
 summary(df$sw)
 ```
 
-Stabilised weights should centre on 1 with no extreme tail. If they do
-not, a term in the treatment model is likely misspecified.
+Inspect the weight distribution and covariate balance. Extreme weights can
+reflect limited overlap, model misspecification, or sampling variability.
+Only weighted point estimates are shown: ordinary weighted-least-squares
+standard errors do not account for this weighting procedure. For uncertainty,
+bootstrap whole subjects and refit both propensity models and the outcome model
+in every replicate, or use an appropriate estimating-equation method.
 
 ## 5. Report
 
 > In a simulated cohort with time-varying confounding (*n* = 2000),
-> naive regression underestimated the effect of initial treatment. An
-> inverse-probability-weighted marginal structural model recovered
-> effects close to the true data-generating values. Instrumental
+> the adjusted conditional coefficient for initial treatment was
+> `r round(coef(naive)["a0"], 2)`, while the weighted marginal estimate
+> was `r round(coef(msm)["a0"], 2)` (intervention target 1.25). The
+> weighted estimate for later treatment was `r round(coef(msm)["a1"], 2)`
+> (target 0.8). Instrumental
 > variable, difference-in-differences, and regression-discontinuity
 > designs exploit alternative identification strategies, each with
 > its own assumptions. Heterogeneity of treatment effect can be

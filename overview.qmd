@@ -39,13 +39,15 @@ Each node is a lab; nodes share an edge when they have at least two tags in comm
 
 ## Filter
 
+::: {#filter-summary .filter-summary aria-live="polite" aria-atomic="true"}
+<span id="filter-summary-text"></span>
+<button id="filter-reset" type="button" hidden>Reset all filters</button>
+:::
+
 ::: {.search-row}
 <label for="overview-search" class="visually-hidden">Search labs</label>
 <input id="overview-search" type="search" placeholder="Search labs…" autocomplete="off" spellcheck="false" />
-:::
-
-::: {#filter-summary .filter-summary aria-live="polite" aria-atomic="true"}
-<button id="filter-reset" type="button" hidden>Reset all filters</button>
+<p id="search-status" role="alert"></p>
 :::
 
 ::: {#topic-filter-bar .filter-bar aria-label="Filter by course"}
@@ -62,7 +64,7 @@ Each node is a lab; nodes share an edge when they have at least two tags in comm
 <div id="a11y-announcer" class="visually-hidden" role="status" aria-live="polite" aria-atomic="true"></div>
 
 ::: {#tutorial-list-empty .tutorial-list-empty hidden=true}
-No labs match the current filters. Try removing one, or [reset all]{role="link"}.
+No labs match the current filters. Try removing one, or use “Reset all filters” above.
 :::
 
 ::: {#tutorial-list .tutorial-list}
