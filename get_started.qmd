@@ -37,10 +37,17 @@ A few OS-specific notes:
 - On **Windows**, install [Rtools](https://cran.r-project.org/bin/windows/Rtools/)
   matching your R version; some packages in the `renv` lock file build from
   source on first use.
-- On **Linux**, install the development headers listed by `sudo apt install`
-  — most commonly `libcurl4-openssl-dev`, `libssl-dev`, `libxml2-dev`,
-  `libfontconfig1-dev`, `libfreetype6-dev`, `libharfbuzz-dev`, `libfribidi-dev`,
-  and `libgit2-dev`, `libfftw3-dev`, and `cmake`.
+- On **Debian/Ubuntu Linux**, install the native dependencies before restoring
+  the R library. GLPK supplies the shared library required by the locked igraph
+  binary, as well as headers for source builds:
+
+  ```bash
+  sudo apt-get update
+  sudo apt-get install -y cmake pkg-config libfftw3-dev libcurl4-openssl-dev \
+    libssl-dev libxml2-dev libfontconfig1-dev libfreetype6-dev \
+    libharfbuzz-dev libfribidi-dev libpng-dev libtiff-dev libjpeg-dev \
+    libwebp-dev libuv1-dev libglpk-dev zlib1g-dev
+  ```
 
 ## Clone and restore
 

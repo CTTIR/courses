@@ -410,35 +410,40 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <p>A remote R environment such as <a href="https://posit.cloud">Posit Cloud</a> may also be used, provided it has these prerequisites and enough memory and installation time. That hosted environment is not part of the local qualification.</p>
 <p>A few OS-specific notes:</p>
 <ul>
-<li>On <strong>macOS</strong>, install the Xcode command-line tools once with <code>xcode-select --install</code> so R can build packages from source. Homebrew users also need <code>brew install cmake fftw pkg-config</code> for native dependencies.</li>
-<li>On <strong>Windows</strong>, install <a href="https://cran.r-project.org/bin/windows/Rtools/">Rtools</a> matching your R version; some packages in the <code>renv</code> lock file build from source on first use.</li>
-<li>On <strong>Linux</strong>, install the development headers listed by <code>sudo apt install</code> — most commonly <code>libcurl4-openssl-dev</code>, <code>libssl-dev</code>, <code>libxml2-dev</code>, <code>libfontconfig1-dev</code>, <code>libfreetype6-dev</code>, <code>libharfbuzz-dev</code>, <code>libfribidi-dev</code>, and <code>libgit2-dev</code>, <code>libfftw3-dev</code>, and <code>cmake</code>.</li>
+<li><p>On <strong>macOS</strong>, install the Xcode command-line tools once with <code>xcode-select --install</code> so R can build packages from source. Homebrew users also need <code>brew install cmake fftw pkg-config</code> for native dependencies.</p></li>
+<li><p>On <strong>Windows</strong>, install <a href="https://cran.r-project.org/bin/windows/Rtools/">Rtools</a> matching your R version; some packages in the <code>renv</code> lock file build from source on first use.</p></li>
+<li><p>On <strong>Debian/Ubuntu Linux</strong>, install the native dependencies before restoring the R library. GLPK supplies the shared library required by the locked igraph binary, as well as headers for source builds:</p>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb1"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="fu">sudo</span> apt-get update</span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="fu">sudo</span> apt-get install <span class="at">-y</span> cmake pkg-config libfftw3-dev libcurl4-openssl-dev <span class="dt">\</span></span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a>  libssl-dev libxml2-dev libfontconfig1-dev libfreetype6-dev <span class="dt">\</span></span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a>  libharfbuzz-dev libfribidi-dev libpng-dev libtiff-dev libjpeg-dev <span class="dt">\</span></span>
+<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a>  libwebp-dev libuv1-dev libglpk-dev zlib1g-dev</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div></li>
 </ul>
 </section>
 <section id="clone-and-restore" class="level2">
 <h2 class="anchored" data-anchor-id="clone-and-restore">Clone and restore</h2>
-<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb1"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="fu">git</span> clone https://github.com/CTTIR/courses.git</span>
-<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="bu">cd</span> courses</span>
-<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a><span class="ex">Rscript</span> <span class="at">-e</span> <span class="st">'renv::restore(prompt=FALSE)'</span></span>
-<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a><span class="ex">npm</span> ci</span>
-<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a><span class="ex">Rscript</span> setup_check.R</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb2"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="fu">git</span> clone https://github.com/CTTIR/courses.git</span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a><span class="bu">cd</span> courses</span>
+<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a><span class="ex">Rscript</span> <span class="at">-e</span> <span class="st">'renv::restore(prompt=FALSE)'</span></span>
+<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a><span class="ex">npm</span> ci</span>
+<span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a><span class="ex">Rscript</span> setup_check.R</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <p><a href="https://rstudio.github.io/renv/"><code>renv</code></a> restores the versioned package records into the project library. Native packages may require additional system headers; read the first installation error if restoration fails. The R version itself and system libraries are not installed by <code>renv</code>.</p>
 <p><code>setup_check.R</code> is read-only. It reports missing packages, version mismatches, or missing command-line tools and exits with a failure status until they are fixed. It never silently installs or upgrades packages. The lockfile covers executable lessons and the local Shiny apps; optional chunks marked <code>eval: false</code> describe additional workflows and do not claim to have run without their data or tools.</p>
 </section>
 <section id="render-the-site-locally" class="level2">
 <h2 class="anchored" data-anchor-id="render-the-site-locally">Render the site locally</h2>
 <p>Two commands, depending on what you want:</p>
-<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb2"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="ex">quarto</span> preview    <span class="co"># live-reloading local server (good for writing)</span></span>
-<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a><span class="ex">quarto</span> render <span class="at">--profile</span> verify  <span class="co"># fresh execution and build into docs/</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb3"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="ex">quarto</span> preview    <span class="co"># live-reloading local server (good for writing)</span></span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a><span class="ex">quarto</span> render <span class="at">--profile</span> verify  <span class="co"># fresh execution and build into docs/</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <p>To render a single lab without touching the rest of the site:</p>
-<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb3"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="ex">quarto</span> render course1_foundations/labs/lab_week1_session1.qmd</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb4"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="ex">quarto</span> render course1_foundations/labs/lab_week1_session1.qmd</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <p>This will produce both the HTML article and the Reveal.js slide deck, because each lab declares both formats in its front matter.</p>
 </section>
 <section id="render-only-articles-or-only-slides" class="level2">
 <h2 class="anchored" data-anchor-id="render-only-articles-or-only-slides">Render only articles or only slides</h2>
 <p>Occasionally you want just one of the two outputs:</p>
-<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb4"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="ex">quarto</span> render course1_foundations/labs/lab_week1_session1.qmd <span class="at">--to</span> html</span>
-<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a><span class="ex">quarto</span> render course1_foundations/labs/lab_week1_session1.qmd <span class="at">--to</span> revealjs</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb5"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="ex">quarto</span> render course1_foundations/labs/lab_week1_session1.qmd <span class="at">--to</span> html</span>
+<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a><span class="ex">quarto</span> render course1_foundations/labs/lab_week1_session1.qmd <span class="at">--to</span> revealjs</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <p>The <code>--to</code> flag selects one of the formats declared in the front matter and skips the other.</p>
 <p>For routine prose edits, <code>quarto render</code> may reuse locally frozen calculations. The <code>_freeze/</code> cache is not distributed with the source. Before release, use the verification commands in the README, including the standalone script and complete-site checks.</p>
 </section>

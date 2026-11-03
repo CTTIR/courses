@@ -1,5 +1,27 @@
 # Maintenance review — 30 October 2026
 
+## Hosted follow-up — 3 November 2026
+
+The first Linux run after publication (`41604874549`, source `c20e71b`)
+stopped during `renv` restoration: the locked igraph 2.3.4 binary could not
+load `libglpk.so.40`. This was an omitted native prerequisite, before any
+lesson validation ran. Add `libglpk-dev` to the existing native installation
+step before restoration and provide the same complete apt command in the
+first-use guide. Preserve the lockfile, all lesson tests and render gates.
+
+Observed local evidence: Ubuntu 24.04 aarch64 apt resolves `libglpk-dev` to
+`libglpk40` (5.0-1build2); the installed library loads and `glp_version()`
+returns 5.0. This checks the missing runtime library, not the full hosted
+Ubuntu environment. The updated guide renders successfully with Quarto
+1.10.19 and Pagefind indexes all 80 lab pages. Seven JavaScript and six Python
+tests pass; the complete-site checker finds all 80 articles, 80 slide decks
+and 80 scripts and checks 7,437 local links. Actionlint and whitespace checks
+pass. Lesson calculations are unchanged and were not recomputed for this
+native-prerequisite repair. Exact-head hosted restoration, full recomputation
+and deployment must be observed separately after pushing.
+
+## Original audit
+
 Scope: the four-course curriculum, 80 executable labs and companion scripts,
 12 local Shiny apps, website navigation/search, and the Pages build. Baseline:
 `05970afe487e19b2a0a97917c59b11aeaef2ea01`. Work is isolated from the original
