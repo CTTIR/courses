@@ -114,3 +114,7 @@ must be reviewed and revised before inclusion, and references must be verified
 against their DOI, arXiv ID or ISBN.
 
 Local software setup: vLLM with Python/PyTorch, plus R and RStudio.
+
+## Clinical data science
+
+Continue with [Clinical Data Science in R · Course](https://cttir.github.io/clinical-data-science-in-r-course/): eight workshops applying the curriculum to clinical AI and translational trauma research. [Source repository](https://github.com/CTTIR/clinical-data-science-in-r-course).

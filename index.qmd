@@ -7,15 +7,6 @@ title-block-style: none
 
 ::: {.hero}
 
-<!-- Cross-site logo: source lives in CTTIR/website. Update there to propagate. -->
-```{=html}
-<a href="https://cttir.github.io/website/" class="ctir-avatar-link" aria-label="CTIR home">
-  <img src="https://cttir.github.io/website/images/cttir-logo.png"
-       alt="CTIR — Computational Trauma and Tissue Injury Research"
-       class="ctir-avatar" />
-</a>
-```
-
 ::: {.kicker}
 OPEN CURRICULUM · R · QUARTO · MIT
 :::
@@ -121,3 +112,7 @@ at a group meeting or a seminar. One `quarto render` builds both.
 - [Research workflow](appendices/research_workflow.qmd), [Decision tree](appendices/decision_tree.qmd), [Glossary](appendices/glossary.qmd), [Common errors](appendices/common_errors.qmd), [Writing a report](appendices/writing_a_report.qmd).
 - [References](references.qmd) — the sources and teaching ecosystems we drew on.
 - [Acknowledgements](acknowledgements.qmd) — the full list of people whose work made this curriculum possible.
+
+## Clinical data science
+
+Continue with [Clinical Data Science in R · Course](https://cttir.github.io/clinical-data-science-in-r-course/): eight workshops applying the curriculum to clinical AI and translational trauma research. [Source repository](https://github.com/CTTIR/clinical-data-science-in-r-course).
